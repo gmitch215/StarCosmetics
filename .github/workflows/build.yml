@@ -1,0 +1,78 @@
+name: Build Project
+
+on:
+  push:
+    branches: [ master, ver/* ]
+  pull_request:
+    branches: [ master, ver/* ]
+
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    name: Maven Setup
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Maven Setup
+        run: mvn clean install
+      - name: Maven Information
+        run: mvn dependency:tree -Ddetail=true
+
+  build:
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 20
+
+    strategy:
+      matrix:
+        java-version: [ 8, 11, 16, 17, 18 ]
+
+    name: Build Java ${{ matrix.java-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+          cache: 'maven'
+      - name: Build with Maven
+        run: mvn clean install
+
+  analyze:
+    runs-on: ubuntu-latest
+    needs: setup
+    if: github.event_name != 'pull_request'
+    timeout-minutes: 20
+
+    name: Analyze Project
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Team-Inceptus_Novaconomy
