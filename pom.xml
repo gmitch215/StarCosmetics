@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>me.gamercoder215</groupId>
+    <artifactId>starcosmetics-parent</artifactId>
+    <version>1.0.0</version>
+
+    <name>StarCosmetics-Parent</name>
+    <url>https://github.com/GamerCoder215/StarCosmetics</url>
+    <description>Free 200+ Cosmetics Plugin for Spigot</description>
+    <packaging>pom</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+
+        <github>GamerCoder215/StarCosmetics</github>
+        <sonar.organization>gamercoder215</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
+    <inceptionYear>2022</inceptionYear>
+
+    <modules>
+        <module>abstraction</module>
+        <module>plugin</module>
+        <module>legacy</module>
+        <module>contemporary</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <name>GamerCoder215</name>
+            <roles>
+                <role>Owner</role>
+            </roles>
+            <email>gamercoder215@teaminceptus.us</email>
+            <organization>Team Inceptus</organization>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GPL-3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <ciManagement>
+        <system>GitHub Actions</system>
+        <url>https://github.com/${github}/actions</url>
+    </ciManagement>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/${github}/issues/</url>
+    </issueManagement>
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <name>Spigot-API Repository</name>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <finalName>${project.name}-${project.version}</finalName>
+        <defaultGoal>clean install</defaultGoal>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.7.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+</project>
