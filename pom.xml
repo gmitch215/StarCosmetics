@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.gamercoder215</groupId>
+    <groupId>me.gamercoder215.starcosmetics</groupId>
     <artifactId>starcosmetics-parent</artifactId>
     <version>1.0.0</version>
 
@@ -65,6 +65,11 @@
             <id>spigot-repo</id>
             <name>Spigot-API Repository</name>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>jitpack</id>
+            <name>JitPack</name>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 

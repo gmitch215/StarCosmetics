@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>me.gamercoder215</groupId>
+        <groupId>me.gamercoder215.starcosmetics</groupId>
         <artifactId>starcosmetics-parent</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -10,6 +10,10 @@
     <artifactId>starcosmetics-contemporary</artifactId>
     <name>StarCosmetics-Contemporary</name>
     <description>Contemporary (1.13+) StarCosmetics MC Wrapper</description>
+
+    <properties>
+        <lamp.version>3.0.71</lamp.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -22,6 +26,18 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>starcosmetics-abstraction</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${lamp.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>common</artifactId>
+            <version>${lamp.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
