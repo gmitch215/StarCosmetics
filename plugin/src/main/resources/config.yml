@@ -1,0 +1,15 @@
+# StarCosmetics v${project.version} by GamerCoder215
+#
+# Main Configuration File
+
+# Language used by the plugin
+#
+# Available Languages:
+# - en (English)
+# - es (Spanish / Español)
+# - fr (French / Français)
+# - de (German / Deutsch)
+# - pt (Portuguese / Português)
+# - ja (Japanese / 日本)
+# - zh (Chinese / 中国人)
+language: en
