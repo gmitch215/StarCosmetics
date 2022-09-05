@@ -1,2 +1,3 @@
 # StarCosmetics
-Free 200+ Cosmetics Plugin for Spigot
+
+200+ Cosmetics Plugin, developed for Spigot 1.9+
