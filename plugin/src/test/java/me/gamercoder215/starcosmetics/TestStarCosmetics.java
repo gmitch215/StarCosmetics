@@ -13,6 +13,8 @@ public final class TestStarCosmetics {
         Assertions.assertEquals(StarConfig.ServerVersion.UNKNOWN, StarConfig.ServerVersion.getByVersion("1_8_R1"));
         Assertions.assertEquals(StarConfig.ServerVersion.UNKNOWN, StarConfig.ServerVersion.getByVersion("1_8_R2"));
         Assertions.assertEquals(StarConfig.ServerVersion.UNKNOWN, StarConfig.ServerVersion.getByVersion("1_8_R3"));
+        
+        Assertions.assertEquals(StarConfig.ServerVersion.CONTEMPORARY, StarConfig.ServerVersion.getByVersion("1_19_R1"));
     }
 
 }
