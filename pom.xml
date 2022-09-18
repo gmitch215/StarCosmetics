@@ -27,8 +27,30 @@
     <modules>
         <module>abstraction</module>
         <module>plugin</module>
-        <module>legacy</module>
-        <module>contemporary</module>
+
+        <module>1_9_R1</module>
+        <module>1_9_R2</module>
+
+        <module>1_10_R1</module>
+        <module>1_11_R1</module>
+        <module>1_12_R1</module>
+
+        <module>1_13_R1</module>
+        <module>1_13_R2</module>
+
+        <module>1_14_R1</module>
+        <module>1_15_R1</module>
+
+        <module>1_16_R1</module>
+        <module>1_16_R2</module>
+        <module>1_16_R3</module>
+
+        <module>1_17_R1</module>
+
+        <module>1_18_R1</module>
+        <module>1_18_R2</module>
+
+        <module>1_19_R1</module>
     </modules>
 
     <developers>
@@ -65,6 +87,11 @@
             <id>spigot-repo</id>
             <name>Spigot-API Repository</name>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>nms-repo</id>
+            <name>NMS Repository</name>
+            <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
         <repository>
             <id>jitpack</id>
