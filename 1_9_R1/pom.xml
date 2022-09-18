@@ -7,14 +7,14 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>starcosmetics-legacy</artifactId>
-    <name>StarCosmetics-Legacy</name>
-    <description>Legacy (1.9 - 1.12+) StarCosmetics MC Wrapper</description>
+    <artifactId>starcosmetics-1_9_R1</artifactId>
+    <name>StarCosmetics-1.9</name>
+    <description>Legacy (1.9 - 1.13+) StarCosmetics MC Wrapper</description>
 
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
+            <artifactId>spigot</artifactId>
             <version>1.9-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

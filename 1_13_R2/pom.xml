@@ -7,9 +7,9 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>starcosmetics-contemporary</artifactId>
-    <name>StarCosmetics-Contemporary</name>
-    <description>Contemporary (1.13+) StarCosmetics MC Wrapper</description>
+    <artifactId>starcosmetics-1_13_R2</artifactId>
+    <name>StarCosmetics-1.13.2</name>
+    <description>Contemporary (1.13.2+) StarCosmetics MC Wrapper</description>
 
     <properties>
         <lamp.version>3.0.71</lamp.version>
