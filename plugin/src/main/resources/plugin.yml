@@ -6,3 +6,31 @@ author: GamerCoder215
 website: ${project.url}
 load: POSTWORLD
 api-version: 1.13
+permissions:
+  starcosmetics.*:
+    description: Access to all StarCosmetics Actions
+    default: op
+    children:
+      starcosmetics.admin: true
+      starcosmetics.user: true
+
+  # Admin
+  starcosmetics.admin:
+    description: Access to all StarCosmetics Admin Actions
+    default: op
+
+  starcosmetics.admin.reloadconfig:
+    description: Access to reload the StarCosmetics config
+    default: op
+    children:
+      starcosmetics.admin: true
+  # User
+  starcosmetics.user:
+    description: Access to all StarCosmetics User Actions
+    default: true
+
+  starcosmetics.user.settings:
+    description: Access to StarCosmetics Settings
+    default: true
+    children:
+      starcosmetics.user: true
