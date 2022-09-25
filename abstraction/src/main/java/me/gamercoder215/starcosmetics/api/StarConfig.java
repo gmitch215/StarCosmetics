@@ -1,5 +1,8 @@
 package me.gamercoder215.starcosmetics.api;
 
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
+import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
+import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -141,5 +144,41 @@ public interface StarConfig {
              return getByVersion(getServerVersion());
         }
 
+    }
+
+   static CommandWrapper getCommandWrapper() {
+        int cmdV = ServerVersion.getCurrent().getCommandVersion();
+
+        try {
+            return (CommandWrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.CommandWrapperV" + cmdV)
+                    .getConstructor(Plugin.class)
+                    .newInstance(getPlugin());
+        } catch (ReflectiveOperationException e) {
+            print(e);
+            return null;
+        }
+    }
+
+    static CosmeticSelections getCosmeticSelections() {
+        String cosmeticV = getServerVersion().split("_")[0] + "_" + getServerVersion().split("_")[1];
+        try {
+            return (CosmeticSelections) Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
+                    .getConstructor()
+                    .newInstance();
+        } catch (ReflectiveOperationException e) {
+            print(e);
+            return null;
+        }
+    }
+
+    static Wrapper getWrapper() {
+        try {
+            return (Wrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.Wrapper" + StarConfig.getServerVersion())
+                    .getConstructor()
+                    .newInstance();
+        } catch (ReflectiveOperationException e) {
+            print(e);
+            return null;
+        }
     }
 }
