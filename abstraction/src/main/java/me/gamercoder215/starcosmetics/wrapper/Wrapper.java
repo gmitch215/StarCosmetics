@@ -1,7 +1,8 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
-import org.bukkit.Bukkit;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,19 +17,22 @@ public interface Wrapper {
 
     NBTWrapper getNBTWrapper(ItemStack item);
 
+    default ItemStack withID(Material m, int amount, String id) {
+        NBTWrapper wrapper = getNBTWrapper(new ItemStack(m, amount));
+        wrapper.setID(id);
+        return wrapper.getItem();
+    }
+
+    default ItemStack withID(Material m, String id) {
+        return withID(m, 1, id);
+    }
+
     void sendActionbar(Player p, String message);
 
     void spawnFakeEntity(Player p, EntityType type, Location loc, long deathTicks);
 
     void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks);
 
-    static String getServerVersion() {
-        return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
-    }
+    // Other Utilities
 
-    static Wrapper getWrapper() {
-        try {
-            return (Wrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.Wrapper" + getServerVersion()).getConstructor().newInstance();
-        } catch (Exception e) { throw new IllegalStateException("Wrapper not Found: " + getServerVersion()); }
-    }
 }
