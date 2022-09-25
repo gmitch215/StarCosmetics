@@ -1,11 +1,9 @@
 package me.gamercoder215.starcosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.wrapper.CommandWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -24,6 +22,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig {
         return true;
     }
 
+    private void registerEvents() {
+        new ClickEvents(this);
+    }
+
     private static FileConfiguration config;
 
     @Override
@@ -34,7 +36,9 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig {
         config = StarConfig.loadConfig();
         getLogger().info("Loaded Files...");
 
-        getCommandWrapper();
+        registerEvents();
+        StarConfig.getCommandWrapper();
+        getLogger().info("Loaded Classes...");
 
         getLogger().info("Done!");
     }
@@ -49,14 +53,14 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig {
     @Override
     public String get(String key) {
         Properties p = new Properties();
-        String lang = getLanguage().equalsIgnoreCase("en") ? "" : getLanguage();
+        String lang = getLanguage().equalsIgnoreCase("en") ? "" : "_" + getLanguage();
 
-        try (InputStream str = getClass().getResourceAsStream("/starcosmetics" + lang + ".properties")) {
+        try (InputStream str = getClass().getResourceAsStream("/lang/starcosmetics" + lang + ".properties")) {
             p.load(str);
             str.close();
             return ChatColor.translateAlternateColorCodes('&', p.getProperty(key, "Unknown Value"));
         } catch (IOException e) {
-            StarConfig.print(e);
+            print(e);
             return "Unknown Value";
         }
     }
@@ -71,19 +75,5 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig {
     public static void print(Throwable t) {
         StarConfig.print(t);
     }
-
-    public static CommandWrapper getCommandWrapper() {
-        StarCosmetics plugin = StarCosmetics.getPlugin(StarCosmetics.class);
-        int cmdV = ServerVersion.getCurrent().getCommandVersion();
-
-        try {
-            return (CommandWrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.CommandWrapperV" + cmdV).getConstructor(Plugin.class).newInstance(plugin);
-        } catch (ReflectiveOperationException e) {
-            print(e);
-            return null;
-        }
-    }
-
-
 
 }
