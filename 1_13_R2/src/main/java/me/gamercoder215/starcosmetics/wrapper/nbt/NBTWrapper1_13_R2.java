@@ -1,4 +1,4 @@
-package me.gamercoder215.starcosmetics.wrapper;
+package me.gamercoder215.starcosmetics.wrapper.nbt;
 
 import net.minecraft.server.v1_13_R2.ItemStack;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;

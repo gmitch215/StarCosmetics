@@ -1,6 +1,8 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_11_R1;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_11_R1.*;

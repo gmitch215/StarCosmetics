@@ -1,14 +1,14 @@
-package me.gamercoder215.starcosmetics.wrapper;
+package me.gamercoder215.starcosmetics.wrapper.nbt;
 
-import net.minecraft.server.v1_14_R1.ItemStack;
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.item.ItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 
 import java.util.UUID;
 
-public class NBTWrapper1_14_R1 extends NBTWrapper {
+public class NBTWrapper1_17_R1 extends NBTWrapper {
 
-    public NBTWrapper1_14_R1(org.bukkit.inventory.ItemStack item) {
+    public NBTWrapper1_17_R1(org.bukkit.inventory.ItemStack item) {
         super(item);
     }
 

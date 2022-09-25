@@ -1,4 +1,4 @@
-package me.gamercoder215.starcosmetics.wrapper;
+package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.entity.Player;

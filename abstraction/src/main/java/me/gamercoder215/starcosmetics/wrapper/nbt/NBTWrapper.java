@@ -1,6 +1,5 @@
-package me.gamercoder215.starcosmetics.wrapper;
+package me.gamercoder215.starcosmetics.wrapper.nbt;
 
-import com.avaje.ebean.validation.NotNull;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -14,8 +13,7 @@ public abstract class NBTWrapper {
     NBTWrapper(ItemStack item) {
         this.item = item;
     }
-
-    @NotNull
+    
     public ItemStack getItem() {
         return item;
     }
@@ -27,6 +25,8 @@ public abstract class NBTWrapper {
     public final String getID() {
         return getNBTString("id");
     }
+
+    public final boolean hasID() { return getID() != null && !getID().isEmpty(); }
 
     public abstract String getNBTString(String key);
 

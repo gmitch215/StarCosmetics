@@ -1,21 +1,21 @@
-package me.gamercoder215.starcosmetics.wrapper;
+package me.gamercoder215.starcosmetics.wrapper.nbt;
 
-import net.minecraft.server.v1_10_R1.ItemStack;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
+import net.minecraft.server.v1_16_R3.ItemStack;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 
 import java.util.UUID;
 
-public class NBTWrapper1_10_R1 extends NBTWrapper {
+public class NBTWrapper1_16_R3 extends NBTWrapper {
 
-    public NBTWrapper1_10_R1(org.bukkit.inventory.ItemStack item) {
+    public NBTWrapper1_16_R3(org.bukkit.inventory.ItemStack item) {
         super(item);
     }
 
     @Override
     public String getNBTString(String key) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         return starcosmetics.getString(key);
@@ -24,7 +24,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public void setNBT(String key, String value) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         starcosmetics.setString(key, value);
@@ -36,7 +36,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public boolean getNBTBoolean(String key) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         return starcosmetics.getBoolean(key);
@@ -45,7 +45,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public void setNBT(String key, boolean value) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         starcosmetics.setBoolean(key, value);
@@ -57,7 +57,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public int getNBTInt(String key) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         return starcosmetics.getInt(key);
@@ -66,7 +66,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public void setNBT(String key, int value) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         starcosmetics.setInt(key, value);
@@ -78,7 +78,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public double getNBTDouble(String key) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         return starcosmetics.getDouble(key);
@@ -87,7 +87,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public void setNBT(String key, double value) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         starcosmetics.setDouble(key, value);
@@ -99,7 +99,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public UUID getNBTUUID(String key) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         return UUID.fromString(new String(starcosmetics.getByteArray(key)));
@@ -108,7 +108,7 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
     @Override
     public void setNBT(String key, UUID value) {
         ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         starcosmetics.setByteArray(key, value.toString().getBytes());

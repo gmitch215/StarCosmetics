@@ -1,4 +1,4 @@
-package me.gamercoder215.starcosmetics.wrapper;
+package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Bukkit;

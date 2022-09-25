@@ -1,6 +1,8 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_9_R1;
 import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
