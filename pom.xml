@@ -7,7 +7,7 @@
 
     <name>StarCosmetics-Parent</name>
     <url>https://github.com/GamerCoder215/StarCosmetics</url>
-    <description>Free 200+ Cosmetics Plugin for Spigot</description>
+    <description>Advanced and Open-Source Cosmetics Plugin for Spigot 1.9+</description>
     <packaging>pom</packaging>
 
     <properties>
@@ -60,7 +60,6 @@
                 <role>Owner</role>
             </roles>
             <email>gamercoder215@teaminceptus.us</email>
-            <organization>Team Inceptus</organization>
         </developer>
     </developers>
 
@@ -114,6 +113,36 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M7</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/**/*</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                    <relocations>
+                        <relocation>
+                            <pattern>revxrsal.commands</pattern>
+                            <shadedPattern>me.gamercoder215.starcosmetics.shaded.lamp</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
