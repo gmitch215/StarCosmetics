@@ -1,6 +1,9 @@
-package me.gamercoder215.starcosmetics.api.cosmetics;
+package me.gamercoder215.starcosmetics.api.cosmetics.selection;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 
 public abstract class CosmeticSelection {

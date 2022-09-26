@@ -1,5 +1,9 @@
-package me.gamercoder215.starcosmetics.api.cosmetics;
+package me.gamercoder215.starcosmetics.api.cosmetics.selection;
 
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseGadget;
+import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -36,7 +40,11 @@ public final class GadgetSelection extends CosmeticSelection implements Consumer
 
     @Override
     public CosmeticKey getParent() {
-        return null;
+        return BaseGadget.CLICK_GADGET;
+    }
+
+    public ItemStack getItem() {
+        return item;
     }
 
     public static final class Builder {
