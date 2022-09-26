@@ -3,7 +3,9 @@ package me.gamercoder215.starcosmetics;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Firework;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -41,6 +43,14 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig {
         getLogger().info("Loaded Classes...");
 
         getLogger().info("Done!");
+    }
+
+    @Override
+    public void onDisable() {
+        // Remove Cosmetic Fireworks
+        for (World w : Bukkit.getWorlds())
+            for (Firework f : w.getEntitiesByClass(Firework.class))
+                if (f.hasMetadata("cosmetic")) f.remove();
     }
 
     // Config Implementation

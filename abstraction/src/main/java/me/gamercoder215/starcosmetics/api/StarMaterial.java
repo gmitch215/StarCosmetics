@@ -7,6 +7,7 @@ public enum StarMaterial {
     POPPY("red_flower", "poppy"),
     TOTEM("totem", "totem_of_undying"),
     MAGMA_BLOCK("magma", "magma_block"),
+    OAK_LOG("log", "oak_log"),
     ;
 
     private final String[] names;
