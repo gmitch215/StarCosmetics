@@ -1,16 +1,22 @@
 package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.TrailSelection;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.bukkit.Material;
+import org.bukkit.Statistic;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
+import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.TrailSelection;
 
 public class CosmeticSelections1_12 implements CosmeticSelections {
 

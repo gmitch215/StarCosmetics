@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarMaterial;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public class CosmeticSelections1_10 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
-            .add(new BaseTrail.TrailSelection("magma_block", BaseTrail.PROJECTILE_TRAIL, StarMaterial.MAGMA_BLOCK.find(),
+            .add(new TrailSelection("magma_block", BaseTrail.PROJECTILE_TRAIL, StarMaterial.MAGMA_BLOCK.find(),
                     CompletionCriteria.fromMined(175, StarMaterial.MAGMA_BLOCK.find()), CosmeticRarity.COMMON))
 
             .build();

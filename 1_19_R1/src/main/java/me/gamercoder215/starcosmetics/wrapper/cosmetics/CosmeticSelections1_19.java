@@ -3,7 +3,8 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.TrailSelection;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
+
 import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
 
@@ -19,7 +20,8 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
     // Trails
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
             .add(new TrailSelection("sculk_soul", BaseTrail.PROJECTILE_TRAIL, Particle.SCULK_CHARGE,
-                    CompletionCriteria.fromKilled(2, EntityType.WARDEN), CosmeticRarity.EPIC))
+                    CompletionCriteria.fromKilled(5, EntityType.WARDEN), CosmeticRarity.EPIC))
+            
             .build();
 
     // Selections

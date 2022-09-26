@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.StarMaterial;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.ParticleSelection;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.TrailSelection;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
+
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -67,8 +67,30 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new TrailSelection("chickens", BaseTrail.PROJECTILE_TRAIL, EntityType.CHICKEN,
                     CompletionCriteria.fromKilled(200, EntityType.CHICKEN), CosmeticRarity.OCCASIONAL))
             .build();
+    
+    // Ground Trails
+
+    private static final List<CosmeticSelection> GROUND_TRAILS = ImmutableList.<CosmeticSelection>builder()
+            .add(new TrailSelection("poppy", BaseTrail.GROUND_TRAIL, StarMaterial.POPPY.find(),
+                    CompletionCriteria.fromMined(120, StarMaterial.POPPY.find()), CosmeticRarity.OCCASIONAL))
+            
+            .add(new TrailSelection("lava", BaseTrail.GROUND_TRAIL, Particle.LAVA,
+                    CompletionCriteria.fromKilled(525, EntityType.BLAZE), CosmeticRarity.RARE))
+            
+            .add(new TrailSelection("water", BaseTrail.GROUND_TRAIL, Particle.WATER_SPLASH,
+                    CompletionCriteria.fromKilled(625, EntityType.SQUID), CosmeticRarity.RARE))
+            .build();
+
+    // Sound Trails
+
+    private static final List<CosmeticSelection> SOUND_TRAILS = ImmutableList.<CosmeticSelection>builder()
+            .add(new TrailSelection("slime", BaseTrail.SOUND_TRAIL, Sound.BLOCK_SLIME_PLACE,
+                    CompletionCriteria.fromKilled(100, EntityType.SLIME) ,CosmeticRarity.OCCASIONAL))
+            .build();
 
     // Shapes
+
+    // Small Rings
 
     private static final List<CosmeticSelection> SMALL_RINGS = ImmutableList.<CosmeticSelection>builder()
             .add(new ParticleSelection("heart", BaseShape.SMALL_RING, Particle.HEART,
@@ -78,6 +100,8 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
             .build();
 
     // Gadgets
+
+    // Click Gadgets
 
     private static final List<CosmeticSelection> CLICK_GADGETS = ImmutableList.<CosmeticSelection>builder()
             .add(GadgetSelection.builder()
@@ -110,8 +134,12 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
 
     private static final Map<CosmeticKey, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<CosmeticKey, List<CosmeticSelection>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, PROJECTILE_TRAILS)
+            .put(BaseTrail.GROUND_TRAIL, GROUND_TRAILS)
+            .put(BaseTrail.SOUND_TRAIL, SOUND_TRAILS)
 
             .put(BaseShape.SMALL_RING, SMALL_RINGS)
+
+            .put(BaseGadget.CLICK_GADGET, CLICK_GADGETS)
             .build();
 
     @Override

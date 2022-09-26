@@ -3,8 +3,10 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.TrailSelection;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
+
 import org.bukkit.Material;
+import org.bukkit.Particle;
 
 import java.util.List;
 import java.util.Map;
@@ -20,10 +22,15 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
             .add(new TrailSelection("netherite", BaseTrail.PROJECTILE_TRAIL, Material.NETHERITE_INGOT,
                     CompletionCriteria.fromMined(120, Material.ANCIENT_DEBRIS), CosmeticRarity.RARE))
-
+            
             .add(new TrailSelection("super_netherite", BaseTrail.PROJECTILE_TRAIL, Material.NETHERITE_INGOT,
                     CompletionCriteria.fromMined(260, Material.ANCIENT_DEBRIS), CosmeticRarity.EPIC))
 
+            .build();
+
+    private static final List<CosmeticSelection> BLOCK_TRAILS = ImmutableList.<CosmeticSelection>builder()
+            .add(new TrailSelection("soul_flame", BaseTrail.GROUND_TRAIL, Particle.SOUL_FIRE_FLAME,
+                    CompletionCriteria.fromMined(800, Material.SOUL_SAND, Material.SOUL_SOIL), CosmeticRarity.RARE))
             .build();
 
     // Selections
@@ -32,6 +39,10 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
             .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
                     CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_15").stream(),
                     PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
+            )
+            .put(BaseTrail.GROUND_TRAIL, Stream.concat(
+                    CosmeticSelections.getForVersion(BaseTrail.GROUND_TRAIL, "1_15").stream(),
+                    BLOCK_TRAILS.stream()).collect(Collectors.toList())
             )
             .build();
 

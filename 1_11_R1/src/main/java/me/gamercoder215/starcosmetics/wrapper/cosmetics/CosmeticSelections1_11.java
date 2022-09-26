@@ -4,13 +4,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarMaterial;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.TrailSelection;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.TrailSelection;
+
 import org.bukkit.entity.EntityType;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
 
 public class CosmeticSelections1_11 implements CosmeticSelections {
 

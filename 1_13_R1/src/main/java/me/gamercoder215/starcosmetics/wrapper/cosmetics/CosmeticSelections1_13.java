@@ -3,6 +3,8 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
@@ -17,7 +19,7 @@ public class CosmeticSelections1_13 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
-            .add(new BaseTrail.TrailSelection("shells", BaseTrail.PROJECTILE_TRAIL, Material.NAUTILUS_SHELL,
+            .add(new TrailSelection("shells", BaseTrail.PROJECTILE_TRAIL, Material.NAUTILUS_SHELL,
                     CompletionCriteria.fromKilled(50, EntityType.DROWNED), CosmeticRarity.OCCASIONAL))
 
             .build();

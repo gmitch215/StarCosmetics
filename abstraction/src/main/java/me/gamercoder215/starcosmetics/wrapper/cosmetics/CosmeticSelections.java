@@ -2,7 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticSelection;
+import me.gamercoder215.starcosmetics.api.cosmetics.selection.CosmeticSelection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
