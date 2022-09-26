@@ -1,9 +1,11 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,7 +29,7 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (p.isDead() || !p.isValid()) {
+                    if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
                         cancel();
                         return;
                     }
@@ -42,7 +44,7 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (p.isDead() || !p.isValid()) {
+                    if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
                         cancel();
                         return;
                     }
@@ -58,7 +60,7 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (p.isDead() || !p.isValid()) {
+                    if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
                         cancel();
                         return;
                     }
@@ -93,7 +95,43 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
                 }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
             }
         }
-    });
+    }),
+
+    GROUND_TRAIL(Material.STONE, (e, o) -> {
+        Location loc = e.getLocation().add(0, 0.1, 0);
+
+        if (o instanceof Particle) {
+            Particle part = (Particle) o;
+            e.getWorld().spawnParticle(part, loc, r.nextInt(2), 0, 0, 0, 0);
+        }
+
+        if (o instanceof Material || o instanceof ItemStack) {
+            ItemStack item = o instanceof Material ? new ItemStack((Material) o) : (ItemStack) o;
+            for (Player pl : e.getWorld().getPlayers()) StarConfig.getWrapper().spawnFakeItem(pl, item, loc, 5);
+        }
+    }),
+
+    SOUND_TRAIL(Material.JUKEBOX, (e, o) -> {
+        if (!(o instanceof Sound)) return;
+        if (!(e instanceof Projectile)) return;
+        Projectile p = (Projectile) e;
+        Sound sound = (Sound) o;
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
+                    cancel();
+                    return;
+                }
+
+
+            }
+        }.runTaskTimer(StarConfig.getPlugin(), 2, 2);
+        e.getWorld().playSound(e.getLocation(), sound, 1, 1);
+    })
+
+    ;
 
     private final Material icon;
     private final BiConsumer<Entity, Object> trail;
@@ -111,7 +149,7 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
     @Override
     public String getNamespace() {
         return "trail";
-    }
+    } 
 
     @Override
     public String getDisplayKey() {
@@ -125,30 +163,7 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
 
     @Override
     public void accept(Object... args) {
-        accept((Projectile) args[0], args[1]);
-    }
-
-    public static class TrailSelection extends CosmeticSelection {
-
-        private final String name;
-        private final BaseTrail parent;
-
-        public TrailSelection(String name, BaseTrail parent, Object value, CompletionCriteria criteria, CosmeticRarity rarity) {
-            super(value, criteria, rarity);
-
-            this.name = name;
-            this.parent = parent;
-        }
-
-        @Override
-        public String getKey() {
-            return name;
-        }
-
-        @Override
-        public CosmeticKey getParent() {
-            return parent;
-        }
+        accept((Entity) args[0], args[1]);
     }
 
 }

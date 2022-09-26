@@ -63,28 +63,4 @@ public enum BaseShape implements BiConsumer<Location, Particle>, CosmeticKey {
     public void accept(Object... args) {
         accept((Location) args[0], (Particle) args[1]);
     }
-
-    public static class ParticleSelection extends CosmeticSelection {
-
-        private final BaseShape parent;
-        private final String name;
-
-        public ParticleSelection(String name, BaseShape parent, Object object, CompletionCriteria criteria, CosmeticRarity rarity) {
-            super(object, criteria, rarity);
-
-            this.name = name;
-            this.parent = parent;
-        }
-
-
-        @Override
-        public String getKey() {
-            return name;
-        }
-
-        @Override
-        public CosmeticKey getParent() {
-            return parent;
-        }
-    }
 }
