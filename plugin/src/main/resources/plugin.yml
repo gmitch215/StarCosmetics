@@ -24,6 +24,13 @@ permissions:
     default: op
     children:
       starcosmetics.admin: true
+
+  starcosmetics.admin.bypasscheck:
+    description: Access to bypass the StarCosmetics requirements check for enabling cosmetics
+    default: op
+    children:
+      starcosmetics.admin: true
+
   # User
   starcosmetics.user:
     description: Access to all StarCosmetics User Actions

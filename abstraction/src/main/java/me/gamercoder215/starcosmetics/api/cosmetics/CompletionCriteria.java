@@ -19,7 +19,7 @@ public class CompletionCriteria {
     private final Object[] displayArguments;
 
     public CompletionCriteria(Predicate<Player> criteria, String displayKey, Object... displayArguments) {
-        this.criteria = criteria;
+        this.criteria = p -> p.hasPermission("starcosmetics.admin.bypasscheck") || criteria.test(p);
         this.displayKey = displayKey;
         this.displayArguments = displayArguments;
     }
@@ -34,6 +34,8 @@ public class CompletionCriteria {
 
     public boolean hasUnlocked(Player player) {
         if (player == null) return false;
+        if (player.hasPermission("starcosmetics.admin.bypasscheck")) return true;
+
         return criteria.test(player);
     }
 
