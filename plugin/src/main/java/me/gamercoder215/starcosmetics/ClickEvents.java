@@ -7,16 +7,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class ClickEvents implements Listener {
 
-    private final StarCosmetics plugin;
+    // private final StarCosmetics plugin;
 
     public ClickEvents(StarCosmetics plugin) {
-        this.plugin = plugin;
+        // this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-
+        
     }
 
 }
