@@ -6,10 +6,13 @@ import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticSelection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 
 public interface CosmeticSelections {
+
+    SecureRandom r = new SecureRandom();
 
     Map<CosmeticKey, List<CosmeticSelection>> getAllSelections();
 
