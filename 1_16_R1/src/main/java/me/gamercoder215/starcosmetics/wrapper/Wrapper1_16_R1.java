@@ -55,6 +55,7 @@ public class Wrapper1_16_R1 implements Wrapper {
         CraftWorld cw = (CraftWorld) loc.getWorld();
         EntityPlayer sp = ((CraftPlayer) p).getHandle();
         EntityItem nmsEntity = new EntityItem(cw.getHandle(), loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
+        nmsEntity.o();
 
         PacketPlayOutSpawnEntity add = new PacketPlayOutSpawnEntity(nmsEntity);
         sp.playerConnection.sendPacket(add);

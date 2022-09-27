@@ -58,6 +58,7 @@ public class Wrapper1_19_R1 implements Wrapper {
         CraftWorld cw = (CraftWorld) loc.getWorld();
         ServerPlayer sp = ((CraftPlayer) p).getHandle();
         ItemEntity nmsEntity = new ItemEntity(cw.getHandle(), loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
+        nmsEntity.setNeverPickUp();
 
         ClientboundAddEntityPacket add = new ClientboundAddEntityPacket(nmsEntity);
         sp.connection.send(add);
