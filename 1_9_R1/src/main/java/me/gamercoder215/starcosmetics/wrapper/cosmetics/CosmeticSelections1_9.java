@@ -42,7 +42,7 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(145, Material.REDSTONE_ORE), CosmeticRarity.OCCASIONAL))
             .add(new TrailSelection("gold", BaseTrail.PROJECTILE_TRAIL, Material.GOLD_INGOT,
                     CompletionCriteria.fromMined(115, Material.GOLD_ORE), CosmeticRarity.OCCASIONAL))
-
+                    
             .add(new TrailSelection("diamond", BaseTrail.PROJECTILE_TRAIL, Material.DIAMOND,
                     CompletionCriteria.fromMined(110, Material.DIAMOND_ORE), CosmeticRarity.UNCOMMON))
             .add(new TrailSelection("emerald", BaseTrail.PROJECTILE_TRAIL, Material.EMERALD,
