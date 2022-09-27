@@ -125,7 +125,7 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
                     return;
                 }
 
-
+                p.getWorld().playSound(p.getLocation(), sound, r.nextInt(2) + 3, 1);
             }
         }.runTaskTimer(StarConfig.getPlugin(), 2, 2);
         e.getWorld().playSound(e.getLocation(), sound, 1, 1);
