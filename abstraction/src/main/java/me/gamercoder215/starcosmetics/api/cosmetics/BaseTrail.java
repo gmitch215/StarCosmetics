@@ -9,6 +9,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +19,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
-public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
+public enum BaseTrail implements Trail {
     
     PROJECTILE_TRAIL(Material.ARROW, (e, o) -> {
         if (!(e instanceof Projectile)) return;
@@ -82,7 +84,7 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (p.isDead() || !p.isValid()) {
+                        if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
                             cancel();
                             return;
                         }
@@ -93,6 +95,58 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
                         }
                     }
                 }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
+            }
+        }
+
+        // Custom Trails
+
+        if (o instanceof String) {
+            String type = (String) o;
+            switch (type.toLowerCase()) {
+                case "riptide": {
+                    w.attachRiptide(p);
+                    break;
+                }
+            }
+
+            // Custom Trails with Input
+            if (type.contains(":")) {
+                type = type.split(":")[0];
+                String input = type.split(":")[1];
+                switch (type) {
+                    case "fancy_item": {
+                        Material m = Material.getMaterial(input);
+                        ItemStack item = new ItemStack(m);
+                        
+                        new BukkitRunnable() {
+                            public void run() {
+                                if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
+                                    cancel();
+                                    return;
+                                }
+                                
+                                // TODO: Fix Location for right arm aligned with projectile
+                                ArmorStand as = p.getWorld().spawn(p.getLocation(), ArmorStand.class);
+                                as.setInvulnerable(true);
+                                as.setVisible(false);
+                                as.setArms(true);
+                                as.setMarker(true);
+
+                                Vector dir = p.getLocation().getDirection();
+                                
+                                as.setRightArmPose(new EulerAngle(dir.getX(), dir.getY(), dir.getZ()));
+                                as.getEquipment().setItemInMainHand(item);
+
+                                new BukkitRunnable() {
+                                    public void run() {
+                                        as.remove();
+                                    }
+                                }.runTaskLater(StarConfig.getPlugin(), 8);
+                        }
+                        }.runTaskTimer(StarConfig.getPlugin(), 5, 8);
+                        break;
+                    }
+                }
             }
         }
     }),
@@ -129,7 +183,7 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
             }
         }.runTaskTimer(StarConfig.getPlugin(), 2, 2);
         e.getWorld().playSound(e.getLocation(), sound, 1, 1);
-    })
+    }),
 
     ;
 
@@ -159,11 +213,6 @@ public enum BaseTrail implements BiConsumer<Entity, Object>, CosmeticKey {
     @Override
     public Material getIcon() {
         return icon;
-    }
-
-    @Override
-    public void accept(Object... args) {
-        accept((Entity) args[0], args[1]);
     }
 
 }
