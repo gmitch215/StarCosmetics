@@ -1,5 +1,18 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftArmorStand;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_19_R1;
@@ -9,15 +22,9 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class Wrapper1_19_R1 implements Wrapper {
     @Override
@@ -70,5 +77,40 @@ public class Wrapper1_19_R1 implements Wrapper {
                 sp.connection.send(remove);
             }
         }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+    }
+
+    @Override
+    public void attachRiptide(org.bukkit.entity.Entity en) {
+        ArmorStand as = ((CraftArmorStand) en.getWorld().spawnEntity(en.getLocation(), EntityType.ARMOR_STAND)).getHandle();
+        as.setInvulnerable(true);
+        as.setInvisible(true);
+        as.setMarker(true);
+
+        new BukkitRunnable() {
+            public void run() {
+                if (en.isDead() || !en.isValid() || en.hasMetadata("stopped")) {
+                    cancel();
+                    return;
+                }
+
+                as.teleportTo(en.getLocation().getX(), en.getLocation().getY(), en.getLocation().getZ());
+                
+                try {
+                    Field spinTicks = LivingEntity.class.getDeclaredField("bC");
+                    spinTicks.setAccessible(true);
+                    spinTicks.setInt(as, 3);
+
+                    if (!as.level.isClientSide) {
+                        Method setFlag = LivingEntity.class.getDeclaredMethod("c");
+                        setFlag.setAccessible(true);
+                        setFlag.invoke(as, 4);
+                    }
+                } catch (ReflectiveOperationException e) {
+                    StarConfig.print(e);
+                }
+
+                
+            }
+        }.runTaskTimer(StarConfig.getPlugin(), 0, 2);
     }
 }

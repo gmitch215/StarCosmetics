@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +33,8 @@ public interface Wrapper {
     void spawnFakeEntity(Player p, EntityType type, Location loc, long deathTicks);
 
     void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks);
+
+    void attachRiptide(Entity en);
 
     // Other Utilities
 

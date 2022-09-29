@@ -1,11 +1,5 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
-import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
-import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_12_R1;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -14,6 +8,17 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_12_R1;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_12_R1.Entity;
+import net.minecraft.server.v1_12_R1.EntityItem;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntity;
 
 public class Wrapper1_12_R1 implements Wrapper {
 
@@ -67,6 +72,11 @@ public class Wrapper1_12_R1 implements Wrapper {
                 sp.playerConnection.sendPacket(remove);
             }
         }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+    }
+
+    @Override
+    public void attachRiptide(org.bukkit.entity.Entity en) {
+        throw new UnsupportedOperationException();
     }
 
 }

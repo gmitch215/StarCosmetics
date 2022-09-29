@@ -1,5 +1,15 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftArmorStand;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_18_R1;
@@ -9,15 +19,8 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class Wrapper1_18_R1 implements Wrapper {
 
@@ -71,6 +74,26 @@ public class Wrapper1_18_R1 implements Wrapper {
                 sp.connection.send(remove);
             }
         }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+    }
+
+    @Override
+    public void attachRiptide(org.bukkit.entity.Entity en) {
+        ArmorStand as = ((CraftArmorStand) en.getWorld().spawnEntity(en.getLocation(), EntityType.ARMOR_STAND)).getHandle();
+        as.setInvulnerable(true);
+        as.setInvisible(true);
+        as.setMarker(true);
+
+        new BukkitRunnable() {
+            public void run() {
+                if (en.isDead() || !en.isValid() || en.hasMetadata("stopped")) {
+                    cancel();
+                    return;
+                }
+
+                as.teleportTo(en.getLocation().getX(), en.getLocation().getY(), en.getLocation().getZ());
+                as.startAutoSpinAttack(3);
+            }
+        }.runTaskTimer(StarConfig.getPlugin(), 0, 2);
     }
 
 }

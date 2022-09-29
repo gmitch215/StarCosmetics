@@ -69,4 +69,9 @@ public class Wrapper1_10_R1 implements Wrapper {
         }.runTaskLater(StarConfig.getPlugin(), deathTicks);
     }
 
+    @Override
+    public void attachRiptide(org.bukkit.entity.Entity en) {
+        throw new UnsupportedOperationException();
+    }
+
 }

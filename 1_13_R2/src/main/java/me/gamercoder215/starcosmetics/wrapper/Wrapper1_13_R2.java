@@ -1,19 +1,26 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
-import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
-import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_13_R2;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_13_R2;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_13_R2.Entity;
+import net.minecraft.server.v1_13_R2.EntityArmorStand;
+import net.minecraft.server.v1_13_R2.EntityItem;
+import net.minecraft.server.v1_13_R2.EntityPlayer;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_13_R2.PacketPlayOutSpawnEntity;
 
 public class Wrapper1_13_R2 implements Wrapper {
 
@@ -67,6 +74,26 @@ public class Wrapper1_13_R2 implements Wrapper {
                 sp.playerConnection.sendPacket(remove);
             }
         }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+    }
+
+    @Override
+    public void attachRiptide(org.bukkit.entity.Entity en) {
+        EntityArmorStand as = ((CraftArmorStand) en.getWorld().spawnEntity(en.getLocation(), EntityType.ARMOR_STAND)).getHandle();
+        as.setInvulnerable(true);
+        as.setInvisible(true);
+        as.setMarker(true);
+
+        new BukkitRunnable() {
+            public void run() {
+                if (en.isDead() || !en.isValid() || en.hasMetadata("stopped")) {
+                    cancel();
+                    return;
+                }
+
+                as.enderTeleportTo(en.getLocation().getX(), en.getLocation().getY(), en.getLocation().getZ());
+                as.o(3);
+            }
+        }.runTaskTimer(StarConfig.getPlugin(), 0, 2);
     }
 
 }
