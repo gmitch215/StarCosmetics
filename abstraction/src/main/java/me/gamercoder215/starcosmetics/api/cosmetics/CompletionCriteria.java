@@ -60,7 +60,7 @@ public class CompletionCriteria {
                 count += p.getStatistic(Statistic.MINE_BLOCK, m);
             }
             return count >= amount;
-        }, "criteria.amount.list." + materials.size(), amount, materials.toArray());
+        }, "criteria.amount.mined.list." + materials.size(), amount, materials.toArray());
     }
 
     public static CompletionCriteria fromMined(int amount, Material... materials) {
@@ -71,12 +71,31 @@ public class CompletionCriteria {
         return new CompletionCriteria(p -> p.getStatistic(Statistic.KILL_ENTITY, type) >= amount, "criteria.amount.killed", amount, WordUtils.capitalizeFully(type.name().replace("_", " ")));
     }
 
+    /* TODO: Write for the following Statistics:
+      - ITEM_ENCHANTED
+      - 
+    */
     public static CompletionCriteria fromStatistic(Statistic stat, int amount) {
         return new CompletionCriteria(p -> p.getStatistic(stat) >= amount, "criteria.amount." + stat.name().toLowerCase(), amount);
     }
 
     public static CompletionCriteria fromCrafted(int amount, Material m) {
         return new CompletionCriteria(p -> p.getStatistic(Statistic.CRAFT_ITEM, m) >= amount, "criteria.amount.crafted", amount, WordUtils.capitalizeFully(m.name().replace("_", " ")));
+    }
+
+    public static CompletionCriteria fromCrafted(int amount, Material... materials) {
+        return fromCrafted(amount, Arrays.asList(materials));
+    }
+
+    // TODO: Multi-Crafting Language Messages
+    public static CompletionCriteria fromCrafted(int amount, Collection<Material> materials) {
+        return new CompletionCriteria(p -> {
+            int count = 0;
+            for (Material m : materials) {
+                count += p.getStatistic(Statistic.CRAFT_ITEM, m);
+            }
+            return count >= amount;
+        }, "criteria.amount.crafted.list." + materials.size(), amount, materials.toArray());
     }
 
 }
