@@ -24,7 +24,7 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
     // Trails
 
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
-            // Items
+            // Items + Fancy Items
             .add(new TrailSelection("red_flowers", BaseTrail.PROJECTILE_TRAIL, StarMaterial.POPPY.find(),
                     CompletionCriteria.fromMined(30, StarMaterial.POPPY.find()), CosmeticRarity.COMMON))
             .add(new TrailSelection("ghast", BaseTrail.PROJECTILE_TRAIL, Material.GHAST_TEAR,
@@ -35,6 +35,8 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(70, StarMaterial.OAK_LOG.find()), CosmeticRarity.COMMON))
             .add(new TrailSelection("beef", BaseTrail.PROJECTILE_TRAIL, Material.COOKED_BEEF,
                     CompletionCriteria.fromKilled(55, EntityType.COW), CosmeticRarity.COMMON))
+            .add(new TrailSelection("flint", BaseTrail.PROJECTILE_TRAIL, Material.FLINT,
+                    CompletionCriteria.fromMined(80, Material.GRAVEL), CosmeticRarity.COMMON))
 
             .add(new TrailSelection("iron", BaseTrail.PROJECTILE_TRAIL, Material.IRON_INGOT,
                     CompletionCriteria.fromMined(185, Material.IRON_ORE), CosmeticRarity.OCCASIONAL))
@@ -42,7 +44,6 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(145, Material.REDSTONE_ORE), CosmeticRarity.OCCASIONAL))
             .add(new TrailSelection("gold", BaseTrail.PROJECTILE_TRAIL, Material.GOLD_INGOT,
                     CompletionCriteria.fromMined(115, Material.GOLD_ORE), CosmeticRarity.OCCASIONAL))
-                    
             .add(new TrailSelection("diamond", BaseTrail.PROJECTILE_TRAIL, Material.DIAMOND,
                     CompletionCriteria.fromMined(110, Material.DIAMOND_ORE), CosmeticRarity.UNCOMMON))
             .add(new TrailSelection("emerald", BaseTrail.PROJECTILE_TRAIL, Material.EMERALD,
@@ -56,13 +57,32 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(265, Material.DIAMOND_ORE), CosmeticRarity.RARE))
             .add(new TrailSelection("super_emerald", BaseTrail.PROJECTILE_TRAIL, Material.EMERALD_BLOCK,
                     CompletionCriteria.fromMined(190, Material.EMERALD_ORE), CosmeticRarity.RARE))
+            .add(new TrailSelection("stone_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:stone_sword",
+                    CompletionCriteria.fromMined(1200, Material.STONE, Material.COBBLESTONE), CosmeticRarity.RARE))
+            
+            .add(new TrailSelection("diamond_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:diamond_sword",
+                    CompletionCriteria.fromKilled(75, EntityType.WITHER), CosmeticRarity.LEGENDARY))
 
+            
             // Particles
             .add(new TrailSelection("heart", BaseTrail.PROJECTILE_TRAIL, Particle.HEART,
-                    CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 10), CosmeticRarity.COMMON))
+                    CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 15), CosmeticRarity.COMMON))
+
             .add(new TrailSelection("flame", BaseTrail.PROJECTILE_TRAIL, Particle.FLAME,
                     CompletionCriteria.fromKilled(65, EntityType.BLAZE), CosmeticRarity.OCCASIONAL))
 
+            .add(new TrailSelection("lava", BaseTrail.PROJECTILE_TRAIL, Particle.LAVA,
+                    CompletionCriteria.fromMined(400, Material.NETHERRACK), CosmeticRarity.UNCOMMON))
+            .add(new TrailSelection("notes", BaseTrail.PROJECTILE_TRAIL, Particle.NOTE,
+                    CompletionCriteria.fromCrafted(85, Material.NOTE_BLOCK, Material.JUKEBOX), CosmeticRarity.UNCOMMON))
+            
+            .add(new TrailSelection("enchantment", BaseTrail.PROJECTILE_TRAIL, Particle.ENCHANTMENT_TABLE,
+                    CompletionCriteria.fromStatistic(Statistic.ITEM_ENCHANTED, 125), CosmeticRarity.RARE))
+            .add(new TrailSelection("anger", BaseTrail.PROJECTILE_TRAIL, Particle.VILLAGER_ANGRY, 
+                    CompletionCriteria.fromKilled(65, EntityType.IRON_GOLEM), CosmeticRarity.RARE))
+            
+            .add(new TrailSelection("dragon_breath", BaseTrail.PROJECTILE_TRAIL, Particle.DRAGON_BREATH,
+                    CompletionCriteria.fromKilled(10, EntityType.ENDER_DRAGON), CosmeticRarity.EPIC))
             // Entities
             .add(new TrailSelection("chickens", BaseTrail.PROJECTILE_TRAIL, EntityType.CHICKEN,
                     CompletionCriteria.fromKilled(200, EntityType.CHICKEN), CosmeticRarity.OCCASIONAL))

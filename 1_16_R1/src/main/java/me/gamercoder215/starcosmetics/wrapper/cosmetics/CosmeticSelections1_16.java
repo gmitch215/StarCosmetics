@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
 
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.entity.EntityType;
 
 import java.util.List;
 import java.util.Map;
@@ -20,12 +21,16 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+            // Items + Fancy Items
             .add(new TrailSelection("netherite", BaseTrail.PROJECTILE_TRAIL, Material.NETHERITE_INGOT,
                     CompletionCriteria.fromMined(120, Material.ANCIENT_DEBRIS), CosmeticRarity.RARE))
             
-            .add(new TrailSelection("super_netherite", BaseTrail.PROJECTILE_TRAIL, Material.NETHERITE_INGOT,
+            .add(new TrailSelection("super_netherite", BaseTrail.PROJECTILE_TRAIL, Material.NETHERITE_BLOCK,
                     CompletionCriteria.fromMined(260, Material.ANCIENT_DEBRIS), CosmeticRarity.EPIC))
-
+            
+            .add(new TrailSelection("netherite_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:netherite_sword",
+                    CompletionCriteria.fromKilled(1250, EntityType.WITHER_SKELETON), CosmeticRarity.MYTHICAL))
+            
             .build();
 
     private static final List<CosmeticSelection> BLOCK_TRAILS = ImmutableList.<CosmeticSelection>builder()

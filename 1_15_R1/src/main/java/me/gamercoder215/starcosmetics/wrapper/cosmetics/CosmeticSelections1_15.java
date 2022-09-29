@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,13 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+            // Items + Fancy Items
             .add(new TrailSelection("honeycomb", BaseTrail.PROJECTILE_TRAIL, Material.HONEYCOMB,
                     CompletionCriteria.fromMined(240, Material.OAK_LOG, Material.BIRCH_LOG), CosmeticRarity.COMMON))
 
+            // Particles
+            .add(new TrailSelection("honey", BaseTrail.PROJECTILE_TRAIL, Particle.DRIPPING_HONEY,
+                    CompletionCriteria.fromCrafted(80, Material.BEEHIVE), CosmeticRarity.UNCOMMON))
             .build();
 
     // Selections
