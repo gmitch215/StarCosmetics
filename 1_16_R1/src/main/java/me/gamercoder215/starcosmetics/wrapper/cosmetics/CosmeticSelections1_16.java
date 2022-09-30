@@ -22,6 +22,9 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
     // Trails
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
             // Items + Fancy Items
+            .add(new TrailSelection("crying_obsidian", BaseTrail.PROJECTILE_TRAIL, Material.CRYING_OBSIDIAN,
+                    CompletionCriteria.fromMined(250, Material.OBSIDIAN), CosmeticRarity.UNCOMMON))
+
             .add(new TrailSelection("netherite", BaseTrail.PROJECTILE_TRAIL, Material.NETHERITE_INGOT,
                     CompletionCriteria.fromMined(120, Material.ANCIENT_DEBRIS), CosmeticRarity.RARE))
             

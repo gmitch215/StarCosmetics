@@ -28,7 +28,9 @@ public class CosmeticSelections1_13 implements CosmeticSelections {
             .add(new TrailSelection("coral", BaseTrail.PROJECTILE_TRAIL, 
                     Arrays.asList(Material.FIRE_CORAL_BLOCK, Material.TUBE_CORAL_BLOCK, Material.BRAIN_CORAL_BLOCK, Material.BUBBLE_CORAL_BLOCK, Material.HORN_CORAL_BLOCK),
                     CompletionCriteria.fromCrafted(15, Material.CONDUIT), CosmeticRarity.RARE))
-            
+            .add(new TrailSelection("membranes", BaseTrail.PROJECTILE_TRAIL, Material.PHANTOM_MEMBRANE,
+                    CompletionCriteria.fromKilled(100, EntityType.PHANTOM), CosmeticRarity.RARE))
+                    
             .add(new TrailSelection("sea_heart", BaseTrail.PROJECTILE_TRAIL, Material.HEART_OF_THE_SEA,
                     CompletionCriteria.fromKilled(400, EntityType.ELDER_GUARDIAN), CosmeticRarity.EPIC))
             

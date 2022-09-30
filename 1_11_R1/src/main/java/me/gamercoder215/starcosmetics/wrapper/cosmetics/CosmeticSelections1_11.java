@@ -22,7 +22,7 @@ public class CosmeticSelections1_11 implements CosmeticSelections {
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
             .add(new TrailSelection("totems", BaseTrail.PROJECTILE_TRAIL, StarMaterial.TOTEM.find(),
                     CompletionCriteria.fromKilled(350, EntityType.EVOKER), CosmeticRarity.EPIC))
-
+            
             .build();
 
     // Selections

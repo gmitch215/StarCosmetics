@@ -52,7 +52,9 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(310, Material.REDSTONE_ORE), CosmeticRarity.UNCOMMON))
             .add(new TrailSelection("super_gold", BaseTrail.PROJECTILE_TRAIL, Material.GOLD_BLOCK,
                     CompletionCriteria.fromMined(255, Material.GOLD_ORE), CosmeticRarity.UNCOMMON))
-
+            .add(new TrailSelection("ender_eye", BaseTrail.PROJECTILE_TRAIL, Material.EYE_OF_ENDER,
+                    CompletionCriteria.fromKilled(250, EntityType.ENDERMAN), CosmeticRarity.UNCOMMON))
+            
             .add(new TrailSelection("super_diamond", BaseTrail.PROJECTILE_TRAIL, Material.DIAMOND_BLOCK,
                     CompletionCriteria.fromMined(265, Material.DIAMOND_ORE), CosmeticRarity.RARE))
             .add(new TrailSelection("super_emerald", BaseTrail.PROJECTILE_TRAIL, Material.EMERALD_BLOCK,
@@ -63,7 +65,8 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new TrailSelection("diamond_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:diamond_sword",
                     CompletionCriteria.fromKilled(75, EntityType.WITHER), CosmeticRarity.LEGENDARY))
 
-            
+            .add(new TrailSelection("ender_crystals", BaseTrail.PROJECTILE_TRAIL, Material.END_CRYSTAL,
+                    CompletionCriteria.fromKilled(120, EntityType.ENDER_DRAGON), CosmeticRarity.MYTHICAL))  
             // Particles
             .add(new TrailSelection("heart", BaseTrail.PROJECTILE_TRAIL, Particle.HEART,
                     CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 15), CosmeticRarity.COMMON))

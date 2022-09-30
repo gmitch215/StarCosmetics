@@ -11,15 +11,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.bukkit.Material;
+
 public class CosmeticSelections1_10 implements CosmeticSelections {
 
     // Cosmetic Maps
 
     // Trails
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+            // Items + Fancy Items
             .add(new TrailSelection("magma_block", BaseTrail.PROJECTILE_TRAIL, StarMaterial.MAGMA_BLOCK.find(),
                     CompletionCriteria.fromMined(175, StarMaterial.MAGMA_BLOCK.find()), CosmeticRarity.COMMON))
 
+            .add(new TrailSelection("structure_void", BaseTrail.PROJECTILE_TRAIL, "fancy_item:structure_void",
+                    CompletionCriteria.fromMined(12000, Material.OBSIDIAN), CosmeticRarity.MYTHICAL))
+            
             .build();
 
     // Selections
