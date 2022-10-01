@@ -1,21 +1,18 @@
 package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructurePoint;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-
-import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructurePoint;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 
 public final class LegacyStructureReader implements StructureReader {
     
@@ -50,17 +47,22 @@ public final class LegacyStructureReader implements StructureReader {
 
                 if (i == 3 && !line.equalsIgnoreCase("---")) throw new RuntimeException("Malformed Strucutre File: Expected '---' but got '" + line + "'");
                 
-                if (i > 3) {
+                if (i > 3)
                     if (!line.equalsIgnoreCase("---")) {
                         String material = line.split(":")[0];
                         if (material.startsWith("{") && material.endsWith("}")) {
+                            String[] entries = material.split(",");
+                            for (String entry : entries) {
+                                String[] split = entry.split("=");
 
+                            }
                         } else {
 
-                        if (Material.matchMaterial(material) == null) throw new RuntimeException("Unknown Material '" + material + "'");
+                            if (Material.matchMaterial(material) == null)
+                                throw new RuntimeException("Unknown Material '" + material + "'");
                             Material m = Material.matchMaterial(material);
 
-                            String[] coords = line.split(":")[1].split("*");
+                            String[] coords = line.split(":")[1].split("\\*");
 
                             for (String coord : coords) {
                                 String[] split = coord.replaceAll("[\\[\\]]", "").split(",");
@@ -74,7 +76,6 @@ public final class LegacyStructureReader implements StructureReader {
                     } else {
                         // read entities
                     }
-                }
 
                 index.incrementAndGet();
             }
@@ -90,13 +91,6 @@ public final class LegacyStructureReader implements StructureReader {
     @Override
     public void close() {
         try { reader.close(); } catch (IOException e) { StarConfig.print(e); }
-    }
-
-    public static void main(String[] args) throws Exception {
-        LegacyStructureReader r = new LegacyStructureReader(new FileReader(new File("/workspaces/StarCosmetics/plugin/src/main/resources/structures/1.9/tree.scs")));
-        for (String line; (line = r.reader.readLine()) != null;) {
-            System.out.println(line);
-        }
     }
 
     
