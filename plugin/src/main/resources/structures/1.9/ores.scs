@@ -1,4 +1,4 @@
 ALL
 cosmetics.gadgets.ores
 ---
-{40%=iron_ore,20%=coal_ore,15%=gold_ore,10%=diamond_ore,5%=emerald_ore}:(2,2,1,1,2,2)[0,0,0];
+{40%=iron_ore,20%=coal_ore,15%=gold_ore,10%=diamond_ore,5%=emerald_ore}:(2,2,1,1,2,2)^[0,0,0];
