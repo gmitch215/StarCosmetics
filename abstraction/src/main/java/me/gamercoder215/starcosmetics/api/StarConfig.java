@@ -29,12 +29,10 @@ public interface StarConfig {
     }
 
     static FileConfiguration getConfiguration() {
-        if (!getConfigurationFile().exists()) {
-            try {
-                getConfigurationFile().createNewFile();
-            } catch (IOException e) {
-                print(e);
-            }
+        if (!getConfigurationFile().exists()) try {
+            getConfigurationFile().createNewFile();
+        } catch (IOException e) {
+            print(e);
         }
 
         return getPlugin().getConfig();
@@ -118,25 +116,18 @@ public interface StarConfig {
         }
 
         public boolean isCompatible() {
-            for (String version : compatibleVersions) {
-                if (version.equals(getServerVersion())) return true;
-            }
+            for (String version : compatibleVersions) if (version.equals(getServerVersion())) return true;
             return false;
         }
 
         public static boolean isAllCompatible() {
-            for (ServerVersion version : values()) {
-                if (version.isCompatible()) return true;
-            }
+            for (ServerVersion version : values()) if (version.isCompatible()) return true;
             return false;
         }
 
         public static ServerVersion getByVersion(String version) {
-            for (ServerVersion srvV : values()) {
-                for (String v : srvV.compatibleVersions) {
-                    if (v.equals(version)) return srvV;
-                }
-            }
+            for (ServerVersion srvV : values())
+                for (String v : srvV.compatibleVersions) if (v.equals(version)) return srvV;
             return UNKNOWN;
         }
 
@@ -178,7 +169,8 @@ public interface StarConfig {
                     .newInstance();
         } catch (ReflectiveOperationException e) {
             print(e);
-            return null;
-        }
+        } catch (ArrayIndexOutOfBoundsException ignored) {} // Using test server
+
+        return null;
     }
 }
