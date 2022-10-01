@@ -1,18 +1,17 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
-import java.util.Map;
-
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
-import me.gamercoder215.starcosmetics.api.StarConfig;
+import java.util.Map;
 
 public class Structure {
     
     private final String minVersion;
     private final String displayKey;
-    private Map<StructurePoint, Material> points;
-    private Map<StructurePoint, EntityType> entities;
+    private final Map<StructurePoint, Material> points;
+    private final Map<StructurePoint, EntityType> entities;
 
     public Structure(String minVersion, String displayKey, Map<StructurePoint, Material> points, Map<StructurePoint, EntityType> entities) {
         this.minVersion = minVersion;
