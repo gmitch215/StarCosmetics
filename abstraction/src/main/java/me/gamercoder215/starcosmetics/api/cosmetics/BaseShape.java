@@ -6,7 +6,7 @@ import org.bukkit.Particle;
 
 import java.util.function.BiConsumer;
 
-public enum BaseShape implements BiConsumer<Location, Particle>, CosmeticKey {
+public enum BaseShape implements BiConsumer<Location, Particle>, ParticleShape {
     
     SMALL_RING((l, p) -> circle(l, p, 10, 4)),
 

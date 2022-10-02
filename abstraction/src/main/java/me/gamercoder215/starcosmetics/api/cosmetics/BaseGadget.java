@@ -1,10 +1,10 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
+import org.bukkit.Material;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-
-import org.bukkit.Material;
 
 public enum BaseGadget implements Gadget {
 

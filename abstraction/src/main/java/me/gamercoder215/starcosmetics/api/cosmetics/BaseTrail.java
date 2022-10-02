@@ -1,7 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -17,6 +16,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+
+import static me.gamercoder215.starcosmetics.util.Constants.r;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
 @SuppressWarnings("unchecked")
 public enum BaseTrail implements Trail {
@@ -51,7 +53,7 @@ public enum BaseTrail implements Trail {
                         return;
                     }
                     
-                    for (Player pl : p.getWorld().getPlayers()) StarConfig.getWrapper().spawnFakeItem(pl, item, p.getLocation(), 10);
+                    for (Player pl : p.getWorld().getPlayers()) getWrapper().spawnFakeItem(pl, item, p.getLocation(), 10);
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
         }
@@ -67,7 +69,7 @@ public enum BaseTrail implements Trail {
                         return;
                     }
 
-                    for (Player pl : p.getWorld().getPlayers()) StarConfig.getWrapper().spawnFakeEntity(pl, type, p.getLocation(), 10);
+                    for (Player pl : p.getWorld().getPlayers()) getWrapper().spawnFakeEntity(pl, type, p.getLocation(), 10);
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 6, 6);
         }
@@ -91,7 +93,7 @@ public enum BaseTrail implements Trail {
 
                         for (Player pl : p.getWorld().getPlayers()) {
                             ItemStack item = items.get(r.nextInt(items.size()));
-                            StarConfig.getWrapper().spawnFakeItem(pl, item, p.getLocation(), 10);
+                            getWrapper().spawnFakeItem(pl, item, p.getLocation(), 10);
                         }
                     }
                 }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
@@ -104,7 +106,7 @@ public enum BaseTrail implements Trail {
             String type = (String) o;
             switch (type.toLowerCase()) {
                 case "riptide": {
-                    w.attachRiptide(p);
+                    getWrapper().attachRiptide(p);
                     break;
                 }
             }
@@ -119,6 +121,7 @@ public enum BaseTrail implements Trail {
                         ItemStack item = new ItemStack(m);
                         
                         new BukkitRunnable() {
+                            @Override
                             public void run() {
                                 if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
                                     cancel();
@@ -138,6 +141,7 @@ public enum BaseTrail implements Trail {
                                 as.getEquipment().setItemInMainHand(item);
 
                                 new BukkitRunnable() {
+                                    @Override
                                     public void run() {
                                         as.remove();
                                     }
@@ -161,7 +165,7 @@ public enum BaseTrail implements Trail {
 
         if (o instanceof Material || o instanceof ItemStack) {
             ItemStack item = o instanceof Material ? new ItemStack((Material) o) : (ItemStack) o;
-            for (Player pl : e.getWorld().getPlayers()) StarConfig.getWrapper().spawnFakeItem(pl, item, loc, 5);
+            for (Player pl : e.getWorld().getPlayers()) getWrapper().spawnFakeItem(pl, item, loc, 5);
         }
     }),
 
