@@ -1,5 +1,6 @@
-package me.gamercoder215.starcosmetics.api;
+package me.gamercoder215.starcosmetics.util;
 
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -10,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public final class Generator {
 
     public static ItemStack getGUIBackground() {
-        ItemStack item = StarConfig.isLegacy() ? new ItemStack(Material.matchMaterial("STAINED_GLASS_PANE"), 1, (short) 7) : new ItemStack(Material.matchMaterial("GRAY_STAINED_GLASS_PANE"));
+        ItemStack item = Wrapper.getWrapper().isLegacy() ? new ItemStack(Material.matchMaterial("STAINED_GLASS_PANE"), 1, (short) 7) : new ItemStack(Material.matchMaterial("GRAY_STAINED_GLASS_PANE"));
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(" ");
         item.setItemMeta(meta);

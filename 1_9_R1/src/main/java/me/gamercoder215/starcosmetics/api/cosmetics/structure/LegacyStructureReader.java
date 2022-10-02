@@ -1,9 +1,6 @@
-package me.gamercoder215.starcosmetics.wrapper.cosmetics;
+package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructurePoint;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 

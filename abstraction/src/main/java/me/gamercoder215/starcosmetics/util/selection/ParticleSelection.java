@@ -1,16 +1,16 @@
-package me.gamercoder215.starcosmetics.api.cosmetics.selection;
+package me.gamercoder215.starcosmetics.util.selection;
 
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.ParticleShape;
 
 public class ParticleSelection extends CosmeticSelection {
 
-    private final BaseShape parent;
+    private final ParticleShape parent;
     private final String name;
 
-    public ParticleSelection(String name, BaseShape parent, Object object, CompletionCriteria criteria, CosmeticRarity rarity) {
+    public ParticleSelection(String name, ParticleShape parent, Object object, CompletionCriteria criteria, CosmeticRarity rarity) {
         super(object, criteria, rarity);
 
         this.name = name;

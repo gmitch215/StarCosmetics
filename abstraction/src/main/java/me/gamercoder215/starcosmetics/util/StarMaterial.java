@@ -1,4 +1,4 @@
-package me.gamercoder215.starcosmetics.api;
+package me.gamercoder215.starcosmetics.util;
 
 import org.bukkit.Material;
 
@@ -8,6 +8,14 @@ public enum StarMaterial {
     TOTEM("totem", "totem_of_undying"),
     MAGMA_BLOCK("magma", "magma_block"),
     OAK_LOG("log", "oak_log"),
+
+    END_STONE("ender_stone", "end_stone"),
+
+    COMMAND_BLOCK("command", "command_block"),
+
+    CHAIN_COMMAND_BLOCK("command_chain", "chain_command_block"),
+
+    REPEATING_COMMAND_BLOCK("command_repeating", "repeating_command_block"),
     ;
 
     private final String[] names;

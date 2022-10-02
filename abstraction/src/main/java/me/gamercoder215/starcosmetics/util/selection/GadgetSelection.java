@@ -1,10 +1,9 @@
-package me.gamercoder215.starcosmetics.api.cosmetics.selection;
+package me.gamercoder215.starcosmetics.util.selection;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseGadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
-import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -65,9 +64,7 @@ public final class GadgetSelection extends CosmeticSelection implements Consumer
         }
 
         public Builder item(ItemStack item) {
-            NBTWrapper wr = w.getNBTWrapper(item);
-            wr.setID("gadget:" + id);
-            this.item = wr.getItem();
+            this.item = item;
             return this;
         }
 

@@ -1,12 +1,10 @@
-package me.gamercoder215.starcosmetics.wrapper.cosmetics;
+package me.gamercoder215.starcosmetics.api.cosmetics.structure;
+
+import me.gamercoder215.starcosmetics.api.StarConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-
-import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 
 public final class ModernStructureReader implements StructureReader {
 

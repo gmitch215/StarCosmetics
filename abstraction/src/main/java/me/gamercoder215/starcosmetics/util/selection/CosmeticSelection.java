@@ -1,14 +1,10 @@
-package me.gamercoder215.starcosmetics.api.cosmetics.selection;
+package me.gamercoder215.starcosmetics.util.selection;
 
-import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 
 public abstract class CosmeticSelection {
-
-    public static final Wrapper w = StarConfig.getWrapper();
 
     protected final Object input;
 

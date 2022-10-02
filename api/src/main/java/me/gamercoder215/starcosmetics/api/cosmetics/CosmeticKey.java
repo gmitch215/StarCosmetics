@@ -1,17 +1,13 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
-import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-import java.security.SecureRandom;
-
+/**
+ * Parent Interface for Cosmetics.
+ * @since 1.0.0m
+ */
 public interface CosmeticKey {
-
-    SecureRandom r = new SecureRandom();
-
-    Wrapper w = StarConfig.getWrapper();
 
     String getNamespace();
 
@@ -24,7 +20,5 @@ public interface CosmeticKey {
     default String getDisplayPrefix() {
         return ChatColor.YELLOW + "";
     }
-
-    void accept(Object... args);
 
 }

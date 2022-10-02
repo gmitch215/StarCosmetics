@@ -1,4 +1,4 @@
-package me.gamercoder215.starcosmetics.api.cosmetics.selection;
+package me.gamercoder215.starcosmetics.util.selection;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;

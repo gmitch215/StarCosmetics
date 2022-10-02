@@ -25,6 +25,7 @@
     <inceptionYear>2022</inceptionYear>
 
     <modules>
+        <module>api</module>
         <module>abstraction</module>
         <module>plugin</module>
 
