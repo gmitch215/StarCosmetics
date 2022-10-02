@@ -4,5 +4,3 @@ cosmetics.gadgets.magma_hut
 netherrack:(2,2,0,0,2,2)^[0,0,0];
 magma_block:[2,1,2]*[2,1,-2]*[-2,1,2]*[-2,1,-2];
 magma_block:[2,2,2]*[2,2,-2]*[-2,2,2]*[-2,2,-2]
----
-magma_cube:[0,1,0]
