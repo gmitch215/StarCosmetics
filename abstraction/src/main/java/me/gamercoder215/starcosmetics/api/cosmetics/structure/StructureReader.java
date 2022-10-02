@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,7 +43,6 @@ public interface StructureReader {
                             points.add(new StructurePoint(x + cx, y + cy, z + cz));
 
             } else points.add(readRawPoint(s));
-        
 
         return points;
     }
@@ -68,7 +68,7 @@ public interface StructureReader {
 
     static StructureReader getStructureReader(Reader r) {
         try {
-            if (StarConfig.isLegacy())
+            if (Wrapper.getWrapper().isLegacy())
                 return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.LegacyStructureReader")
                         .asSubclass(StructureReader.class)
                         .getConstructor(Reader.class)
