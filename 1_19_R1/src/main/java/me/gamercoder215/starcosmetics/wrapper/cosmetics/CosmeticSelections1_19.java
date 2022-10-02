@@ -2,9 +2,13 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
-
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
+import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
+import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
 
@@ -19,9 +23,15 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+            // Items + Fancy Items
+            .add(new TrailSelection("horns", BaseTrail.PROJECTILE_TRAIL, Material.GOAT_HORN,
+                    CompletionCriteria.fromMined(100, Material.GOAT_HORN), CosmeticRarity.RARE))
+
+
+            // Particles
             .add(new TrailSelection("sculk_soul", BaseTrail.PROJECTILE_TRAIL, Particle.SCULK_CHARGE,
                     CompletionCriteria.fromKilled(5, EntityType.WARDEN), CosmeticRarity.EPIC))
-            
+
             .build();
 
     // Selections

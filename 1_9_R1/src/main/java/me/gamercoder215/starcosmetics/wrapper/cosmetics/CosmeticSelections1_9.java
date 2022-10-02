@@ -3,10 +3,13 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.StarMaterial;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.selection.*;
-
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
+import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
+import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -14,8 +17,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static me.gamercoder215.starcosmetics.api.player.StarPlayer.COMPLETION_NETHER_ROOF;
 
 public class CosmeticSelections1_9 implements CosmeticSelections {
 
@@ -44,6 +50,7 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(145, Material.REDSTONE_ORE), CosmeticRarity.OCCASIONAL))
             .add(new TrailSelection("gold", BaseTrail.PROJECTILE_TRAIL, Material.GOLD_INGOT,
                     CompletionCriteria.fromMined(115, Material.GOLD_ORE), CosmeticRarity.OCCASIONAL))
+
             .add(new TrailSelection("diamond", BaseTrail.PROJECTILE_TRAIL, Material.DIAMOND,
                     CompletionCriteria.fromMined(110, Material.DIAMOND_ORE), CosmeticRarity.UNCOMMON))
             .add(new TrailSelection("emerald", BaseTrail.PROJECTILE_TRAIL, Material.EMERALD,
@@ -54,6 +61,11 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(255, Material.GOLD_ORE), CosmeticRarity.UNCOMMON))
             .add(new TrailSelection("ender_eye", BaseTrail.PROJECTILE_TRAIL, Material.EYE_OF_ENDER,
                     CompletionCriteria.fromKilled(250, EntityType.ENDERMAN), CosmeticRarity.UNCOMMON))
+            .add(new TrailSelection("nether_brick", BaseTrail.PROJECTILE_TRAIL, Material.NETHER_BRICK,
+                    CompletionCriteria.fromMined(500, Material.NETHERRACK), CosmeticRarity.UNCOMMON))
+            .add(new TrailSelection("prismarine", BaseTrail.PROJECTILE_TRAIL,
+                    Arrays.asList(Material.PRISMARINE_CRYSTALS, Material.PRISMARINE_SHARD),
+                    CompletionCriteria.fromMined(100, Material.PRISMARINE), CosmeticRarity.UNCOMMON))
             
             .add(new TrailSelection("super_diamond", BaseTrail.PROJECTILE_TRAIL, Material.DIAMOND_BLOCK,
                     CompletionCriteria.fromMined(265, Material.DIAMOND_ORE), CosmeticRarity.RARE))
@@ -61,12 +73,24 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(190, Material.EMERALD_ORE), CosmeticRarity.RARE))
             .add(new TrailSelection("stone_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:stone_sword",
                     CompletionCriteria.fromMined(1200, Material.STONE, Material.COBBLESTONE), CosmeticRarity.RARE))
+            .add(new TrailSelection("rabbits", BaseTrail.PROJECTILE_TRAIL, Material.RABBIT_FOOT,
+                    CompletionCriteria.fromKilled(120, EntityType.RABBIT), CosmeticRarity.RARE))
+
+            .add(new TrailSelection("chorus_fruit", BaseTrail.PROJECTILE_TRAIL, Material.CHORUS_FRUIT,
+                    CompletionCriteria.fromMined(1000, StarMaterial.END_STONE.find()), CosmeticRarity.EPIC))
             
             .add(new TrailSelection("diamond_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:diamond_sword",
                     CompletionCriteria.fromKilled(75, EntityType.WITHER), CosmeticRarity.LEGENDARY))
+            .add(new TrailSelection("nether_star", BaseTrail.PROJECTILE_TRAIL, Material.NETHER_STAR,
+                    CompletionCriteria.fromKilled(100, EntityType.WITHER), CosmeticRarity.LEGENDARY))
 
             .add(new TrailSelection("ender_crystals", BaseTrail.PROJECTILE_TRAIL, Material.END_CRYSTAL,
-                    CompletionCriteria.fromKilled(120, EntityType.ENDER_DRAGON), CosmeticRarity.MYTHICAL))  
+                    CompletionCriteria.fromKilled(120, EntityType.ENDER_DRAGON), CosmeticRarity.MYTHICAL))
+
+            .add(new TrailSelection("command_blocks", BaseTrail.PROJECTILE_TRAIL,
+                    Arrays.asList(StarMaterial.COMMAND_BLOCK.find(), StarMaterial.CHAIN_COMMAND_BLOCK.find(), StarMaterial.REPEATING_COMMAND_BLOCK.find()),
+                    CompletionCriteria.of(p -> new StarPlayer(p).hasCompleted(COMPLETION_NETHER_ROOF)), CosmeticRarity.SPECIAL))
+
             // Particles
             .add(new TrailSelection("heart", BaseTrail.PROJECTILE_TRAIL, Particle.HEART,
                     CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 15), CosmeticRarity.COMMON))
