@@ -21,7 +21,7 @@ import static me.gamercoder215.starcosmetics.util.Constants.r;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
 @SuppressWarnings("unchecked")
-public enum BaseTrail implements Trail {
+public enum BaseTrail implements Trail, BiConsumer<Entity, Object> {
     
     PROJECTILE_TRAIL(Material.ARROW, (e, o) -> {
         if (!(e instanceof Projectile)) return;

@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import org.bukkit.Material;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -34,8 +33,4 @@ public enum BaseGadget implements Gadget {
         return Material.HOPPER;
     }
 
-    @Override
-    public void accept(Object... args) {
-        consumer.accept(Arrays.asList(args));
-    }
 }

@@ -58,9 +58,4 @@ public enum BaseShape implements BiConsumer<Location, Particle>, ParticleShape {
     public Material getIcon() {
         return Material.BEACON;
     }
-
-    @Override
-    public void accept(Object... args) {
-        accept((Location) args[0], (Particle) args[1]);
-    }
 }
