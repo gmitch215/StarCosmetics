@@ -179,7 +179,7 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Selection Map
 
-    private static final Map<CosmeticKey, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<CosmeticKey, List<CosmeticSelection>>builder()
+    private static final Map<Cosmetic, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, PROJECTILE_TRAILS)
             .put(BaseTrail.GROUND_TRAIL, GROUND_TRAILS)
             .put(BaseTrail.SOUND_TRAIL, SOUND_TRAILS)
@@ -190,7 +190,7 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
             .build();
 
     @Override
-    public Map<CosmeticKey, List<CosmeticSelection>> getAllSelections() {
+    public Map<Cosmetic, List<CosmeticSelection>> getAllSelections() {
         return SELECTIONS;
     }
 }

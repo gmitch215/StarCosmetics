@@ -1,7 +1,7 @@
 package me.gamercoder215.starcosmetics.util.selection;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticKey;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.Trail;
 
@@ -23,7 +23,7 @@ public class TrailSelection extends CosmeticSelection {
     }
 
     @Override
-    public CosmeticKey getParent() {
+    public Cosmetic getParent() {
         return parent;
     }
 }
