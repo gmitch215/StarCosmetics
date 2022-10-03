@@ -9,19 +9,19 @@ import java.util.List;
 public enum CosmeticParent {
 
     TRAILS(Material.ARROW, 20, false,
-            BaseTrail.PROJECTILE_TRAIL)
+            BaseTrail.PROJECTILE_TRAIL, BaseTrail.GROUND_TRAIL, BaseTrail.SOUND_TRAIL)
     ;
 
     private final Material icon;
 
-    private final CosmeticKey[] children;
+    private final Cosmetic[] children;
     private final String prefix;
 
     private final int place;
 
     private final boolean clickToKeys;
 
-    CosmeticParent(String prefix, Material icon, int place, boolean clickToKeys, CosmeticKey... children) {
+    CosmeticParent(String prefix, Material icon, int place, boolean clickToKeys, Cosmetic... children) {
         this.prefix = prefix;
         this.icon = icon;
         this.children = children;
@@ -29,15 +29,15 @@ public enum CosmeticParent {
         this.clickToKeys = clickToKeys;
     }
 
-    CosmeticParent(Material icon, int place, boolean clickToKeys, CosmeticKey... children) {
+    CosmeticParent(Material icon, int place, boolean clickToKeys, Cosmetic... children) {
         this(ChatColor.YELLOW, icon, place, clickToKeys, children);
     }
 
-    CosmeticParent(ChatColor color, Material icon, int place, boolean clickToKeys, CosmeticKey... children) {
+    CosmeticParent(ChatColor color, Material icon, int place, boolean clickToKeys, Cosmetic... children) {
         this(color.toString(), icon, place, clickToKeys, children);
     }
 
-    CosmeticParent(int hexColor, Material icon, int place, boolean clickToKeys, CosmeticKey... children) {
+    CosmeticParent(int hexColor, Material icon, int place, boolean clickToKeys, Cosmetic... children) {
         this(ChatColor.translateAlternateColorCodes('&',
                 "&x&" + Integer.toHexString(hexColor).charAt(0) +
                         "&" + Integer.toHexString(hexColor).charAt(1) +
@@ -51,7 +51,7 @@ public enum CosmeticParent {
         return prefix;
     }
 
-    public List<CosmeticKey> getChildren() {
+    public List<Cosmetic> getChildren() {
         return Arrays.asList(children);
     }
 
