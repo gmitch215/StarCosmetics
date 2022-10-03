@@ -4,18 +4,28 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 
+/**
+ *
+ */
 public class StarPlayer {
 
     // Setting Constants
 
+    /**
+     * Represents the Notification Setting.
+     */
     public static final String SETTING_NOTIFICATIONS = "notifications";
 
     // Completion Constants
 
+    /**
+     * Represents the Completion of stepping on the Nether Roof.
+     */
     public static final String COMPLETION_NETHER_ROOF = "nether_roof";
 
 
@@ -51,11 +61,23 @@ public class StarPlayer {
 
     // Completion Configuration
 
-    public boolean hasCompleted(String s) {
-        return config.getBoolean("completions.", false);
+    /**
+     * Whether or not the player has completed the specified completion.
+     * @param s The completion to check.
+     * @return true if completed, false otherwise
+     */
+    public boolean hasCompleted(@NotNull String s) {
+        if (s == null) return false;
+        return config.getBoolean("completions." + s, false);
     }
 
-    public void setCompleted(String s, boolean b) {
+    /**
+     * Sets the completion of the specified completion to the specified value.
+     * @param s The completion to set.
+     * @param b The value to set the completion to.
+     */
+    public void setCompleted(@NotNull String s, boolean b) {
+        if (s == null) return;
         if (!config.isConfigurationSection("completions")) config.createSection("completions");
 
         config.set("completions." + s, b);
@@ -64,16 +86,34 @@ public class StarPlayer {
 
     // Settings
 
-    public boolean getSetting(String s) {
+    /**
+     * Whether or not the player has the specified setting enabled.
+     * @param s The setting to check.
+     * @return true if enabled, false otherwise
+     */
+    public boolean getSetting(@NotNull String s) {
+        if (s == null) return false;
         return getSetting(s, false);
     }
 
+    /**
+     * Whether or not the player has the specified setting enabled.
+     * @param s The setting to check.
+     * @param def The default value to return if the setting is not set.
+     * @return true if enabled, false otherwise
+     */
     public boolean getSetting(String s, boolean def) {
         if (!config.isConfigurationSection("settings")) config.createSection("settings");
 
         return config.getBoolean("settings." + s, def);
     }
 
+    /**
+     * Sets the specified setting to the specified value.
+     * @param s The setting to set.
+     * @param b The value to set the setting to.
+     * @return true if enabled, false otherwise
+     */
     public boolean setSetting(String s, boolean b) {
         if (!config.isConfigurationSection("settings")) config.createSection("settings");
 
