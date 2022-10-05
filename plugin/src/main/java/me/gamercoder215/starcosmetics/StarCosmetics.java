@@ -1,7 +1,12 @@
 package me.gamercoder215.starcosmetics;
 
+import com.avaje.ebean.validation.NotNull;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
+import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
@@ -15,9 +20,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
-public final class StarCosmetics extends JavaPlugin implements StarConfig {
+public final class StarCosmetics extends JavaPlugin implements StarConfig, CosmeticRegistry {
 
     private static final Wrapper w = Wrapper.getWrapper();
 
@@ -127,4 +135,16 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig {
         StarConfig.print(t);
     }
 
+    @Override
+    public @NotNull List<CosmeticLocation> getAllFor(Class<Cosmetic> parentClass) {
+        String cosmeticV = getServerVersion().split("_")[0] + "_" + getServerVersion().split("_")[1];
+        List<CosmeticLocation> locs = new ArrayList<>();
+        if (parentClass == null) return locs;
+
+        Map<Cosmetic, List<CosmeticSelection>> selections = getCosmeticSelections().getAllSelections();
+        for (Map.Entry<Cosmetic, List<CosmeticSelection>> entry : selections.entrySet())
+            if (parentClass.isInstance(entry.getKey())) locs.addAll(entry.getValue());
+
+        return locs;
+    }
 }
