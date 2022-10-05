@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import static me.gamercoder215.starcosmetics.api.player.StarPlayer.COMPLETION_NETHER_ROOF;
+import static me.gamercoder215.starcosmetics.api.player.PlayerCompletion.NETHER_ROOF;
 
 public class CompletionEvents implements Listener {
 
@@ -36,8 +36,8 @@ public class CompletionEvents implements Listener {
                         break;
                     }
                     case NETHER: {
-                        if (sp.hasCompleted(COMPLETION_NETHER_ROOF)) return;
-                        if (to.getBlockY() >= 128) sp.setCompleted(COMPLETION_NETHER_ROOF, true);
+                        if (sp.hasCompleted(NETHER_ROOF)) return;
+                        if (to.getBlockY() >= 128) sp.setCompleted(NETHER_ROOF, true);
 
                         break;
                     }

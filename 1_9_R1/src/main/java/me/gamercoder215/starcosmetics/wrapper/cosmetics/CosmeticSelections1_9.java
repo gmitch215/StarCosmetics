@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
@@ -21,9 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static me.gamercoder215.starcosmetics.api.player.StarPlayer.COMPLETION_NETHER_ROOF;
-
-public class CosmeticSelections1_9 implements CosmeticSelections {
+public final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -89,7 +88,7 @@ public class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new TrailSelection("command_blocks", BaseTrail.PROJECTILE_TRAIL,
                     Arrays.asList(StarMaterial.COMMAND_BLOCK.find(), StarMaterial.CHAIN_COMMAND_BLOCK.find(), StarMaterial.REPEATING_COMMAND_BLOCK.find()),
-                    CompletionCriteria.of(p -> new StarPlayer(p).hasCompleted(COMPLETION_NETHER_ROOF)), CosmeticRarity.SPECIAL))
+                    CompletionCriteria.of(p -> new StarPlayer(p).hasCompleted(PlayerCompletion.NETHER_ROOF)), CosmeticRarity.SPECIAL))
 
             // Particles
             .add(new TrailSelection("heart", BaseTrail.PROJECTILE_TRAIL, Particle.HEART,

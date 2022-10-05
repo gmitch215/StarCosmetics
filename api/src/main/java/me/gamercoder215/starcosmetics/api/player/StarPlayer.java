@@ -10,30 +10,21 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
+ * Represents a player used by StarCosmetics.
+ * @since 1.0.0
  */
-public class StarPlayer {
-
-    // Setting Constants
-
-    /**
-     * Represents the Notification Setting.
-     */
-    public static final String SETTING_NOTIFICATIONS = "notifications";
-
-    // Completion Constants
-
-    /**
-     * Represents the Completion of stepping on the Nether Roof.
-     */
-    public static final String COMPLETION_NETHER_ROOF = "nether_roof";
-
+public final class StarPlayer {
 
     private final OfflinePlayer player;
     private final File file;
     private final FileConfiguration config;
 
-    public StarPlayer(OfflinePlayer player) {
+    /**
+     * Constructs a new StarPlayer.
+     * @param player OfflinePlayer to use
+     * @since 1.0.0
+     */
+    public StarPlayer(@NotNull OfflinePlayer player) {
         this.player = player;
 
         this.file = new File(StarConfig.getPlayerDirectory(), player.getUniqueId().toString() + ".yml");
@@ -47,14 +38,32 @@ public class StarPlayer {
         }
     }
 
+    /**
+     * Fetches the OfflinePlayer used to construct this StarPlayer.
+     * @return OfflinePlayer used
+     * @since 1.0.0
+     */
+    @NotNull
     public OfflinePlayer getPlayer() {
         return player;
     }
 
+    /**
+     * Fetches the File this configuration is stored in.
+     * @return File
+     * @since 1.0.0
+     */
+    @NotNull
     public File getFile() {
         return file;
     }
 
+    /**
+     * Fetches the FileConfiguration of this StarPlayer.
+     * @return FileConfiguration
+     * @since 1.0.0
+     */
+    @NotNull
     public FileConfiguration getConfig() {
         return config;
     }
@@ -63,24 +72,26 @@ public class StarPlayer {
 
     /**
      * Whether or not the player has completed the specified completion.
-     * @param s The completion to check.
+     * @param c The completion to check.
      * @return true if completed, false otherwise
+     * @since 1.0.0
      */
-    public boolean hasCompleted(@NotNull String s) {
-        if (s == null) return false;
-        return config.getBoolean("completions." + s, false);
+    public boolean hasCompleted(@NotNull PlayerCompletion c) {
+        if (c == null) return false;
+        return config.getBoolean("completions." + c.name().toLowerCase(), false);
     }
 
     /**
      * Sets the completion of the specified completion to the specified value.
-     * @param s The completion to set.
+     * @param c The completion to set.
      * @param b The value to set the completion to.
+     * @since 1.0.0
      */
-    public void setCompleted(@NotNull String s, boolean b) {
-        if (s == null) return;
+    public void setCompleted(@NotNull PlayerCompletion c, boolean b) {
+        if (c == null) return;
         if (!config.isConfigurationSection("completions")) config.createSection("completions");
 
-        config.set("completions." + s, b);
+        config.set("completions." + c.name().toLowerCase(), b);
         try { config.save(file); } catch (IOException e) { StarConfig.print(e); }
     }
 
@@ -90,39 +101,41 @@ public class StarPlayer {
      * Whether or not the player has the specified setting enabled.
      * @param s The setting to check.
      * @return true if enabled, false otherwise
+     * @since 1.0.0
      */
-    public boolean getSetting(@NotNull String s) {
+    public boolean getSetting(@NotNull PlayerSetting s) {
         if (s == null) return false;
         return getSetting(s, false);
     }
 
     /**
      * Whether or not the player has the specified setting enabled.
-     * @param s The setting to check.
+     * @param setting The setting to check.
      * @param def The default value to return if the setting is not set.
      * @return true if enabled, false otherwise
+     * @since 1.0.0
      */
-    public boolean getSetting(String s, boolean def) {
+    public boolean getSetting(@NotNull PlayerSetting setting, boolean def) {
+        if (setting == null) return false;
         if (!config.isConfigurationSection("settings")) config.createSection("settings");
 
-        return config.getBoolean("settings." + s, def);
+        return config.getBoolean("settings." + setting.name().toLowerCase(), def);
     }
 
     /**
      * Sets the specified setting to the specified value.
-     * @param s The setting to set.
+     * @param setting The setting to set.
      * @param b The value to set the setting to.
      * @return true if enabled, false otherwise
+     * @since 1.0.0
      */
-    public boolean setSetting(String s, boolean b) {
+    public boolean setSetting(@NotNull PlayerSetting setting, boolean b) {
         if (!config.isConfigurationSection("settings")) config.createSection("settings");
 
-        config.set("settings." + s, b);
+        config.set("settings." + setting.name().toLowerCase(), b);
         try { config.save(file); } catch (IOException e) { StarConfig.print(e); }
 
         return b;
     }
-
-
 
 }
