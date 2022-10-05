@@ -210,8 +210,8 @@ public enum BaseTrail implements Trail, BiConsumer<Entity, Object> {
     } 
 
     @Override
-    public String getDisplayKey() {
-        return "cosmetics.trails." + name().toLowerCase();
+    public String getDisplayName() {
+        return StarConfig.getConfig().get("cosmetics.trails." + name().toLowerCase());
     }
 
     @Override

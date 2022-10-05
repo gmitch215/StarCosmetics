@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -50,8 +51,8 @@ public enum BaseShape implements BiConsumer<Location, Particle>, ParticleShape {
     }
 
     @Override
-    public String getDisplayKey() {
-        return "cosmetics.particle_shapes." + name().toLowerCase();
+    public String getDisplayName() {
+        return StarConfig.getConfig().get("cosmetics.particle_shapes." + name().toLowerCase());
     }
 
     @Override

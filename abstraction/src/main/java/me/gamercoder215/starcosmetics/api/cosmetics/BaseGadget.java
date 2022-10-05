@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Material;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public enum BaseGadget implements Gadget {
     }
 
     @Override
-    public String getDisplayKey() {
-        return "cosmetic." + getNamespace();
+    public String getDisplayName() {
+        return StarConfig.getConfig().get("cosmetic.gadget" + getNamespace());
     }
 
     @Override

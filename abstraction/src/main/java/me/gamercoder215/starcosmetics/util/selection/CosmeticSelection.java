@@ -3,8 +3,9 @@ package me.gamercoder215.starcosmetics.util.selection;
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 
-public abstract class CosmeticSelection {
+public abstract class CosmeticSelection implements CosmeticLocation {
 
     protected final Object input;
 
@@ -30,9 +31,8 @@ public abstract class CosmeticSelection {
         return rarity;
     }
 
-    public final String constructKey() { return getParent().getNamespace() + ":" + getKey(); }
-
-    public abstract String getKey();
+    @Override
+    public final String getNamespace() { return getParent().getNamespace(); }
 
     public abstract Cosmetic getParent();
 }

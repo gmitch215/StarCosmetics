@@ -3,22 +3,22 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 import org.bukkit.Material;
 
 /**
- * Parent Interface for Cosmetics.
+ * Parent Interface for Base Cosmetics, ready for material, particle, or entity implementations.
  * @since 1.0.0m
  */
 public interface Cosmetic {
 
     /**
      * Fetches the namespace of this Comsmetic.
-     * @return The namespace of this Cosmetic.
+     * @return Cosmetic Namespace
      */
     String getNamespace();
 
     /**
-     * Fetches the key used to display the name of this Cosmetic.
-     * @return The key used to display the name of this Cosmetic.
+     * Fetches the display name of this cosmetic.
+     * @return Display name of Cosmetic
      */
-    String getDisplayKey();
+    String getDisplayName();
 
     /**
      * Fetches the icon of this cosmetic.
