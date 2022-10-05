@@ -41,3 +41,9 @@ permissions:
     default: true
     children:
       starcosmetics.user: true
+
+  starcosmetics.user.cosmetics:
+    description: Access to StarCosmetics Cosmetics
+    default: true
+    children:
+      starcosmetics.user: true

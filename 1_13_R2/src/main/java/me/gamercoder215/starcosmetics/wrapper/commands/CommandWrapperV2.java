@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import revxrsal.commands.annotation.Command;
@@ -40,7 +41,7 @@ public class CommandWrapperV2 implements CommandWrapper {
     @Description("Reloads the StarCosmetics configuration.")
     @Usage("/starreload")
     @CommandPermission("starcosmetics.admin.reloadconfig")
-    public void reloadConfig(Player p) {
-        CommandWrapper.super.reloadConfig(p);
+    public void reloadConfig(CommandSender sender) {
+        CommandWrapper.super.reloadConfig(sender);
     }
 }
