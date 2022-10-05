@@ -2,11 +2,11 @@ package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class LegacyStructureReader implements StructureReader {
     
     private final BufferedReader reader;
+
+    private static final SecureRandom r = new SecureRandom();
 
     public LegacyStructureReader(Reader r) {
         this.reader = new BufferedReader(r);
@@ -28,7 +30,6 @@ public final class LegacyStructureReader implements StructureReader {
             String displayKey = null;
 
             Map<StructurePoint, Material> points = new HashMap<>();
-            Map<StructurePoint, EntityType> entities = new HashMap<>();
             for (String line; (line = reader.readLine()) != null;) {
                 int i = index.get();
 
@@ -44,40 +45,52 @@ public final class LegacyStructureReader implements StructureReader {
 
                 if (i == 3 && !line.equalsIgnoreCase("---")) throw new RuntimeException("Malformed Strucutre File: Expected '---' but got '" + line + "'");
                 
-                if (i > 3)
-                    if (!line.equalsIgnoreCase("---")) {
-                        String material = line.split(":")[0];
-                        if (material.startsWith("{") && material.endsWith("}")) {
-                            String[] entries = material.split(",");
-                            for (String entry : entries) {
-                                String[] split = entry.split("=");
+                if (i > 3) {
+                    String material = line.split(":")[0];
+                    if (material.startsWith("{") && material.endsWith("}")) {
+                        Map<Material, Integer> chances = new HashMap<>();
 
-                            }
-                        } else {
+                        int amount = 0;
+                        String[] entries = material.split(",");
+                        for (String entry : entries) {
+                            String[] split = entry.split("=");
 
-                            if (Material.matchMaterial(material) == null)
-                                throw new RuntimeException("Unknown Material '" + material + "'");
-                            Material m = Material.matchMaterial(material);
+                            int chance = Integer.parseInt(split[0].replace("%", ""));
+                            amount += chance;
 
-                            String[] coords = line.split(":")[1].split("\\*");
+                            if (Material.matchMaterial(split[1]) == null)
+                                throw new RuntimeException("Unknown Material '" + split[1] + "'");
 
-                            for (String coord : coords) {
-                                String[] split = coord.replaceAll("[\\[\\]]", "").split(",");
-                                int x = Integer.parseInt(split[0]);
-                                int y = Integer.parseInt(split[1]);
-                                int z = Integer.parseInt(split[2]);
-
-                                points.put(new StructurePoint(x, y, z), m);
-                            }
+                            chances.put(Material.matchMaterial(split[1]), chance);
                         }
+
+                        if (amount != 100) throw new RuntimeException("Malformed Strucutre File: Chance total is not 100%");
+
+                        Map<Integer, Material> chanceMap = new HashMap<>();
+                        int current = 0;
+                        for (Map.Entry<Material, Integer> entry : chances.entrySet())
+                            for (int j = 0; j < entry.getValue(); j++) {
+                                chanceMap.put(current, entry.getKey());
+                                current++;
+                            }
+
+                        String coords = line.split(":")[1];
+                        for (StructurePoint p : StructureReader.readPoints(coords))
+                            points.put(p, chanceMap.get(r.nextInt(100)));
                     } else {
-                        // read entities
+                        if (Material.matchMaterial(material) == null)
+                            throw new RuntimeException("Unknown Material '" + material + "'");
+                        Material m = Material.matchMaterial(material);
+
+                        String coords = line.split(":")[1];
+                        for (StructurePoint p : StructureReader.readPoints(coords)) points.put(p, m);
                     }
+                }
 
                 index.incrementAndGet();
             }
 
-            return new Structure(minVersion, displayKey, points, entities);
+            return new Structure(minVersion, displayKey, points, new HashMap<>());
         } catch (IOException e) {
             StarConfig.print(e);
         }

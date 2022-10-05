@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -16,22 +15,34 @@ public final class Structure {
     final String minVersion;
     private final String displayKey;
     private final Map<StructurePoint, Material> points;
-    private final Map<StructurePoint, EntityType> entities;
 
-    Structure(String minVersion, String displayKey, Map<StructurePoint, Material> points, Map<StructurePoint, EntityType> entities) {
+    private final Map<StructurePoint, String> blockData;
+
+    Structure(String minVersion, String displayKey, Map<StructurePoint, Material> points, Map<StructurePoint, String> blockData) {
         this.minVersion = minVersion;
         this.points = points;
-        this.entities = entities;
         this.displayKey = displayKey;
+        this.blockData = blockData;
     }
 
     /**
      * Fetches a Map of StructurePoints to Materials that the Structure will place.
      * @return StructurePoint to Material Blueprint Map
+     * @since 1.0.0
      */
     @NotNull
     public Map<StructurePoint, Material> getPoints() {
         return points;
+    }
+
+    /**
+     * Fetches a Map of StructurePoints to BlockData that the Structure will place (only works for 1.13+).
+     * @return StructurePoint to BlockData Blueprint Map
+     * @since 1.0.0
+     */
+    @NotNull
+    public Map<StructurePoint, String> getBlockData() {
+        return blockData;
     }
 
     /**
