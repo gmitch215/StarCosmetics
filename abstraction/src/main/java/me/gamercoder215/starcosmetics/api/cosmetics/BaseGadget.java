@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Material;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -32,6 +33,11 @@ public enum BaseGadget implements Gadget {
     @Override
     public Material getIcon() {
         return Material.HOPPER;
+    }
+
+    @Override
+    public void accept(Object... args) {
+        consumer.accept(Arrays.asList(args));
     }
 
 }

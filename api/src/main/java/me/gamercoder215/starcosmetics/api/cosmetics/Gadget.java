@@ -5,4 +5,7 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
  * @since 1.0.0
  */
 public interface Gadget extends Cosmetic {
+
+    void accept(Object... args);
+
 }
