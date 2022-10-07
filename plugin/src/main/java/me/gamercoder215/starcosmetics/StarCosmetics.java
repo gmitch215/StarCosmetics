@@ -137,7 +137,6 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     @Override
     public @NotNull List<CosmeticLocation> getAllFor(Class<Cosmetic> parentClass) {
-        String cosmeticV = getServerVersion().split("_")[0] + "_" + getServerVersion().split("_")[1];
         List<CosmeticLocation> locs = new ArrayList<>();
         if (parentClass == null) return locs;
 
