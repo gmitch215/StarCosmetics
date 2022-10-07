@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
+
 import java.util.Map;
 
 /**
@@ -57,6 +59,15 @@ public final class Structure {
         int current = Integer.parseInt(currentV.split("_")[1]);
         int required = Integer.parseInt(minVersion.split("\\.")[1]);
         return current >= required;
+    }
+
+    /**
+     * Fetches the localized name of this Structure.
+     * @return Localized Name
+     */
+    @NotNull
+    public String getLocalizedName() {
+        return StarConfig.getConfig().get(displayKey);
     }
 
 }
