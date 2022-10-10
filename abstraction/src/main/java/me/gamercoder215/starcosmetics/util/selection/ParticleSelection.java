@@ -3,7 +3,7 @@ package me.gamercoder215.starcosmetics.util.selection;
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
-import me.gamercoder215.starcosmetics.api.cosmetics.ParticleShape;
+import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 
 public class ParticleSelection extends CosmeticSelection {
 
