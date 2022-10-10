@@ -1,6 +1,9 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import com.google.common.collect.ImmutableList;
+import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -14,7 +17,7 @@ import java.util.function.Predicate;
 
 /**
  * Represents Criteria needed to unlock a Cosmetic
- * @since 1.0.0
+
  */
 public final class CompletionCriteria {
 
@@ -24,50 +27,25 @@ public final class CompletionCriteria {
 
     private final Object[] displayArguments;
 
-    /**
-     * Creates a new CompletionCriteria.
-     * @param criteria The criteria to check for
-     * @param unlockCriteria The criteria to check when unlocking
-     * @param displayKey The display key in a language file for the criteria
-     * @param displayArguments The arguments to use when displaying the criteria
-     * @since 1.0.0
-     */
-    public CompletionCriteria(Predicate<Player> criteria, Predicate<Player> unlockCriteria, String displayKey, Object... displayArguments) {
+    private CompletionCriteria(Predicate<Player> criteria, Predicate<Player> unlockCriteria, String displayKey, Object... displayArguments) {
+        if (criteria == null) throw new IllegalArgumentException("Criteria cannot be null!");
+        if (unlockCriteria == null) throw new IllegalArgumentException("Unlock Criteria cannot be null!");
+        if (displayKey == null) throw new IllegalArgumentException("Display Key cannot be null!");
+
         this.criteria = p -> p.hasPermission("starcosmetics.admin.bypasscheck") || criteria.test(p);
         this.displayKey = displayKey;
         this.displayArguments = displayArguments;
         this.unlockCriteria = unlockCriteria;
+
+        getDisplayMessage(); // Validate
     }
 
-    /**
-     * Creates a new CompletionCriteria with no display and unlock criteria.
-     * @param criteria The criteria to check for
-     */
-    public CompletionCriteria(Predicate<Player> criteria) {
-        this(criteria, criteria);
-    }
-
-    /**
-     * Creates a new CompletionCriteria with no display.
-     * @param criteria The criteria to check for
-     * @param unlockCriteria The criteria to check when unlocking
-     * @since 1.0.0
-     */
-    public CompletionCriteria(Predicate<Player> criteria, Predicate<Player> unlockCriteria) {
-        this(criteria, unlockCriteria, null);
-    }
-
-    /**
-     * Creates a new CompletionCriteria with no display and unlock criteria.
-     * @param criteria The criteria to check for
-     * @param unlockCriteria The criteria to check when unlocking
-     * @param displayKey The display key in a language file for the criteria
-     * @param firstArg The first argument to use when displaying the criteria
-     * @param displayArguments The arguments to use when displaying the criteria
-     * @since 1.0.0
-     */
-    public CompletionCriteria(Predicate<Player> criteria, Predicate<Player> unlockCriteria, String displayKey, Object firstArg, Object[] displayArguments) {
+    private CompletionCriteria(Predicate<Player> criteria, Predicate<Player> unlockCriteria, String displayKey, Object firstArg, Object[] displayArguments) {
         this(criteria, unlockCriteria, displayKey, ImmutableList.builder().add(firstArg).add(displayArguments).build().toArray());
+    }
+
+    private CompletionCriteria(Predicate<Player> criteria, String displayKey, Object... displayArguments) {
+        this(criteria, criteria, displayKey, displayArguments);
     }
 
     /**
@@ -90,57 +68,28 @@ public final class CompletionCriteria {
     }
 
     /**
-     * Fetches the display key for the completion message.
-     * @return Display key for Completion
+     * Fetches the display message of this criteria.
+     * @return Display Message
      */
     @NotNull
-    public String getDisplayKey() {
-        return displayKey;
-    }
-
-    /**
-     * Fetches the arguments to use when displaying the completion message.
-     * @return Arguments to use when displaying the completion message
-     */
-    public Object[] getDisplayArguments() {
-        return displayArguments;
+    public String getDisplayMessage() {
+        return String.format(StarConfig.getConfig().get(displayKey), displayArguments);
     }
 
     // Static Generators
 
     /**
-     * Generates a CompletionCriteria with {@link CompletionCriteria#CompletionCriteria(Predicate)}.
-     * @param criteria The criteria to check for
+     * Generates a CompletionCriteria from a {@link PlayerCompletion}.
+     * @param completion Completion to Check for
      * @return CompletionCriteria with the given criteria
-     * @since 1.0.0
+     * @throws IllegalArgumentException if criteria is null
      */
-    public static CompletionCriteria of(Predicate<Player> criteria) {
-        return new CompletionCriteria(criteria);
-    }
-
-    /**
-     * Generates a CompletionCriteria with {@link CompletionCriteria#CompletionCriteria(Predicate, Predicate, String, Object, Object[])}, with unlock criteria and criteria the same.
-     * @param criteria The criteria to check for
-     * @param displayKey The display key in a language file for the criteria
-     * @param args The arguments to use when displaying the criteria
-     * @return CompletionCriteria with the given criteria
-     * @since 1.0.0
-     */
-    public static CompletionCriteria of(Predicate<Player> criteria, String displayKey, Object... args) {
-        return new CompletionCriteria(criteria, criteria, displayKey, args);
-    }
-
-    /**
-     * Generates a CompletionCriteria with {@link CompletionCriteria#CompletionCriteria(Predicate, Predicate, String, Object, Object[])}.
-     * @param criteria The criteria to check for
-     * @param unlockCriteria The criteria to check when unlocking
-     * @param displayKey The display key in a language file for the criteria
-     * @param args The arguments to use when displaying the criteria
-     * @return CompletionCriteria with the given criteria
-     * @since 1.0.0
-     */
-    public static CompletionCriteria of(Predicate<Player> criteria, Predicate<Player> unlockCriteria, String displayKey, Object... args) {
-        return new CompletionCriteria(criteria, unlockCriteria, displayKey, args);
+    @NotNull
+    public static CompletionCriteria fromCompletion(@NotNull PlayerCompletion completion) throws IllegalArgumentException {
+        return new CompletionCriteria(
+                p -> new StarPlayer(p).hasCompleted(completion),
+                "criteria.completion." + completion.name().toLowerCase()
+        );
     }
 
     /**
@@ -148,7 +97,6 @@ public final class CompletionCriteria {
      * @param amount The amount of blocks to mine
      * @param m The material to check for
      * @return CompletionCriteria with the given criteria
-     * @since 1.0.0
      */
     public static CompletionCriteria fromMined(int amount, Material m) {
         return new CompletionCriteria(
@@ -162,7 +110,6 @@ public final class CompletionCriteria {
      * @param amount The amount of blocks to mine
      * @param materials Collection of Materials to check for
      * @return CompletionCriteria with the given criteria
-     * @since 1.0.0
      */
     public static CompletionCriteria fromMined(int amount, Collection<Material> materials) {
         return new CompletionCriteria(p -> {
@@ -191,7 +138,6 @@ public final class CompletionCriteria {
      * @param amount The amount of kills to check for
      * @param type The type of entity to check for
      * @return CompletionCriteria with the given criteria
-     * @since 1.0.0
      */
     public static CompletionCriteria fromKilled(int amount, EntityType type) {
         return new CompletionCriteria(
