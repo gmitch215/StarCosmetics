@@ -1,18 +1,20 @@
 package me.gamercoder215.starcosmetics.api.player;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
  * Represents a player used by StarCosmetics.
- * @since 1.0.0
- */
+*/
 public final class StarPlayer {
 
     private final OfflinePlayer player;
@@ -22,7 +24,6 @@ public final class StarPlayer {
     /**
      * Constructs a new StarPlayer.
      * @param player OfflinePlayer to use
-     * @since 1.0.0
      */
     public StarPlayer(@NotNull OfflinePlayer player) {
         this.player = player;
@@ -41,7 +42,6 @@ public final class StarPlayer {
     /**
      * Fetches the OfflinePlayer used to construct this StarPlayer.
      * @return OfflinePlayer used
-     * @since 1.0.0
      */
     @NotNull
     public OfflinePlayer getPlayer() {
@@ -51,7 +51,6 @@ public final class StarPlayer {
     /**
      * Fetches the File this configuration is stored in.
      * @return File
-     * @since 1.0.0
      */
     @NotNull
     public File getFile() {
@@ -61,7 +60,6 @@ public final class StarPlayer {
     /**
      * Fetches the FileConfiguration of this StarPlayer.
      * @return FileConfiguration
-     * @since 1.0.0
      */
     @NotNull
     public FileConfiguration getConfig() {
@@ -74,7 +72,6 @@ public final class StarPlayer {
      * Whether or not the player has completed the specified completion.
      * @param c The completion to check.
      * @return true if completed, false otherwise
-     * @since 1.0.0
      */
     public boolean hasCompleted(@NotNull PlayerCompletion c) {
         if (c == null) return false;
@@ -85,7 +82,6 @@ public final class StarPlayer {
      * Sets the completion of the specified completion to the specified value.
      * @param c The completion to set.
      * @param b The value to set the completion to.
-     * @since 1.0.0
      */
     public void setCompleted(@NotNull PlayerCompletion c, boolean b) {
         if (c == null) return;
@@ -101,7 +97,6 @@ public final class StarPlayer {
      * Whether or not the player has the specified setting enabled.
      * @param s The setting to check.
      * @return true if enabled, false otherwise
-     * @since 1.0.0
      */
     public boolean getSetting(@NotNull PlayerSetting s) {
         if (s == null) return false;
@@ -113,7 +108,6 @@ public final class StarPlayer {
      * @param setting The setting to check.
      * @param def The default value to return if the setting is not set.
      * @return true if enabled, false otherwise
-     * @since 1.0.0
      */
     public boolean getSetting(@NotNull PlayerSetting setting, boolean def) {
         if (setting == null) return false;
@@ -127,7 +121,6 @@ public final class StarPlayer {
      * @param setting The setting to set.
      * @param b The value to set the setting to.
      * @return true if enabled, false otherwise
-     * @since 1.0.0
      */
     public boolean setSetting(@NotNull PlayerSetting setting, boolean b) {
         if (!config.isConfigurationSection("settings")) config.createSection("settings");
@@ -136,6 +129,26 @@ public final class StarPlayer {
         try { config.save(file); } catch (IOException e) { StarConfig.print(e); }
 
         return b;
+    }
+
+    /**
+     * Fetches the selected cosmetic.
+     * @param clazz The class of the cosmetic to fetch.
+     * @return Selected Cosmetic for this Cosmetic Class
+     */
+    @Nullable
+    public CosmeticLocation getSelectedCosmetic(@Nullable Class<Cosmetic> clazz) {
+        if (clazz == null) return null;
+        if (Cosmetic.class.equals(clazz)) return null;
+
+        if (!config.isConfigurationSection("cosmetics")) {
+            config.createSection("cosmetics");
+            return null;
+        }
+
+        String path = "cosmetics." + clazz.getSimpleName().toLowerCase();
+
+        return CosmeticLocation.getByFullKey(config.getString(path, null));
     }
 
 }

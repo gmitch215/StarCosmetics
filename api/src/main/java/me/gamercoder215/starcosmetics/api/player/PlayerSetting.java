@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a setting available to players.
- * @since 1.0.0
  */
 public enum PlayerSetting {
 
@@ -31,7 +30,6 @@ public enum PlayerSetting {
     /**
      * Fetches the setting's display name.
      * @return Setting Display Name
-     * @since 1.0.0
      */
     @NotNull
     public String getDisplayName() {

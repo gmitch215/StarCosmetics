@@ -5,8 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a custom completion a player has to achieve to unlock cosmetics.
- * @since 1.0.0
- */
+*/
 public enum PlayerCompletion {
 
     /**
@@ -24,7 +23,6 @@ public enum PlayerCompletion {
     /**
      * Fetches the completion's display name.
      * @return Completion Display Name
-     * @since 1.0.0
      */
     @NotNull
     public String getDisplayName() {
