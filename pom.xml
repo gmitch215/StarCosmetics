@@ -181,6 +181,14 @@
             <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Other Dependencies -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>23.0.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 
