@@ -8,7 +8,6 @@ import java.util.Map;
 
 /**
  * Represents a StarCosmetics Structure
- * @since 1.0.0
  */
 public final class Structure {
     
@@ -28,7 +27,6 @@ public final class Structure {
     /**
      * Fetches a Map of StructurePoints to Materials that the Structure will place.
      * @return StructurePoint to Material Blueprint Map
-     * @since 1.0.0
      */
     @NotNull
     public Map<StructurePoint, Material> getPoints() {
@@ -38,7 +36,6 @@ public final class Structure {
     /**
      * Fetches a Map of StructurePoints to BlockData that the Structure will place (only works for 1.13+).
      * @return StructurePoint to BlockData Blueprint Map
-     * @since 1.0.0
      */
     @NotNull
     public Map<StructurePoint, String> getBlockData() {
@@ -48,7 +45,6 @@ public final class Structure {
     /**
      * Whether this Structure is compatible with this version of Minecraft.
      * @return true if this Structure is compatible with this version of Minecraft, false otherwise.
-     * @since 1.0.0
      */
     public boolean isCompatible() {
         if (minVersion.equalsIgnoreCase("ALL")) return true;
