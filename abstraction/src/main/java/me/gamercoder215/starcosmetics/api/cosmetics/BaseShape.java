@@ -1,9 +1,12 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
+import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleSize;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;
 
@@ -35,9 +38,11 @@ public enum BaseShape implements BiConsumer<Location, Particle>, ParticleShape {
 
 
     private final BiConsumer<Location, Particle> particle;
+    private final ParticleSize size;
 
     BaseShape(BiConsumer<Location, Particle> runnable) {
         this.particle = runnable;
+        this.size = ParticleSize.valueOf(name());
     }
 
     @Override
@@ -58,5 +63,11 @@ public enum BaseShape implements BiConsumer<Location, Particle>, ParticleShape {
     @Override
     public Material getIcon() {
         return Material.BEACON;
+    }
+
+    @Override
+    @NotNull
+    public ParticleSize getSize() {
+        return size;
     }
 }
