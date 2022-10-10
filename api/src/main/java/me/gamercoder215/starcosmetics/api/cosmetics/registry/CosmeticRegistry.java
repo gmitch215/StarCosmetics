@@ -8,17 +8,24 @@ import java.util.List;
 
 /**
  * Represents the registry for all StarCosmetics Cosmetics.
- * @since 1.0.0
- */
+*/
 public interface CosmeticRegistry {
 
     /**
      * Fetches a list of Locations for a specific Cosmetic.
      * @param parentClass Parent Cosmetic Class
      * @return List of Cosmetic Locations
-     * @since 1.0.0
      */
     @NotNull
     List<CosmeticLocation> getAllFor(@Nullable Class<Cosmetic> parentClass);
+
+    /**
+     * Fetches a list of all registered CosmeticLocations.
+     * @return List of Cosmetic Locations
+     */
+    @NotNull
+    default List<CosmeticLocation> getAllCosmetics() {
+        return getAllFor(Cosmetic.class);
+    }
 
 }

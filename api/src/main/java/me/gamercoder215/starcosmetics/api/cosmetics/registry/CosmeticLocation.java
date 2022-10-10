@@ -1,12 +1,15 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.registry;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a specific entry for a cosmetic.
- * @since 1.0.0
- */
+*/
 public interface CosmeticLocation {
 
     /**
@@ -24,14 +27,49 @@ public interface CosmeticLocation {
     String getKey();
 
     /**
+     * Fetches the parent of this cosmetic location.
+     * @return Parent Cosmetic
+     */
+    @NotNull
+    Cosmetic getParent();
+
+    /**
+     * Fetches the rarity of this CosmeticLocation.
+     * @return Cosmetic Rarity
+     */
+    @NotNull
+    CosmeticRarity getRarity();
+
+    /**
+     * Fetches the criteria required to unlock this CosmeticLocation.
+     * @return Completion Criteria
+     */
+    @NotNull
+    CompletionCriteria getCompletionCriteria();
+
+    /**
      * <p>Fetches the full key.</p>
      * <p>The full key is constructed as "{@link #getNamespace()}{@code :}{@link #getKey()}".</p>
      * @return Full Key
-     * @since 1.0.0
      */
     @NotNull
     default String getFullKey() {
         return getNamespace() + ":" + getKey();
+    }
+
+    /**
+     * Fetches a CosmeticLocation by {@link #getFullKey()}.
+     * @param fullKey Full Key
+     * @return Cosmetic Location
+     */
+    @Nullable
+    static CosmeticLocation getByFullKey(@Nullable String fullKey) {
+        if (fullKey == null) return null;
+
+        return StarConfig.getRegistry().getAllCosmetics()
+                .stream()
+                .filter(c -> c.getFullKey().equalsIgnoreCase(fullKey))
+                .findFirst().orElse(null);
     }
 
 }
