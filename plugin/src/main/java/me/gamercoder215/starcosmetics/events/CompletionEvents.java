@@ -41,6 +41,7 @@ public class CompletionEvents implements Listener {
 
                         break;
                     }
+                    default: break;
                 }
             }
         }.runTaskAsynchronously(plugin);
