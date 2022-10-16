@@ -22,7 +22,7 @@ public class CosmeticSelections1_12 implements CosmeticSelections {
     // Cosmetic Maps
 
     // Trails
-    private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("concrete", BaseTrail.PROJECTILE_TRAIL, ImmutableList.of(
                     Material.RED_GLAZED_TERRACOTTA, Material.ORANGE_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA,
                     Material.GREEN_GLAZED_TERRACOTTA, Material.CYAN_GLAZED_TERRACOTTA, Material.BLUE_GLAZED_TERRACOTTA,
@@ -36,7 +36,7 @@ public class CosmeticSelections1_12 implements CosmeticSelections {
 
     // Selections
 
-    private static final Map<Cosmetic, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection>>builder()
+    private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
                     CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_11").stream(),
                     PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
@@ -44,7 +44,7 @@ public class CosmeticSelections1_12 implements CosmeticSelections {
             .build();
 
     @Override
-    public Map<Cosmetic, List<CosmeticSelection>> getAllSelections() {
+    public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
 

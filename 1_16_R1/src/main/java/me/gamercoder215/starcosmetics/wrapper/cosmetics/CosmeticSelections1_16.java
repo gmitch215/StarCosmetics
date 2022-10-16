@@ -23,7 +23,7 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
     // Cosmetic Maps
 
     // Trails
-    private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + Fancy Items
             .add(new TrailSelection("shroomlight", BaseTrail.PROJECTILE_TRAIL, Material.SHROOMLIGHT,
                     CompletionCriteria.fromMined(120, Material.CRIMSON_STEM, Material.WARPED_STEM), CosmeticRarity.COMMON))
@@ -44,14 +44,14 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
             
             .build();
 
-    private static final List<CosmeticSelection> BLOCK_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> BLOCK_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("soul_flame", BaseTrail.GROUND_TRAIL, Particle.SOUL_FIRE_FLAME,
                     CompletionCriteria.fromMined(800, Material.SOUL_SAND, Material.SOUL_SOIL), CosmeticRarity.RARE))
             .build();
 
     // Selections
 
-    private static final Map<Cosmetic, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection>>builder()
+    private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
                     CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_15").stream(),
                     PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
@@ -63,7 +63,7 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
             .build();
 
     @Override
-    public Map<Cosmetic, List<CosmeticSelection>> getAllSelections() {
+    public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
 

@@ -14,6 +14,7 @@ import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -27,7 +28,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Trails
 
-    private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + Fancy Items
             .add(new TrailSelection("red_flowers", BaseTrail.PROJECTILE_TRAIL, StarMaterial.POPPY.find(),
                     CompletionCriteria.fromMined(30, StarMaterial.POPPY.find()), CosmeticRarity.COMMON))
@@ -115,7 +116,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
     
     // Ground Trails
 
-    private static final List<CosmeticSelection> GROUND_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("poppy", BaseTrail.GROUND_TRAIL, StarMaterial.POPPY.find(),
                     CompletionCriteria.fromMined(120, StarMaterial.POPPY.find()), CosmeticRarity.OCCASIONAL))
             
@@ -128,7 +129,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Sound Trails
 
-    private static final List<CosmeticSelection> SOUND_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("slime", BaseTrail.SOUND_TRAIL, Sound.BLOCK_SLIME_PLACE,
                     CompletionCriteria.fromKilled(100, EntityType.SLIME) ,CosmeticRarity.OCCASIONAL))
             .build();
@@ -137,7 +138,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Small Rings
 
-    private static final List<CosmeticSelection> SMALL_RINGS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("heart", BaseShape.SMALL_RING, Particle.HEART,
                     CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 15), CosmeticRarity.COMMON))
             .add(new ParticleSelection("flame", BaseShape.SMALL_RING, Particle.FLAME,
@@ -148,8 +149,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Click Gadgets
 
-    private static final List<CosmeticSelection> CLICK_GADGETS = ImmutableList.<CosmeticSelection>builder()
-            .add(GadgetSelection.builder()
+    private static final List<CosmeticSelection<?>> CLICK_GADGETS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(GadgetSelection.builder(PlayerInteractEvent.class)
                     .info("firework", CompletionCriteria.fromKilled(60, EntityType.CREEPER), CosmeticRarity.COMMON)
                     .item(Material.FIREWORK)
                     .action(e -> {
@@ -177,7 +178,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Selection Map
 
-    private static final Map<Cosmetic, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection>>builder()
+    private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, PROJECTILE_TRAILS)
             .put(BaseTrail.GROUND_TRAIL, GROUND_TRAILS)
             .put(BaseTrail.SOUND_TRAIL, SOUND_TRAILS)
@@ -188,7 +189,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .build();
 
     @Override
-    public Map<Cosmetic, List<CosmeticSelection>> getAllSelections() {
+    public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
 }

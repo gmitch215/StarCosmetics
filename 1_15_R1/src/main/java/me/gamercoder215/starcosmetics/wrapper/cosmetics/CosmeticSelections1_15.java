@@ -21,7 +21,7 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
     // Cosmetic Maps
 
     // Trails
-    private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + Fancy Items
             .add(new TrailSelection("honeycomb", BaseTrail.PROJECTILE_TRAIL, Material.HONEYCOMB,
                     CompletionCriteria.fromMined(240, Material.OAK_LOG, Material.BIRCH_LOG), CosmeticRarity.COMMON))
@@ -36,7 +36,7 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
 
     // Selections
 
-    private static final Map<Cosmetic, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection>>builder()
+    private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
                     CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_14").stream(),
                     PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
@@ -44,7 +44,7 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
             .build();
 
     @Override
-    public Map<Cosmetic, List<CosmeticSelection>> getAllSelections() {
+    public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
 

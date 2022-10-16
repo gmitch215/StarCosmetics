@@ -21,7 +21,7 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
     // Cosmetic Maps
 
     // Trails
-    private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + FFancy Items
             .add(new TrailSelection("lantern", BaseTrail.PROJECTILE_TRAIL, Material.LANTERN,
                     CompletionCriteria.fromCrafted(30, Material.TORCH), CosmeticRarity.COMMON))
@@ -33,7 +33,7 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
 
     // Selections
 
-    private static final Map<Cosmetic, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection>>builder()
+    private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
                     CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_13").stream(),
                     PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
@@ -41,7 +41,7 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
             .build();
 
     @Override
-    public Map<Cosmetic, List<CosmeticSelection>> getAllSelections() {
+    public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
 

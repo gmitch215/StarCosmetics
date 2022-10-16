@@ -22,7 +22,7 @@ public class CosmeticSelections1_11 implements CosmeticSelections {
     // Cosmetic Maps
 
     // Trails
-    private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("totems", BaseTrail.PROJECTILE_TRAIL, StarMaterial.TOTEM.find(),
                     CompletionCriteria.fromKilled(350, EntityType.EVOKER), CosmeticRarity.EPIC))
             .add(new TrailSelection("shulker_shell", BaseTrail.PROJECTILE_TRAIL, Material.SHULKER_SHELL,
@@ -32,7 +32,7 @@ public class CosmeticSelections1_11 implements CosmeticSelections {
 
     // Selections
 
-    private static final Map<Cosmetic, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection>>builder()
+    private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
                     CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_10").stream(),
                     PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
@@ -40,7 +40,7 @@ public class CosmeticSelections1_11 implements CosmeticSelections {
             .build();
 
     @Override
-    public Map<Cosmetic, List<CosmeticSelection>> getAllSelections() {
+    public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
 

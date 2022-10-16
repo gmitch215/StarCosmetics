@@ -20,14 +20,14 @@ public class CosmeticSelections1_18 implements CosmeticSelections {
     // Cosmetic Maps
 
     // Trails
-    private static final List<CosmeticSelection> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection>builder()
+    private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("otherside", BaseTrail.PROJECTILE_TRAIL, Material.MUSIC_DISC_OTHERSIDE,
                     CompletionCriteria.fromMined(2500, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE), CosmeticRarity.RARE))
             .build();
 
     // Selections
 
-    private static final Map<Cosmetic, List<CosmeticSelection>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection>>builder()
+    private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
                     CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_17").stream(),
                     PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
@@ -35,7 +35,7 @@ public class CosmeticSelections1_18 implements CosmeticSelections {
             .build();
 
     @Override
-    public Map<Cosmetic, List<CosmeticSelection>> getAllSelections() {
+    public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
 }
