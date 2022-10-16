@@ -4,21 +4,22 @@ import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 
-public abstract class CosmeticSelection implements CosmeticLocation {
+public abstract class CosmeticSelection<T> implements CosmeticLocation<T> {
 
-    protected final Object input;
+    protected final T input;
 
     protected final CompletionCriteria completionCriteria;
 
     protected final CosmeticRarity rarity;
 
-    protected CosmeticSelection(Object input, CompletionCriteria criteria, CosmeticRarity rarity) {
+    protected CosmeticSelection(T input, CompletionCriteria criteria, CosmeticRarity rarity) {
         this.input = input;
         this.completionCriteria = criteria;
         this.rarity = rarity;
     }
 
-    public final Object getInput() {
+    @Override
+    public final T getInput() {
         return input;
     }
 

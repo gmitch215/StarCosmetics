@@ -4,13 +4,16 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
+
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a specific entry for a cosmetic.
+ * @param <T> Input Type
 */
-public interface CosmeticLocation {
+public interface CosmeticLocation<T> {
 
     /**
      * Fetches the namespace of this cosmetic location that would belong to parent {@link Cosmetic}.
@@ -58,12 +61,26 @@ public interface CosmeticLocation {
     }
 
     /**
+     * Fetches the input type of this CosmeticLocation.
+     * @return Class of Input Type
+     */
+    @NotNull
+    Class<? extends T> getInputType();
+
+    /**
+     * Fetches the input used in {@link Cosmetic#run(Location, CosmeticLocation)}.
+     * @return CosmeticLocation Input for Parent Cosmetic
+     */
+    @NotNull
+    T getInput();
+
+    /**
      * Fetches a CosmeticLocation by {@link #getFullKey()}.
      * @param fullKey Full Key
      * @return Cosmetic Location
      */
     @Nullable
-    static CosmeticLocation getByFullKey(@Nullable String fullKey) {
+    static CosmeticLocation<?> getByFullKey(@Nullable String fullKey) {
         if (fullKey == null) return null;
 
         return StarConfig.getRegistry().getAllCosmetics()
