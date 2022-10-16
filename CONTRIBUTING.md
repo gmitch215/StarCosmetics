@@ -1,5 +1,5 @@
 # Contributing
-Contributing guidelines for the MobChip Project. We appreciate your help in helping us to improve the project.
+Contributing guidelines for the StarCosmetics Project. We appreciate your help in helping us to improve the project.
 
 ## Pull Requeset Process
 1. Ensure that the pull request is at the correct branch you want to merge in.
