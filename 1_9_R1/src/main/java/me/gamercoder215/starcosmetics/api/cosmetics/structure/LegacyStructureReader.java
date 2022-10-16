@@ -90,7 +90,7 @@ public final class LegacyStructureReader implements StructureReader {
                 index.incrementAndGet();
             }
 
-            return new Structure(minVersion, displayKey, points, new HashMap<>());
+            return new LegacyStructure(minVersion, displayKey, points);
         } catch (IOException e) {
             StarConfig.print(e);
         }

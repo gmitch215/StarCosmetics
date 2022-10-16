@@ -20,7 +20,7 @@ public final class ModernStructureReader implements StructureReader {
     public ModernStructureReader(Reader r) {
         this.reader = new BufferedReader(r);
     }
-
+    
     @Override
     public Structure read() {
         try {
@@ -116,7 +116,7 @@ public final class ModernStructureReader implements StructureReader {
                 index.incrementAndGet();
             }
 
-            return new Structure(minVersion, displayKey, points, blockData);
+            return new ModernStructure(minVersion, displayKey, points, blockData);
         } catch (IOException e) {
             StarConfig.print(e);
         }
