@@ -137,7 +137,7 @@ public final class StarPlayer {
      * @return Selected Cosmetic for this Cosmetic Class
      */
     @Nullable
-    public CosmeticLocation getSelectedCosmetic(@Nullable Class<Cosmetic> clazz) {
+    public CosmeticLocation<?> getSelectedCosmetic(@Nullable Class<Cosmetic> clazz) {
         if (clazz == null) return null;
         if (Cosmetic.class.equals(clazz)) return null;
 
