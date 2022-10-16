@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+@SuppressWarnings("unchecked")
 public final class StarCosmetics extends JavaPlugin implements StarConfig, CosmeticRegistry {
 
     private static final Wrapper w = Wrapper.getWrapper();
@@ -136,13 +137,15 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     }
 
     @Override
-    public @NotNull List<CosmeticLocation> getAllFor(Class<Cosmetic> parentClass) {
-        List<CosmeticLocation> locs = new ArrayList<>();
+    @NotNull
+    public <T extends Cosmetic> List<CosmeticLocation<? extends T>> getAllFor(Class<T> parentClass) {
+        List<CosmeticLocation<? extends T>> locs = new ArrayList<>();
         if (parentClass == null) return locs;
 
-        Map<Cosmetic, List<CosmeticSelection>> selections = getCosmeticSelections().getAllSelections();
-        for (Map.Entry<Cosmetic, List<CosmeticSelection>> entry : selections.entrySet())
-            if (parentClass.isInstance(entry.getKey())) locs.addAll(entry.getValue());
+        Map<Cosmetic, List<CosmeticSelection<?>>> selections = getCosmeticSelections().getAllSelections();
+        for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
+            if (parentClass.isInstance(entry.getKey())) for (CosmeticLocation<?> loc : entry.getValue()) 
+                    locs.add((CosmeticLocation<T>) loc);
 
         return locs;
     }
