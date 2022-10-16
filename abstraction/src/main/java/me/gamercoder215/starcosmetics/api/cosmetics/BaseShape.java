@@ -3,6 +3,9 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleSize;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -10,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;
 
-public enum BaseShape implements BiConsumer<Location, Particle>, ParticleShape {
+public enum BaseShape implements ParticleShape {
     
     SMALL_RING((l, p) -> circle(l, p, 10, 4)),
 
@@ -46,11 +49,6 @@ public enum BaseShape implements BiConsumer<Location, Particle>, ParticleShape {
     }
 
     @Override
-    public void accept(Location l, Particle t) {
-        particle.accept(l, t);
-    }
-
-    @Override
     public String getNamespace() {
         return "particle_shapes:" + name().toLowerCase();
     }
@@ -69,5 +67,12 @@ public enum BaseShape implements BiConsumer<Location, Particle>, ParticleShape {
     @NotNull
     public ParticleSize getSize() {
         return size;
+    }
+
+    @Override
+    public void run(@NotNull Location l, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException {
+        if (!(location instanceof ParticleSelection)) return;
+        ParticleSelection sel = (ParticleSelection) location;
+        particle.accept(l, sel.getInput());
     }
 }

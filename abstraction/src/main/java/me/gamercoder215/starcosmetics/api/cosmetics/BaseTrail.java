@@ -1,6 +1,8 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -10,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,12 +24,13 @@ import static me.gamercoder215.starcosmetics.util.Constants.r;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
 @SuppressWarnings("unchecked")
-public enum BaseTrail implements Trail, BiConsumer<Entity, Object> {
+public final class BaseTrail<T> implements Trail<T> {
     
-    PROJECTILE_TRAIL(Material.ARROW, (e, o) -> {
-        if (!(e instanceof Projectile)) return;
-        Projectile p = (Projectile) e;
+    public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile_trail", Object.class, Material.ARROW, (en, cloc) -> {
+        if (!(en instanceof Projectile)) return;
+        Projectile p = (Projectile) en;
         Location loc = p.getLocation();
+        Object o = cloc.getInput();
 
         if (o instanceof Particle) {
             Particle part = (Particle) o;
@@ -153,10 +157,13 @@ public enum BaseTrail implements Trail, BiConsumer<Entity, Object> {
                 }
             }
         }
-    }),
+    });
 
-    GROUND_TRAIL(Material.STONE, (e, o) -> {
-        Location loc = e.getLocation().add(0, 0.1, 0);
+    public static final BaseTrail<Object> GROUND_TRAIL = new BaseTrail<>("ground_trail", Object.class, Material.STONE, (e, cloc) -> {
+        if (!(e instanceof Projectile)) return;
+        Projectile p = (Projectile) e;
+        Location loc = p.getLocation().add(0, 0.1, 0);
+        Object o = cloc.getInput();
 
         if (o instanceof Particle) {
             Particle part = (Particle) o;
@@ -167,13 +174,15 @@ public enum BaseTrail implements Trail, BiConsumer<Entity, Object> {
             ItemStack item = o instanceof Material ? new ItemStack((Material) o) : (ItemStack) o;
             for (Player pl : e.getWorld().getPlayers()) getWrapper().spawnFakeItem(pl, item, loc, 5);
         }
-    }),
+    });
 
-    SOUND_TRAIL(Material.JUKEBOX, (e, o) -> {
+    public static final BaseTrail<Sound> SOUND_TRAIL = new BaseTrail<>("sound_trail", Sound.class, Material.JUKEBOX, (e, cloc) -> {
+        Object o = cloc.getInput();
         if (!(o instanceof Sound)) return;
+        Sound sound = (Sound) o;
+
         if (!(e instanceof Projectile)) return;
         Projectile p = (Projectile) e;
-        Sound sound = (Sound) o;
 
         new BukkitRunnable() {
             @Override
@@ -187,21 +196,19 @@ public enum BaseTrail implements Trail, BiConsumer<Entity, Object> {
             }
         }.runTaskTimer(StarConfig.getPlugin(), 2, 2);
         e.getWorld().playSound(e.getLocation(), sound, 1, 1);
-    }),
-
-    ;
+    });
 
     private final Material icon;
-    private final BiConsumer<Entity, Object> trail;
+    private final BiConsumer<Entity, CosmeticLocation<?>> trail;
+    private final Class<T> type;
+    private final String name;
 
-    BaseTrail(Material icon, BiConsumer<Entity, Object> runnable) {
+    private BaseTrail(String name, Class<T> type, Material icon, BiConsumer<Entity, CosmeticLocation<?>> runnable) {
         this.icon = icon;
         this.trail = runnable;
-    }
+        this.type = type;
+        this.name = name;
 
-    @Override
-    public void accept(Entity e, Object u) {
-        trail.accept(e, u);
     }
 
     @Override
@@ -211,12 +218,22 @@ public enum BaseTrail implements Trail, BiConsumer<Entity, Object> {
 
     @Override
     public String getDisplayName() {
-        return StarConfig.getConfig().get("cosmetics.trails." + name().toLowerCase());
+        return StarConfig.getConfig().get("cosmetics.trails." + name.toLowerCase());
     }
 
     @Override
     public Material getIcon() {
         return icon;
+    }
+
+    @Override
+    public Class<T> getTrailType() {
+        return type;
+    }
+
+    @Override
+    public void run(@NotNull Entity en, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException {
+        trail.accept(en, location);
     }
 
 }

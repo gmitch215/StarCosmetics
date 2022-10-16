@@ -1,24 +1,20 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import org.bukkit.Material;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.event.Event;
+import org.jetbrains.annotations.NotNull;
 
 public enum BaseGadget implements Gadget {
 
     CLICK_GADGET
     ;
 
-    private final Consumer<List<Object>> consumer;
-
-    BaseGadget(Consumer<List<Object>> args) {
-        this.consumer = args;
-    }
-
-    BaseGadget() { this((args) -> {}); }
+    BaseGadget() {}
 
     @Override
     public String getNamespace() {
@@ -36,8 +32,10 @@ public enum BaseGadget implements Gadget {
     }
 
     @Override
-    public void accept(Object... args) {
-        consumer.accept(Arrays.asList(args));
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public void run(@NotNull Location l, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException {
+        GadgetSelection sel = (GadgetSelection) location;
+        sel.run((Event) location.getInput());
     }
 
 }

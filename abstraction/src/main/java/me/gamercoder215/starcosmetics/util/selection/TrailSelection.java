@@ -1,16 +1,17 @@
 package me.gamercoder215.starcosmetics.util.selection;
 
+import org.jetbrains.annotations.NotNull;
+
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.Trail;
 
-public class TrailSelection extends CosmeticSelection {
+public final class TrailSelection extends CosmeticSelection<Object> {
 
     private final String name;
-    private final Trail parent;
+    private final Trail<?> parent;
 
-    public TrailSelection(String name, Trail parent, Object value, CompletionCriteria criteria, CosmeticRarity rarity) {
+    public TrailSelection(String name, Trail<?> parent, Object value, CompletionCriteria criteria, CosmeticRarity rarity) {
         super(value, criteria, rarity);
 
         this.name = name;
@@ -23,7 +24,13 @@ public class TrailSelection extends CosmeticSelection {
     }
 
     @Override
-    public Cosmetic getParent() {
+    public Trail<?> getParent() {
         return parent;
     }
+
+    @Override
+    public @NotNull Class<? extends Object> getInputType() {
+        return input.getClass();
+    }
+
 }
