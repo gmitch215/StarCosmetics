@@ -4,8 +4,8 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a custom completion a player has to achieve to unlock cosmetics.
-*/
+ * Represents a custom completion a player has to achieve to unlock cosmetics, through any toggled event.
+ */
 public enum PlayerCompletion {
 
     /**
