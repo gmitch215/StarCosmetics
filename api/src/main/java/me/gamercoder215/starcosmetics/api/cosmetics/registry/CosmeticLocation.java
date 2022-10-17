@@ -20,7 +20,9 @@ public interface CosmeticLocation<T> {
      * @return Cosmetic Namespace
      */
     @NotNull
-    String getNamespace();
+    default String getNamespace() {
+        return getParent().getNamespace();
+    }
 
     /**
      * Fetches the key of this cosmetic location.

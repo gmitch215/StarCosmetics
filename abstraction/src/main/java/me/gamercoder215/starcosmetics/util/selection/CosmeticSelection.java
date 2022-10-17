@@ -1,5 +1,7 @@
 package me.gamercoder215.starcosmetics.util.selection;
 
+import java.util.Objects;
+
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
@@ -34,5 +36,17 @@ public abstract class CosmeticSelection<T> implements CosmeticLocation<T> {
     }
 
     @Override
-    public final String getNamespace() { return getParent().getNamespace(); }
+    public boolean equals(Object o) {
+        if (!(o instanceof CosmeticSelection<?>)) return false;
+        CosmeticSelection<?> s = (CosmeticSelection<?>) o;
+        if (this == o) return true;
+
+        return getFullKey().equals(s.getFullKey());
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(getFullKey());
+    }
+    
 }
