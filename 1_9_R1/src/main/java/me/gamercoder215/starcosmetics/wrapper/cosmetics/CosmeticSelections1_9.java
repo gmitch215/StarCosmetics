@@ -109,6 +109,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             
             .add(new TrailSelection("dragon_breath", BaseTrail.PROJECTILE_TRAIL, Particle.DRAGON_BREATH,
                     CompletionCriteria.fromKilled(10, EntityType.ENDER_DRAGON), CosmeticRarity.EPIC))
+            
             // Entities
             .add(new TrailSelection("chickens", BaseTrail.PROJECTILE_TRAIL, EntityType.CHICKEN,
                     CompletionCriteria.fromKilled(200, EntityType.CHICKEN), CosmeticRarity.OCCASIONAL))
@@ -119,19 +120,22 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("poppy", BaseTrail.GROUND_TRAIL, StarMaterial.POPPY.find(),
                     CompletionCriteria.fromMined(120, StarMaterial.POPPY.find()), CosmeticRarity.OCCASIONAL))
-            
+    
             .add(new TrailSelection("lava", BaseTrail.GROUND_TRAIL, Particle.LAVA,
                     CompletionCriteria.fromKilled(525, EntityType.BLAZE), CosmeticRarity.RARE))
-            
             .add(new TrailSelection("water", BaseTrail.GROUND_TRAIL, Particle.WATER_SPLASH,
                     CompletionCriteria.fromKilled(625, EntityType.SQUID), CosmeticRarity.RARE))
+            
             .build();
 
     // Sound Trails
 
     private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("slime", BaseTrail.SOUND_TRAIL, Sound.BLOCK_SLIME_PLACE,
-                    CompletionCriteria.fromKilled(100, EntityType.SLIME) ,CosmeticRarity.OCCASIONAL))
+                    CompletionCriteria.fromKilled(100, EntityType.SLIME), CosmeticRarity.OCCASIONAL))
+            .add(new TrailSelection("anvil", BaseTrail.SOUND_TRAIL, Sound.BLOCK_ANVIL_PLACE,
+                    CompletionCriteria.fromKilled(30, EntityType.IRON_GOLEM), CosmeticRarity.OCCASIONAL))
+            
             .build();
 
     // Shapes
