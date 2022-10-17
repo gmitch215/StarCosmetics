@@ -27,8 +27,8 @@ public interface Cosmetic {
     String getDisplayName();
 
     /**
-     * Fetches the icon of this cosmetic.
-     * @return The icon of this cosmetic.
+     * Fetches the inventory icon of this cosmetic.
+     * @return The Icon of this cosmetic.
      */
     @NotNull
     Material getIcon();
