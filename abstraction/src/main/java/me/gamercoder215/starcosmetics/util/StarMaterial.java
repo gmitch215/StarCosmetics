@@ -1,27 +1,34 @@
 package me.gamercoder215.starcosmetics.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Material;
 
 public enum StarMaterial {
 
-    POPPY("red_flower", "poppy"),
-    TOTEM("totem", "totem_of_undying"),
-    MAGMA_BLOCK("magma", "magma_block"),
-    OAK_LOG("log", "oak_log"),
+    POPPY("red_flower"),
+    TOTEM("totem"),
+    MAGMA_BLOCK("magma"),
+    OAK_LOG("log"),
 
-    END_STONE("ender_stone", "end_stone"),
+    END_STONE("ender_stone"),
 
-    COMMAND_BLOCK("command", "command_block"),
+    COMMAND_BLOCK("command"),
 
-    CHAIN_COMMAND_BLOCK("command_chain", "chain_command_block"),
+    CHAIN_COMMAND_BLOCK("command_chain"),
 
-    REPEATING_COMMAND_BLOCK("command_repeating", "repeating_command_block"),
+    REPEATING_COMMAND_BLOCK("command_repeating"),
+
+    GRASS_BLOCK("grass")
     ;
 
-    private final String[] names;
+    private final List<String> names = new ArrayList<>();
 
     StarMaterial(String... allnames) {
-        this.names = allnames;
+        this.names.addAll(Arrays.asList(allnames));
+        this.names.add(name());
     }
 
     public Material find() {
