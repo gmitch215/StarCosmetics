@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,11 +37,15 @@ public interface Wrapper {
 
     int getCommandVersion();
 
+    boolean isItem(Material m);
+
     default boolean isLegacy() {
         return getCommandVersion() == 1;
     }
 
     NBTWrapper getNBTWrapper(ItemStack item);
+
+    StarInventory createInventory(String key, int size, String title);
 
     default ItemStack withID(Material m, int amount, String id) {
         NBTWrapper wrapper = getNBTWrapper(new ItemStack(m, amount));

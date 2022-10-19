@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_14_R1;
 import net.md_5.bungee.api.ChatMessageType;
@@ -27,6 +28,11 @@ public class Wrapper1_14_R1 implements Wrapper {
     @Override
     public int getCommandVersion() {
         return 2;
+    }
+
+    @Override
+    public boolean isItem(org.bukkit.Material m) {
+        return m.isItem();
     }
 
     @Override
@@ -94,6 +100,11 @@ public class Wrapper1_14_R1 implements Wrapper {
                 as.p(3);
             }
         }.runTaskTimer(StarConfig.getPlugin(), 0, 2);
+    }
+
+    @Override
+    public StarInventory createInventory(String key, int size, String title) {
+        return new StarInventory1_14_R1(key, size, title);
     }
 
 }

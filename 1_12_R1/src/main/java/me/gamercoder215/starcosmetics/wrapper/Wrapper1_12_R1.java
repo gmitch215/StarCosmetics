@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_12_R1;
 import net.md_5.bungee.api.ChatMessageType;
@@ -17,6 +18,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.Entity;
 import net.minecraft.server.v1_12_R1.EntityItem;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.Item;
 import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntity;
 
@@ -77,6 +79,18 @@ public class Wrapper1_12_R1 implements Wrapper {
     @Override
     public void attachRiptide(org.bukkit.entity.Entity en) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isItem(org.bukkit.Material m) {
+        if (m == org.bukkit.Material.AIR) return false;
+        return Item.getById(m.getId()) != null;
+    }
+
+    @Override
+    public StarInventory createInventory(String key, int size, String title) {
+        return new StarInventory1_12_R1(key, size, title);
     }
 
 }
