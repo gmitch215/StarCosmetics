@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 
@@ -35,10 +36,10 @@ public interface Cosmetic {
 
     /**
      * Runs a CosmeticLocation based on this parent.
-     * @param l Bukkit Location to use at
+     * @param l Bukkit Location to use at (not necessary for some Cosmetics)
      * @param location CosmeticLocation to input
      * @throws IllegalArgumentException if location is null or is not supported
      */
-    void run(@NotNull Location l, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException;
+    void run(@Nullable Location l, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException;
 
 }
