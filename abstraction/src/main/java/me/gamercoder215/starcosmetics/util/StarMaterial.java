@@ -9,8 +9,10 @@ import org.bukkit.Material;
 public enum StarMaterial {
 
     POPPY("red_flower"),
+
     TOTEM("totem"),
     MAGMA_BLOCK("magma"),
+
     OAK_LOG("log"),
 
     END_STONE("ender_stone"),
@@ -21,14 +23,24 @@ public enum StarMaterial {
 
     REPEATING_COMMAND_BLOCK("command_repeating"),
 
-    GRASS_BLOCK("grass")
+    GRASS_BLOCK("grass"),
+
+    CRAFTING_TABLE("workbench"),
+
+    OBSERVER(Material.OBSIDIAN)
     ;
 
+    private final Material defaultV;
     private final List<String> names = new ArrayList<>();
 
-    StarMaterial(String... allnames) {
+    StarMaterial(Material defaultV, String... allnames) {
         this.names.addAll(Arrays.asList(allnames));
         this.names.add(name());
+        this.defaultV = defaultV;
+    }
+
+    StarMaterial(String... allnames) {
+        this(null, allnames);
     }
 
     public Material find() {
@@ -36,6 +48,8 @@ public enum StarMaterial {
             Material m = Material.matchMaterial(s);
             if (m != null) return m;
         }
+
+        if (defaultV != null) return defaultV;
 
         throw new AssertionError("No material found for " + this.name());
     }
