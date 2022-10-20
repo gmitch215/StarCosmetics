@@ -1,14 +1,14 @@
 package me.gamercoder215.starcosmetics.util;
 
+import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public final class Generator {
+
+    private static final Wrapper w = Wrapper.w;
 
     public static ItemStack getGUIBackground() {
         ItemStack item = Wrapper.getWrapper().isLegacy() ? new ItemStack(Material.matchMaterial("STAINED_GLASS_PANE"), 1, (short) 7) : new ItemStack(Material.matchMaterial("GRAY_STAINED_GLASS_PANE"));
@@ -18,15 +18,11 @@ public final class Generator {
         return item;
     }
 
-    public static Inventory genGUI(int size, String name) {
-        return genGUI(size, name, null);
-    }
-
-    public static Inventory genGUI(int size, String name, InventoryHolder holder) {
+    public static StarInventory genGUI(String key, int size, String name) {
         if (size < 9 || size > 54) return null;
         if (size % 9 > 0) return null;
 
-        Inventory inv = Bukkit.createInventory(holder, size, name);
+        StarInventory inv = w.createInventory(key, size, name);
         ItemStack bg = getGUIBackground();
 
         if (size < 27) return inv;
