@@ -104,7 +104,7 @@ public class NBTWrapper1_18_R1 extends NBTWrapper {
         CompoundTag tag = nmsitem.getOrCreateTag();
         CompoundTag starcosmetics = tag.getCompound(ROOT);
 
-        return UUID.fromString(new String(starcosmetics.getByteArray(key)));
+        return starcosmetics.getUUID(key);
     }
 
     @Override

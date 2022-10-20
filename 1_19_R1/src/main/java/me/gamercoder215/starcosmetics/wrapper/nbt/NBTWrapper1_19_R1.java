@@ -104,7 +104,7 @@ public class NBTWrapper1_19_R1 extends NBTWrapper {
         CompoundTag tag = nmsitem.getOrCreateTag();
         CompoundTag starcosmetics = tag.getCompound(ROOT);
 
-        return UUID.fromString(new String(starcosmetics.getByteArray(key)));
+        return starcosmetics.getUUID(key);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class NBTWrapper1_19_R1 extends NBTWrapper {
         CompoundTag tag = nmsitem.getOrCreateTag();
         CompoundTag starcosmetics = tag.getCompound(ROOT);
 
-        starcosmetics.putByteArray(key, value.toString().getBytes());
+        starcosmetics.putUUID(key, value);
         tag.put(ROOT, starcosmetics);
         nmsitem.setTag(tag);
         this.item = CraftItemStack.asBukkitCopy(nmsitem);
