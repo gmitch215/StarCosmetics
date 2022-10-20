@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import com.google.common.collect.Lists;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
