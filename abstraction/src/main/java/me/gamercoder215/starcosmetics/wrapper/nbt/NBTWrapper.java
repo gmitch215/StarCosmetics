@@ -2,6 +2,8 @@ package me.gamercoder215.starcosmetics.wrapper.nbt;
 
 import org.bukkit.inventory.ItemStack;
 
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+
 import java.util.UUID;
 
 public abstract class NBTWrapper {
@@ -47,4 +49,21 @@ public abstract class NBTWrapper {
     public abstract UUID getNBTUUID(String key);
 
     public abstract void setNBT(String key, UUID value);
+
+    public abstract Class<?> getNBTClass(String key);
+
+    public abstract void setNBT(String key, Class<?> clazz);
+
+    public <T> Class<T> getNBTClass(String key, Class<T> cast) {
+        Class<?> clazz = getNBTClass(key);
+        return cast.isAssignableFrom(clazz) ? cast : null;
+    }
+
+    public final CosmeticLocation<?> getNBTLocation(String key) {
+        return CosmeticLocation.getByFullKey(getNBTString(key));
+    }
+
+    public final void setNBT(String key, CosmeticLocation<?> value) {
+        setNBT(key, value.getFullKey());
+    }
 }

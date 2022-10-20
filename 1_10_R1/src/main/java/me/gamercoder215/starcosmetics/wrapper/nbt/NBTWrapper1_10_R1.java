@@ -4,6 +4,8 @@ import net.minecraft.server.v1_10_R1.ItemStack;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
+
 import java.util.UUID;
 
 public class NBTWrapper1_10_R1 extends NBTWrapper {
@@ -112,6 +114,32 @@ public class NBTWrapper1_10_R1 extends NBTWrapper {
         NBTTagCompound starcosmetics = tag.getCompound(ROOT);
 
         starcosmetics.setByteArray(key, value.toString().getBytes());
+        tag.set(ROOT, starcosmetics);
+        nmsitem.setTag(tag);
+        this.item = CraftItemStack.asBukkitCopy(nmsitem);
+    }
+
+    @Override
+    public Class<?> getNBTClass(String key) {
+        ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = nmsitem.hasTag() ? new NBTTagCompound() : nmsitem.getTag();
+        NBTTagCompound starcosmetics = tag.getCompound(ROOT);
+
+        try {
+            return Class.forName(new String(starcosmetics.getByteArray(key)));
+        } catch (ClassNotFoundException e) {
+            StarConfig.print(e);
+            return null;
+        }
+    }
+
+    @Override
+    public void setNBT(String key, Class<?> clazz) {
+        ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = nmsitem.hasTag() ? new NBTTagCompound() : nmsitem.getTag();
+        NBTTagCompound starcosmetics = tag.getCompound(ROOT);
+
+        starcosmetics.setByteArray(key, clazz.getName().getBytes());
         tag.set(ROOT, starcosmetics);
         nmsitem.setTag(tag);
         this.item = CraftItemStack.asBukkitCopy(nmsitem);
