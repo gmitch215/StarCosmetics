@@ -3,18 +3,19 @@ package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface StructureReader {
+public interface StructureReader extends Closeable {
 
     Structure read();
-
-    void close();
 
     static List<StructurePoint> readPoints(String input) {
         List<StructurePoint> points = new ArrayList<>();
@@ -64,6 +65,10 @@ public interface StructureReader {
             StarConfig.print(e);
             return null;
         }
+    }
+
+    static StructureReader getStructureReader(InputStream stream) {
+        return getStructureReader(new InputStreamReader(stream));
     }
 
     static StructureReader getStructureReader(Reader r) {
