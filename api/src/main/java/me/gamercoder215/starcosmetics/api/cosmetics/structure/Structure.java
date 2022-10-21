@@ -1,12 +1,11 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-
-import me.gamercoder215.starcosmetics.api.StarConfig;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -78,7 +77,7 @@ public abstract class Structure {
                     l.getBlock().setType(Material.AIR);
 
                     it.remove();
-                };
+                }
             }
         }.runTaskLater(StarConfig.getPlugin(), delay);
     }
