@@ -1,8 +1,8 @@
 package me.gamercoder215.starcosmetics.wrapper.nbt;
 
-import org.bukkit.inventory.ItemStack;
-
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.util.Constants;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -18,6 +18,10 @@ public abstract class NBTWrapper {
     
     public ItemStack getItem() {
         return item;
+    }
+
+    public static NBTWrapper of(ItemStack item) {
+        return Constants.w.getNBTWrapper(item);
     }
 
     public final void setID(String value) {
