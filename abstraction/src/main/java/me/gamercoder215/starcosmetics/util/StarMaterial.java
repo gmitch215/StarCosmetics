@@ -1,16 +1,19 @@
 package me.gamercoder215.starcosmetics.util;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.bukkit.Material;
 
 public enum StarMaterial {
 
     POPPY("red_flower"),
 
     TOTEM("totem"),
+
     MAGMA_BLOCK("magma"),
 
     OAK_LOG("log"),
@@ -27,22 +30,49 @@ public enum StarMaterial {
 
     CRAFTING_TABLE("workbench"),
 
+    BLACK_STAINED_GLASS_PANE(15, "stained_glass_pane"),
+
+    RED_STAINED_GLASS_PANE(14, "stained_glass_pane"),
+
+    LIME_STAINED_GLASS_PANE(5, "stained_glass_pane"),
+
+    LIME_WOOL(5, "wool"),
+
+    RED_WOOL(14, "wool"),
+
     OBSERVER(Material.OBSIDIAN)
     ;
 
     private final Material defaultV;
+    private final short data;
+    private final boolean dataOnlyLegacy;
     private final List<String> names = new ArrayList<>();
 
-    StarMaterial(Material defaultV, String... allnames) {
-        this.names.addAll(Arrays.asList(allnames));
+    StarMaterial(Material defaultV, int data, boolean dataOnlyLegacy, String... allnames) {
         this.names.add(name());
+        this.names.addAll(Arrays.asList(allnames));
         this.defaultV = defaultV;
+        this.dataOnlyLegacy = dataOnlyLegacy;
+        this.data = (short) data;
+    }
+
+    StarMaterial(Material defaultV, String... allnames) {
+        this(defaultV, 0, true, allnames);
+    }
+
+    StarMaterial(int data, String... allnames) {
+        this(null, data, true, allnames);
+    }
+
+    StarMaterial(Material defaultV, int data, String... allnames) {
+        this(defaultV, data, true, allnames);
     }
 
     StarMaterial(String... allnames) {
-        this(null, allnames);
+        this(null, 0, true, allnames);
     }
 
+    @NotNull
     public Material find() {
         for (String s : names) {
             Material m = Material.matchMaterial(s);
@@ -53,5 +83,16 @@ public enum StarMaterial {
 
         throw new AssertionError("No material found for " + this.name());
     }
+
+    public ItemStack findStack() {
+        return findStack(1);
+    }
+
+    public ItemStack findStack(int amount) {
+        if (dataOnlyLegacy) return new ItemStack(find());
+        else return new ItemStack(find(), amount, data);
+    }
+
+
 
 }
