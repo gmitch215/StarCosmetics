@@ -20,6 +20,14 @@ public interface Wrapper {
         return getWrapper() == null;
     }
 
+    static String get(String key) {
+        return StarConfig.getConfig().get(key);
+    }
+
+    static String getMessage(String key) {
+        return StarConfig.getConfig().getMessage(key);
+    }
+
     static String getServerVersion() {
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
     }
