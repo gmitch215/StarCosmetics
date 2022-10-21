@@ -1,16 +1,19 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
+import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-import me.gamercoder215.starcosmetics.util.StarMaterial;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 
 public final class MaterialSelector {
 
@@ -19,7 +22,7 @@ public final class MaterialSelector {
     private MaterialSelector() { throw new UnsupportedOperationException(); }
 
     @NotNull
-    public static Material toMaterial(Class<? extends Event> eventClass) {
+    public static Material toMaterial(@NotNull Class<? extends Event> eventClass) {
         if (Modifier.isAbstract(eventClass.getModifiers())) throw new IllegalArgumentException("Using Abstract Class");
 
         String n = eventClass.getSimpleName().toLowerCase();
@@ -43,7 +46,7 @@ public final class MaterialSelector {
     }
 
     @NotNull
-    public static Material toMaterial(Sound s) {
+    public static Material toMaterial(@NotNull Sound s) {
         String n = s.name();
         Material chosen = null;
 
@@ -60,17 +63,23 @@ public final class MaterialSelector {
         if (chosen == null && n.contains("GENERIC")) chosen = Material.LEATHER_CHESTPLATE;
         if (chosen == null && n.contains("VILLAGER")) chosen = Material.EMERALD;
 
-        if (n.startsWith("MUSIC")) {
-            if (n.contains("OVERWORLD")) chosen = StarMaterial.GRASS_BLOCK.find();
-            else if (n.contains("NETHER")) chosen = Material.NETHERRACK;
-            else chosen = Material.NOTE_BLOCK;
-        }
+        if (n.startsWith("MUSIC")) if (n.contains("OVERWORLD")) chosen = StarMaterial.GRASS_BLOCK.find();
+        else if (n.contains("NETHER")) chosen = Material.NETHERRACK;
+        else chosen = Material.NOTE_BLOCK;
 
         if (chosen == null && n.startsWith("RECORD")) chosen = Material.JUKEBOX;
         if (chosen == null && n.startsWith("UI")) chosen = Material.REDSTONE_BLOCK;
         if (chosen == null && n.startsWith("WEATHER")) chosen = Material.BUCKET;
 
         return chosen == null ? Material.STONE : chosen;
+    }
+
+    public static void chooseEvent(@NotNull Player p, Consumer<Class<? extends Event>> clickAction) {
+        StarInventory inv = w.createInventory("choose:event", 54, get("gui.choose.event"));
+
+        // TODO: Scrollable Inventory
+
+        p.openInventory(inv);
     }
 
 }
