@@ -116,6 +116,7 @@ public final class ModernStructureReader implements StructureReader {
                 index.incrementAndGet();
             }
 
+            close();
             return new ModernStructure(minVersion, displayKey, points, blockData);
         } catch (IOException e) {
             StarConfig.print(e);
