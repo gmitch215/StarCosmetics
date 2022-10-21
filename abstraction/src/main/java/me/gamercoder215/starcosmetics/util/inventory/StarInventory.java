@@ -1,8 +1,8 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
-import java.util.Map;
-
 import org.bukkit.inventory.Inventory;
+
+import java.util.Map;
 
 public interface StarInventory extends Inventory {
     
@@ -16,6 +16,10 @@ public interface StarInventory extends Inventory {
 
     default Object getAttribute(String key) {
         return getAllAttributes().get(key);
+    }
+
+    default boolean hasAttribute(String key) {
+        return getAttribute(key) != null;
     }
 
     default <T> T getAttribute(String key, Class<T> cast) {
