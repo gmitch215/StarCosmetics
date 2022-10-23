@@ -74,6 +74,8 @@ public interface StarConfig {
      */
     @NotNull
     static Logger getLogger() {
+        if (Bukkit.getServer() == null) return Logger.getLogger("StarCosmetics");
+
         return getPlugin().getLogger();
     }
 
