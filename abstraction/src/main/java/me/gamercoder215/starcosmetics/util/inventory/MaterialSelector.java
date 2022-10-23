@@ -1,15 +1,27 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
+import com.google.common.collect.ImmutableList;
+import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.SheepDyeWoolEvent;
+import org.bukkit.event.inventory.FurnaceExtractEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -17,7 +29,7 @@ import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 
 public final class MaterialSelector {
 
-    private static final Wrapper w = Wrapper.getWrapper();
+    private static final Wrapper w = Constants.w;
     
     private MaterialSelector() { throw new UnsupportedOperationException(); }
 
@@ -43,6 +55,43 @@ public final class MaterialSelector {
 
         if (chosen == null) chosen = Material.REDSTONE;
         return chosen;
+    }
+
+    public static final List<Class<? extends Event>> PLAYER_CLASSES = ImmutableList.<Class<? extends Event>>builder()
+            .add(AsyncPlayerChatEvent.class)
+            .add(BlockBreakEvent.class)
+            .add(BlockPlaceEvent.class)
+            .add(FurnaceExtractEvent.class)
+            .add(InventoryOpenEvent.class)
+            .add(InventoryCloseEvent.class)
+            .add(optional("player.PlayerAdvancementDoneEvent"))
+            .add(PlayerBedEnterEvent.class)
+            .add(PlayerBedLeaveEvent.class)
+            .add(PlayerChangedWorldEvent.class)
+            .add(PlayerDeathEvent.class)
+            .add(PlayerEditBookEvent.class)
+            .add(PlayerEggThrowEvent.class)
+            .add(PlayerExpChangeEvent.class)
+            .add(PlayerFishEvent.class)
+            .add(PlayerJoinEvent.class)
+            .add(PlayerRespawnEvent.class)
+            .add(optional("player.PlayerRiptideEvent"))
+            .add(PlayerUnleashEntityEvent.class)
+            .add(SheepDyeWoolEvent.class)
+            .add(SignChangeEvent.class)
+            .build()
+
+            .stream()
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+    private static Class<? extends Event> optional(String name) {
+        try {
+            return Class.forName("org.bukkit.event." + name)
+                    .asSubclass(Event.class);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 
     @NotNull
@@ -76,10 +125,32 @@ public final class MaterialSelector {
 
     public static void chooseEvent(@NotNull Player p, Consumer<Class<? extends Event>> clickAction) {
         StarInventory inv = w.createInventory("choose:event", 54, get("gui.choose.event"));
-
-        // TODO: Scrollable Inventory
+        inv.setAttribute("chosen_action", clickAction);
 
         p.openInventory(inv);
+    }
+
+    @NotNull
+    public static Map<Integer, List<ItemStack>> generateRows(ItemStack... mats) {
+        Map<Integer, List<ItemStack>> map = new HashMap<>();
+        if (mats.length == 0) return map;
+
+        List<ItemStack> list = Arrays.asList(mats);
+        int size = list.size();
+
+        if (size < 7) {
+            map.put(0, list);
+            return map;
+        } else {
+            int rows = size / 7;
+            int remainder = size % 7;
+
+            for (int i = 0; i < rows; i++) map.put(i, list.subList(i * 7, (i + 1) * 7));
+
+            if (remainder != 0) map.put(rows, list.subList(rows * 7, rows * 7 + remainder));
+        }
+
+        return map;
     }
 
 }
