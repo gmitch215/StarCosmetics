@@ -29,6 +29,7 @@ public interface Wrapper {
     }
 
     static String getServerVersion() {
+        if (Bukkit.getServer() == null) return ""; // Using Test Server
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
     }
 
@@ -37,11 +38,12 @@ public interface Wrapper {
             return (Wrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.Wrapper" + getServerVersion())
                     .getConstructor()
                     .newInstance();
-        } catch (ClassNotFoundException e) { // Using unsupported version
+        } catch (ArrayIndexOutOfBoundsException | NoSuchMethodException ignored) {} // Using test server
+        catch (ClassNotFoundException e) { // Using unsupported version
             return null;
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
-        } catch (ArrayIndexOutOfBoundsException ignored) {} // Using test server
+        }
 
         return null;
     }
