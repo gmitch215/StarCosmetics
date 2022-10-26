@@ -6,6 +6,8 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
+import me.gamercoder215.starcosmetics.events.CompletionEvents;
+import me.gamercoder215.starcosmetics.events.CosmeticEvents;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
@@ -42,6 +44,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     private void registerEvents() {
         new ClickEvents(this);
+        new CompletionEvents(this);
+        new CosmeticEvents(this);
     }
 
     private static FileConfiguration config;

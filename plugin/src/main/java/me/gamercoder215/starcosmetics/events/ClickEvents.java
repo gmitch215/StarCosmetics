@@ -38,8 +38,7 @@ public final class ClickEvents implements Listener {
         if (!(e.getWhoClicked() instanceof Player)) return;
         if (e.getCurrentItem() == null) return;
         ItemStack item = e.getCurrentItem();
-        Player p = (Player) e.getWhoClicked();
-
+        
         NBTWrapper w = NBTWrapper.of(item);
 
         if (w.hasID() && !e.isCancelled()) {
