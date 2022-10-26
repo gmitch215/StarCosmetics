@@ -3,6 +3,8 @@ package me.gamercoder215.starcosmetics.api.player;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Represents a player used by StarCosmetics.
+ * Represents a player used by StarCosmetics to manage their configuration.
 */
 public final class StarPlayer {
 
@@ -139,7 +141,7 @@ public final class StarPlayer {
     @Nullable
     public CosmeticLocation<?> getSelectedCosmetic(@Nullable Class<Cosmetic> clazz) {
         if (clazz == null) return null;
-        if (Cosmetic.class.equals(clazz)) return null;
+        if (Cosmetic.class.equals(clazz) || Trail.class.equals(clazz)) return null;
 
         if (!config.isConfigurationSection("cosmetics")) {
             config.createSection("cosmetics");
@@ -149,6 +151,42 @@ public final class StarPlayer {
         String path = "cosmetics." + clazz.getSimpleName().toLowerCase();
 
         return CosmeticLocation.getByFullKey(config.getString(path, null));
+    }
+
+    public <T> CosmeticLocation<T> getSelectedTrail(@NotNull Class<T> clazz) {
+        if (clazz == null) return null;
+        if (!config.isConfigurationSection("cosmetics")) {
+            config.createSection("cosmetics");
+            return null;
+        }
+
+        String path = "cosmetics.trails." + clazz.getSimpleName().toLowerCase();
+
+        return CosmeticLocation.getByFullKey(config.getString(path, null));
+    }
+
+    /**
+     * Sets the selected cosmetic.
+     * @param clazz The class of the cosmetic to set.
+     * @param loc The location to set the cosmetic to.
+     */
+    public void setSelectedCosmetic(@NotNull Class<Cosmetic> clazz, @NotNull CosmeticLocation<?> loc) {
+        if (clazz == null || loc == null) return;
+        if (Cosmetic.class.equals(clazz)) return;
+
+        if (!config.isConfigurationSection("cosmetics")) config.createSection("cosmetics");
+        String path = "cosmetics." + clazz.getSimpleName().toLowerCase();
+
+        config.set(path, loc.getFullKey());
+        save();
+    }
+
+    /**
+     * <p>Saves this StarPlayer's configuration.</p>
+     * <p>Methods that edit the configuration automatically save the configuration, so an additional call is not necessary.</p>
+     */
+    public void save() {
+        try { config.save(file); } catch (IOException e) { StarConfig.print(e); }
     }
 
 }
