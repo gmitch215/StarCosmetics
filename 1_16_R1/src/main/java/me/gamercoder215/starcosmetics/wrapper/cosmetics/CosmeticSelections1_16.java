@@ -42,6 +42,9 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
             .add(new TrailSelection("netherite_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:netherite_sword",
                     CompletionCriteria.fromKilled(1250, EntityType.WITHER_SKELETON), CosmeticRarity.MYTHICAL))
             
+            .add(new TrailSelection("netherite_axe", BaseTrail.PROJECTILE_TRAIL, "fancy_item:netherite_axe",
+                    CompletionCriteria.fromKilled(2500, EntityType.WITHER_SKELETON), CosmeticRarity.ULTRA))
+
             .build();
 
     private static final List<CosmeticSelection<?>> BLOCK_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
