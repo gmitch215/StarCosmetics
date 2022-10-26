@@ -2,6 +2,8 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,7 +28,7 @@ import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 @SuppressWarnings("unchecked")
 public final class BaseTrail<T> implements Trail<T> {
     
-    public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile_trail", Object.class, Material.ARROW, (en, cloc) -> {
+    public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile_trail", Object.class, TrailType.PROJECTILE, Material.ARROW, (en, cloc) -> {
         if (!(en instanceof Projectile)) return;
         Projectile p = (Projectile) en;
         Location loc = p.getLocation();
@@ -159,9 +161,9 @@ public final class BaseTrail<T> implements Trail<T> {
         }
     });
 
-    public static final BaseTrail<Object> GROUND_TRAIL = new BaseTrail<>("ground_trail", Object.class, Material.STONE, (e, cloc) -> {
-        if (!(e instanceof Projectile)) return;
-        Projectile p = (Projectile) e;
+    public static final BaseTrail<Object> GROUND_TRAIL = new BaseTrail<>("ground_trail", Object.class, TrailType.GROUND, Material.STONE, (e, cloc) -> {
+        if (!(e instanceof Player)) return;
+        Player p = (Player) e;
         Location loc = p.getLocation().add(0, 0.1, 0);
         Object o = cloc.getInput();
 
@@ -176,7 +178,7 @@ public final class BaseTrail<T> implements Trail<T> {
         }
     });
 
-    public static final BaseTrail<Sound> SOUND_TRAIL = new BaseTrail<>("sound_trail", Sound.class, Material.JUKEBOX, (e, cloc) -> {
+    public static final BaseTrail<Sound> SOUND_TRAIL = new BaseTrail<>("sound_trail", Sound.class, TrailType.PROJECTILE_SOUND, Material.JUKEBOX, (e, cloc) -> {
         Object o = cloc.getInput();
         if (!(o instanceof Sound)) return;
         Sound sound = (Sound) o;
@@ -200,12 +202,14 @@ public final class BaseTrail<T> implements Trail<T> {
 
     private final Material icon;
     private final BiConsumer<Entity, CosmeticLocation<?>> trail;
-    private final Class<T> type;
+    private final Class<T> otype;
+    private final TrailType type;
     private final String name;
 
-    private BaseTrail(String name, Class<T> type, Material icon, BiConsumer<Entity, CosmeticLocation<?>> runnable) {
+    private BaseTrail(String name, Class<T> otype, TrailType type, Material icon, BiConsumer<Entity, CosmeticLocation<?>> runnable) {
         this.icon = icon;
         this.trail = runnable;
+        this.otype = otype;
         this.type = type;
         this.name = name;
 
@@ -227,13 +231,18 @@ public final class BaseTrail<T> implements Trail<T> {
     }
 
     @Override
-    public Class<T> getTrailType() {
-        return type;
+    public Class<T> getObjectType() {
+        return otype;
     }
 
     @Override
     public void run(@NotNull Entity en, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException {
         trail.accept(en, location);
+    }
+
+    @Override
+    public @NotNull TrailType getType() {
+        return type;
     }
 
 }

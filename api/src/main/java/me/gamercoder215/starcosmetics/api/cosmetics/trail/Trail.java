@@ -1,23 +1,33 @@
-package me.gamercoder215.starcosmetics.api.cosmetics;
+package me.gamercoder215.starcosmetics.api.cosmetics.trail;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 
 /**
  * Represents a StarCosmetics Trail
- * @param <T> Trail Type (Projectile Trails, Entity Trails, etc.)
+ * @param <T> Trail Object Type (Item Trails, Entity Trails, etc.)
  */
 public interface Trail<T> extends Cosmetic {
 
     /**
-     * Fetches the trail type.
-     * @return Trail Type
+     * Fetches the type of the object used in the trail.
+     * @return Trail Object Type ({@link Particle}, {@link Material}, etc)
      */
     @NotNull
-    Class<T> getTrailType();
+    Class<T> getObjectType();
+
+    /**
+     * Fetches the type of this trail.
+     * @reutrn Trail Type
+     */
+    @NotNull
+    TrailType getType();
 
     /**
      * Runs a CosmeticLocation based on this parent.

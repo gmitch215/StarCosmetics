@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
-import me.gamercoder215.starcosmetics.api.cosmetics.Trail;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 
 public final class TrailSelection extends CosmeticSelection<Object> {
 
