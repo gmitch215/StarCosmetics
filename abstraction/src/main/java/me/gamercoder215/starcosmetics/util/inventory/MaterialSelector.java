@@ -1,9 +1,14 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
 import com.google.common.collect.ImmutableList;
+
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -17,15 +22,19 @@ import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 
 public final class MaterialSelector {
 
@@ -124,18 +133,83 @@ public final class MaterialSelector {
     }
 
     public static void chooseEvent(@NotNull Player p, Consumer<Class<? extends Event>> clickAction) {
-        StarInventory inv = w.createInventory("choose:event", 54, get("gui.choose.event"));
+        StarInventory inv = w.createInventory("choose:event_inv", 54, get("gui.choose.event"));
         inv.setAttribute("chosen_action", clickAction);
+
+        List<ItemStack> items = new ArrayList<>();
+        for (Class<? extends Event> clazz : PLAYER_CLASSES) {
+            Material m = toMaterial(clazz);
+            ItemStack item = new ItemStack(m);
+            ItemMeta meta = item.getItemMeta();
+            meta.setDisplayName(ChatColor.YELLOW + clazz.getSimpleName());
+            
+            List<String> lore = new ArrayList<>();
+            lore.add(" ");
+            lore.addAll(Arrays.stream(ChatPaginator.wordWrap(
+                get("gui.choose.event_desc." + clazz.getSimpleName(), ""), 30
+            )).map(s -> ChatColor.GRAY + s).collect(Collectors.toList()));
+            lore.add(" ");
+            meta.setLore(lore);
+
+            item.setItemMeta(meta);
+
+            NBTWrapper nbt = NBTWrapper.of(item);
+            nbt.setID("choose:event");
+            nbt.setNBT("event", clazz);
+            item = nbt.getItem();
+
+            items.add(item);
+        }
+
+        Map<Integer, List<ItemStack>> rows = generateRows(items);
+        inv.setAttribute("rows", rows);
+        setRows(inv, rows);
 
         p.openInventory(inv);
     }
 
-    @NotNull
-    public static Map<Integer, List<ItemStack>> generateRows(ItemStack... mats) {
-        Map<Integer, List<ItemStack>> map = new HashMap<>();
-        if (mats.length == 0) return map;
+    public static ItemStack getHead(String key) {
+        try {
+            Properties p = new Properties();
+            p.load(MaterialSelector.class.getResourceAsStream("/heads.properties"));
 
-        List<ItemStack> list = Arrays.asList(mats);
+            String value = p.getProperty(key);
+            if (value == null) return null;
+
+            // TODO Create Texture Parser
+        } catch (IOException e) {
+            StarConfig.print(e);
+        }
+
+        return null;
+    } 
+
+    @NotNull
+    public static Map<Integer, List<ItemStack>> generateRows(ItemStack... items) {
+        return generateRows(Arrays.asList(items));
+    }
+
+    public static void setRows(Inventory inv, Map<Integer, List<ItemStack>> rows) {
+        int limit = (inv.getSize() - 18) / 9;
+        if (limit < 1) return;
+
+        for (int i = 0; i < Math.min(rows.size(), limit); i++) {
+            List<ItemStack> row = rows.get(i);
+            if (row.isEmpty() || row.size() > 7) throw new IllegalArgumentException("Unexpected row size: " + row.size() + "(" + i + ")");
+            
+            for (int j = 0; j < row.size(); j++) {
+                int slot = ((i + 1) * 9) + j + 1;
+                inv.setItem(slot, row.get(j));
+            }
+        }
+    }
+
+    @NotNull
+    public static Map<Integer, List<ItemStack>> generateRows(Iterable<ItemStack> it) {
+        Map<Integer, List<ItemStack>> map = new HashMap<>();
+        List<ItemStack> list = ImmutableList.copyOf(it);
+        if (list.size() == 0) return map;
+
         int size = list.size();
 
         if (size < 7) {
