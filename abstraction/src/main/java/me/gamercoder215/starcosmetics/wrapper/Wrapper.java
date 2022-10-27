@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -30,6 +31,18 @@ public interface Wrapper {
 
     static String getMessage(String key) {
         return StarConfig.getConfig().getMessage(key);
+    }
+
+    static void send(CommandSender sender, String key) {
+        sender.sendMessage(get(key));
+    }
+
+    static void sendMessage(CommandSender sender, String key) {
+        sender.sendMessage(getMessage(key));
+    }
+
+    static void send(CommandSender sender, String key, Object... args) {
+        sender.sendMessage(String.format(get(key), args));
     }
 
     static String getServerVersion() {
