@@ -1,14 +1,15 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
 import com.google.common.collect.ImmutableList;
-
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import net.md_5.bungee.api.ChatColor;
-
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -25,16 +26,19 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 
 public final class MaterialSelector {
 
@@ -66,30 +70,29 @@ public final class MaterialSelector {
         return chosen;
     }
 
-    public static final List<Class<? extends Event>> PLAYER_CLASSES = ImmutableList.<Class<? extends Event>>builder()
-            .add(AsyncPlayerChatEvent.class)
-            .add(BlockBreakEvent.class)
-            .add(BlockPlaceEvent.class)
-            .add(FurnaceExtractEvent.class)
-            .add(InventoryOpenEvent.class)
-            .add(InventoryCloseEvent.class)
-            .add(optional("player.PlayerAdvancementDoneEvent"))
-            .add(PlayerBedEnterEvent.class)
-            .add(PlayerBedLeaveEvent.class)
-            .add(PlayerChangedWorldEvent.class)
-            .add(PlayerDeathEvent.class)
-            .add(PlayerEditBookEvent.class)
-            .add(PlayerEggThrowEvent.class)
-            .add(PlayerExpChangeEvent.class)
-            .add(PlayerFishEvent.class)
-            .add(PlayerJoinEvent.class)
-            .add(PlayerRespawnEvent.class)
-            .add(optional("player.PlayerRiptideEvent"))
-            .add(PlayerUnleashEntityEvent.class)
-            .add(SheepDyeWoolEvent.class)
-            .add(SignChangeEvent.class)
-            .build()
-
+    public static final List<Class<? extends Event>> PLAYER_CLASSES = new ArrayList<Class<? extends Event>>() {{
+            add(AsyncPlayerChatEvent.class);
+            add(BlockBreakEvent.class);
+            add(BlockPlaceEvent.class);
+            add(FurnaceExtractEvent.class);
+            add(InventoryOpenEvent.class);
+            add(InventoryCloseEvent.class);
+            add(optional("player.PlayerAdvancementDoneEvent"));
+            add(PlayerBedEnterEvent.class);
+            add(PlayerBedLeaveEvent.class);
+            add(PlayerChangedWorldEvent.class);
+            add(PlayerDeathEvent.class);
+            add(PlayerEditBookEvent.class);
+            add(PlayerEggThrowEvent.class);
+            add(PlayerExpChangeEvent.class);
+            add(PlayerFishEvent.class);
+            add(PlayerJoinEvent.class);
+            add(PlayerRespawnEvent.class);
+            add(optional("player.PlayerRiptideEvent"));
+            add(PlayerUnleashEntityEvent.class);
+            add(SheepDyeWoolEvent.class);
+            add(SignChangeEvent.class);
+        }}
             .stream()
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
@@ -132,30 +135,49 @@ public final class MaterialSelector {
         return chosen == null ? Material.STONE : chosen;
     }
 
-    public static void chooseEvent(@NotNull Player p, Consumer<Class<? extends Event>> clickAction) {
-        StarInventory inv = w.createInventory("choose:event_inv", 54, get("gui.choose.event"));
+    @NotNull
+    public static String getFriendlyName(@Nullable Sound s) {
+        if (s == null) return "";
+
+        String n = WordUtils.capitalizeFully(s.name().replace("_", " "));
+        String prefix = n.split(" ")[0].toLowerCase();
+        String suffix = n.substring(prefix.length());
+
+        switch (prefix) {
+            case "entity": return get("constants.friendly.entity") + " - " + suffix;
+            case "music": return get("constants.friendly.music") + " - " + suffix;
+            case "record": return get("constants.friendly.record") + " - " + suffix;
+            case "ui": return get("constants.friendly.ui") + " - " + suffix;
+            case "weather": return get("constants.friendly.weather") + " - " + suffix;
+        }
+
+        return n;
+    }
+
+    public static void chooseSound(@NotNull Player p, Consumer<Sound> clickAction) {
+        StarInventory inv = w.createInventory("choose:sound_inv", 54, get("gui.choose.sound"));
+        inv.setCancelled();
         inv.setAttribute("chosen_action", clickAction);
 
         List<ItemStack> items = new ArrayList<>();
-        for (Class<? extends Event> clazz : PLAYER_CLASSES) {
-            Material m = toMaterial(clazz);
+        for (Sound s : Sound.values()) {
+            Material m = toMaterial(s);
             ItemStack item = new ItemStack(m);
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.YELLOW + clazz.getSimpleName());
-            
+            meta.setDisplayName(ChatColor.YELLOW + getFriendlyName(s));
+
             List<String> lore = new ArrayList<>();
             lore.add(" ");
             lore.addAll(Arrays.stream(ChatPaginator.wordWrap(
-                get("gui.choose.event_desc." + clazz.getSimpleName(), ""), 30
-            )).map(s -> ChatColor.GRAY + s).collect(Collectors.toList()));
+                    get("gui.choose.sound_desc." + s.name().toLowerCase(), "null"), 30
+            )).map(str -> ChatColor.GRAY + str).collect(Collectors.toList()));
             lore.add(" ");
-            meta.setLore(lore);
+            if (!lore.get(1).equalsIgnoreCase("null")) meta.setLore(lore);
 
             item.setItemMeta(meta);
 
             NBTWrapper nbt = NBTWrapper.of(item);
-            nbt.setID("choose:event");
-            nbt.setNBT("event", clazz);
+            nbt.set("sound", s.name());
             item = nbt.getItem();
 
             items.add(item);
@@ -164,20 +186,92 @@ public final class MaterialSelector {
         Map<Integer, List<ItemStack>> rows = generateRows(items);
         inv.setAttribute("rows", rows);
         setRows(inv, rows);
+        setScrolls(inv);
 
         p.openInventory(inv);
+    }
+
+    public static void chooseEvent(@NotNull Player p, Consumer<Class<? extends Event>> clickAction) {
+        StarInventory inv = w.createInventory("choose:event_inv", 54, get("gui.choose.event"));
+        inv.setCancelled();
+        inv.setAttribute("chosen_action", clickAction);
+
+        List<ItemStack> items = new ArrayList<>();
+        for (Class<? extends Event> clazz : PLAYER_CLASSES) {
+            Material m = toMaterial(clazz);
+            ItemStack item = new ItemStack(m);
+            ItemMeta meta = item.getItemMeta();
+            meta.setDisplayName(ChatColor.YELLOW + clazz.getSimpleName());
+
+            List<String> lore = new ArrayList<>();
+            lore.add(" ");
+            lore.addAll(Arrays.stream(ChatPaginator.wordWrap(
+                get("gui.choose.event_desc." + clazz.getSimpleName(), "null"), 30
+            )).map(str -> ChatColor.GRAY + str).collect(Collectors.toList()));
+            lore.add(" ");
+            if (!lore.get(1).equalsIgnoreCase("null")) meta.setLore(lore);
+
+            item.setItemMeta(meta);
+
+            NBTWrapper nbt = NBTWrapper.of(item);
+            nbt.set("event", clazz);
+            item = nbt.getItem();
+
+            items.add(item);
+        }
+
+        Map<Integer, List<ItemStack>> rows = generateRows(items);
+        inv.setAttribute("rows", rows);
+        setRows(inv, rows);
+        setScrolls(inv);
+
+        p.openInventory(inv);
+    }
+
+    public static void setScrolls(Inventory inv) {
+        int size = inv.getSize();
+
+        ItemStack up = getHead("arrow_up");
+        ItemMeta uMeta = up.getItemMeta();
+        uMeta.setDisplayName(ChatColor.GREEN + get("constants.up"));
+        up.setItemMeta(uMeta);
+        NBTWrapper uNBT = NBTWrapper.of(up);
+        uNBT.setID("scroll_up");
+        uNBT.set("row", 0);
+        up = uNBT.getItem();
+        inv.setItem(26 - (54 - size), up);
+
+        ItemStack down = getHead("arrow_down");
+        ItemMeta dMeta = down.getItemMeta();
+        dMeta.setDisplayName(ChatColor.GREEN + get("constants.down"));
+        down.setItemMeta(dMeta);
+        NBTWrapper dNBT = NBTWrapper.of(down);
+        dNBT.setID("scroll_down");
+        dNBT.set("up_item", 26 - (54 - size));
+        down = dNBT.getItem();
+        inv.setItem(35 - (54 - size), down);
     }
 
     public static ItemStack getHead(String key) {
         try {
             Properties p = new Properties();
-            p.load(MaterialSelector.class.getResourceAsStream("/heads.properties"));
+            p.load(MaterialSelector.class.getResourceAsStream("/util/heads.properties"));
 
             String value = p.getProperty(key);
             if (value == null) return null;
 
-            // TODO Create Texture Parser
-        } catch (IOException e) {
+            ItemStack head = w.isLegacy() ? new ItemStack(Material.matchMaterial("SKULL_ITEM"), 1, (short) 3) : new ItemStack(Material.matchMaterial("PLAYER_HEAD"));
+            SkullMeta hMeta = (SkullMeta) head.getItemMeta();
+
+            GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+            profile.getProperties().put("textures", new Property("textures", value));
+            Method mtd = hMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+            mtd.setAccessible(true);
+            mtd.invoke(hMeta, profile);
+
+            head.setItemMeta(hMeta);
+            return head;
+        } catch (IOException | ReflectiveOperationException e) {
             StarConfig.print(e);
         }
 
@@ -190,12 +284,18 @@ public final class MaterialSelector {
     }
 
     public static void setRows(Inventory inv, Map<Integer, List<ItemStack>> rows) {
+        setRows(inv, rows, 0);
+    }
+
+    public static void setRows(Inventory inv, Map<Integer, List<ItemStack>> rows, int start) {
         int limit = (inv.getSize() - 18) / 9;
         if (limit < 1) return;
 
-        for (int i = 0; i < Math.min(rows.size(), limit); i++) {
+        int startRow = Math.min(start, 0);
+
+        for (int i = startRow; i < Math.min(rows.size(), limit + startRow); i++) {
             List<ItemStack> row = rows.get(i);
-            if (row.isEmpty() || row.size() > 7) throw new IllegalArgumentException("Unexpected row size: " + row.size() + "(" + i + ")");
+            if (row.isEmpty() || row.size() > 7) throw new IllegalArgumentException("Unexpected row size: " + row.size() + " (" + i + ")");
             
             for (int j = 0; j < row.size(); j++) {
                 int slot = ((i + 1) * 9) + j + 1;
