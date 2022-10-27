@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a rarity used in a Cosmetic.
@@ -76,7 +77,17 @@ public enum CosmeticRarity {
                         "&" + Integer.toHexString(hexColor).charAt(5)));
     }
 
+    /**
+     * Fetches the prefix that this prefix uses.
+     * @return String Preifx
+     */
+    @NotNull
     public String getPrefix() {
         return prefix;
+    }
+
+    @Override
+    public String toString() {
+        return getPrefix();
     }
 }
