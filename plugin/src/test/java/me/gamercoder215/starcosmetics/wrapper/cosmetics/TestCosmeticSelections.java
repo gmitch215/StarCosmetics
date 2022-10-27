@@ -21,4 +21,11 @@ public class TestCosmeticSelections {
         Assertions.assertEquals("World", joined.get(1));
     }
 
+    @Test
+    @DisplayName("Test Version Fetcher")
+    public void testVersionFetcher() {
+        Assertions.assertNull(CosmeticSelections.getForVersion("1_8"));
+        Assertions.assertNotNull(CosmeticSelections.getForVersion("1_9"));
+    }
+
 }
