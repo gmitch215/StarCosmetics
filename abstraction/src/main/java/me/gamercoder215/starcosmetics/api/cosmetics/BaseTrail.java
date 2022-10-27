@@ -4,7 +4,6 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -233,6 +232,19 @@ public final class BaseTrail<T> implements Trail<T> {
     @Override
     public Class<T> getObjectType() {
         return otype;
+    }
+
+    @Override
+    public int hashCode() {
+        return type.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof BaseTrail)) return false;
+        BaseTrail<?> other = (BaseTrail<?>) obj;
+        if (this == other) return true;
+        return other.type == type;
     }
 
     @Override
