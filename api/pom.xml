@@ -9,7 +9,7 @@
 
     <artifactId>starcosmetics-api</artifactId>
     <name>StarCosmetics-API</name>
-    <description>StarCosmetics API, available for external use</description>
+    <description>The official StarCosmetics API, available for external use</description>
 
     <build>
         <plugins>

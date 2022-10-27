@@ -11,7 +11,6 @@
     <name>StarCosmetics</name>
 
     <build>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
