@@ -36,8 +36,6 @@ public final class CompletionCriteria {
         this.displayKey = displayKey;
         this.displayArguments = displayArguments;
         this.unlockCriteria = unlockCriteria;
-
-        getDisplayMessage(); // Validate
     }
 
     private CompletionCriteria(Predicate<Player> criteria, Predicate<Player> unlockCriteria, String displayKey, Object firstArg, Object[] displayArguments) {
