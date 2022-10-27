@@ -1,13 +1,12 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.trail;
 
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
-
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 
 /**
  * Represents a StarCosmetics Trail
@@ -24,7 +23,7 @@ public interface Trail<T> extends Cosmetic {
 
     /**
      * Fetches the type of this trail.
-     * @reutrn Trail Type
+     * @return Trail Type
      */
     @NotNull
     TrailType getType();
@@ -39,6 +38,7 @@ public interface Trail<T> extends Cosmetic {
     /**
      * @deprecated use {@link #run(Entity, CosmeticLocation)}
      */
+    @Override
     @Deprecated
     default void run(Location l, CosmeticLocation<?> cloc) {
         throw new UnsupportedOperationException();
