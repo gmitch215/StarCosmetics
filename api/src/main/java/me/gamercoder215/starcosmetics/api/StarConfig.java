@@ -21,7 +21,10 @@ public interface StarConfig {
      */
     @NotNull
     static Plugin getPlugin() {
-        return Bukkit.getPluginManager().getPlugin("StarCosmetics");
+        try {
+            return Bukkit.getPluginManager().getPlugin("StarCosmetics");
+        } catch (NullPointerException ignored) {}
+        return null;
     }
 
     /**
@@ -30,6 +33,8 @@ public interface StarConfig {
      */
     @NotNull
     static StarConfig getConfig() {
+        if (Bukkit.getServer() == null) return new TestStarConfig(); // Using Test Implementation
+
         return (StarConfig) getPlugin();
     }
 
