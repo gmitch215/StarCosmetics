@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,18 @@ public interface CosmeticSelections {
 
     default List<CosmeticSelection<?>> getSelections(Cosmetic key) {
         return getAllSelections().get(key);
+    }
+
+    @SafeVarargs
+    static <T> List<T> join(List<T>... lists) {
+        List<T> list = new ArrayList<>();
+        for (List<T> l : lists) list.addAll(l);
+
+        return list;
+    }
+
+    static List<CosmeticSelection<?>> join(List<CosmeticSelection<?>> list, Cosmetic key, String ver) {
+        return join(list, getForVersion(ver).get(key));
     }
 
     @SuppressWarnings("unchecked")
@@ -32,7 +45,7 @@ public interface CosmeticSelections {
 
             return (Map<Cosmetic, List<CosmeticSelection<?>>>) selectionsF.get(null);
         } catch (NoSuchFieldException e) {
-          throw new AssertionError("SELECTIONS field not found: " + version);
+            throw new AssertionError("SELECTIONS field not found: " + version);
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
         }

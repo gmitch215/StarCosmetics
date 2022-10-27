@@ -42,7 +42,9 @@ public interface Wrapper {
             return (Wrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.Wrapper" + getServerVersion())
                     .getConstructor()
                     .newInstance();
-        } catch (ArrayIndexOutOfBoundsException | NoSuchMethodException ignored) {} // Using test server
+        } catch (ArrayIndexOutOfBoundsException | NoSuchMethodException ignored) { // Using test server
+            return new TestWrapper();
+        }
         catch (ClassNotFoundException e) { // Using unsupported version
             return null;
         } catch (ReflectiveOperationException e) {

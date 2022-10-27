@@ -14,8 +14,8 @@ import org.bukkit.entity.EntityType;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
 public class CosmeticSelections1_16 implements CosmeticSelections {
 
@@ -47,7 +47,7 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
 
             .build();
 
-    private static final List<CosmeticSelection<?>> BLOCK_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("soul_flame", BaseTrail.GROUND_TRAIL, Particle.SOUL_FIRE_FLAME,
                     CompletionCriteria.fromMined(800, Material.SOUL_SAND, Material.SOUL_SOIL), CosmeticRarity.RARE))
             .build();
@@ -55,14 +55,8 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
-            .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
-                    CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_15").stream(),
-                    PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
-            )
-            .put(BaseTrail.GROUND_TRAIL, Stream.concat(
-                    CosmeticSelections.getForVersion(BaseTrail.GROUND_TRAIL, "1_15").stream(),
-                    BLOCK_TRAILS.stream()).collect(Collectors.toList())
-            )
+            .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_15"))
+            .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_15"))
             .build();
 
     @Override

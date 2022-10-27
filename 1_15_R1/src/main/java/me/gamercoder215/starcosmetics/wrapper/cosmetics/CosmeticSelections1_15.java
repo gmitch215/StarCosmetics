@@ -13,8 +13,8 @@ import org.bukkit.Particle;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
 public class CosmeticSelections1_15 implements CosmeticSelections {
 
@@ -37,10 +37,7 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
-            .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
-                    CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_14").stream(),
-                    PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
-            )
+            .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_13"))
             .build();
 
     @Override
