@@ -12,9 +12,9 @@ public enum StarMaterial {
 
     POPPY("red_flower", "red_rose"),
 
-    TOTEM("totem"),
+    TOTEM_OF_UNDYING(Material.AIR,"totem"),
 
-    MAGMA_BLOCK("magma"),
+    MAGMA_BLOCK(Material.STONE, "magma"),
 
     OAK_LOG("log"),
 
