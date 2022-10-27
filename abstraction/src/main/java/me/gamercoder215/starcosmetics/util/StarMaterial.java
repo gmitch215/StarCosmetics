@@ -10,7 +10,7 @@ import java.util.List;
 
 public enum StarMaterial {
 
-    POPPY("red_flower"),
+    POPPY("red_flower", "red_rose"),
 
     TOTEM("totem"),
 
@@ -51,6 +51,7 @@ public enum StarMaterial {
     StarMaterial(Material defaultV, int data, boolean dataOnlyLegacy, String... allnames) {
         this.names.add(name());
         this.names.addAll(Arrays.asList(allnames));
+
         this.defaultV = defaultV;
         this.dataOnlyLegacy = dataOnlyLegacy;
         this.data = (short) data;
@@ -81,7 +82,7 @@ public enum StarMaterial {
 
         if (defaultV != null) return defaultV;
 
-        throw new AssertionError("No material found for " + this.name());
+        throw new AssertionError("No material found for " + name());
     }
 
     public ItemStack findStack() {
