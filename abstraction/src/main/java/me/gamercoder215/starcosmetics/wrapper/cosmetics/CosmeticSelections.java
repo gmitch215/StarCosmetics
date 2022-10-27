@@ -46,6 +46,8 @@ public interface CosmeticSelections {
             return (Map<Cosmetic, List<CosmeticSelection<?>>>) selectionsF.get(null);
         } catch (NoSuchFieldException e) {
             throw new AssertionError("SELECTIONS field not found: " + version);
+        } catch (ClassNotFoundException e) { // Using unsupported version
+            return null;
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
         }
