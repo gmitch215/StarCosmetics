@@ -4,7 +4,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
-
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -153,14 +153,19 @@ public final class StarPlayer {
         return CosmeticLocation.getByFullKey(config.getString(path, null));
     }
 
-    public <T> CosmeticLocation<T> getSelectedTrail(@NotNull Class<T> clazz) {
-        if (clazz == null) return null;
+    /**
+     * Fetches the selected trail cosmetic.
+     * @param type {@link TrailType} to use
+     * @return Selected Cosmetic for this Trail Type
+     */
+    public @Nullable CosmeticLocation<?> getSelectedTrail(@NotNull TrailType type) {
+        if (type == null) return null;
         if (!config.isConfigurationSection("cosmetics")) {
             config.createSection("cosmetics");
             return null;
         }
 
-        String path = "cosmetics.trails." + clazz.getSimpleName().toLowerCase();
+        String path = "cosmetics.trails." + type.name().toLowerCase();
 
         return CosmeticLocation.getByFullKey(config.getString(path, null));
     }
