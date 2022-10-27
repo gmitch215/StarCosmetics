@@ -14,3 +14,12 @@
 # - zh (Chinese / 中国人)
 # - it (Italian / Italiano)
 language: en
+
+# Configure core functionality
+functionality:
+  # The command version of the plugin.
+  #
+  # auto - Automatically Detects
+  # 1 - Command Version 1 (All Versions)
+  # 2 - Command Version 2 (1.13+)
+  command-version: auto

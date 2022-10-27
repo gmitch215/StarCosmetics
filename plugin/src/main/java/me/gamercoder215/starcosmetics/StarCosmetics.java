@@ -112,7 +112,14 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     public static CommandWrapper getCommandWrapper() {
         if (!isCompatible()) return null;
-        int cmdV = w.getCommandVersion();
+        final int cmdV;
+
+        String v = config.get("functionality.command-version", "auto").toString();
+        switch (v) {
+            case "1": cmdV = 1; break;
+            case "2": cmdV = 2; break;
+            default: cmdV = w.getCommandVersion(); break;
+        }
 
         try {
             return (CommandWrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.CommandWrapperV" + cmdV)
