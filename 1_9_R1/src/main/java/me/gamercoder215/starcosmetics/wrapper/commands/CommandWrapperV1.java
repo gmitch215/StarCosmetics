@@ -4,6 +4,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.*;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
@@ -19,7 +20,7 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
     public CommandWrapperV1(Plugin plugin) {
         this.plugin = plugin;
         loadCommands();
-        plugin.getLogger().info("Loaded Command Wrapper V1 (1.9 - 1.12)");
+        plugin.getLogger().info("Loaded Command Wrapper V1 (1.9+)");
     }
 
     private PluginCommand createCommand(String name, String... aliases) {
@@ -75,7 +76,17 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         switch (cmd.getName()) {
+            case "starreload": {
+                reloadConfig(sender);
+                break;
+            }
+            case "starsettings": {
+                if (!(sender instanceof Player)) return false;
+                Player p = (Player) sender;
 
+                settings(p);
+                break;
+            }
         }
 
         return true;
