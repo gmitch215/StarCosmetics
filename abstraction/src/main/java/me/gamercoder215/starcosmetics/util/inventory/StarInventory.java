@@ -22,6 +22,18 @@ public interface StarInventory extends Inventory {
         return getAttribute(key) != null;
     }
 
+    default boolean isCancelled() {
+        return getAttribute("cancel", Boolean.class);
+    }
+
+    default void setCancelled(boolean cancel) {
+        setAttribute("cancel", cancel);
+    }
+
+    default void setCancelled() {
+        setCancelled(true);
+    }
+
     default <T> T getAttribute(String key, Class<T> cast) {
         Object o = getAttribute(key);
         if (o == null) return null;
@@ -33,7 +45,7 @@ public interface StarInventory extends Inventory {
         return o == null ? def : o;
     }
 
-    default <T> T getAttribute(String key, Object def, Class<T> cast) {
+    default <T> T getAttribute(String key, T def, Class<T> cast) {
         return cast.cast(getAttribute(key, def));
     }
 
