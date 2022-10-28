@@ -2,16 +2,22 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
 import me.gamercoder215.starcosmetics.util.StarSound;
+import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.send;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
+import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 public interface CommandWrapper {
 
@@ -60,8 +66,25 @@ public interface CommandWrapper {
         if (sender instanceof Player) StarSound.ENTITY_ARROW_HIT_PLAYER.play((Player) sender, 3F, 2F);
     }
 
-    default void openCosmetics(Player p) {
+    default void cosmetics(Player p) {
+        StarInventory inv = w.createInventory("cosmetics_parent_menu", 54, get("menu.cosmetics"));
 
+        for (CosmeticParent parent : CosmeticParent.values()) {
+            ItemStack item = new ItemStack(parent.getIcon());
+            ItemMeta meta = item.getItemMeta();
+            meta.setDisplayName(get(parent.getDisplayKey()));
+            item.setItemMeta(meta);
+
+            NBTWrapper nbt = of(item);
+            nbt.setID("cosmetic:selection:parent");
+            nbt.set("parent", parent.name());
+            item = nbt.getItem();
+
+            inv.setItem(parent.getPlace(), item);
+        }
+
+        p.openInventory(inv);
+        StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 3F, 2F);
     }
 
 }
