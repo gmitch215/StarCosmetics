@@ -8,8 +8,9 @@ import java.util.List;
 
 public enum CosmeticParent {
 
-    TRAILS(Material.ARROW, 20, false,
-            BaseTrail.PROJECTILE_TRAIL, BaseTrail.GROUND_TRAIL, BaseTrail.SOUND_TRAIL)
+    TRAILS(Material.ARROW, 20,
+            BaseTrail.PROJECTILE_TRAIL, BaseTrail.GROUND_TRAIL, BaseTrail.SOUND_TRAIL),
+
     ;
 
     private final Material icon;
@@ -19,32 +20,29 @@ public enum CosmeticParent {
 
     private final int place;
 
-    private final boolean clickToKeys;
-
-    CosmeticParent(String prefix, Material icon, int place, boolean clickToKeys, Cosmetic... children) {
+    CosmeticParent(String prefix, Material icon, int place, Cosmetic... children) {
         this.prefix = prefix;
         this.icon = icon;
         this.children = children;
         this.place = place;
-        this.clickToKeys = clickToKeys;
     }
 
-    CosmeticParent(Material icon, int place, boolean clickToKeys, Cosmetic... children) {
-        this(ChatColor.YELLOW, icon, place, clickToKeys, children);
+    CosmeticParent(Material icon, int place, Cosmetic... children) {
+        this(ChatColor.YELLOW, icon, place, children);
     }
 
-    CosmeticParent(ChatColor color, Material icon, int place, boolean clickToKeys, Cosmetic... children) {
-        this(color.toString(), icon, place, clickToKeys, children);
+    CosmeticParent(ChatColor color, Material icon, int place, Cosmetic... children) {
+        this(color.toString(), icon, place, children);
     }
 
-    CosmeticParent(int hexColor, Material icon, int place, boolean clickToKeys, Cosmetic... children) {
+    CosmeticParent(int hexColor, Material icon, int place, Cosmetic... children) {
         this(ChatColor.translateAlternateColorCodes('&',
                 "&x&" + Integer.toHexString(hexColor).charAt(0) +
                         "&" + Integer.toHexString(hexColor).charAt(1) +
                         "&" + Integer.toHexString(hexColor).charAt(2) +
                         "&" + Integer.toHexString(hexColor).charAt(3) +
                         "&" + Integer.toHexString(hexColor).charAt(4) +
-                        "&" + Integer.toHexString(hexColor).charAt(5)), icon, place, clickToKeys, children);
+                        "&" + Integer.toHexString(hexColor).charAt(5)), icon, place, children);
     }
 
     public String getPrefix() {
@@ -60,14 +58,11 @@ public enum CosmeticParent {
     }
 
     public String getDisplayKey() {
-        return "cosmetics." + name().toLowerCase();
+        return "menu.cosmetics." + name().toLowerCase();
     }
 
     public Material getIcon() {
         return this.icon;
     }
 
-    public boolean isClickToKeys() {
-        return clickToKeys;
-    }
 }
