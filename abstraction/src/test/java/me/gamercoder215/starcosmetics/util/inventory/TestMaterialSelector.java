@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.Sound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,7 +29,7 @@ public class TestMaterialSelector {
     @DisplayName("Test Event to ItemStack")
     public void testEventItem() {
         for (int i = 0; i < 10; i++)
-            Assertions.assertNotNull(MaterialSelector.toMaterial(MaterialSelector.PLAYER_CLASSES.get(r.nextInt(MaterialSelector.PLAYER_CLASSES.size()))));
+            Assertions.assertNotNull(MaterialSelector.toMaterial(SoundEventSelection.AVAILABLE_EVENTS.get(r.nextInt(SoundEventSelection.AVAILABLE_EVENTS.size()))));
     }
 
 }
