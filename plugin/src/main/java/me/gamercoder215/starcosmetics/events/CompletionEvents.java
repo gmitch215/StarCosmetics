@@ -24,7 +24,6 @@ public class CompletionEvents implements Listener {
     @EventHandler
     public void onMoveAsync(PlayerMoveEvent e) {
         new BukkitRunnable() {
-
             @Override
             public void run() {
                 Player p = e.getPlayer();

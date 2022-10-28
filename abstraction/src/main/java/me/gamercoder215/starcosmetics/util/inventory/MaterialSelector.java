@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
@@ -14,15 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.SheepDyeWoolEvent;
-import org.bukkit.event.inventory.FurnaceExtractEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -68,42 +60,6 @@ public final class MaterialSelector {
 
         if (chosen == null) chosen = Material.REDSTONE;
         return chosen;
-    }
-
-    public static final List<Class<? extends Event>> PLAYER_CLASSES = new ArrayList<Class<? extends Event>>() {{
-            add(AsyncPlayerChatEvent.class);
-            add(BlockBreakEvent.class);
-            add(BlockPlaceEvent.class);
-            add(FurnaceExtractEvent.class);
-            add(InventoryOpenEvent.class);
-            add(InventoryCloseEvent.class);
-            add(optional("player.PlayerAdvancementDoneEvent"));
-            add(PlayerBedEnterEvent.class);
-            add(PlayerBedLeaveEvent.class);
-            add(PlayerChangedWorldEvent.class);
-            add(PlayerDeathEvent.class);
-            add(PlayerEditBookEvent.class);
-            add(PlayerEggThrowEvent.class);
-            add(PlayerExpChangeEvent.class);
-            add(PlayerFishEvent.class);
-            add(PlayerJoinEvent.class);
-            add(PlayerRespawnEvent.class);
-            add(optional("player.PlayerRiptideEvent"));
-            add(PlayerUnleashEntityEvent.class);
-            add(SheepDyeWoolEvent.class);
-            add(SignChangeEvent.class);
-        }}
-            .stream()
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
-
-    private static Class<? extends Event> optional(String name) {
-        try {
-            return Class.forName("org.bukkit.event." + name)
-                    .asSubclass(Event.class);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
     }
 
     @NotNull
@@ -197,7 +153,7 @@ public final class MaterialSelector {
         inv.setAttribute("chosen_action", clickAction);
 
         List<ItemStack> items = new ArrayList<>();
-        for (Class<? extends Event> clazz : PLAYER_CLASSES) {
+        for (Class<? extends Event> clazz : SoundEventSelection.AVAILABLE_EVENTS) {
             Material m = toMaterial(clazz);
             ItemStack item = new ItemStack(m);
             ItemMeta meta = item.getItemMeta();

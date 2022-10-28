@@ -1,16 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftArmorStand;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.events.CompletionEvents1_12_R1;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_17_R1;
@@ -22,8 +13,21 @@ import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.EntityArmorStand;
 import net.minecraft.world.entity.item.EntityItem;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftArmorStand;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Wrapper1_17_R1 implements Wrapper {
+
+    public Wrapper1_17_R1() {
+        new CompletionEvents1_12_R1();
+    }
 
     @Override
     public int getCommandVersion() {
@@ -90,6 +94,7 @@ public class Wrapper1_17_R1 implements Wrapper {
         as.setMarker(true);
 
         new BukkitRunnable() {
+            @Override
             public void run() {
                 if (en.isDead() || !en.isValid() || en.hasMetadata("stopped")) {
                     cancel();

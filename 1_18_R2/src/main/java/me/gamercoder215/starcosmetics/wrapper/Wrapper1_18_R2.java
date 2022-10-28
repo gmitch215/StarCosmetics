@@ -1,19 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftArmorStand;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.events.CompletionEvents1_12_R1;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_18_R2;
@@ -26,8 +14,24 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftArmorStand;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class Wrapper1_18_R2 implements Wrapper {
+
+    public Wrapper1_18_R2() {
+        new CompletionEvents1_12_R1();
+    }
 
     @Override
     public int getCommandVersion() {
@@ -89,6 +93,7 @@ public class Wrapper1_18_R2 implements Wrapper {
         as.setMarker(true);
 
         new BukkitRunnable() {
+            @Override
             public void run() {
                 if (en.isDead() || !en.isValid() || en.hasMetadata("stopped")) {
                     cancel();

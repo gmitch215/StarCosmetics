@@ -1,10 +1,12 @@
 package me.gamercoder215.starcosmetics.api.player;
 
+import me.gamercoder215.starcosmetics.api.Completion;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a player used by StarCosmetics to manage their configuration.
@@ -20,8 +24,14 @@ import java.io.IOException;
 public final class StarPlayer {
 
     private final OfflinePlayer player;
-    private final File file;
+    private final File folder;
+
+    // Configuration Files
+    private final File configF;
     private final FileConfiguration config;
+
+    private final File soundF;
+    private final FileConfiguration sounds;
 
     /**
      * Constructs a new StarPlayer.
@@ -30,14 +40,26 @@ public final class StarPlayer {
     public StarPlayer(@NotNull OfflinePlayer player) {
         this.player = player;
 
-        this.file = new File(StarConfig.getPlayerDirectory(), player.getUniqueId().toString() + ".yml");
-        if (!file.exists()) try { file.createNewFile(); } catch (Exception e) { StarConfig.print(e); }
+        this.folder = new File(StarConfig.getPlayerDirectory(), player.getUniqueId().toString());
+        if (!folder.exists()) folder.mkdir();
 
-        this.config = YamlConfiguration.loadConfiguration(file);
+        this.configF = new File(folder, "config.yml");
+        if (!configF.exists()) try { configF.createNewFile(); } catch (IOException e) { StarConfig.print(e); }
+        this.config = YamlConfiguration.loadConfiguration(folder);
+        checkMain();
 
-        if (!config.isString("name")) {
-            config.set("name", player.getName());
-            try { config.save(file); } catch (IOException e) { StarConfig.print(e); }
+        this.soundF = new File(folder, "sounds.yml");
+        if (!soundF.exists()) try { soundF.createNewFile(); } catch (IOException e) { StarConfig.print(e); }
+        this.sounds = YamlConfiguration.loadConfiguration(soundF);
+    }
+
+    private void checkMain() {
+        if (!config.isString("name")) config.set("name", player.getName());
+
+        try {
+            config.save(configF);
+        } catch (IOException e) {
+            StarConfig.print(e);
         }
     }
 
@@ -51,21 +73,30 @@ public final class StarPlayer {
     }
 
     /**
-     * Fetches the File this configuration is stored in.
-     * @return File
+     * Fetches the Folder this player's configuration files are stored in.
+     * @return Player's Data Folder
      */
     @NotNull
-    public File getFile() {
-        return file;
+    public File getFolder() {
+        return folder;
     }
 
     /**
-     * Fetches the FileConfiguration of this StarPlayer.
-     * @return FileConfiguration
+     * Fetches the Main FileConfiguration of this StarPlayer.
+     * @return Main FileConfiguration Instance
      */
     @NotNull
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    /**
+     * Fetches the File that{@link #getConfig()} is stored in.
+     * @return Main Configuration File
+     */
+    @NotNull
+    public File getConfigFile() {
+        return configF;
     }
 
     // Completion Configuration
@@ -75,9 +106,9 @@ public final class StarPlayer {
      * @param c The completion to check.
      * @return true if completed, false otherwise
      */
-    public boolean hasCompleted(@NotNull PlayerCompletion c) {
+    public boolean hasCompleted(@NotNull Completion c) {
         if (c == null) return false;
-        return config.getBoolean("completions." + c.name().toLowerCase(), false);
+        return config.getBoolean("completions." + c.getKey(), false);
     }
 
     /**
@@ -85,12 +116,32 @@ public final class StarPlayer {
      * @param c The completion to set.
      * @param b The value to set the completion to.
      */
-    public void setCompleted(@NotNull PlayerCompletion c, boolean b) {
+    public void setCompleted(@NotNull Completion c, boolean b) {
         if (c == null) return;
         if (!config.isConfigurationSection("completions")) config.createSection("completions");
 
-        config.set("completions." + c.name().toLowerCase(), b);
-        try { config.save(file); } catch (IOException e) { StarConfig.print(e); }
+        config.set("completions." + c.getKey(), b);
+        try { config.save(folder); } catch (IOException e) { StarConfig.print(e); }
+    }
+
+    /**
+     * Sends a Notification to this StarPlayer.
+     * @param message Message to Send
+     */
+    public void sendNotification(@Nullable String message) {
+        if (message == null) return;
+        if (!getSetting(PlayerSetting.NOTIFICATIONS)) return;
+        if (!player.isOnline()) return;
+
+        player.getPlayer().sendMessage(message);
+    }
+
+    /**
+     * Sets the completion of the specified completion to true.
+     * @param c The completion to set.
+     */
+    public void setCompleted(@NotNull Completion c) {
+        setCompleted(c, true);
     }
 
     // Settings
@@ -128,7 +179,7 @@ public final class StarPlayer {
         if (!config.isConfigurationSection("settings")) config.createSection("settings");
 
         config.set("settings." + setting.name().toLowerCase(), b);
-        try { config.save(file); } catch (IOException e) { StarConfig.print(e); }
+        try { config.save(folder); } catch (IOException e) { StarConfig.print(e); }
 
         return b;
     }
@@ -187,11 +238,35 @@ public final class StarPlayer {
     }
 
     /**
-     * <p>Saves this StarPlayer's configuration.</p>
+     * Fetches a list of entries that this player has for sound events.
+     * @return List of Sound Event Entries
+     */
+    @NotNull
+    public List<SoundEventSelection> getSoundSelections() {
+        List<SoundEventSelection> selections = new ArrayList<>();
+        if (!sounds.isList("sounds")) {
+            sounds.set("sounds", new ArrayList<>());
+            return selections;
+        }
+
+        for (Object o : sounds.getList("sounds")) {
+            if (!(o instanceof SoundEventSelection)) continue;
+            selections.add((SoundEventSelection) o);
+        }
+
+        return selections;
+    }
+
+    /**
+     * <p>Saves all of this StarPlayer's configuration.</p>
      * <p>Methods that edit the configuration automatically save the configuration, so an additional call is not necessary.</p>
      */
     public void save() {
-        try { config.save(file); } catch (IOException e) { StarConfig.print(e); }
+        try {
+            config.save(configF);
+        } catch (IOException e) {
+            StarConfig.print(e);
+        }
     }
 
 }

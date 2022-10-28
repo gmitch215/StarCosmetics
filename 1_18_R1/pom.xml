@@ -63,6 +63,12 @@
             <scope>provided</scope>
             <classifier>remapped-mojang</classifier>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>starcosmetics-1_12_R1</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>starcosmetics-abstraction</artifactId>

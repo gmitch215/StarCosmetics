@@ -1,32 +1,33 @@
 package me.gamercoder215.starcosmetics.api.player;
 
-import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.Completion;
+import me.gamercoder215.starcosmetics.api.Rarity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a custom completion a player has to achieve to unlock cosmetics, through any toggled event.
+ * Represents a custom completion a player has to achieve to unlock GENERAL cosmetics, through any toggled event.
  */
-public enum PlayerCompletion {
+public enum PlayerCompletion implements Completion {
 
     /**
      * Completion for reaching the roof of the Nether.
      */
-    NETHER_ROOF("completion.nether_roof")
+    NETHER_ROOF(Rarity.EPIC)
     ;
 
-    private final String displayKey;
+    private final Rarity rarity;
 
-    PlayerCompletion(String displayKey) {
-        this.displayKey = displayKey;
+    PlayerCompletion(Rarity rarity) {
+        this.rarity = rarity;
     }
 
-    /**
-     * Fetches the completion's display name.
-     * @return Completion Display Name
-     */
-    @NotNull
-    public String getDisplayName() {
-        return StarConfig.getConfig().get(displayKey);
+    @Override
+    public @NotNull String getKey() {
+        return name().toLowerCase();
     }
 
+    @Override
+    public @NotNull Rarity getRarity() {
+        return rarity;
+    }
 }

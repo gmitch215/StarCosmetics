@@ -1,10 +1,12 @@
 package me.gamercoder215.starcosmetics;
 
 import com.avaje.ebean.validation.NotNull;
+import com.google.common.collect.ImmutableList;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
 import me.gamercoder215.starcosmetics.events.CompletionEvents;
 import me.gamercoder215.starcosmetics.events.CosmeticEvents;
@@ -16,6 +18,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Firework;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,6 +54,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     private static FileConfiguration config;
 
+    private static final List<Class<? extends ConfigurationSerializable>> SERIALIZABLE = ImmutableList.<Class<? extends ConfigurationSerializable>>builder()
+            .add(SoundEventSelection.class)
+            .build();
+
     @Override
     public void onEnable() {
         if (!checkCompatible()) return;
@@ -60,6 +68,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         registerEvents();
         getCommandWrapper();
+        SERIALIZABLE.forEach(ConfigurationSerialization::registerClass);
         getLogger().info("Loaded Classes...");
 
         getLogger().info("Done!");
@@ -71,6 +80,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         for (World w : Bukkit.getWorlds())
             for (Firework f : w.getEntitiesByClass(Firework.class))
                 if (f.hasMetadata("cosmetic")) f.remove();
+
+        SERIALIZABLE.forEach(ConfigurationSerialization::unregisterClass);
     }
 
     // Config Implementation
