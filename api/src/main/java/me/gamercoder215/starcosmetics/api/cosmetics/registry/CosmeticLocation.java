@@ -1,10 +1,9 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.registry;
 
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
-
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +42,7 @@ public interface CosmeticLocation<T> {
      * @return Cosmetic Rarity
      */
     @NotNull
-    CosmeticRarity getRarity();
+    Rarity getRarity();
 
     /**
      * Fetches the criteria required to unlock this CosmeticLocation.

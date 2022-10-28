@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

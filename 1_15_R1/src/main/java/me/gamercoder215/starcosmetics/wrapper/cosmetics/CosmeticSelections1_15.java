@@ -2,10 +2,10 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
-import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
@@ -24,14 +24,14 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + Fancy Items
             .add(new TrailSelection("honeycomb", BaseTrail.PROJECTILE_TRAIL, Material.HONEYCOMB,
-                    CompletionCriteria.fromMined(240, Material.OAK_LOG, Material.BIRCH_LOG), CosmeticRarity.COMMON))
+                    CompletionCriteria.fromMined(240, Material.OAK_LOG, Material.BIRCH_LOG), Rarity.COMMON))
 
             .add(new TrailSelection("super_honeycomb", BaseTrail.PROJECTILE_TRAIL, Material.HONEYCOMB_BLOCK,
-                    CompletionCriteria.fromMined(1345, Material.OAK_LOG, Material.BIRCH_LOG), CosmeticRarity.RARE))
+                    CompletionCriteria.fromMined(1345, Material.OAK_LOG, Material.BIRCH_LOG), Rarity.RARE))
 
             // Particles
             .add(new TrailSelection("honey", BaseTrail.PROJECTILE_TRAIL, Particle.DRIPPING_HONEY,
-                    CompletionCriteria.fromCrafted(80, Material.BEEHIVE), CosmeticRarity.UNCOMMON))
+                    CompletionCriteria.fromCrafted(80, Material.BEEHIVE), Rarity.UNCOMMON))
             .build();
 
     // Selections

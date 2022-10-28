@@ -1,12 +1,12 @@
-package me.gamercoder215.starcosmetics.api.cosmetics;
+package me.gamercoder215.starcosmetics.api;
 
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a rarity used in a Cosmetic.
+ * Represents a rarity used in a Cosmetic, Completion, or anything else.
  */
-public enum CosmeticRarity {
+public enum Rarity {
 
     /**
      * Represents the common rarity.
@@ -59,15 +59,15 @@ public enum CosmeticRarity {
 
     private final String prefix;
 
-    CosmeticRarity(String prefix) {
+    Rarity(String prefix) {
         this.prefix = prefix;
     }
 
-    CosmeticRarity(ChatColor color) {
+    Rarity(ChatColor color) {
         this(color + "");
     }
 
-    CosmeticRarity(int hexColor) {
+    Rarity(int hexColor) {
         this(ChatColor.translateAlternateColorCodes('&',
                 "&x&" + Integer.toHexString(hexColor).charAt(0) +
                         "&" + Integer.toHexString(hexColor).charAt(1) +

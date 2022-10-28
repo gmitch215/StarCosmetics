@@ -2,10 +2,10 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
-import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
@@ -24,9 +24,9 @@ public class CosmeticSelections1_11 implements CosmeticSelections {
     // Trails
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("totems", BaseTrail.PROJECTILE_TRAIL, StarMaterial.TOTEM_OF_UNDYING.find(),
-                    CompletionCriteria.fromKilled(350, EntityType.EVOKER), CosmeticRarity.EPIC))
+                    CompletionCriteria.fromKilled(350, EntityType.EVOKER), Rarity.EPIC))
             .add(new TrailSelection("shulker_shell", BaseTrail.PROJECTILE_TRAIL, Material.SHULKER_SHELL,
-                    CompletionCriteria.fromKilled(350, EntityType.SHULKER), CosmeticRarity.EPIC))
+                    CompletionCriteria.fromKilled(350, EntityType.SHULKER), Rarity.EPIC))
 
             .build();
 

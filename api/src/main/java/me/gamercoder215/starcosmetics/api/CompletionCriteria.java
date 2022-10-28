@@ -1,8 +1,6 @@
-package me.gamercoder215.starcosmetics.api.cosmetics;
+package me.gamercoder215.starcosmetics.api;
 
 import com.google.common.collect.ImmutableList;
-import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
@@ -17,7 +15,6 @@ import java.util.function.Predicate;
 
 /**
  * Represents Criteria needed to unlock a Cosmetic
-
  */
 public final class CompletionCriteria {
 
@@ -77,16 +74,16 @@ public final class CompletionCriteria {
     // Static Generators
 
     /**
-     * Generates a CompletionCriteria from a {@link PlayerCompletion}.
+     * Generates a CompletionCriteria from a {@link Completion}.
      * @param completion Completion to Check for
      * @return CompletionCriteria with the given criteria
      * @throws IllegalArgumentException if criteria is null
      */
     @NotNull
-    public static CompletionCriteria fromCompletion(@NotNull PlayerCompletion completion) throws IllegalArgumentException {
+    public static CompletionCriteria fromCompletion(@NotNull Completion completion) throws IllegalArgumentException {
         return new CompletionCriteria(
                 p -> new StarPlayer(p).hasCompleted(completion),
-                "criteria.completion." + completion.name().toLowerCase()
+                "criteria.completion." + completion.getKey()
         );
     }
 
@@ -196,6 +193,47 @@ public final class CompletionCriteria {
             for (Material m : materials) count += p.getStatistic(Statistic.CRAFT_ITEM, m);
             return count == amount;
         },"criteria.amount.crafted.list." + materials.size(), amount, materials.toArray());
+    }
+
+    private static Statistic getPlayStatistic() {
+        try {
+            return Statistic.valueOf("PLAY_ONE_MINUTE");
+        } catch (IllegalArgumentException e) {
+            return Statistic.valueOf("PLAY_ONE_TICK");
+        }
+    }
+
+    /**
+     * Generates a CompletionCrtieria with the player's playtime.
+     * @param ticks The amount of ticks the player must play for
+     * @return CompletionCriteria with the given criteria
+     */
+    @NotNull
+    public static CompletionCriteria fromPlaytime(long ticks) {
+        Statistic stat = getPlayStatistic();
+
+        return new CompletionCriteria(p -> {
+            long time = p.getStatistic(stat);
+            return time >= ticks;
+        }, p -> {
+            long time = p.getStatistic(stat);
+            return time == ticks;
+        }, "criteria.amount.playtime", formatTime(ticks));
+    }
+
+    private static String formatTime(long ticks) {
+        double seconds = (double) ticks / 20D;
+
+        if (seconds < 60) return String.format(StarConfig.getConfig().get("constants.time.seconds"), String.format("%,.0f", seconds));
+
+        double minutes = seconds / 60D;
+        if (minutes < 60) return String.format(StarConfig.getConfig().get("constants.time.minutes"), String.format("%,.0f", minutes));
+
+        double hours = minutes / 60D;
+        if (hours < 24) return String.format(StarConfig.getConfig().get("constants.time.hours"), String.format("%,.0f", hours));
+
+        double days = hours / 24D;
+        return String.format(StarConfig.getConfig().get("constants.time.days"), String.format("%,.0f", days));
     }
 
 }

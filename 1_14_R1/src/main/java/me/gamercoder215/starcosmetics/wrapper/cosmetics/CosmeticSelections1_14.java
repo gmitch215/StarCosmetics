@@ -2,10 +2,10 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
-import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
@@ -24,10 +24,10 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + FFancy Items
             .add(new TrailSelection("lantern", BaseTrail.PROJECTILE_TRAIL, Material.LANTERN,
-                    CompletionCriteria.fromCrafted(30, Material.TORCH), CosmeticRarity.COMMON))
+                    CompletionCriteria.fromCrafted(30, Material.TORCH), Rarity.COMMON))
 
             .add(new TrailSelection("wither_roses", BaseTrail.PROJECTILE_TRAIL, Material.WITHER_ROSE,
-                    CompletionCriteria.fromKilled(1000, EntityType.WITHER), CosmeticRarity.MYTHICAL))
+                    CompletionCriteria.fromKilled(1000, EntityType.WITHER), Rarity.MYTHICAL))
 
             .build();
 

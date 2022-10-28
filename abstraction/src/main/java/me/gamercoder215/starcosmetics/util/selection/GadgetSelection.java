@@ -1,9 +1,9 @@
 package me.gamercoder215.starcosmetics.util.selection;
 
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseGadget;
-import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +18,7 @@ public final class GadgetSelection<T extends Event> extends CosmeticSelection<It
     private final Consumer<T> eventAction;
     private final Class<T> eventClass;
 
-    private GadgetSelection(String name, Class<T> eventClass, CompletionCriteria criteria, CosmeticRarity rarity, ItemStack item, Consumer<T> action) {
+    private GadgetSelection(String name, Class<T> eventClass, CompletionCriteria criteria, Rarity rarity, ItemStack item, Consumer<T> action) {
         super(item, criteria, rarity);
         this.name = name;
         this.item = item;
@@ -58,14 +58,14 @@ public final class GadgetSelection<T extends Event> extends CosmeticSelection<It
         String id;
         Class<T> eventClass;
         Consumer<T> action;
-        CosmeticRarity rarity;
+        Rarity rarity;
         CompletionCriteria criteria;
 
         private Builder(Class<T> eventClass) {
             this.eventClass = eventClass;
         }
 
-        public Builder<T> info(String id, CompletionCriteria criteria, CosmeticRarity rarity) {
+        public Builder<T> info(String id, CompletionCriteria criteria, Rarity rarity) {
             this.id = id;
             this.rarity = rarity;
             this.criteria = criteria;

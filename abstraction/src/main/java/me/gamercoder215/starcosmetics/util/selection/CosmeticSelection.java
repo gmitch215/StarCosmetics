@@ -1,10 +1,10 @@
 package me.gamercoder215.starcosmetics.util.selection;
 
-import java.util.Objects;
-
-import me.gamercoder215.starcosmetics.api.cosmetics.CompletionCriteria;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRarity;
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+
+import java.util.Objects;
 
 public abstract class CosmeticSelection<T> implements CosmeticLocation<T> {
 
@@ -12,9 +12,9 @@ public abstract class CosmeticSelection<T> implements CosmeticLocation<T> {
 
     protected final CompletionCriteria completionCriteria;
 
-    protected final CosmeticRarity rarity;
+    protected final Rarity rarity;
 
-    protected CosmeticSelection(T input, CompletionCriteria criteria, CosmeticRarity rarity) {
+    protected CosmeticSelection(T input, CompletionCriteria criteria, Rarity rarity) {
         this.input = input;
         this.completionCriteria = criteria;
         this.rarity = rarity;
@@ -31,7 +31,7 @@ public abstract class CosmeticSelection<T> implements CosmeticLocation<T> {
     }
 
     @Override
-    public final CosmeticRarity getRarity() {
+    public final Rarity getRarity() {
         return rarity;
     }
 
