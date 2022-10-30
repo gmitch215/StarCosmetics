@@ -13,7 +13,6 @@ import me.gamercoder215.starcosmetics.events.CosmeticEvents;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
-import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -30,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getCosmeticSelections;
 
 @SuppressWarnings("unchecked")
 public final class StarCosmetics extends JavaPlugin implements StarConfig, CosmeticRegistry {
@@ -127,27 +128,21 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         String v = config.get("functionality.command-version", "auto").toString();
         switch (v) {
-            case "1": cmdV = 1; break;
-            case "2": cmdV = 2; break;
-            default: cmdV = w.getCommandVersion(); break;
+            case "1":
+                cmdV = 1;
+                break;
+            case "2":
+                cmdV = 2;
+                break;
+            default:
+                cmdV = w.getCommandVersion();
+                break;
         }
 
         try {
             return (CommandWrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.CommandWrapperV" + cmdV)
                     .getConstructor(Plugin.class)
                     .newInstance(StarConfig.getPlugin());
-        } catch (ReflectiveOperationException e) {
-            StarConfig.print(e);
-            return null;
-        }
-    }
-
-    public static CosmeticSelections getCosmeticSelections() {
-        String cosmeticV = getServerVersion().split("_")[0] + "_" + getServerVersion().split("_")[1];
-        try {
-            return (CosmeticSelections) Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
-                    .getConstructor()
-                    .newInstance();
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
             return null;
