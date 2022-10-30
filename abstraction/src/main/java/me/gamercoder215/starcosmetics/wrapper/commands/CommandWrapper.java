@@ -2,9 +2,11 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
+import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +85,10 @@ public interface CommandWrapper {
 
             inv.setItem(parent.getPlace(), item);
         }
+
+        List<CosmeticSelection<?>> pSelections = new ArrayList<>();
+        for (BaseShape s : BaseShape.values()) pSelections.addAll(getCosmeticSelections().getSelections(s));
+
 
         p.openInventory(inv);
         StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 3F, 2F);
