@@ -40,6 +40,12 @@ public enum StarMaterial {
 
     RED_WOOL(14, "wool"),
 
+    WHITE_WOOL(0, "wool"),
+
+    LEAD("leash"),
+
+    LILY_PAD("water_lily"),
+
     OBSERVER(Material.OBSIDIAN)
     ;
 
