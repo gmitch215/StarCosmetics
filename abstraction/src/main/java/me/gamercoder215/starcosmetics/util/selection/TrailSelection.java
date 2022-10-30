@@ -28,7 +28,7 @@ public final class TrailSelection extends CosmeticSelection<Object> {
     }
 
     @Override
-    public @NotNull Class<? extends Object> getInputType() {
+    public @NotNull Class<?> getInputType() {
         return input.getClass();
     }
 
