@@ -4,15 +4,18 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
-import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.Inventory;
@@ -258,6 +261,179 @@ public final class MaterialSelector {
                 inv.setItem(slot, row.get(j));
             }
         }
+    }
+
+    @NotNull
+    public static ItemStack toItemStack(@NotNull CosmeticLocation<?> loc) {
+        final Material type;
+        final String name;
+        Object input = loc.getInput();
+
+        if (input instanceof Material) {
+            Material m = (Material) input;
+            type = m;
+            name = WordUtils.capitalizeFully(m.name().replace("_", " "));
+        }
+        else if (input instanceof Particle) {
+            Particle p = (Particle) input;
+            type = toMaterial(p);
+            name = WordUtils.capitalizeFully(p.name().replace("_", " "));
+        }
+        else if (input instanceof EntityType) {
+            EntityType e = (EntityType) input;
+            type = toMaterial(e);
+            name = WordUtils.capitalizeFully(e.name().replace("_", " "));
+        }
+        else if (input instanceof Sound) {
+            Sound s = (Sound) input;
+            type = toMaterial(s);
+            name = getFriendlyName(s);
+        }
+        else throw new IllegalArgumentException("Unexpected input type: " + input + " (" + input.getClass().getName() + ")");
+
+        ItemStack item = new ItemStack(type);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + name);
+        List<String> lore = new ArrayList<>();
+        lore.add(loc.getRarity().toString());
+        if (!loc.getRarity().isSecret()) {
+            lore.add(" ");
+            lore.addAll(Arrays.stream(
+                    ChatPaginator.wordWrap(loc.getCompletionCriteria().getDisplayMessage(), 30)
+            ).map(s -> ChatColor.GRAY + s).collect(Collectors.toList()));
+        }
+
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        NBTWrapper nbt = NBTWrapper.of(item);
+        nbt.setID("choose:cosmetic");
+        nbt.set("location", loc);
+        item = nbt.getItem();
+
+        return item;
+    }
+
+    @NotNull
+    public static Material toMaterial(@NotNull EntityType type) {
+        Material m = null;
+
+        for (Material mat : Material.values()) {
+            if (mat.name().equalsIgnoreCase(type.name())) {
+                m = mat;
+                break;
+            }
+
+            if (mat.name().equalsIgnoreCase(type.name() + "_SPAWN_EGG")) {
+                m = mat;
+                break;
+            }
+        }
+
+        if (m == null) m = Material.APPLE;
+
+        return m;
+    }
+
+    @NotNull
+    public static Material toMaterial(@NotNull Particle particle) {
+        for (Material m : Material.values()) if (particle.name().equalsIgnoreCase(m.name())) return m;
+
+        switch (particle.name().toLowerCase()) {
+            case "white_ash":
+            case "ash": return Material.FLINT_AND_STEEL;
+            case "block_crack":
+            case "block_dust":
+            case "block_marker": return Material.STONE;
+            case "bubble_column_up":
+            case "bubble_pop": return Material.matchMaterial("SEAGRASS");
+            case "campire_cosy_smoke":
+            case "campfire_signal_smoke": return Material.matchMaterial("CAMPFIRE");
+            case "cloud": return StarMaterial.WHITE_WOOL.find();
+            case "composter": return Material.matchMaterial("COMPOSTER");
+            case "crimson_spore": return Material.matchMaterial("CRIMSON_NYLIUM");
+            case "crit": return Material.DIAMOND_SWORD;
+            case "crit_magic": return Material.ENCHANTED_BOOK;
+            case "current_down": return Material.matchMaterial("TRIDENT");
+            case "damage_indicator": return Material.IRON_AXE;
+            case "dolphin": return Material.matchMaterial("DOLPHIN_SPAWN_EGG");
+            case "dragon_breath": return Material.DRAGON_EGG;
+            case "dripping_dripstone_lava":
+            case "falling_dripstone_lava":
+            case "falling_lava":
+            case "landing_lava":
+            case "lava":
+            case "drip_lava": return Material.LAVA_BUCKET;
+            case "dripping_dripstone_water":
+            case "falling_dripstone_water":
+            case "falling_water":
+            case "drip_water": return Material.WATER_BUCKET;
+            case "falling_honey":
+            case "landing_honey":
+            case "dripping_honey": return Material.matchMaterial("HONEY_BLOCK");
+            case "falling_obsidian_tear":
+            case "landing_obsidian_tear":
+            case "dripping_obsidian_tear": return Material.matchMaterial("CRYING_OBSIDIAN");
+            case "falling_nectar":
+            case "wax_on":
+            case "wax_off": return Material.matchMaterial("HONEYCOMB");
+            case "dust_color_transition": return Material.FLINT;
+            case "electric_spark": return Material.END_ROD;
+            case "explosion_huge":
+            case "explosion_large":
+            case "explosion_normal": return Material.TNT;
+            case "falling_dust": return Material.GRAVEL;
+            case "spore_blossom_air":
+            case "falling_spore_blossom": return Material.matchMaterial("SPORE_BLOSSOM");
+            case "fireworks_spawrk": return Material.FIREWORK;
+            case "small_flame":
+            case "flame": return Material.TORCH;
+            case "flash": return Material.matchMaterial("LIGHTNING_ROD");
+            case "glow": return Material.SEA_LANTERN;
+            case "glow_squid_ink": return Material.matchMaterial("GLOW_INK_SAC");
+            case "heart": return Material.GOLDEN_APPLE;
+            case "item_crack": return Material.IRON_PICKAXE;
+            case "mob_appearence": return Material.ROTTEN_FLESH;
+            case "nautilus": return Material.matchMaterial("NAUTILUS_SHELL");
+            case "note": return Material.NOTE_BLOCK;
+            case "reverse_portal":
+            case "portal": return Material.OBSIDIAN;
+            case "scrape": return Material.IRON_BLOCK;
+            case "sculk_charge":
+            case "sculk_charge_pop":
+            case "vibration":
+            case "sculk_soul": return Material.matchMaterial("SCULK_SENSOR");
+            case "shriek": return Material.matchMaterial("SCULK_SHRIEKER");
+            case "slime": return Material.SLIME_BLOCK;
+            case "smoke_large":
+            case "smoke_normal": return Material.FURNACE;
+            case "sneeze": return Material.PAPER;
+            case "snow_shovel": return Material.IRON_HOE;
+            case "snowflake":
+            case "snowball": return Material.SNOW_BALL;
+            case "sonic_boom": return Material.matchMaterial("SCULK");
+            case "soul": return Material.SOUL_SAND;
+            case "soul_fire_flame": return Material.matchMaterial("SOUL_TORCH");
+            case "spell_mob":
+            case "spell_witch":
+            case "spell_mob_ambient":
+            case "spell": return Material.ENCHANTMENT_TABLE;
+            case "spit": return StarMaterial.LEAD.find();
+            case "squid_ink": return Material.INK_SACK;
+            case "suspended_depth":
+            case "suspended": return Material.STRING;
+            case "sweep_attack": return Material.GOLD_SWORD;
+            case "totem": return StarMaterial.TOTEM_OF_UNDYING.find();
+            case "villager_angry":
+            case "villager_happy":
+            case "town_aura": return Material.EMERALD;
+            case "warped_spore": return Material.matchMaterial("WARPED_NYLIUM");
+            case "water_drop":
+            case "water_wake":
+            case "water_bubble": return StarMaterial.LILY_PAD.find();
+        }
+
+        return Material.CLAY_BALL;
     }
 
     @NotNull
