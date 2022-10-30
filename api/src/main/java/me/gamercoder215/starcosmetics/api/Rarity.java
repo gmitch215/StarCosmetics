@@ -48,24 +48,32 @@ public enum Rarity {
      * <p>Represents the special rarity.</p>
      * <p>This rarity is one of two rarities that have no visible requirements in their description.</p>
      */
-    SPECIAL(ChatColor.RED),
+    SPECIAL(ChatColor.RED, true),
 
     /**
      * <p>Represents the secret rarity.</p>
      * <p>This rarity is one of two rarities that have no visible requirements in their description.</p>
      */
-    SECRET(ChatColor.DARK_RED),
+    SECRET(ChatColor.DARK_RED, true),
     ;
 
     private final String prefix;
+    private final boolean secret;
+
+    Rarity(String prefix, boolean secret) {
+        this.prefix = prefix;
+        this.secret = secret;
+    }
 
     Rarity(String prefix) {
-        this.prefix = prefix;
+        this(prefix, false);
     }
 
     Rarity(ChatColor color) {
         this(color + "");
     }
+
+    Rarity(ChatColor color, boolean secret) { this(color + "", secret); }
 
     Rarity(int hexColor) {
         this(ChatColor.translateAlternateColorCodes('&',
@@ -77,17 +85,17 @@ public enum Rarity {
                         "&" + Integer.toHexString(hexColor).charAt(5)));
     }
 
-    /**
-     * Fetches the prefix that this prefix uses.
-     * @return String Preifx
-     */
+    @Override
     @NotNull
-    public String getPrefix() {
+    public String toString() {
         return prefix;
     }
 
-    @Override
-    public String toString() {
-        return getPrefix();
+    /**
+     * Whether this rarity has a visible Completion Requirement.
+     * @return true if requirement is visible, false otherwise
+     */
+    public boolean isSecret() {
+        return secret;
     }
 }
