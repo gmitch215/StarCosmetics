@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
+import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -65,6 +66,18 @@ public interface Wrapper {
         }
 
         return null;
+    }
+
+    static CosmeticSelections getCosmeticSelections() {
+        String cosmeticV = getServerVersion().split("_")[0] + "_" + getServerVersion().split("_")[1];
+        try {
+            return (CosmeticSelections) Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
+                    .getConstructor()
+                    .newInstance();
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+            return null;
+        }
     }
 
     int getCommandVersion();
