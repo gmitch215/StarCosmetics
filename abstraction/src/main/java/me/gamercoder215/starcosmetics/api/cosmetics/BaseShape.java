@@ -5,7 +5,6 @@ import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleSize;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -55,7 +54,7 @@ public enum BaseShape implements ParticleShape {
 
     @Override
     public String getDisplayName() {
-        return StarConfig.getConfig().get("cosmetics.particle_shapes." + name().toLowerCase());
+        return StarConfig.getConfig().get("cosmetics.particle_shapes");
     }
 
     @Override
