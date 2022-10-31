@@ -44,10 +44,18 @@ public enum StarSound {
         l.getWorld().playSound(l, s, volume, pitch);
     }
 
-    public void play(Location l) { play(l, 1F, 1F); }
+    public void play(@NotNull Location l) { play(l, 1F, 1F); }
 
     public void play(@NotNull Entity en, float volume, float pitch) { play(en.getLocation(), volume, pitch); }
 
     public void play(@NotNull Entity en) { play(en.getLocation()); }
+
+    public void playSuccess(@NotNull Entity en) {
+        play(en, 3F, 2F);
+    }
+
+    public void playFailure(@NotNull Entity en) {
+        play(en, 3F, 0F);
+    }
 
 }
