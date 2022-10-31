@@ -4,13 +4,18 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
@@ -66,7 +71,7 @@ public interface CommandWrapper {
         plugin.reloadConfig();
 
         send(sender, "command.reload.reloaded");
-        if (sender instanceof Player) StarSound.ENTITY_ARROW_HIT_PLAYER.play((Player) sender, 3F, 2F);
+        if (sender instanceof Player) StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess((Player) sender);
     }
 
     default void cosmetics(Player p) {
@@ -88,10 +93,25 @@ public interface CommandWrapper {
 
         List<CosmeticSelection<?>> pSelections = new ArrayList<>();
         for (BaseShape s : BaseShape.values()) pSelections.addAll(getCosmeticSelections().getSelections(s));
+        inv.setAttribute("collections:particle", pSelections);
 
+        ItemStack particles = StarMaterial.FIREWORK_STAR.findStack();
+        FireworkEffectMeta meta = (FireworkEffectMeta) particles.getItemMeta();
+        meta.setDisplayName(ChatColor.YELLOW + get("cosmetics.particle_shapes"));
+        meta.setEffect(FireworkEffect.builder()
+                .withColor(Color.fromRGB(r.nextInt(16777216)))
+                .build());
+
+        particles.setItemMeta(meta);
+        NBTWrapper pnbt = of(particles);
+        pnbt.setID("cosmetic:selection:shape");
+        particles = pnbt.getItem();
+        inv.setItem(24, particles);
+        
+        // TODO Create the rest of the cosmetics menus
 
         p.openInventory(inv);
-        StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 3F, 2F);
+        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
 }
