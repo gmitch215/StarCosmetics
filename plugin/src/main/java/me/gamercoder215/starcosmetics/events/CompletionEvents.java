@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import static me.gamercoder215.starcosmetics.api.player.PlayerCompletion.NETHER_ROOF;
 
-public class CompletionEvents implements Listener {
+public final class CompletionEvents implements Listener {
 
     private final StarCosmetics plugin;
 
