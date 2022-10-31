@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.util.Constants;
 import org.bukkit.Material;
 
 import java.io.BufferedReader;
@@ -15,7 +16,7 @@ public final class ModernStructureReader implements StructureReader {
 
     private final BufferedReader reader;
 
-    private static final SecureRandom r = new SecureRandom();
+    private static final SecureRandom r = Constants.r;
 
     public ModernStructureReader(Reader r) {
         this.reader = new BufferedReader(r);

@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 
 import java.lang.reflect.Field;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 public interface CosmeticSelections {
 
-    SecureRandom r = new SecureRandom();
+    SecureRandom r = Constants.r;
 
     Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections();
 

@@ -14,9 +14,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.security.SecureRandom;
+
 public interface Wrapper {
 
     Wrapper w = Constants.w;
+
+    SecureRandom r = Constants.r;
 
     static boolean isCompatible() {
         return getWrapper() == null;
