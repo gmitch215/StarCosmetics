@@ -46,6 +46,8 @@ public enum StarMaterial {
 
     LILY_PAD("water_lily"),
 
+    FIREWORK_STAR("firework_charge"),
+
     OBSERVER(Material.OBSIDIAN)
     ;
 
