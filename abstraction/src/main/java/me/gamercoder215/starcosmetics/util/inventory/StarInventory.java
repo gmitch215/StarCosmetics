@@ -1,16 +1,32 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+
 public interface StarInventory extends Inventory {
-    
+
+    @Nullable
     String getKey();
 
     Map<String, Object> getAllAttributes();
 
     void setAttribute(String key, Object value);
+
+    default void setAttributes(@NotNull Map<String, Object> map) {
+        map.forEach(this::setAttribute);
+    }
+
+    default StarInventory copy() {
+        StarInventory inv = getWrapper().createInventory(getKey(), getSize(), getTitle());
+        inv.setContents(getContents());
+        inv.setAttributes(getAllAttributes());
+        return inv;
+    }
 
     void removeAttribute(String key);
 
