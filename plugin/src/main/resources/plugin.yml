@@ -2,6 +2,7 @@ name: ${project.name}
 main: me.gamercoder215.starcosmetics.StarCosmetics
 version: ${project.version}
 description: ${project.description}
+softdepend: [PlaceholderAPI]
 author: GamerCoder215
 website: ${project.url}
 load: POSTWORLD
