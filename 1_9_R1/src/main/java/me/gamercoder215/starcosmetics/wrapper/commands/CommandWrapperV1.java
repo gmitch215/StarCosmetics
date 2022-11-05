@@ -23,6 +23,43 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
         plugin.getLogger().info("Loaded Command Wrapper V1 (1.9+)");
     }
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        switch (cmd.getName()) {
+            case "starreload": {
+                reloadConfig(sender);
+                break;
+            }
+            case "starsettings": {
+                if (!(sender instanceof Player)) return false;
+                Player p = (Player) sender;
+
+                settings(p);
+                break;
+            }
+            case "cosmetics": {
+                if (!(sender instanceof Player)) return false;
+                Player p = (Player) sender;
+
+                cosmetics(p);
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        switch (cmd.getName()) {
+
+        }
+
+        return suggestions;
+    }
+
     private PluginCommand createCommand(String name, String... aliases) {
         try {
             Constructor<PluginCommand> p = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
@@ -71,36 +108,6 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
 
             register(pcmd);
         }
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        switch (cmd.getName()) {
-            case "starreload": {
-                reloadConfig(sender);
-                break;
-            }
-            case "starsettings": {
-                if (!(sender instanceof Player)) return false;
-                Player p = (Player) sender;
-
-                settings(p);
-                break;
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-        List<String> suggestions = new ArrayList<>();
-
-        switch (cmd.getName()) {
-
-        }
-
-        return suggestions;
     }
 
 }

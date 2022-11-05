@@ -4,22 +4,24 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +34,7 @@ public interface CommandWrapper {
     Map<String, List<String>> COMMANDS = ImmutableMap.<String, List<String>>builder()
             .put("starsettings", Arrays.asList("ssettings", "settings", "ss"))
             .put("starreload", Arrays.asList("sreload", "sr"))
-            .put("starcosmetics", Arrays.asList("scosmetics", "sc"))
+            .put("starcosmetics", Arrays.asList("scosmetics", "sc", "cosmetics", "cs"))
             .build();
 
     Map<String, String> COMMAND_PERMISSION = ImmutableMap.<String, String>builder()
@@ -75,12 +77,12 @@ public interface CommandWrapper {
     }
 
     default void cosmetics(Player p) {
-        StarInventory inv = w.createInventory("cosmetics_parent_menu", 54, get("menu.cosmetics"));
+        StarInventory inv = Generator.genGUI("cosmetics_parent_menu", 54, get("menu.cosmetics"));
 
         for (CosmeticParent parent : CosmeticParent.values()) {
             ItemStack item = new ItemStack(parent.getIcon());
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(get(parent.getDisplayKey()));
+            meta.setDisplayName(ChatColor.YELLOW + get(parent.getDisplayKey()));
             item.setItemMeta(meta);
 
             NBTWrapper nbt = of(item);
@@ -91,20 +93,22 @@ public interface CommandWrapper {
             inv.setItem(parent.getPlace(), item);
         }
 
-        List<CosmeticSelection<?>> pSelections = new ArrayList<>();
-        for (BaseShape s : BaseShape.values()) pSelections.addAll(getCosmeticSelections().getSelections(s));
-        inv.setAttribute("collections:particle", pSelections);
+        List<CosmeticSelection<?>> sel = Wrapper.allFor(BaseShape.class);
+        inv.setAttribute("collections:custom", sel);
+        inv.setAttribute("items_display", "menu.cosmetics.shape");
 
         ItemStack particles = StarMaterial.FIREWORK_STAR.findStack();
         FireworkEffectMeta meta = (FireworkEffectMeta) particles.getItemMeta();
-        meta.setDisplayName(ChatColor.YELLOW + get("cosmetics.particle_shapes"));
+        meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.shape"));
         meta.setEffect(FireworkEffect.builder()
                 .withColor(Color.fromRGB(r.nextInt(16777216)))
                 .build());
 
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
         particles.setItemMeta(meta);
         NBTWrapper pnbt = of(particles);
-        pnbt.setID("cosmetic:selection:shape");
+        pnbt.setID("cosmetic:selection:custom");
         particles = pnbt.getItem();
         inv.setItem(24, particles);
         

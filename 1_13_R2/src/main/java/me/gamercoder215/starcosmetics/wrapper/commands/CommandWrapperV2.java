@@ -44,4 +44,14 @@ public class CommandWrapperV2 implements CommandWrapper {
     public void reloadConfig(CommandSender sender) {
         CommandWrapper.super.reloadConfig(sender);
     }
+
+    @Override
+    @Command({"starcosmetics", "scosmetics", "sc", "cosmetics", "cs"})
+    @Description("Opens the StarCosmetics Cosmetics menu.")
+    @Usage("/starcosmetics")
+    @CommandPermission("starcosmetics.user.cosmetics")
+    public void cosmetics(Player p) {
+        CommandWrapper.super.cosmetics(p);
+    }
+
 }
