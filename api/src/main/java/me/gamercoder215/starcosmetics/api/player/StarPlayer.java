@@ -179,7 +179,7 @@ public final class StarPlayer {
         if (!config.isConfigurationSection("settings")) config.createSection("settings");
 
         config.set("settings." + setting.name().toLowerCase(), b);
-        try { config.save(folder); } catch (IOException e) { StarConfig.print(e); }
+        save();
 
         return b;
     }
@@ -216,9 +216,32 @@ public final class StarPlayer {
             return null;
         }
 
+        if (!config.isConfigurationSection("cosmetics.trails")) {
+            config.createSection("cosmetics.trails");
+            return null;
+        }
+
         String path = "cosmetics.trails." + type.name().toLowerCase();
 
         return CosmeticLocation.getByFullKey(config.getString(path, null));
+    }
+
+    /**
+     * Sets the selected Trail Cosmetic for the specified Trail Type.
+     * @param type Trail Type to use
+     * @param cosmetic The cosmetic to set.
+     */
+    public void setSelectedTrail(@NotNull TrailType type, @Nullable CosmeticLocation<?> cosmetic) {
+        if (type == null) return;
+        if (!config.isConfigurationSection("cosmetics")) config.createSection("cosmetics");
+        if (!config.isConfigurationSection("cosmetics.trails")) config.createSection("cosmetics.trails");
+
+        String path = "cosmetics.trails." + type.name().toLowerCase();
+
+        if (cosmetic == null) config.set(path, null);
+        else config.set(path, cosmetic.getFullKey());
+
+        save();
     }
 
     /**
@@ -226,7 +249,7 @@ public final class StarPlayer {
      * @param clazz The class of the cosmetic to set.
      * @param loc The location to set the cosmetic to.
      */
-    public void setSelectedCosmetic(@NotNull Class<Cosmetic> clazz, @NotNull CosmeticLocation<?> loc) {
+    public void setSelectedCosmetic(@NotNull Class<? extends Cosmetic> clazz, @NotNull CosmeticLocation<?> loc) {
         if (clazz == null || loc == null) return;
         if (Cosmetic.class.equals(clazz)) return;
 
