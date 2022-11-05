@@ -19,13 +19,13 @@ public interface CosmeticSelections {
     Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections();
 
     default List<CosmeticSelection<?>> getSelections(Cosmetic key) {
-        return getAllSelections().get(key);
+        return getAllSelections().getOrDefault(key, new ArrayList<>());
     }
 
     @SafeVarargs
     static <T> List<T> join(List<T>... lists) {
         List<T> list = new ArrayList<>();
-        for (List<T> l : lists) list.addAll(l);
+        for (List<T> l : lists) if (l != null) list.addAll(l);
 
         return list;
     }
