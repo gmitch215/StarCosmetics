@@ -17,9 +17,10 @@ import java.util.UUID;
 
 public class CompletionEvents1_12_R1 implements Listener {
 
-    private final Plugin plugin = StarConfig.getPlugin();
+    private final Plugin plugin;
 
     public CompletionEvents1_12_R1() {
+        this.plugin = StarConfig.getPlugin();
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
