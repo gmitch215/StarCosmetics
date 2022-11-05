@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Wrapper1_14_R1 implements Wrapper {
+public final class Wrapper1_14_R1 implements Wrapper {
 
     public Wrapper1_14_R1() {
         new CompletionEvents1_12_R1();

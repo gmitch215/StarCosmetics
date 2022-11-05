@@ -1,8 +1,10 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
+import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
@@ -15,16 +17,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface Wrapper {
-
-    Wrapper w = Constants.w;
 
     SecureRandom r = Constants.r;
 
     static boolean isCompatible() {
-        return getWrapper() == null;
+        return getWrapper() != null;
     }
+
+    default void registerEvents() {}
 
     static String get(String key) {
         return StarConfig.getConfig().get(key);
@@ -57,31 +61,38 @@ public interface Wrapper {
 
     static Wrapper getWrapper() {
         try {
-            return (Wrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.Wrapper" + getServerVersion())
+            return Class.forName("me.gamercoder215.starcosmetics.wrapper.Wrapper" + getServerVersion())
+                    .asSubclass(Wrapper.class)
                     .getConstructor()
                     .newInstance();
         } catch (ArrayIndexOutOfBoundsException | NoSuchMethodException ignored) { // Using test server
             return new TestWrapper();
-        }
-        catch (ClassNotFoundException e) { // Using unsupported version
+        } catch (ClassNotFoundException e) { // Using unsupported version
             return null;
-        } catch (ReflectiveOperationException e) {
+        } catch (Exception e) {
             StarConfig.print(e);
         }
-
         return null;
     }
 
     static CosmeticSelections getCosmeticSelections() {
         String cosmeticV = getServerVersion().split("_")[0] + "_" + getServerVersion().split("_")[1];
         try {
-            return (CosmeticSelections) Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
+            return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
+                    .asSubclass(CosmeticSelections.class)
                     .getConstructor()
                     .newInstance();
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
             return null;
         }
+    }
+
+    static <T extends Enum<T> & Cosmetic> List<CosmeticSelection<?>> allFor(Class<T> clazz) {
+        List<CosmeticSelection<?>> selections = new ArrayList<>();
+        for (T cosmetic : clazz.getEnumConstants()) selections.addAll(getCosmeticSelections().getSelections(cosmetic));
+
+        return selections;
     }
 
     int getCommandVersion();

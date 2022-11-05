@@ -27,11 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class Wrapper1_18_R2 implements Wrapper {
-
-    public Wrapper1_18_R2() {
-        new CompletionEvents1_12_R1();
-    }
+public final class Wrapper1_18_R2 implements Wrapper {
 
     @Override
     public int getCommandVersion() {
@@ -127,6 +123,11 @@ public class Wrapper1_18_R2 implements Wrapper {
     @Override
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_18_R2(key, size, title);
+    }
+
+    @Override
+    public void registerEvents() {
+        new CompletionEvents1_12_R1();
     }
 
 }

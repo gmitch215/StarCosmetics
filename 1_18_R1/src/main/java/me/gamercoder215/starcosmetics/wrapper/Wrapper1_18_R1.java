@@ -23,11 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Wrapper1_18_R1 implements Wrapper {
-
-    public Wrapper1_18_R1() {
-        new CompletionEvents1_12_R1();
-    }
+public final class Wrapper1_18_R1 implements Wrapper {
 
     @Override
     public int getCommandVersion() {
@@ -110,6 +106,11 @@ public class Wrapper1_18_R1 implements Wrapper {
     @Override
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_18_R1(key, size, title);
+    }
+
+    @Override
+    public void registerEvents() {
+        new CompletionEvents1_12_R1();
     }
 
 }

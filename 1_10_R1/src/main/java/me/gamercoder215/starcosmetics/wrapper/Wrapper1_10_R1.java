@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Wrapper1_10_R1 implements Wrapper {
+public final class Wrapper1_10_R1 implements Wrapper {
 
     @Override
     public int getCommandVersion() {
