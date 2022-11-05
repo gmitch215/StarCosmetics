@@ -1,7 +1,7 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
-import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.ChatColor;
@@ -22,15 +22,16 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
 public final class MaterialSelector {
 
-    private static final Wrapper w = Constants.w;
+    private static final Wrapper w = getWrapper();
     
     private MaterialSelector() { throw new UnsupportedOperationException(); }
 
     public static void chooseSound(@NotNull Player p, Consumer<Sound> clickAction) {
-        StarInventory inv = w.createInventory("choose:sound_inv", 54, get("gui.choose.sound"));
+        StarInventory inv = Generator.genGUI("choose:sound_inv", 54, get("gui.choose.sound"));
         inv.setCancelled();
         inv.setAttribute("chosen_action", clickAction);
 
@@ -58,7 +59,7 @@ public final class MaterialSelector {
             items.add(item);
         }
 
-        Map<Integer, List<ItemStack>> rows = StarInventoryUtil.generateRows(items);
+        Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
         inv.setAttribute("rows", rows);
         StarInventoryUtil.setRows(inv, rows);
         StarInventoryUtil.setScrolls(inv);
@@ -67,7 +68,7 @@ public final class MaterialSelector {
     }
 
     public static void chooseEvent(@NotNull Player p, Consumer<Class<? extends Event>> clickAction) {
-        StarInventory inv = w.createInventory("choose:event_inv", 54, get("gui.choose.event"));
+        StarInventory inv = Generator.genGUI("choose:event_inv", 54, get("gui.choose.event"));
         inv.setCancelled();
         inv.setAttribute("chosen_action", clickAction);
 
@@ -95,7 +96,7 @@ public final class MaterialSelector {
             items.add(item);
         }
 
-        Map<Integer, List<ItemStack>> rows = StarInventoryUtil.generateRows(items);
+        Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
         inv.setAttribute("rows", rows);
         StarInventoryUtil.setRows(inv, rows);
         StarInventoryUtil.setScrolls(inv);
