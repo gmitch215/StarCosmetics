@@ -88,7 +88,7 @@ public enum Rarity {
     @Override
     @NotNull
     public String toString() {
-        return prefix;
+        return prefix + ChatColor.BOLD + name();
     }
 
     /**
