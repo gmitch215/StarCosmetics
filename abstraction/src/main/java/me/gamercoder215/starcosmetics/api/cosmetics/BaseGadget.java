@@ -2,8 +2,8 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -14,7 +14,9 @@ public enum BaseGadget implements Gadget {
     CLICK_GADGET
     ;
 
-    BaseGadget() {}
+    BaseGadget() {
+        Constants.PARENTS.add(this);
+    }
 
     @Override
     public String getNamespace() {
@@ -23,7 +25,7 @@ public enum BaseGadget implements Gadget {
 
     @Override
     public String getDisplayName() {
-        return StarConfig.getConfig().get("cosmetic.gadget" + getNamespace());
+        return StarConfig.getConfig().get("cosmetic.gadget." + getNamespace());
     }
 
     @Override

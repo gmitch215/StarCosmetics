@@ -4,6 +4,8 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
+import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -22,10 +24,11 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.util.Constants.r;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
 @SuppressWarnings("unchecked")
 public final class BaseTrail<T> implements Trail<T> {
+
+    public static final Wrapper w = Wrapper.getWrapper();
     
     public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile_trail", Object.class, TrailType.PROJECTILE, Material.ARROW, (en, cloc) -> {
         if (!(en instanceof Projectile)) return;
@@ -58,7 +61,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         return;
                     }
                     
-                    for (Player pl : p.getWorld().getPlayers()) getWrapper().spawnFakeItem(pl, item, p.getLocation(), 10);
+                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeItem(pl, item, p.getLocation(), 10);
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
         }
@@ -74,7 +77,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         return;
                     }
 
-                    for (Player pl : p.getWorld().getPlayers()) getWrapper().spawnFakeEntity(pl, type, p.getLocation(), 10);
+                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeEntity(pl, type, p.getLocation(), 10);
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 6, 6);
         }
@@ -98,7 +101,7 @@ public final class BaseTrail<T> implements Trail<T> {
 
                         for (Player pl : p.getWorld().getPlayers()) {
                             ItemStack item = items.get(r.nextInt(items.size()));
-                            getWrapper().spawnFakeItem(pl, item, p.getLocation(), 10);
+                            w.spawnFakeItem(pl, item, p.getLocation(), 10);
                         }
                     }
                 }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
@@ -111,7 +114,7 @@ public final class BaseTrail<T> implements Trail<T> {
             String type = (String) o;
             switch (type.toLowerCase()) {
                 case "riptide": {
-                    getWrapper().attachRiptide(p);
+                    w.attachRiptide(p);
                     break;
                 }
             }
@@ -173,7 +176,7 @@ public final class BaseTrail<T> implements Trail<T> {
 
         if (o instanceof Material || o instanceof ItemStack) {
             ItemStack item = o instanceof Material ? new ItemStack((Material) o) : (ItemStack) o;
-            for (Player pl : e.getWorld().getPlayers()) getWrapper().spawnFakeItem(pl, item, loc, 5);
+            for (Player pl : e.getWorld().getPlayers()) w.spawnFakeItem(pl, item, loc, 5);
         }
     });
 
@@ -212,16 +215,17 @@ public final class BaseTrail<T> implements Trail<T> {
         this.type = type;
         this.name = name;
 
+        Constants.PARENTS.add(this);
     }
 
     @Override
     public String getNamespace() {
-        return "trail";
+        return "trail:" + name;
     } 
 
     @Override
     public String getDisplayName() {
-        return StarConfig.getConfig().get("cosmetics.trails." + name.toLowerCase());
+        return StarConfig.getConfig().get("cosmetics.trail." + name.toLowerCase());
     }
 
     @Override
