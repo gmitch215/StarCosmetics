@@ -1,12 +1,11 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
-import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
@@ -16,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -29,15 +29,18 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 public class StarInventoryUtil {
 
-    private static final Wrapper w = Constants.w;
+    private static final Wrapper w = getWrapper();
 
     @NotNull
     public static Material toMaterial(@NotNull Class<? extends Event> eventClass) {
@@ -68,14 +71,8 @@ public class StarInventoryUtil {
         String n = s.name();
         Material chosen = null;
 
-        for (Material m : Arrays.stream(Material.values()).filter(w::isItem).collect(Collectors.toList())) {
-            if (n.equals(m.name())) return m; // Takes Absolute Priority
-
-            if (n.contains(m.name())) {
-                chosen = m;
-                break;
-            }
-        }
+        for (Material m : Arrays.stream(Material.values()).filter(w::isItem).collect(Collectors.toList()))
+            if (n.equals(m.name()) || n.contains(m.name())) return m; // Takes Absolute Priority
 
         if (chosen == null && n.startsWith("ENTITY")) chosen = StarMaterial.POPPY.find();
         if (chosen == null && n.contains("GENERIC")) chosen = Material.LEATHER_CHESTPLATE;
@@ -111,7 +108,8 @@ public class StarInventoryUtil {
         return n;
     }
 
-    public static void setScrolls(Inventory inv) {
+    public static void setScrolls(StarInventory inv) {
+        inv.setAttribute("row_count", 0);
         int size = inv.getSize();
 
         ItemStack up = getHead("arrow_up");
@@ -120,7 +118,6 @@ public class StarInventoryUtil {
         up.setItemMeta(uMeta);
         NBTWrapper uNBT = NBTWrapper.of(up);
         uNBT.setID("scroll_up");
-        uNBT.set("row", 0);
         up = uNBT.getItem();
         inv.setItem(26 - (54 - size), up);
 
@@ -130,7 +127,6 @@ public class StarInventoryUtil {
         down.setItemMeta(dMeta);
         NBTWrapper dNBT = NBTWrapper.of(down);
         dNBT.setID("scroll_down");
-        dNBT.set("up_item", 26 - (54 - size));
         down = dNBT.getItem();
         inv.setItem(35 - (54 - size), down);
     }
@@ -161,11 +157,6 @@ public class StarInventoryUtil {
         return null;
     }
 
-    @NotNull
-    public static Map<Integer, List<ItemStack>> generateRows(ItemStack... items) {
-        return generateRows(Arrays.asList(items));
-    }
-
     public static void setRows(Inventory inv, Map<Integer, List<ItemStack>> rows) {
         setRows(inv, rows, 0);
     }
@@ -174,16 +165,19 @@ public class StarInventoryUtil {
         int limit = (inv.getSize() - 18) / 9;
         if (limit < 1) return;
 
-        int startRow = Math.min(start, 0);
+        int startR = Math.max(start, 0);
 
-        for (int i = startRow; i < Math.min(rows.size(), limit + startRow); i++) {
+        AtomicInteger index = new AtomicInteger();
+        for (int i = startR; i < Math.min(rows.size(), limit + startR); i++) {
             List<ItemStack> row = rows.get(i);
             if (row.isEmpty() || row.size() > 7) throw new IllegalArgumentException("Unexpected row size: " + row.size() + " (" + i + ")");
 
             for (int j = 0; j < row.size(); j++) {
-                int slot = ((i + 1) * 9) + j + 1;
+                int slot = ((index.get() + 1) * 9) + j + 1;
                 inv.setItem(slot, row.get(j));
             }
+
+            index.incrementAndGet();
         }
     }
 
@@ -194,45 +188,71 @@ public class StarInventoryUtil {
         meta.setDisplayName(ChatColor.GOLD + c.getDisplayName());
         item.setItemMeta(meta);
         NBTWrapper nbt = of(item);
-        nbt.setID("cosmetic:selection:" + c.getNamespace());
+        nbt.setID("cosmetic:selection");
+        nbt.set("cosmetic", c.getNamespace());
+        nbt.set("display", c.getDisplayName());
+
+        if (c instanceof Trail<?>) nbt.set("trail_type", ((Trail<?>) c).getType().name());
         item = nbt.getItem();
 
         return item;
     }
 
     @NotNull
-    public static ItemStack toItemStack(@NotNull CosmeticLocation<?> loc) {
-        final Material type;
-        final String name;
-        Object input = loc.getInput();
+    public static String toInputString(@NotNull Object input) {
+        if (input instanceof Enum<?>) {
+            Enum<?> e = (Enum<?>) input;
+            return WordUtils.capitalizeFully(e.name().replace("_", " "));
+        }
 
-        if (input instanceof Material) {
-            Material m = (Material) input;
-            type = m;
-            name = WordUtils.capitalizeFully(m.name().replace("_", " "));
+        if (input instanceof Collection<?>) {
+            Collection<?> c = (Collection<?>) input;
+            if (c.isEmpty()) throw new IllegalArgumentException("Empty Input List");
+
+            return toInputString(c.stream().findFirst().orElse(null));
         }
-        else if (input instanceof Particle) {
-            Particle p = (Particle) input;
-            type = toMaterial(p);
-            name = WordUtils.capitalizeFully(p.name().replace("_", " "));
+
+        if (input instanceof String) {
+            String s = input.toString();
+            if (s.startsWith("fancy_item:")) return WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
         }
-        else if (input instanceof EntityType) {
-            EntityType e = (EntityType) input;
-            type = toMaterial(e);
-            name = WordUtils.capitalizeFully(e.name().replace("_", " "));
+
+        throw new IllegalArgumentException("Unexpected input type: " + input + " (" + input.getClass().getName() + ")");
+    }
+
+    @NotNull
+    public static Material toInputMaterial(@NotNull Object input) {
+        if (input instanceof Material) return (Material) input;
+        if (input instanceof Particle) return toMaterial((Particle) input);
+        if (input instanceof EntityType) return toMaterial((EntityType) input);
+        if (input instanceof Sound) return toMaterial((Sound) input);
+        if (input instanceof Collection<?>) {
+            Collection<?> c = (Collection<?>) input;
+            if (c.isEmpty()) throw new IllegalArgumentException("Empty Input List");
+
+            return toInputMaterial(c.stream().findFirst().orElse(null));
         }
-        else if (input instanceof Sound) {
-            Sound s = (Sound) input;
-            type = toMaterial(s);
-            name = getFriendlyName(s);
+
+        if (input instanceof String) {
+            String s = input.toString();
+            if (s.startsWith("fancy_item")) return Material.matchMaterial(s.split(":")[1]);
         }
-        else throw new IllegalArgumentException("Unexpected input type: " + input + " (" + input.getClass().getName() + ")");
+
+        throw new IllegalArgumentException("Unexpected input type: " + input + " (" + input.getClass().getName() + ")");
+    }
+
+    @NotNull
+    public static ItemStack toItemStack(@NotNull CosmeticLocation<?> loc) {
+        Object input = loc.getInput();
+        String name = toInputString(input);
+        Material type = toInputMaterial(input);
 
         ItemStack item = new ItemStack(type);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + name);
         List<String> lore = new ArrayList<>();
         lore.add(loc.getRarity().toString());
+
         if (!loc.getRarity().isSecret()) {
             lore.add(" ");
             lore.addAll(Arrays.stream(
@@ -270,6 +290,22 @@ public class StarInventoryUtil {
         if (m == null) m = Material.APPLE;
 
         return m;
+    }
+
+    public static void setBack(@NotNull StarInventory inv, @NotNull Consumer<Player> action) {
+        int size = inv.getSize();
+
+        ItemStack back = getHead("arrow_left");
+        ItemMeta meta = back.getItemMeta();
+        meta.setDisplayName(ChatColor.RED + get("constants.back"));
+        back.setItemMeta(meta);
+
+        NBTWrapper nbt = of(back);
+        nbt.setID("back");
+        back = nbt.getItem();
+
+        inv.setItem(size - 5, back);
+        inv.setAttribute("back_inventory_action", action);
     }
 
     @NotNull
@@ -371,29 +407,6 @@ public class StarInventoryUtil {
         }
 
         return Material.CLAY_BALL;
-    }
-
-    @NotNull
-    public static Map<Integer, List<ItemStack>> generateRows(Iterable<ItemStack> it) {
-        Map<Integer, List<ItemStack>> map = new HashMap<>();
-        List<ItemStack> list = ImmutableList.copyOf(it);
-        if (list.size() == 0) return map;
-
-        int size = list.size();
-
-        if (size < 7) {
-            map.put(0, list);
-            return map;
-        } else {
-            int rows = size / 7;
-            int remainder = size % 7;
-
-            for (int i = 0; i < rows; i++) map.put(i, list.subList(i * 7, (i + 1) * 7));
-
-            if (remainder != 0) map.put(rows, list.subList(rows * 7, rows * 7 + remainder));
-        }
-
-        return map;
     }
 
     @SafeVarargs
