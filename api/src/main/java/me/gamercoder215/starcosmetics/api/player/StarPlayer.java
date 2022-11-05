@@ -45,7 +45,7 @@ public final class StarPlayer {
 
         this.configF = new File(folder, "config.yml");
         if (!configF.exists()) try { configF.createNewFile(); } catch (IOException e) { StarConfig.print(e); }
-        this.config = YamlConfiguration.loadConfiguration(folder);
+        this.config = YamlConfiguration.loadConfiguration(configF);
         checkMain();
 
         this.soundF = new File(folder, "sounds.yml");
@@ -55,6 +55,12 @@ public final class StarPlayer {
 
     private void checkMain() {
         if (!config.isString("name")) config.set("name", player.getName());
+
+        if (!config.isConfigurationSection("completions")) config.createSection("completions");
+        if (!config.isConfigurationSection("settings")) config.createSection("settings");
+
+        if (!config.isConfigurationSection("cosmetics")) config.createSection("cosmetics");
+        if (!config.isConfigurationSection("cosmetics.trails")) config.createSection("cosmetics.trails");
 
         try {
             config.save(configF);
@@ -118,7 +124,6 @@ public final class StarPlayer {
      */
     public void setCompleted(@NotNull Completion c, boolean b) {
         if (c == null) return;
-        if (!config.isConfigurationSection("completions")) config.createSection("completions");
 
         config.set("completions." + c.getKey(), b);
         try { config.save(folder); } catch (IOException e) { StarConfig.print(e); }
@@ -131,6 +136,7 @@ public final class StarPlayer {
     public void sendNotification(@Nullable String message) {
         if (message == null) return;
         if (!getSetting(PlayerSetting.NOTIFICATIONS)) return;
+        if (!player.isOnline()) return;
         if (!player.isOnline()) return;
 
         player.getPlayer().sendMessage(message);
@@ -164,7 +170,6 @@ public final class StarPlayer {
      */
     public boolean getSetting(@NotNull PlayerSetting setting, boolean def) {
         if (setting == null) return false;
-        if (!config.isConfigurationSection("settings")) config.createSection("settings");
 
         return config.getBoolean("settings." + setting.name().toLowerCase(), def);
     }
@@ -176,8 +181,6 @@ public final class StarPlayer {
      * @return true if enabled, false otherwise
      */
     public boolean setSetting(@NotNull PlayerSetting setting, boolean b) {
-        if (!config.isConfigurationSection("settings")) config.createSection("settings");
-
         config.set("settings." + setting.name().toLowerCase(), b);
         save();
 
@@ -194,11 +197,6 @@ public final class StarPlayer {
         if (clazz == null) return null;
         if (Cosmetic.class.equals(clazz) || Trail.class.equals(clazz)) return null;
 
-        if (!config.isConfigurationSection("cosmetics")) {
-            config.createSection("cosmetics");
-            return null;
-        }
-
         String path = "cosmetics." + clazz.getSimpleName().toLowerCase();
 
         return CosmeticLocation.getByFullKey(config.getString(path, null));
@@ -211,18 +209,8 @@ public final class StarPlayer {
      */
     public @Nullable CosmeticLocation<?> getSelectedTrail(@NotNull TrailType type) {
         if (type == null) return null;
-        if (!config.isConfigurationSection("cosmetics")) {
-            config.createSection("cosmetics");
-            return null;
-        }
-
-        if (!config.isConfigurationSection("cosmetics.trails")) {
-            config.createSection("cosmetics.trails");
-            return null;
-        }
 
         String path = "cosmetics.trails." + type.name().toLowerCase();
-
         return CosmeticLocation.getByFullKey(config.getString(path, null));
     }
 
@@ -233,8 +221,6 @@ public final class StarPlayer {
      */
     public void setSelectedTrail(@NotNull TrailType type, @Nullable CosmeticLocation<?> cosmetic) {
         if (type == null) return;
-        if (!config.isConfigurationSection("cosmetics")) config.createSection("cosmetics");
-        if (!config.isConfigurationSection("cosmetics.trails")) config.createSection("cosmetics.trails");
 
         String path = "cosmetics.trails." + type.name().toLowerCase();
 
@@ -253,7 +239,6 @@ public final class StarPlayer {
         if (clazz == null || loc == null) return;
         if (Cosmetic.class.equals(clazz)) return;
 
-        if (!config.isConfigurationSection("cosmetics")) config.createSection("cosmetics");
         String path = "cosmetics." + clazz.getSimpleName().toLowerCase();
 
         config.set(path, loc.getFullKey());
