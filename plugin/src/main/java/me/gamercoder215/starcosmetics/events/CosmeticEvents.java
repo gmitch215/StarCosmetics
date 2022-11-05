@@ -10,7 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public final class CosmeticEvents implements Listener {
     
@@ -33,6 +35,12 @@ public final class CosmeticEvents implements Listener {
 
         CosmeticLocation<?> sProj = sp.getSelectedTrail(TrailType.PROJECTILE_SOUND);
         if (sProj != null) ((Trail<?>) sProj.getParent()).run(en, sProj);
+    }
+
+    @EventHandler
+    public void onHit(ProjectileHitEvent e) {
+        Projectile en = e.getEntity();
+        en.setMetadata("stopped", new FixedMetadataValue(plugin, true));
     }
 
 }
