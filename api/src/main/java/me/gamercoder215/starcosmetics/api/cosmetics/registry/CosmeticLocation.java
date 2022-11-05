@@ -58,7 +58,7 @@ public interface CosmeticLocation<T> {
      */
     @NotNull
     default String getFullKey() {
-        return getNamespace() + ":" + getKey();
+        return getNamespace() + "::" + getKey();
     }
 
     /**
