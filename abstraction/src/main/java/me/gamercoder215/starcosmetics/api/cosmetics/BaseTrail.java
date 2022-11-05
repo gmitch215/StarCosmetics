@@ -24,6 +24,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.util.Constants.r;
+import static me.gamercoder215.starcosmetics.util.entity.StarSelector.isStopped;
 
 @SuppressWarnings("unchecked")
 public final class BaseTrail<T> implements Trail<T> {
@@ -41,7 +42,7 @@ public final class BaseTrail<T> implements Trail<T> {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
+                    if (isStopped(p)) {
                         cancel();
                         return;
                     }
@@ -56,12 +57,12 @@ public final class BaseTrail<T> implements Trail<T> {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
+                    if (isStopped(p)) {
                         cancel();
                         return;
                     }
                     
-                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeItem(pl, item, p.getLocation(), 10);
+                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeItem(pl, item, p.getLocation(), 100);
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
         }
@@ -72,7 +73,7 @@ public final class BaseTrail<T> implements Trail<T> {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
+                    if (isStopped(p)) {
                         cancel();
                         return;
                     }
@@ -94,7 +95,7 @@ public final class BaseTrail<T> implements Trail<T> {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
+                        if (isStopped(p)) {
                             cancel();
                             return;
                         }
