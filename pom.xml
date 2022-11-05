@@ -94,6 +94,11 @@
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
         <repository>
+            <id>placeholderapi</id>
+            <name>PlaceholderAPI Repository</name>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
             <id>jitpack</id>
             <name>JitPack</name>
             <url>https://jitpack.io</url>
