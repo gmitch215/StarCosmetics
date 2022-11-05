@@ -1,6 +1,5 @@
 package me.gamercoder215.starcosmetics.util;
 
-import com.google.common.collect.ImmutableList;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
@@ -9,10 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
@@ -54,7 +50,7 @@ public final class Generator {
     public static StarInventory createSelectionInventory(List<? extends CosmeticLocation<?>> it, @NotNull String display) {
         StarInventory inv = genGUI(54, display);
 
-        Map<Integer, List<ItemStack>> rows = generateRows(ImmutableList.copyOf(it)
+        Map<Integer, List<ItemStack>> rows = generateRows(it
                 .stream()
                 .map(StarInventoryUtil::toItemStack)
                 .collect(Collectors.toList()));
@@ -67,9 +63,14 @@ public final class Generator {
     }
 
     @NotNull
-    public static Map<Integer, List<ItemStack>> generateRows(Iterable<ItemStack> it) {
+    public static Map<Integer, List<ItemStack>> generateRows(@NotNull Collection<ItemStack> col) {
         Map<Integer, List<ItemStack>> map = new HashMap<>();
-        List<ItemStack> list = ImmutableList.copyOf(it);
+        List<ItemStack> list = col
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(m -> getWrapper().isItem(m.getType()))
+                .collect(Collectors.toList());
+
         if (list.size() == 0) return map;
 
         int size = list.size();

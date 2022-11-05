@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -162,22 +161,16 @@ public class StarInventoryUtil {
     }
 
     public static void setRows(Inventory inv, Map<Integer, List<ItemStack>> rows, int start) {
-        int limit = (inv.getSize() - 18) / 9;
-        if (limit < 1) return;
+        for (int i = 0; i < 4; i++) {
+            List<ItemStack> row = rows.get(i + start);
+            if (row == null || row.isEmpty()) continue;
 
-        int startR = Math.max(start, 0);
+            for (int j = 0; j < 7; j++) {
+                ItemStack item = j > row.size() - 1 ? new ItemStack(Material.AIR) : row.get(j);
+                if (item == null) continue;
 
-        AtomicInteger index = new AtomicInteger();
-        for (int i = startR; i < Math.min(rows.size(), limit + startR); i++) {
-            List<ItemStack> row = rows.get(i);
-            if (row.isEmpty() || row.size() > 7) throw new IllegalArgumentException("Unexpected row size: " + row.size() + " (" + i + ")");
-
-            for (int j = 0; j < row.size(); j++) {
-                int slot = ((index.get() + 1) * 9) + j + 1;
-                inv.setItem(slot, row.get(j));
+                inv.setItem((i + 1) * 9 + j + 1, item);
             }
-
-            index.incrementAndGet();
         }
     }
 

@@ -79,7 +79,7 @@ public final class ClickEvents implements Listener {
                 int row = inv.getAttribute("row_count", Integer.class);
                 Map<Integer, List<ItemStack>> rows = inv.getAttribute("rows", Map.class);
 
-                if (row >= rows.size() - 1) {
+                if (row >= rows.size() - 4) {
                     StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
                     return;
                 }
