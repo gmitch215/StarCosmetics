@@ -115,7 +115,8 @@ public final class CompletionCriteria {
             int count = 0;
             for (Material m : materials) count += p.getStatistic(Statistic.MINE_BLOCK, m);
             return count >= amount;
-        }, "criteria.amount.mined.list." + materials.size(), amount, materials.toArray());
+        }, "criteria.amount.mined.list." + materials.size(), amount, materials.stream()
+                .map(m -> WordUtils.capitalizeFully(m.name().replace("_", " "))).toArray());
     }
 
     /**
@@ -192,7 +193,8 @@ public final class CompletionCriteria {
             int count = 0;
             for (Material m : materials) count += p.getStatistic(Statistic.CRAFT_ITEM, m);
             return count == amount;
-        },"criteria.amount.crafted.list." + materials.size(), amount, materials.toArray());
+        },"criteria.amount.crafted.list." + materials.size(), amount, materials.stream()
+                .map(m -> WordUtils.capitalizeFully(m.name().replace("_", " "))).toArray());
     }
 
     private static Statistic getPlayStatistic() {
