@@ -1,6 +1,5 @@
 package me.gamercoder215.starcosmetics;
 
-import com.avaje.ebean.validation.NotNull;
 import com.google.common.collect.ImmutableList;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
@@ -10,6 +9,7 @@ import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
 import me.gamercoder215.starcosmetics.events.CompletionEvents;
 import me.gamercoder215.starcosmetics.events.CosmeticEvents;
+import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
@@ -22,24 +22,25 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Firework;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getCosmeticSelections;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
-@SuppressWarnings("unchecked")
 public final class StarCosmetics extends JavaPlugin implements StarConfig, CosmeticRegistry {
 
-    private static final Wrapper w = Wrapper.getWrapper();
+    private static final Wrapper w = getWrapper();
+
+    public static CommandWrapper cw;
 
     private boolean checkCompatible() {
         if (!Wrapper.isCompatible()) {
-            getLogger().severe("StarCosmetics is not compatible with: " + Bukkit.getBukkitVersion());
+            getLogger().severe("StarCosmetics is not compatible with: " + Bukkit.getBukkitVersion() + " (Expected Wrapper" + Wrapper.getServerVersion() + ")");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
@@ -51,6 +52,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         new ClickEvents(this);
         new CompletionEvents(this);
         new CosmeticEvents(this);
+
+        w.registerEvents();
     }
 
     private static FileConfiguration config;
@@ -68,7 +71,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         getLogger().info("Loaded Files...");
 
         registerEvents();
-        getCommandWrapper();
+        cw = getCommandWrapper();
         SERIALIZABLE.forEach(ConfigurationSerialization::registerClass);
         getLogger().info("Loaded Classes...");
 
@@ -140,7 +143,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         }
 
         try {
-            return (CommandWrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.CommandWrapperV" + cmdV)
+            return (CommandWrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapperV" + cmdV)
                     .getConstructor(Plugin.class)
                     .newInstance(StarConfig.getPlugin());
         } catch (ReflectiveOperationException e) {
@@ -155,15 +158,44 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     @Override
     @NotNull
-    public <T extends Cosmetic> List<CosmeticLocation<? extends T>> getAllFor(Class<T> parentClass) {
-        List<CosmeticLocation<? extends T>> locs = new ArrayList<>();
+    public List<CosmeticLocation<?>> getAllFor(Class<? extends Cosmetic> parentClass) {
+        List<CosmeticLocation<?>> locs = new ArrayList<>();
         if (parentClass == null) return locs;
 
         Map<Cosmetic, List<CosmeticSelection<?>>> selections = getCosmeticSelections().getAllSelections();
         for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
-            if (parentClass.isInstance(entry.getKey())) for (CosmeticLocation<?> loc : entry.getValue()) 
-                    locs.add((CosmeticLocation<T>) loc);
+            if (parentClass.isInstance(entry.getKey())) locs.addAll(entry.getValue());
 
         return locs;
+    }
+
+    @Override
+    public @NotNull List<CosmeticLocation<?>> getAllFor(@Nullable Cosmetic parent) {
+        List<CosmeticLocation<?>> locs = new ArrayList<>();
+        if (parent == null) return locs;
+
+        Map<Cosmetic, List<CosmeticSelection<?>>> selections = getCosmeticSelections().getAllSelections();
+        for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
+            if (entry.getKey().getNamespace().equals(parent.getNamespace())) locs.addAll(entry.getValue());
+
+        locs.sort(Comparator.comparing(CosmeticLocation::getRarity));
+
+        return locs;
+    }
+
+
+    @Override
+    public List<Cosmetic> getAllParents() {
+        return Constants.PARENTS;
+    }
+
+    @Override
+    public Cosmetic getByNamespace(@NotNull String key) {
+        if (key == null) return null;
+        return Constants.PARENTS
+                .stream()
+                .filter(c -> c.getNamespace().equalsIgnoreCase(key))
+                .findFirst()
+                .orElse(null);
     }
 }
