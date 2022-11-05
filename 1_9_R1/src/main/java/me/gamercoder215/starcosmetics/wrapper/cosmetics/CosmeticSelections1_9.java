@@ -11,6 +11,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
@@ -63,7 +64,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromMined(310, Material.REDSTONE_ORE), Rarity.UNCOMMON))
             .add(new TrailSelection("super_gold", BaseTrail.PROJECTILE_TRAIL, Material.GOLD_BLOCK,
                     CompletionCriteria.fromMined(255, Material.GOLD_ORE), Rarity.UNCOMMON))
-            .add(new TrailSelection("ender_eye", BaseTrail.PROJECTILE_TRAIL, Material.EYE_OF_ENDER,
+            .add(new TrailSelection("ender_eye", BaseTrail.PROJECTILE_TRAIL, StarMaterial.ENDER_EYE.find(),
                     CompletionCriteria.fromKilled(250, EntityType.ENDERMAN), Rarity.UNCOMMON))
             .add(new TrailSelection("nether_brick", BaseTrail.PROJECTILE_TRAIL, Material.NETHER_BRICK,
                     CompletionCriteria.fromMined(500, Material.NETHERRACK), Rarity.UNCOMMON))
@@ -136,7 +137,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
     // Sound Trails
 
     private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new TrailSelection("slime", BaseTrail.SOUND_TRAIL, Sound.BLOCK_SLIME_PLACE,
+            .add(new TrailSelection("slime", BaseTrail.SOUND_TRAIL, StarSound.BLOCK_SLIME_PLACE.find(),
                     CompletionCriteria.fromKilled(100, EntityType.SLIME), Rarity.OCCASIONAL))
             .add(new TrailSelection("anvil", BaseTrail.SOUND_TRAIL, Sound.BLOCK_ANVIL_PLACE,
                     CompletionCriteria.fromKilled(30, EntityType.IRON_GOLEM), Rarity.OCCASIONAL))
@@ -161,7 +162,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> CLICK_GADGETS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(GadgetSelection.builder(PlayerInteractEvent.class)
                     .info("firework", CompletionCriteria.fromKilled(60, EntityType.CREEPER), Rarity.COMMON)
-                    .item(Material.FIREWORK)
+                    .item(StarMaterial.FIREWORK_ROCKET.find())
                     .action(e -> {
                         Player p = e.getPlayer();
 
