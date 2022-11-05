@@ -43,7 +43,7 @@ public interface StarConfig {
      * @param t Throwable to print.
      */
     static void print(@NotNull Throwable t) {
-        getLogger().severe(t.getClass().getSimpleName());
+        getLogger().severe(t.getCause() == null ? t.getClass().getSimpleName() : t.getClass().getSimpleName() + " : " + t.getCause().getClass().getSimpleName());
         getLogger().severe("--------------------------");
         getLogger().severe(t.getMessage());
         for (StackTraceElement s : t.getStackTrace()) getLogger().severe(s.toString());
@@ -79,7 +79,7 @@ public interface StarConfig {
      */
     @NotNull
     static Logger getLogger() {
-        if (Bukkit.getServer() == null) return Logger.getLogger("StarCosmetics");
+        if (Bukkit.getServer() == null || getPlugin() == null) return Logger.getLogger("StarCosmetics");
 
         return getPlugin().getLogger();
     }
