@@ -1,10 +1,11 @@
 package me.gamercoder215.starcosmetics.wrapper.nbt;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
-import me.gamercoder215.starcosmetics.util.Constants;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
+
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
 public abstract class NBTWrapper {
 
@@ -21,7 +22,7 @@ public abstract class NBTWrapper {
     }
 
     public static NBTWrapper of(ItemStack item) {
-        return Constants.w.getNBTWrapper(item);
+        return getWrapper().getNBTWrapper(item);
     }
 
     public final void setID(String value) {
@@ -33,6 +34,8 @@ public abstract class NBTWrapper {
     }
 
     public final boolean hasID() { return getID() != null && !getID().isEmpty(); }
+
+    public final boolean hasString(String key) { return getString(key) != null && !getString(key).isEmpty(); }
 
     public abstract String getString(String key);
 
