@@ -2,17 +2,22 @@ package me.gamercoder215.starcosmetics.events;
 
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.StarCosmetics;
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
-import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
+import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
+import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -23,24 +28,27 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static me.gamercoder215.starcosmetics.StarCosmetics.cw;
+import static me.gamercoder215.starcosmetics.util.Generator.genGUI;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 @SuppressWarnings("unchecked")
 public final class ClickEvents implements Listener {
 
-    private final StarCosmetics plugin;
-    private static final Wrapper w = Constants.w;
+    private static StarCosmetics plugin;
+    private static final Wrapper w = getWrapper();
 
     public ClickEvents(StarCosmetics plugin) {
-        this.plugin = plugin;
+        ClickEvents.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
@@ -49,27 +57,26 @@ public final class ClickEvents implements Listener {
                 Player p = (Player) e.getWhoClicked();
                 ItemStack item = e.getCurrentItem();
 
-                NBTWrapper nbt = of(item);
-                int row = nbt.getInt("row");
+                int row = inv.getAttribute("row_count", Integer.class);
+                Map<Integer, List<ItemStack>> rows = inv.getAttribute("rows", Map.class);
+
                 if (row == 0) {
                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
                    return;
                 }
 
                 int newRow = row - 1;
-                nbt.set("row", newRow);
-                inv.setItem(e.getSlot(), nbt.getItem());
+                inv.setAttribute("row_count", newRow);
 
-                Map<Integer, List<ItemStack>> rows = inv.getAttribute("rows", Map.class);
                 StarInventoryUtil.setRows(inv, rows, newRow);
+                p.updateInventory();
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
             })
             .put("scroll_down", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
                 ItemStack item = e.getCurrentItem();
 
-                NBTWrapper nbt = of(item);
-                int row = nbt.getInt("row");
+                int row = inv.getAttribute("row_count", Integer.class);
                 Map<Integer, List<ItemStack>> rows = inv.getAttribute("rows", Map.class);
 
                 if (row >= rows.size() - 1) {
@@ -78,11 +85,25 @@ public final class ClickEvents implements Listener {
                 }
 
                 int newRow = row + 1;
-                nbt.set("row", newRow);
-                inv.setItem(e.getSlot(), nbt.getItem());
+                inv.setAttribute("row_count", newRow);
 
                 StarInventoryUtil.setRows(inv, rows, newRow);
+                p.updateInventory();
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("back", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                Consumer<Player> backAction = inv.getAttribute("back_inventory_action", Consumer.class);
+                boolean sound = inv.getAttribute("back_inventory_sound", true, Boolean.class);
+                if (backAction == null) return;
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        backAction.accept(p);
+                        if (sound) StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    }
+                }.runTask(plugin);
             })
             .put("cosmetic:selection:parent", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
@@ -92,25 +113,73 @@ public final class ClickEvents implements Listener {
 
                 int size = parent.getChildren().size() > 7 ? 45 : 27;
 
-                StarInventory parentInv = w.createInventory("cosmetics_menu:" + parent.name(), size, get("menu.cosmetics." + parent.name().toLowerCase()));
+                StarInventory parentInv = genGUI("cosmetics_menu:" + parent.name(), size, get("menu.cosmetics." + parent.name().toLowerCase()));
                 List<Integer> places = StarInventoryUtil.getGUIPlacements(size, parent.getChildren().size());
 
                 for (int i = 0; i < parent.getChildren().size(); i++) {
                     Cosmetic c = parent.getChildren().get(i);
                     int place = places.get(i);
-
-                    ItemStack cItem = new ItemStack(c.getIcon());
-                    ItemMeta meta = cItem.getItemMeta();
-                    meta.setDisplayName(ChatColor.YELLOW + c.getDisplayName());
-                    cItem.setItemMeta(meta);
-
-                    NBTWrapper nbt = of(cItem);
-                    nbt.setID("cosmetic:selection:" + c.getNamespace());
-                    cItem = nbt.getItem();
-                    inv.setItem(place, cItem);
+                    ItemStack cItem = StarInventoryUtil.toItemStack(c);
+                    parentInv.setItem(place, cItem);
                 }
 
+                StarInventoryUtil.setBack(parentInv, cw::cosmetics);
+                inv.setAttribute("selection_back", (Consumer<Player>) pl -> pl.openInventory(parentInv));
+                inv.setAttribute("back_inventory_sound", false);
+
                 p.openInventory(parentInv);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("choose:cosmetic", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+                CosmeticLocation<?> loc = nbt.getCosmeticLocation("location");
+
+                CompletionCriteria c = loc.getCompletionCriteria();
+
+                if (!c.getCriteria().test(p)) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    p.sendMessage(c.getDisplayMessage());
+                    return;
+                }
+
+                StarPlayer sp = new StarPlayer(p);
+
+                if (Trail.class.isAssignableFrom(loc.getParent().getClass()))
+                    sp.setSelectedTrail(TrailType.valueOf(inv.getAttribute("trail_type", String.class)), loc);
+                else sp.setSelectedCosmetic(loc.getParent().getClass(), loc);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("cosmetic:selection", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+                Cosmetic c = plugin.getByNamespace(nbt.getString("cosmetic"));
+                String display = nbt.getString("display");
+
+                List<CosmeticLocation<?>> selections = plugin.getAllFor(c);
+                StarInventory sel = Generator.createSelectionInventory(selections, display);
+
+                if (inv.hasAttribute("selection_back"))
+                    StarInventoryUtil.setBack(sel, inv.getAttribute("selection_back", Consumer.class));
+                else {
+                    StarInventoryUtil.setBack(sel, cw::cosmetics);
+                    sel.setAttribute("back_inventory_sound", false);
+                }
+
+                if (nbt.hasString("trail_type")) sel.setAttribute("trail_type", nbt.getString("trail_type"));
+
+                p.openInventory(sel);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("cosmetic:selection:custom", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+
+                List<CosmeticSelection<?>> selections = inv.getAttribute("collections:custom", List.class);
+                StarInventory shapeInv = Generator.createSelectionInventory(selections, get(inv.getAttribute("items_display", String.class)));
+                p.openInventory(shapeInv);
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             })
 
