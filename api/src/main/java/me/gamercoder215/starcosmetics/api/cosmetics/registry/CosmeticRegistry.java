@@ -14,19 +14,42 @@ public interface CosmeticRegistry {
     /**
      * Fetches a list of Locations for a specific Cosmetic.
      * @param parentClass Parent Cosmetic Class
-     * @param <T> Parent Cosmetic Class Type
      * @return List of Cosmetic Locations
      */
     @NotNull
-    <T extends Cosmetic> List<CosmeticLocation<? extends T>> getAllFor(@Nullable Class<T> parentClass);
+    List<CosmeticLocation<?>> getAllFor(@Nullable Class<? extends Cosmetic> parentClass);
+
+    /**
+     * Fetches a list of Locations for a specific Cosmetic.
+     * @param parent Parent Cosmetic
+     * @return List of Cosmetic Locations
+     */
+    @NotNull
+    List<CosmeticLocation<?>> getAllFor(@Nullable Cosmetic parent);
 
     /**
      * Fetches a list of all registered CosmeticLocations.
+     *
      * @return List of Cosmetic Locations
      */
     @NotNull
-    default List<CosmeticLocation<? extends Cosmetic>> getAllCosmetics() {
+    default List<CosmeticLocation<?>> getAllCosmetics() {
         return getAllFor(Cosmetic.class);
     }
+
+    /**
+     * Fetches a list of all registered Cosmetic Parents.
+     * @return List of Registered Cosmetic Parents
+     */
+    @NotNull
+    List<Cosmetic> getAllParents();
+
+    /**
+     * Fetches a Cosmetic by its namespace.
+     * @param key Cosmetic Namespace
+     * @return Cosmetic Parent
+     */
+    @Nullable
+    Cosmetic getByNamespace(@NotNull String key);
 
 }
