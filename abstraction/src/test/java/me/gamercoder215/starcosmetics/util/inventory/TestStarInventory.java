@@ -1,9 +1,11 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
+import org.bukkit.Color;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
@@ -11,6 +13,8 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("unchecked")
 public class TestStarInventory {
+
+    private static final SecureRandom r = new SecureRandom();
 
     @Test
     @DisplayName("Test Set Attribute")
@@ -44,6 +48,12 @@ public class TestStarInventory {
 
         Assertions.assertEquals(inv.getAttribute("map"), new HashMap<>());
         Assertions.assertEquals(inv.getAttribute("list"), new ArrayList<>());
+    }
+
+    @Test
+    @DisplayName("Test Random Colors")
+    public void testRandomColors() {
+        for (int i = 0; i < 100; i++) Color.fromRGB(r.nextInt(16777216));
     }
 
 }
