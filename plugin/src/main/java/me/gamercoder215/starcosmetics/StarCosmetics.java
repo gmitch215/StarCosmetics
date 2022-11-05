@@ -9,6 +9,7 @@ import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
 import me.gamercoder215.starcosmetics.events.CompletionEvents;
 import me.gamercoder215.starcosmetics.events.CosmeticEvents;
+import me.gamercoder215.starcosmetics.placeholders.StarPlaceholders;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getCosmeticSelections;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
@@ -75,6 +77,9 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         SERIALIZABLE.forEach(ConfigurationSerialization::registerClass);
         getLogger().info("Loaded Classes...");
 
+        loadPlaceholders();
+        getLogger().info("Loaded Addons...");
+
         getLogger().info("Done!");
     }
 
@@ -107,6 +112,14 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         } catch (IOException e) {
             print(e);
             return "Unknown Value";
+        }
+    }
+
+    private void loadPlaceholders() {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            getLogger().info("Placeholder API Found! Hooking...");
+            new StarPlaceholders(this);
+            getLogger().info("Hooked into Placeholder API!");
         }
     }
 
@@ -161,6 +174,13 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     public List<CosmeticLocation<?>> getAllFor(Class<? extends Cosmetic> parentClass) {
         List<CosmeticLocation<?>> locs = new ArrayList<>();
         if (parentClass == null) return locs;
+
+        if (Cosmetic.class.equals(parentClass))
+            return getCosmeticSelections().getAllSelections()
+                    .entrySet()
+                    .stream()
+                    .flatMap(e -> e.getValue().stream())
+                    .collect(Collectors.toList());
 
         Map<Cosmetic, List<CosmeticSelection<?>>> selections = getCosmeticSelections().getAllSelections();
         for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
