@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.events.CompletionEvents1_12_R1;
+import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_13_R1;
@@ -82,7 +83,7 @@ public final class Wrapper1_13_R1 implements Wrapper {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (en.isDead() || !en.isValid() || en.hasMetadata("stopped")) {
+                if (StarSelector.isStopped(en)) {
                     cancel();
                     return;
                 }
@@ -95,6 +96,7 @@ public final class Wrapper1_13_R1 implements Wrapper {
 
     @Override
     public boolean isItem(org.bukkit.Material m) {
+        if (m == org.bukkit.Material.AIR) return false;
         return m.isItem();
     }
 
