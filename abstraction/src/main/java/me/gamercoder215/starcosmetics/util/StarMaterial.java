@@ -48,7 +48,11 @@ public enum StarMaterial {
 
     FIREWORK_STAR("firework_charge"),
 
-    OBSERVER(Material.OBSIDIAN)
+    OBSERVER(Material.OBSIDIAN),
+
+    ENDER_EYE("eye_of_ender"),
+
+    FIREWORK_ROCKET("firework")
     ;
 
     private final Material defaultV;

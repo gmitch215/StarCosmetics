@@ -18,7 +18,8 @@ public enum StarSound {
     BLOCK_ANVIL_USE("ANVIL_USE"),
     ENTITY_ENDERMAN_TELEPORT("ENDERMAN_TELEPORT", "ENTITY_ENDERMEN_TELEPORT"),
     BLOCK_CHEST_OPEN("CHEST_OPEN", "ENTITY_CHEST_OPEN"),
-    ITEM_BOOK_PAGE_TURN
+    ITEM_BOOK_PAGE_TURN,
+    BLOCK_SLIME_PLACE("block_slime_block_place")
     ;
 
     private final List<String> sounds = new ArrayList<>();
