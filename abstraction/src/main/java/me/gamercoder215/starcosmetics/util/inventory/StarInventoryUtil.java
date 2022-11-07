@@ -9,7 +9,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -208,6 +208,8 @@ public class StarInventoryUtil {
         if (input instanceof String) {
             String s = input.toString();
             if (s.startsWith("fancy_item:")) return WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
+
+            return WordUtils.capitalizeFully(s);
         }
 
         throw new IllegalArgumentException("Unexpected input type: " + input + " (" + input.getClass().getName() + ")");
@@ -229,6 +231,10 @@ public class StarInventoryUtil {
         if (input instanceof String) {
             String s = input.toString();
             if (s.startsWith("fancy_item")) return Material.matchMaterial(s.split(":")[1]);
+
+            switch (s.toLowerCase()) {
+                case "riptide": return Material.matchMaterial("TRIDENT");
+            }
         }
 
         throw new IllegalArgumentException("Unexpected input type: " + input + " (" + input.getClass().getName() + ")");
