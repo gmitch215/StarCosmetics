@@ -8,7 +8,7 @@ public final class StarSelector {
     private StarSelector() { throw new UnsupportedOperationException(); }
 
     public static boolean isStopped(@NotNull Entity en) {
-        return en.isDead() || !en.isValid() || en.hasMetadata("stopped");
+        return en.isOnGround() || en.isDead() || !en.isValid() || en.hasMetadata("stopped");
     }
 
 }
