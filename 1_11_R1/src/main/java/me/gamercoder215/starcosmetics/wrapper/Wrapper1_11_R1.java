@@ -53,19 +53,16 @@ public final class Wrapper1_11_R1 implements Wrapper {
 
     @Override
     public void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks) {
-        CraftWorld cw = (CraftWorld) loc.getWorld();
+        WorldServer ws = ((CraftWorld) loc.getWorld()).getHandle();
         EntityPlayer sp = ((CraftPlayer) p).getHandle();
-        EntityItem nmsEntity = new EntityItem(cw.getHandle(), loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
+        EntityItem nmsEntity = new EntityItem(ws, loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
         nmsEntity.s();
-
-        PacketPlayOutSpawnEntity add = new PacketPlayOutSpawnEntity(nmsEntity, 0);
-        sp.playerConnection.sendPacket(add);
+        ws.addEntity(nmsEntity);
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                PacketPlayOutEntityDestroy remove = new PacketPlayOutEntityDestroy(nmsEntity.getId());
-                sp.playerConnection.sendPacket(remove);
+                nmsEntity.Q();
             }
         }.runTaskLater(StarConfig.getPlugin(), deathTicks);
     }
