@@ -2,6 +2,8 @@ package me.gamercoder215.starcosmetics.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.gamercoder215.starcosmetics.StarCosmetics;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +22,10 @@ public class StarPlaceholders extends PlaceholderExpansion {
         register();
     }
 
-    private static final Map<String, Function<OfflinePlayer, String>> OFFLINE_PH = new HashMap<String, Function<OfflinePlayer, String>>() {{
-        put("name", OfflinePlayer::getName);
+    private static final Map<String, Function<StarPlayer, String>> OFFLINE_PH = new HashMap<String, Function<StarPlayer, String>>() {{
+        put("name", StarPlayer::getName);
+        put("uuid", p -> p.getUniqueId().toString());
+        put("projectile_trail", p -> p.getSelectedTrail(TrailType.PROJECTILE).getFullKey());
     }};
 
     @Override
@@ -48,7 +52,7 @@ public class StarPlaceholders extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer p, String arg) {
-        if (OFFLINE_PH.containsKey(arg)) return OFFLINE_PH.get(arg).apply(p);
+        if (OFFLINE_PH.containsKey(arg)) return OFFLINE_PH.get(arg).apply(new StarPlayer(p));
         return null;
     }
 
