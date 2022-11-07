@@ -30,11 +30,12 @@ import static me.gamercoder215.starcosmetics.util.entity.StarSelector.isStopped;
 public final class BaseTrail<T> implements Trail<T> {
 
     public static final Wrapper w = Wrapper.getWrapper();
+
+    private static final double DEFAULT_OFFSET = 0.2;
     
-    public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile_trail", Object.class, TrailType.PROJECTILE, Material.ARROW, (en, cloc) -> {
+    public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile", Object.class, TrailType.PROJECTILE, Material.ARROW, (en, cloc) -> {
         if (!(en instanceof Projectile)) return;
         Projectile p = (Projectile) en;
-        Location loc = p.getLocation();
         Object o = cloc.getInput();
 
         if (o instanceof Particle) {
@@ -47,9 +48,9 @@ public final class BaseTrail<T> implements Trail<T> {
                         return;
                     }
 
-                    p.getWorld().spawnParticle(part, loc, 1, 0, 0, 0, 0);
+                    p.getWorld().spawnParticle(part, p.getLocation(), 3, DEFAULT_OFFSET, DEFAULT_OFFSET, DEFAULT_OFFSET, 0);
                 }
-            }.runTaskTimer(StarConfig.getPlugin(), 2, 3);
+            }.runTaskTimer(StarConfig.getPlugin(), 2, 1);
         }
 
         if (o instanceof Material || o instanceof ItemStack) {
@@ -62,9 +63,9 @@ public final class BaseTrail<T> implements Trail<T> {
                         return;
                     }
                     
-                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeItem(pl, item, p.getLocation(), 100);
+                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeItem(pl, item, p.getLocation(), 5);
                 }
-            }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
+            }.runTaskTimer(StarConfig.getPlugin(), 5, 2);
         }
 
         if (o instanceof EntityType) {
@@ -164,7 +165,7 @@ public final class BaseTrail<T> implements Trail<T> {
         }
     });
 
-    public static final BaseTrail<Object> GROUND_TRAIL = new BaseTrail<>("ground_trail", Object.class, TrailType.GROUND, Material.STONE, (e, cloc) -> {
+    public static final BaseTrail<Object> GROUND_TRAIL = new BaseTrail<>("ground", Object.class, TrailType.GROUND, Material.STONE, (e, cloc) -> {
         if (!(e instanceof Player)) return;
         Player p = (Player) e;
         Location loc = p.getLocation().add(0, 0.1, 0);
@@ -181,7 +182,7 @@ public final class BaseTrail<T> implements Trail<T> {
         }
     });
 
-    public static final BaseTrail<Sound> SOUND_TRAIL = new BaseTrail<>("sound_trail", Sound.class, TrailType.PROJECTILE_SOUND, Material.JUKEBOX, (e, cloc) -> {
+    public static final BaseTrail<Sound> SOUND_TRAIL = new BaseTrail<>("sound", Sound.class, TrailType.PROJECTILE_SOUND, Material.JUKEBOX, (e, cloc) -> {
         Object o = cloc.getInput();
         if (!(o instanceof Sound)) return;
         Sound sound = (Sound) o;
@@ -192,7 +193,7 @@ public final class BaseTrail<T> implements Trail<T> {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
+                if (isStopped(p)) {
                     cancel();
                     return;
                 }
@@ -200,6 +201,7 @@ public final class BaseTrail<T> implements Trail<T> {
                 p.getWorld().playSound(p.getLocation(), sound, r.nextInt(2) + 3, 1);
             }
         }.runTaskTimer(StarConfig.getPlugin(), 2, 2);
+
         e.getWorld().playSound(e.getLocation(), sound, 1, 1);
     });
 
@@ -221,7 +223,7 @@ public final class BaseTrail<T> implements Trail<T> {
 
     @Override
     public String getNamespace() {
-        return "trail:" + name;
+        return "trail/" + name;
     } 
 
     @Override
