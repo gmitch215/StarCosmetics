@@ -52,7 +52,7 @@ public enum BaseShape implements ParticleShape {
 
     @Override
     public String getNamespace() {
-        return "shape:" + name().toLowerCase();
+        return "shape/" + name().toLowerCase();
     }
 
     @Override
