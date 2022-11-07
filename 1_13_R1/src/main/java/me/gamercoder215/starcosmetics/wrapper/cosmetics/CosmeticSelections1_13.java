@@ -44,6 +44,9 @@ public class CosmeticSelections1_13 implements CosmeticSelections {
             .add(new TrailSelection("scutes", BaseTrail.PROJECTILE_TRAIL, Material.SCUTE,
                     CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 500), Rarity.EPIC))
 
+            .add(new TrailSelection("riptide", BaseTrail.PROJECTILE_TRAIL, "riptide",
+                    CompletionCriteria.fromKilled(1000, EntityType.DROWNED), Rarity.LEGENDARY))
+
             .add(new TrailSelection("notch_apple", BaseTrail.PROJECTILE_TRAIL, Material.ENCHANTED_GOLDEN_APPLE,
                     CompletionCriteria.fromKilled(150, EntityType.WITHER), Rarity.MYTHICAL))
             
