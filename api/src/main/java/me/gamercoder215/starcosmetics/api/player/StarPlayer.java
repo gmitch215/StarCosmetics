@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents a player used by StarCosmetics to manage their configuration.
@@ -46,27 +47,10 @@ public final class StarPlayer {
         this.configF = new File(folder, "config.yml");
         if (!configF.exists()) try { configF.createNewFile(); } catch (IOException e) { StarConfig.print(e); }
         this.config = YamlConfiguration.loadConfiguration(configF);
-        checkMain();
 
         this.soundF = new File(folder, "sounds.yml");
         if (!soundF.exists()) try { soundF.createNewFile(); } catch (IOException e) { StarConfig.print(e); }
         this.sounds = YamlConfiguration.loadConfiguration(soundF);
-    }
-
-    private void checkMain() {
-        if (!config.isString("name")) config.set("name", player.getName());
-
-        if (!config.isConfigurationSection("completions")) config.createSection("completions");
-        if (!config.isConfigurationSection("settings")) config.createSection("settings");
-
-        if (!config.isConfigurationSection("cosmetics")) config.createSection("cosmetics");
-        if (!config.isConfigurationSection("cosmetics.trails")) config.createSection("cosmetics.trails");
-
-        try {
-            config.save(configF);
-        } catch (IOException e) {
-            StarConfig.print(e);
-        }
     }
 
     /**
@@ -77,6 +61,20 @@ public final class StarPlayer {
     public OfflinePlayer getPlayer() {
         return player;
     }
+
+    /**
+     * Fetches the player's name.
+     * @return Player Name
+     */
+    @NotNull
+    public String getName() { return player.getName(); }
+
+    /**
+     * Fetches the player's UUID.
+     * @return Player UUID
+     */
+    @NotNull
+    public UUID getUniqueId() { return player.getUniqueId(); }
 
     /**
      * Fetches the Folder this player's configuration files are stored in.
