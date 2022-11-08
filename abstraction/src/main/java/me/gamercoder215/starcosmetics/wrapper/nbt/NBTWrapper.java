@@ -25,6 +25,12 @@ public abstract class NBTWrapper {
         return getWrapper().getNBTWrapper(item);
     }
 
+    public static ItemStack setID(ItemStack item, String id) {
+        NBTWrapper nbt = of(item);
+        nbt.setID(id);
+        return nbt.getItem();
+    }
+
     public final void setID(String value) {
         set("id", value);
     }
