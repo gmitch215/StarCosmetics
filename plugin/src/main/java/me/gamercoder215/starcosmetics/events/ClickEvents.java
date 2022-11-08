@@ -91,7 +91,36 @@ public final class ClickEvents implements Listener {
                 p.updateInventory();
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             })
-            .put("back", (inv, e) -> {
+            .put("next_page", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+
+                List<StarInventory> pages = inv.getAttribute("pages", List.class);
+                int page = inv.getAttribute("page", Integer.class);
+
+                if (page >= pages.size() - 1) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                p.openInventory(pages.get(page + 1));
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("previous_page", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+
+                List<StarInventory> pages = inv.getAttribute("pages", List.class);
+                int page = inv.getAttribute("current_page", Integer.class);
+
+                if (page == 0) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                p.openInventory(pages.get(page - 1));
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+            }).put("back", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
                 Consumer<Player> backAction = inv.getAttribute("back_inventory_action", Consumer.class);
                 boolean sound = inv.getAttribute("back_inventory_sound", true, Boolean.class);
@@ -159,18 +188,20 @@ public final class ClickEvents implements Listener {
                 String display = nbt.getString("display");
 
                 List<CosmeticLocation<?>> selections = plugin.getAllFor(c);
-                StarInventory sel = Generator.createSelectionInventory(selections, display);
+                List<StarInventory> invs = Generator.createSelectionInventory(selections, display);
 
-                if (inv.hasAttribute("selection_back"))
-                    StarInventoryUtil.setBack(sel, inv.getAttribute("selection_back", Consumer.class));
-                else {
-                    StarInventoryUtil.setBack(sel, cw::cosmetics);
-                    sel.setAttribute("back_inventory_sound", false);
+                for (StarInventory sel : invs) {
+                    if (inv.hasAttribute("selection_back"))
+                        StarInventoryUtil.setBack(sel, inv.getAttribute("selection_back", Consumer.class));
+                    else {
+                        StarInventoryUtil.setBack(sel, cw::cosmetics);
+                        sel.setAttribute("back_inventory_sound", false);
+                    }
+
+                    if (nbt.hasString("trail_type")) sel.setAttribute("trail_type", nbt.getString("trail_type"));
                 }
 
-                if (nbt.hasString("trail_type")) sel.setAttribute("trail_type", nbt.getString("trail_type"));
-
-                p.openInventory(sel);
+                p.openInventory(invs.get(0));
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             })
             .put("cosmetic:selection:custom", (inv, e) -> {
@@ -178,8 +209,9 @@ public final class ClickEvents implements Listener {
                 ItemStack item = e.getCurrentItem();
 
                 List<CosmeticSelection<?>> selections = inv.getAttribute("collections:custom", List.class);
-                StarInventory shapeInv = Generator.createSelectionInventory(selections, get(inv.getAttribute("items_display", String.class)));
-                p.openInventory(shapeInv);
+                List<StarInventory> shapeInv = Generator.createSelectionInventory(selections, get(inv.getAttribute("items_display", String.class)));
+                p.openInventory(shapeInv.get(0));
+
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             })
 

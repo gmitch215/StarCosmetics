@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.util;
 
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
@@ -47,19 +48,27 @@ public final class Generator {
     }
 
     @NotNull
-    public static StarInventory createSelectionInventory(List<? extends CosmeticLocation<?>> it, @NotNull String display) {
-        StarInventory inv = genGUI(54, display);
+    public static List<StarInventory> createSelectionInventory(List<? extends CosmeticLocation<?>> it, @NotNull String display) {
+        List<StarInventory> pages = generatePages(it);
 
-        Map<Integer, List<ItemStack>> rows = generateRows(it
-                .stream()
-                .map(StarInventoryUtil::toItemStack)
-                .collect(Collectors.toList()));
+        for (int i = 0; i < pages.size(); i++) {
+            StarInventory inv = pages.get(i);
+            Rarity current = inv.getAttribute("rarity", Rarity.class);
 
-        inv.setAttribute("rows", rows);
-        StarInventoryUtil.setRows(inv, rows);
-        StarInventoryUtil.setScrolls(inv);
+            Map<Integer, List<ItemStack>> rows = generateRows(it
+                    .stream()
+                    .filter(c -> c.getRarity() == current)
+                    .map(StarInventoryUtil::toItemStack)
+                    .collect(Collectors.toList()));
 
-        return inv;
+            inv.setAttribute("rows", rows);
+            StarInventoryUtil.setRows(inv, rows);
+            StarInventoryUtil.setScrolls(inv);
+        }
+
+        StarInventoryUtil.setPages(pages);
+
+        return pages;
     }
 
     @NotNull
@@ -88,5 +97,26 @@ public final class Generator {
         }
 
         return map;
+    }
+
+    public static List<StarInventory> generatePages(Collection<? extends CosmeticLocation<?>> locs) {
+        List<StarInventory> pages = new ArrayList<>();
+
+        Map<Rarity, StarInventory> rarityPages = new HashMap<>();
+        locs.forEach(loc -> {
+            StarInventory page = rarityPages.get(loc.getRarity());
+            if (page == null) {
+                page = genGUI(54, loc.getParent().getDisplayName() + " | " + loc.getRarity());
+                rarityPages.put(loc.getRarity(), page);
+                page.setAttribute("rarity", loc.getRarity());
+            }
+
+            page.addItem(StarInventoryUtil.toItemStack(loc));
+        });
+
+        // TODO: Fix Rarity Order
+        rarityPages.forEach((r, inv) -> pages.add(Math.min(r.ordinal(), pages.size()), inv));
+
+        return pages;
     }
 }

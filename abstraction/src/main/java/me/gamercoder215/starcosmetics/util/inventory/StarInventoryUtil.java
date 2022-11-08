@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -305,6 +306,34 @@ public class StarInventoryUtil {
 
         inv.setItem(size - 5, back);
         inv.setAttribute("back_inventory_action", action);
+    }
+
+    public static void setPages(@NotNull List<StarInventory> pages) {
+        AtomicInteger index = new AtomicInteger(0);
+        pages.forEach(inv -> {
+            inv.setAttribute("pages", pages);
+            inv.setAttribute("current_page", index.getAndIncrement());
+        });
+
+        ItemStack prev = getHead("arrow_left_gray");
+        ItemMeta pMeta = prev.getItemMeta();
+        pMeta.setDisplayName(get("constants.previous_page"));
+        prev.setItemMeta(pMeta);
+        prev = NBTWrapper.setID(prev, "previous_page");
+
+        ItemStack next = getHead("arrow_right_gray");
+        ItemMeta nMeta = next.getItemMeta();
+        nMeta.setDisplayName(get("constants.next_page"));
+        next.setItemMeta(nMeta);
+        next = NBTWrapper.setID(next, "next_page");
+
+        for (int i = 0; i < pages.size(); i++) {
+            StarInventory page = pages.get(i);
+            page.setAttribute("page", i);
+
+            if (i > 0) page.setItem(47, prev);
+            if (i < pages.size() - 1) page.setItem(51, next);
+        }
     }
 
     @NotNull
