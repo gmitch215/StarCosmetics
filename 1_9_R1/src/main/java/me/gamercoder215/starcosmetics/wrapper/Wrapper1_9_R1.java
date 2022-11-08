@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_9_R1;
 import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
@@ -69,6 +70,14 @@ public final class Wrapper1_9_R1 implements Wrapper {
     @Override
     public void attachRiptide(org.bukkit.entity.Entity en) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
+        Entity nms = ((CraftEntity) en).getHandle();
+
+        nms.yaw = yaw % 360.0F;
+        nms.pitch = pitch % 360.0F;
     }
 
     @Override

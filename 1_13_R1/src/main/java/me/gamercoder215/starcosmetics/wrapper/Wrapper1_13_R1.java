@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
@@ -157,6 +158,14 @@ public final class Wrapper1_13_R1 implements Wrapper {
                 }
             }
         }.runTaskTimer(StarConfig.getPlugin(), 0, 2);
+    }
+
+    @Override
+    public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
+        Entity nms = ((CraftEntity) en).getHandle();
+
+        nms.yaw = yaw % 360.0F;
+        nms.pitch = pitch % 360.0F;
     }
 
     @Override

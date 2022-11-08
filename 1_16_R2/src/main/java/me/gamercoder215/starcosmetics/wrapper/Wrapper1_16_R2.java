@@ -166,6 +166,11 @@ public final class Wrapper1_16_R2 implements Wrapper {
     }
 
     @Override
+    public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
+        en.setRotation(yaw, pitch);
+    }
+
+    @Override
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_16_R2(key, size, title);
     }

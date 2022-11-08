@@ -125,6 +125,8 @@ public interface Wrapper {
 
     void attachRiptide(Entity en);
 
+    void setRotation(Entity en, float yaw, float pitch);
+
     // Other Utilities
 
 }

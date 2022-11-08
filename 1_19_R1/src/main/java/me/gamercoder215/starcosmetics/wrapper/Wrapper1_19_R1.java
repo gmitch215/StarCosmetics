@@ -176,6 +176,11 @@ public final class Wrapper1_19_R1 implements Wrapper {
     }
 
     @Override
+    public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
+        en.setRotation(yaw, pitch);
+    }
+
+    @Override
     public boolean isItem(org.bukkit.Material m) {
         if (m == org.bukkit.Material.AIR) return false;
         return m.isItem();

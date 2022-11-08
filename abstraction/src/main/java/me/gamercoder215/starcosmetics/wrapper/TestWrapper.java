@@ -41,4 +41,7 @@ public class TestWrapper implements Wrapper {
 
     @Override
     public void attachRiptide(Entity en) {}
+
+    @Override
+    public void setRotation(Entity en, float yaw, float pitch) {}
 }

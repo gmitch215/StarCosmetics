@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
@@ -70,6 +71,14 @@ public final class Wrapper1_9_R2 implements Wrapper {
     @Override
     public void attachRiptide(org.bukkit.entity.Entity en) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
+        Entity nms = ((CraftEntity) en).getHandle();
+
+        nms.yaw = yaw % 360.0F;
+        nms.pitch = pitch % 360.0F;
     }
 
     @Override

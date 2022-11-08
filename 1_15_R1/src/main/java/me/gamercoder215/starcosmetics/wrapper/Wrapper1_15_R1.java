@@ -164,6 +164,12 @@ public final class Wrapper1_15_R1 implements Wrapper {
             }
         }.runTaskTimer(StarConfig.getPlugin(), 0, 2);
     }
+
+    @Override
+    public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
+        en.setRotation(yaw, pitch);
+    }
+
     @Override
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_15_R1(key, size, title);

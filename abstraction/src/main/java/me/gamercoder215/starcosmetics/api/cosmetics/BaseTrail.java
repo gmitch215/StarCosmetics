@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,6 +33,26 @@ public final class BaseTrail<T> implements Trail<T> {
     public static final Wrapper w = Wrapper.getWrapper();
 
     private static final double DEFAULT_OFFSET = 0.2;
+
+    private static double normalize(float rot) {
+        float v = rot;
+        while (v < -180.0F) v += 360.0F;
+        while (v >= 180.0F) v -= 360.0F;
+        return Math.toRadians(v);
+    }
+
+    private static Vector fromYawPitch(float yaw, float pitch) {
+        Vector v = new Vector();
+
+        v.setY(-Math.sin(Math.toRadians(pitch)));
+
+        double xz = Math.cos(Math.toRadians(pitch));
+
+        v.setX(-xz * Math.sin(Math.toRadians(yaw)));
+        v.setZ(xz * Math.cos(Math.toRadians(yaw)));
+
+        return v;
+    }
     
     public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile", Object.class, TrailType.PROJECTILE, Material.ARROW, (en, cloc) -> {
         if (!(en instanceof Projectile)) return;
@@ -113,8 +134,8 @@ public final class BaseTrail<T> implements Trail<T> {
         // Custom Trails
 
         if (o instanceof String) {
-            String type = (String) o;
-            switch (type.toLowerCase()) {
+            String str = (String) o;
+            switch (str.toLowerCase()) {
                 case "riptide": {
                     w.attachRiptide(p);
                     break;
@@ -122,32 +143,41 @@ public final class BaseTrail<T> implements Trail<T> {
             }
 
             // Custom Trails with Input
-            if (type.contains(":")) {
-                type = type.split(":")[0];
-                String input = type.split(":")[1];
+            if (str.contains(":")) {
+                String type = str.split(":")[0];
+                String input = str.split(":")[1];
                 switch (type) {
                     case "fancy_item": {
-                        Material m = Material.getMaterial(input);
+                        Material m = Material.matchMaterial(input);
                         ItemStack item = new ItemStack(m);
                         
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (p.isDead() || !p.isValid() || p.hasMetadata("stopped")) {
+                                if (StarSelector.isStopped(en)) {
                                     cancel();
                                     return;
                                 }
+
+                                Location spawn = p.getLocation().subtract(0, 1, 0).setDirection(new Vector(0, 0, 0));
                                 
-                                // TODO: Fix Location for right arm aligned with projectile
-                                ArmorStand as = p.getWorld().spawn(p.getLocation(), ArmorStand.class);
+                                ArmorStand as = p.getWorld().spawn(spawn, ArmorStand.class);
                                 as.setInvulnerable(true);
+                                as.setBasePlate(false);
                                 as.setVisible(false);
                                 as.setArms(true);
                                 as.setMarker(true);
+                                w.setRotation(as, 90.0F, 90.0F);
 
-                                Vector dir = p.getLocation().getDirection();
-                                
-                                as.setRightArmPose(new EulerAngle(dir.getX(), dir.getY(), dir.getZ()));
+                                Location l = p.getLocation();
+
+                                EulerAngle angle = new EulerAngle(
+                                        normalize(l.getPitch() + 170.0F),
+                                        0,
+                                        normalize(-l.getYaw())
+                                );
+
+                                as.setRightArmPose(angle);
                                 as.getEquipment().setItemInMainHand(item);
 
                                 new BukkitRunnable() {
@@ -155,9 +185,9 @@ public final class BaseTrail<T> implements Trail<T> {
                                     public void run() {
                                         as.remove();
                                     }
-                                }.runTaskLater(StarConfig.getPlugin(), 8);
-                        }
-                        }.runTaskTimer(StarConfig.getPlugin(), 5, 8);
+                                }.runTaskLater(StarConfig.getPlugin(), 4);
+                            }
+                        }.runTaskTimer(StarConfig.getPlugin(), 5, 1);
                         break;
                     }
                 }
