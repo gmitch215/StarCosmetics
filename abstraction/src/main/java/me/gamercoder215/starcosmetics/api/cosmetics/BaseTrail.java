@@ -40,19 +40,6 @@ public final class BaseTrail<T> implements Trail<T> {
         while (v >= 180.0F) v -= 360.0F;
         return Math.toRadians(v);
     }
-
-    private static Vector fromYawPitch(float yaw, float pitch) {
-        Vector v = new Vector();
-
-        v.setY(-Math.sin(Math.toRadians(pitch)));
-
-        double xz = Math.cos(Math.toRadians(pitch));
-
-        v.setX(-xz * Math.sin(Math.toRadians(yaw)));
-        v.setZ(xz * Math.cos(Math.toRadians(yaw)));
-
-        return v;
-    }
     
     public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile", Object.class, TrailType.PROJECTILE, Material.ARROW, (en, cloc) -> {
         if (!(en instanceof Projectile)) return;

@@ -114,8 +114,9 @@ public final class Generator {
             page.addItem(StarInventoryUtil.toItemStack(loc));
         });
 
-        // TODO: Fix Rarity Order
-        rarityPages.forEach((r, inv) -> pages.add(Math.min(r.ordinal(), pages.size()), inv));
+        rarityPages.forEach((r, inv) -> pages.add(inv));
+
+        pages.sort(Comparator.comparing(inv -> inv.getAttribute("rarity", Rarity.class)));
 
         return pages;
     }
