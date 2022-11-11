@@ -55,7 +55,6 @@ public final class ClickEvents implements Listener {
     private static final Map<String, BiConsumer<StarInventory, InventoryClickEvent>> CLICK_ITEMS = ImmutableMap.<String, BiConsumer<StarInventory, InventoryClickEvent>>builder()
             .put("scroll_up", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
-                ItemStack item = e.getCurrentItem();
 
                 int row = inv.getAttribute("row_count", Integer.class);
                 Map<Integer, List<ItemStack>> rows = inv.getAttribute("rows", Map.class);
@@ -74,7 +73,6 @@ public final class ClickEvents implements Listener {
             })
             .put("scroll_down", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
-                ItemStack item = e.getCurrentItem();
 
                 int row = inv.getAttribute("row_count", Integer.class);
                 Map<Integer, List<ItemStack>> rows = inv.getAttribute("rows", Map.class);
@@ -93,8 +91,7 @@ public final class ClickEvents implements Listener {
             })
             .put("next_page", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
-                ItemStack item = e.getCurrentItem();
-
+            
                 List<StarInventory> pages = inv.getAttribute("pages", List.class);
                 int page = inv.getAttribute("page", Integer.class);
 
@@ -108,7 +105,6 @@ public final class ClickEvents implements Listener {
             })
             .put("previous_page", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
-                ItemStack item = e.getCurrentItem();
 
                 List<StarInventory> pages = inv.getAttribute("pages", List.class);
                 int page = inv.getAttribute("current_page", Integer.class);
@@ -206,7 +202,6 @@ public final class ClickEvents implements Listener {
             })
             .put("cosmetic:selection:custom", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
-                ItemStack item = e.getCurrentItem();
 
                 List<CosmeticSelection<?>> selections = inv.getAttribute("collections:custom", List.class);
                 List<StarInventory> shapeInv = Generator.createSelectionInventory(selections, get(inv.getAttribute("items_display", String.class)));
