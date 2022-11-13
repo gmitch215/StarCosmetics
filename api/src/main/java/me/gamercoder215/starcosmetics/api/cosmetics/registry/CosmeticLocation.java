@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +25,16 @@ public interface CosmeticLocation<T> {
     }
 
     /**
+     * Whether this Player has unlocked this cosmetic.
+     * @param p Player to test
+     * @return true if unlocked, else false
+     */
+    default boolean isUnlocked(@NotNull Player p) {
+        if (p == null) return false;
+        return getCompletionCriteria().getCriteria().test(p);
+    }
+
+    /**
      * Fetches the key of this cosmetic location.
      * @return Cosmetic Location Key
      */
@@ -31,11 +42,24 @@ public interface CosmeticLocation<T> {
     String getKey();
 
     /**
+     * Fetches the display name of this cosmetic location.
+     * @return Cosmetic Location Display Name
+     */
+    @NotNull
+    String getDisplayName();
+
+    /**
      * Fetches the parent of this cosmetic location.
      * @return Parent Cosmetic
      */
     @NotNull
     Cosmetic getParent();
+
+    /**
+     * Fetches the class of {@link #getParent()}.
+     * @return Parent Cosmetic Class
+     */
+    Class<? extends Cosmetic> getParentClass();
 
     /**
      * Fetches the rarity of this CosmeticLocation.
