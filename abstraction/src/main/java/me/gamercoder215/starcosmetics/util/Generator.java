@@ -5,7 +5,10 @@ import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,17 +51,16 @@ public final class Generator {
     }
 
     @NotNull
-    public static List<StarInventory> createSelectionInventory(List<? extends CosmeticLocation<?>> it, @NotNull String display) {
-        List<StarInventory> pages = generatePages(it);
+    public static List<StarInventory> createSelectionInventory(Player p, List<? extends CosmeticLocation<?>> it, @NotNull String display) {
+        List<StarInventory> pages = generatePages(p, it, display);
 
-        for (int i = 0; i < pages.size(); i++) {
-            StarInventory inv = pages.get(i);
+        for (StarInventory inv : pages) {
             Rarity current = inv.getAttribute("rarity", Rarity.class);
 
             Map<Integer, List<ItemStack>> rows = generateRows(it
                     .stream()
                     .filter(c -> c.getRarity() == current)
-                    .map(StarInventoryUtil::toItemStack)
+                    .map(loc -> StarInventoryUtil.toItemStack(p, loc))
                     .collect(Collectors.toList()));
 
             inv.setAttribute("rows", rows);
@@ -99,19 +101,24 @@ public final class Generator {
         return map;
     }
 
-    public static List<StarInventory> generatePages(Collection<? extends CosmeticLocation<?>> locs) {
+    public static List<StarInventory> generatePages(Player p, Collection<? extends CosmeticLocation<?>> locs) {
+        Optional<? extends CosmeticLocation<?>> o = locs.stream().findFirst();
+        return o.map(cosmeticLocation -> generatePages(p, locs, cosmeticLocation.getParent().getDisplayName())).orElseGet(ArrayList::new);
+    }
+
+    public static List<StarInventory> generatePages(Player p, Collection<? extends CosmeticLocation<?>> locs, String display) {
         List<StarInventory> pages = new ArrayList<>();
 
         Map<Rarity, StarInventory> rarityPages = new HashMap<>();
         locs.forEach(loc -> {
             StarInventory page = rarityPages.get(loc.getRarity());
             if (page == null) {
-                page = genGUI(54, loc.getParent().getDisplayName() + " | " + loc.getRarity());
+                page = genGUI(54, display + " | " + loc.getRarity());
                 rarityPages.put(loc.getRarity(), page);
                 page.setAttribute("rarity", loc.getRarity());
             }
 
-            page.addItem(StarInventoryUtil.toItemStack(loc));
+            page.addItem(StarInventoryUtil.toItemStack(p, loc));
         });
 
         rarityPages.forEach((r, inv) -> pages.add(inv));
@@ -119,5 +126,15 @@ public final class Generator {
         pages.sort(Comparator.comparing(inv -> inv.getAttribute("rarity", Rarity.class)));
 
         return pages;
+    }
+
+    public static ItemStack generateHead(OfflinePlayer p) {
+        ItemStack head = StarMaterial.PLAYER_HEAD.findStack();
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        meta.setDisplayName(p.getName());
+        meta.setOwner(p.getName());
+        head.setItemMeta(meta);
+
+        return head;
     }
 }

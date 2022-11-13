@@ -6,7 +6,9 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.apache.commons.lang3.text.WordUtils;
@@ -18,6 +20,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -194,6 +197,14 @@ public class StarInventoryUtil {
 
     @NotNull
     public static String toInputString(@NotNull Object input) {
+        if (input instanceof Sound || input instanceof StarSound) {
+            Sound s = input instanceof StarSound ? ((StarSound) input).find() : (Sound) input;
+            String n = s.name();
+            return WordUtils.capitalizeFully(n.split("_")[0])
+                    + " - "
+                    + WordUtils.capitalizeFully(n.substring(n.indexOf("_") + 1).replace("_", " "));
+        }
+
         if (input instanceof Enum<?>) {
             Enum<?> e = (Enum<?>) input;
             return WordUtils.capitalizeFully(e.name().replace("_", " "));
@@ -242,23 +253,34 @@ public class StarInventoryUtil {
     }
 
     @NotNull
-    public static ItemStack toItemStack(@NotNull CosmeticLocation<?> loc) {
+    public static ItemStack toItemStack(Player p, @NotNull CosmeticLocation<?> loc) {
         Object input = loc.getInput();
-        String name = toInputString(input);
         Material type = toInputMaterial(input);
+        StarPlayer sp = new StarPlayer(p);
 
         ItemStack item = new ItemStack(type);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + name);
+        meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + loc.getDisplayName());
+        meta.addItemFlags(ItemFlag.values());
+
         List<String> lore = new ArrayList<>();
         lore.add(loc.getRarity().toString());
+
+        ChatColor c = loc.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
 
         if (!loc.getRarity().isSecret()) {
             lore.add(" ");
             lore.addAll(Arrays.stream(
                     ChatPaginator.wordWrap(loc.getCompletionCriteria().getDisplayMessage(), 30)
-            ).map(s -> ChatColor.GRAY + s).collect(Collectors.toList()));
+            ).map(s -> c + s).collect(Collectors.toList()));
         }
+
+
+        if (Trail.class.isAssignableFrom(loc.getParentClass())) {
+            if (sp.getSelectedTrail( ((Trail<?>) loc.getParent()).getType() ) == loc)
+                lore.add(ChatColor.GREEN + "" + ChatColor.BOLD + get("constants.selected"));
+        } else if (loc.equals(sp.getSelectedCosmetic(loc.getParentClass())))
+            lore.add(ChatColor.GREEN + "" + ChatColor.BOLD + get("constants.selected"));
 
         meta.setLore(lore);
         item.setItemMeta(meta);
@@ -266,6 +288,8 @@ public class StarInventoryUtil {
         NBTWrapper nbt = NBTWrapper.of(item);
         nbt.setID("choose:cosmetic");
         nbt.set("location", loc);
+        if (loc.isUnlocked(p)) nbt.set("selected", true);
+
         item = nbt.getItem();
 
         return item;
@@ -286,6 +310,9 @@ public class StarInventoryUtil {
                 break;
             }
         }
+
+        if (type == EntityType.WITHER) m = StarMaterial.WITHER_SKELETON_SKULL.find();
+        if (type == EntityType.ENDER_DRAGON) m = Material.DRAGON_EGG;
 
         if (m == null) m = Material.APPLE;
 
@@ -317,13 +344,13 @@ public class StarInventoryUtil {
 
         ItemStack prev = getHead("arrow_left_gray");
         ItemMeta pMeta = prev.getItemMeta();
-        pMeta.setDisplayName(get("constants.previous_page"));
+        pMeta.setDisplayName(ChatColor.YELLOW + get("constants.previous_page"));
         prev.setItemMeta(pMeta);
         prev = NBTWrapper.setID(prev, "previous_page");
 
         ItemStack next = getHead("arrow_right_gray");
         ItemMeta nMeta = next.getItemMeta();
-        nMeta.setDisplayName(get("constants.next_page"));
+        nMeta.setDisplayName(ChatColor.YELLOW + get("constants.next_page"));
         next.setItemMeta(nMeta);
         next = NBTWrapper.setID(next, "next_page");
 
@@ -365,6 +392,7 @@ public class StarInventoryUtil {
             case "landing_lava":
             case "lava":
             case "drip_lava": return Material.LAVA_BUCKET;
+            case "enchantment_table": return StarMaterial.ENCHANTING_TABLE.find();
             case "dripping_dripstone_water":
             case "falling_dripstone_water":
             case "falling_water":
