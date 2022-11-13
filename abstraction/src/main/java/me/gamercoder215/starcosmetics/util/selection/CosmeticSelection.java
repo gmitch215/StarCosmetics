@@ -48,5 +48,10 @@ public abstract class CosmeticSelection<T> implements CosmeticLocation<T> {
     public final int hashCode() {
         return Objects.hash(getFullKey());
     }
+
+    @Override
+    public String toString() {
+        return "CosmeticSelection[" + getFullKey() + "]";
+    }
     
 }

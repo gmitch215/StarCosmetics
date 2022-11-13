@@ -2,8 +2,11 @@ package me.gamercoder215.starcosmetics.util.selection;
 
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
+import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Particle;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,8 +29,18 @@ public class ParticleSelection extends CosmeticSelection<Particle> {
     }
 
     @Override
+    public @NotNull String getDisplayName() {
+        return Wrapper.get("cosmetics.particle_shapes." + name, StarInventoryUtil.toInputString(getInput()));
+    }
+
+    @Override
     public Cosmetic getParent() {
         return parent;
+    }
+
+    @Override
+    public Class<? extends Cosmetic> getParentClass() {
+        return BaseShape.class;
     }
 
     @Override

@@ -4,6 +4,9 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseGadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -36,8 +39,18 @@ public final class GadgetSelection<T extends Event> extends CosmeticSelection<It
     }
 
     @Override
+    public @NotNull String getDisplayName() {
+        return Wrapper.get("cosmetics.gadgets." + name, StarInventoryUtil.toInputString(getInput()));
+    }
+
+    @Override
     public Cosmetic getParent() {
         return BaseGadget.CLICK_GADGET;
+    }
+
+    @Override
+    public Class<? extends Cosmetic> getParentClass() {
+        return Trail.class;
     }
 
     public ItemStack getItem() {
