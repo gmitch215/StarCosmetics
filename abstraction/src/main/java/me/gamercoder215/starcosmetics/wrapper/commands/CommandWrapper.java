@@ -3,7 +3,10 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
@@ -22,6 +25,7 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +39,7 @@ public interface CommandWrapper {
             .put("starsettings", Arrays.asList("ssettings", "settings", "ss"))
             .put("starreload", Arrays.asList("sreload", "sr"))
             .put("starcosmetics", Arrays.asList("scosmetics", "sc", "cosmetics", "cs"))
+            .put("starabout", Arrays.asList("sabout", "sa", "stara"))
             .build();
 
     Map<String, String> COMMAND_PERMISSION = ImmutableMap.<String, String>builder()
@@ -47,12 +52,14 @@ public interface CommandWrapper {
             .put("starsettings", "Opens the StarCosmetics settings menu.")
             .put("starreload", "Reloads the StarCosmetics configuration.")
             .put("starcosmetics", "Opens the StarCosmetics menu.")
+            .put("starabout", "Displays information about StarCosmetics.")
             .build();
 
     Map<String, String> COMMAND_USAGE = ImmutableMap.<String, String>builder()
             .put("starsettings", "/starsettings")
             .put("starreload", "/starreload")
             .put("starcosmetics", "/starcosmetics")
+            .put("starabout", "/starabout")
             .build();
 
     // Command Methods
@@ -74,6 +81,33 @@ public interface CommandWrapper {
 
         send(sender, "command.reload.reloaded");
         if (sender instanceof Player) StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess((Player) sender);
+    }
+
+    default void about(Player p) {
+        StarInventory inv = Generator.genGUI("about", 27, get("menu.about"));
+        inv.setAttribute("cancel", true);
+
+        ItemStack head = Generator.generateHead(p);
+        ItemMeta hMeta = head.getItemMeta();
+        hMeta.setDisplayName(ChatColor.AQUA + get("menu.about.head"));
+        head.setItemMeta(hMeta);
+        inv.setItem(4, head);
+
+        ItemStack cosmetics = StarMaterial.RED_CONCRETE.findStack();
+        ItemMeta cMeta = cosmetics.getItemMeta();
+        cMeta.setDisplayName(ChatColor.GOLD + get("menu.about.cosmetics"));
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.YELLOW + getWithArgs("menu.about.projectile_trail_count", comma(getCosmeticCount(TrailType.PROJECTILE)) ));
+
+        lore.add(" ");
+        lore.add(ChatColor.RED + getWithArgs("menu.about.total_cosmetic_count", comma(getCosmeticCount()) ));
+        cMeta.setLore(lore);
+
+        cosmetics.setItemMeta(cMeta);
+        inv.setItem(10, cosmetics);
+
+        p.openInventory(inv);
     }
 
     default void cosmetics(Player p) {
@@ -104,11 +138,12 @@ public interface CommandWrapper {
                 .withColor(Color.fromRGB(r.nextInt(16777216)))
                 .build());
 
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.values());
 
         particles.setItemMeta(meta);
         NBTWrapper pnbt = of(particles);
         pnbt.setID("cosmetic:selection:custom");
+        pnbt.set("type", "particle");
         particles = pnbt.getItem();
         inv.setItem(24, particles);
         
@@ -116,6 +151,39 @@ public interface CommandWrapper {
 
         p.openInventory(inv);
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+    }
+
+    // Utilities
+
+    static long getCosmeticCount(TrailType t) {
+        return Wrapper.getCosmeticSelections().getAllSelections()
+                .entrySet()
+                .stream()
+                .filter(e -> e.getKey() instanceof Trail)
+                .filter(e -> ((Trail<?>) e.getKey()).getType() == t)
+                .mapToLong(e -> e.getValue().size())
+                .sum();
+    }
+
+    static long getCosmeticCount(Class<? extends Cosmetic> c) {
+        return Wrapper.getCosmeticSelections().getAllSelections()
+                .entrySet()
+                .stream()
+                .filter(e -> c.isInstance(e.getKey()))
+                .mapToLong(e -> e.getValue().size())
+                .sum();
+    }
+
+    static long getCosmeticCount() {
+        return Wrapper.getCosmeticSelections().getAllSelections()
+                .values()
+                .stream()
+                .mapToLong(List::size)
+                .sum();
+    }
+
+    static String comma(long l) {
+        return String.format("%,.0f", (double) l);
     }
 
 }
