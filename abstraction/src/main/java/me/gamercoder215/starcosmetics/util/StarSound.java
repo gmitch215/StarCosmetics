@@ -19,7 +19,8 @@ public enum StarSound {
     ENTITY_ENDERMAN_TELEPORT("ENDERMAN_TELEPORT", "ENTITY_ENDERMEN_TELEPORT"),
     BLOCK_CHEST_OPEN("CHEST_OPEN", "ENTITY_CHEST_OPEN"),
     ITEM_BOOK_PAGE_TURN,
-    BLOCK_SLIME_PLACE("block_slime_block_place")
+    BLOCK_SLIME_PLACE("block_slime_block_place"),
+    ITEM_TRIDENT_RIPTIDE_1,
     ;
 
     private final List<String> sounds = new ArrayList<>();
