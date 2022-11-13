@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.StarCosmetics;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
@@ -18,6 +19,8 @@ import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -28,6 +31,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -174,7 +178,11 @@ public final class ClickEvents implements Listener {
                 if (Trail.class.isAssignableFrom(loc.getParent().getClass()))
                     sp.setSelectedTrail(TrailType.valueOf(inv.getAttribute("trail_type", String.class)), loc);
                 else sp.setSelectedCosmetic(loc.getParent().getClass(), loc);
+
+                inv.setItem(e.getSlot(), StarInventoryUtil.toItemStack(p, loc));
+
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
             })
             .put("cosmetic:selection", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
@@ -184,7 +192,7 @@ public final class ClickEvents implements Listener {
                 String display = nbt.getString("display");
 
                 List<CosmeticLocation<?>> selections = plugin.getAllFor(c);
-                List<StarInventory> invs = Generator.createSelectionInventory(selections, display);
+                List<StarInventory> invs = Generator.createSelectionInventory(p, selections, display);
 
                 for (StarInventory sel : invs) {
                     if (inv.hasAttribute("selection_back"))
@@ -202,12 +210,48 @@ public final class ClickEvents implements Listener {
             })
             .put("cosmetic:selection:custom", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
 
                 List<CosmeticSelection<?>> selections = inv.getAttribute("collections:custom", List.class);
-                List<StarInventory> shapeInv = Generator.createSelectionInventory(selections, get(inv.getAttribute("items_display", String.class)));
-                p.openInventory(shapeInv.get(0));
+                List<StarInventory> invs = Generator.createSelectionInventory(p, selections, get(inv.getAttribute("items_display", String.class)));
+
+                for (StarInventory sel : invs)
+                    if (inv.hasAttribute("selection_back"))
+                        StarInventoryUtil.setBack(sel, inv.getAttribute("selection_back", Consumer.class));
+                    else {
+                        StarInventoryUtil.setBack(sel, cw::cosmetics);
+                        sel.setAttribute("back_inventory_sound", false);
+                    }
+
+                switch (nbt.getString("type")) {
+                    case "particle": {
+                        ItemStack cancel = new ItemStack(Material.BARRIER);
+                        ItemMeta meta = cancel.getItemMeta();
+                        meta.setDisplayName(ChatColor.RED + get("menu.cosmetics.particle.reset"));
+                        cancel.setItemMeta(meta);
+
+                        NBTWrapper n = of(cancel);
+                        n.setID("cancel:particle");
+                        cancel = n.getItem();
+
+                        ItemStack cancelF = cancel;
+                        invs.forEach(i -> i.setItem(18, cancelF));
+                        break;
+                    }
+                }
+
+                p.openInventory(invs.get(0));
 
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("cancel:particle", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                sp.setSelectedCosmetic(ParticleShape.class, null);
+                StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
             })
 
             .build();
@@ -249,6 +293,7 @@ public final class ClickEvents implements Listener {
         }
 
         StarInventory inv = (StarInventory) e.getClickedInventory();
+        if (inv.hasAttribute("cancel")) e.setCancelled(true);
 
         if (CLICK_INVENTORY.containsKey(inv.getKey())) CLICK_INVENTORY.get(inv.getKey()).accept(inv, e);
         
