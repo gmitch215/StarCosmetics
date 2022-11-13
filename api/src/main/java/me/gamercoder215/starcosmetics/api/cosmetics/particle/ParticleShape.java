@@ -1,7 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.particle;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
