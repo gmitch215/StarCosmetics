@@ -16,6 +16,8 @@ public enum StarMaterial {
 
     MAGMA_BLOCK(Material.STONE, "magma"),
 
+    PLAYER_HEAD(3, "skull_item"),
+
     OAK_LOG("log"),
 
     END_STONE("ender_stone"),
@@ -42,6 +44,8 @@ public enum StarMaterial {
 
     WHITE_WOOL(0, "wool"),
 
+    LIGHT_BLUE_WOOL(3, "wool"),
+
     LEAD("leash"),
 
     LILY_PAD("water_lily"),
@@ -52,7 +56,19 @@ public enum StarMaterial {
 
     ENDER_EYE("eye_of_ender"),
 
-    FIREWORK_ROCKET("firework")
+    FIREWORK_ROCKET("firework"),
+
+    RED_CONCRETE(StarMaterial.RED_WOOL.find()),
+
+    LIGHT_BLUE_CONCRETE(StarMaterial.LIGHT_BLUE_WOOL.find()),
+
+    LIME_CONCRETE(StarMaterial.LIME_WOOL.find()),
+
+    WITHER_SKELETON_SKULL(1, "skull_item"),
+
+    EXPERIENCE_BOTTLE("exp_bottle"),
+
+    ENCHANTING_TABLE("enchantment_table")
     ;
 
     private final Material defaultV;
