@@ -98,7 +98,9 @@ public final class Wrapper1_19_R1 implements Wrapper {
             keyGen.initialize(2048);
             PublicKey pub = keyGen.generateKeyPair().getPublic();
 
-            ProfilePublicKey.Data data = new ProfilePublicKey.Data(Instant.now(), pub, new byte[0]);
+            byte[] bytes = new byte[1024];
+            r.nextBytes(bytes);
+            ProfilePublicKey.Data data = new ProfilePublicKey.Data(Instant.now(), pub, bytes);
             ProfilePublicKey key = ProfilePublicKey.createValidated(SignatureValidator.NO_VALIDATION, data);
 
             UUID uid = UUID.randomUUID();
