@@ -44,6 +44,13 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
                 cosmetics(p);
                 break;
             }
+            case "starrabout": {
+                if (!(sender instanceof Player)) return false;
+                Player p = (Player) sender;
+
+                about(p);
+                break;
+            }
         }
 
         return true;

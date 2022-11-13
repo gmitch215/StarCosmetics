@@ -54,4 +54,10 @@ public class CommandWrapperV2 implements CommandWrapper {
         CommandWrapper.super.cosmetics(p);
     }
 
+    @Override
+    @Command({"starabout", "sabout", "sa", "stara"})
+    @Description("Displays information about StarCosmetics.")
+    @Usage("/starabout")
+    public void about(Player p) { CommandWrapper.super.about(p); }
+
 }
