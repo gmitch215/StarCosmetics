@@ -7,7 +7,7 @@ import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 
 import java.util.UUID;
 
-public class NBTWrapper1_19_R1 extends NBTWrapper {
+public final class NBTWrapper1_19_R1 extends NBTWrapper {
 
     public NBTWrapper1_19_R1(org.bukkit.inventory.ItemStack item) {
         super(item);
