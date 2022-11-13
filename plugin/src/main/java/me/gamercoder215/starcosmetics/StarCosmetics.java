@@ -1,10 +1,12 @@
 package me.gamercoder215.starcosmetics;
 
 import com.google.common.collect.ImmutableList;
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
 import me.gamercoder215.starcosmetics.events.CompletionEvents;
@@ -21,14 +23,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getCosmeticSelections;
@@ -77,6 +82,9 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         SERIALIZABLE.forEach(ConfigurationSerialization::registerClass);
         getLogger().info("Loaded Classes...");
 
+        ASYNC_TICK_RUNNABLE.runTaskTimerAsynchronously(this, 0, 1);
+        getLogger().info("Loaded Tasks...");
+
         loadPlaceholders();
         getLogger().info("Loaded Addons...");
 
@@ -91,6 +99,12 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                 if (f.hasMetadata("cosmetic")) f.remove();
 
         SERIALIZABLE.forEach(ConfigurationSerialization::unregisterClass);
+        getLogger().info("Unregistered Classes...");
+
+        try { ASYNC_TICK_RUNNABLE.cancel(); } catch (IllegalStateException ignored) {}
+        getLogger().info("Cancelled Tasks...");
+
+        getLogger().info("Done!");
     }
 
     // Config Implementation
@@ -169,6 +183,31 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         StarConfig.print(t);
     }
 
+
+    public static final Map<UUID, StarPlayer> STAR_PLAYER_CACHE = new HashMap<>();
+
+    public static final Runnable ASYNC_TICK_TASK = () -> {
+        for (Player p : Bukkit.getOnlinePlayers())
+            if (!STAR_PLAYER_CACHE.containsKey(p.getUniqueId()))
+                STAR_PLAYER_CACHE.put(p.getUniqueId(), new StarPlayer(p));
+
+        for (StarPlayer sp : STAR_PLAYER_CACHE.values()) {
+            if (!sp.isOnline()) {
+                STAR_PLAYER_CACHE.remove(sp.getUniqueId());
+                continue;
+            }
+
+            sp.tick();
+        }
+    };
+
+    public static final BukkitRunnable ASYNC_TICK_RUNNABLE = new BukkitRunnable() {
+        @Override
+        public void run() {
+            ASYNC_TICK_TASK.run();
+        }
+    };
+
     @Override
     @NotNull
     public List<CosmeticLocation<?>> getAllFor(Class<? extends Cosmetic> parentClass) {
@@ -186,6 +225,9 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
             if (parentClass.isInstance(entry.getKey())) locs.addAll(entry.getValue());
 
+        Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
+        locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
+
         return locs;
     }
 
@@ -198,7 +240,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
             if (entry.getKey().getNamespace().equals(parent.getNamespace())) locs.addAll(entry.getValue());
 
-        locs.sort(Comparator.comparing(CosmeticLocation::getRarity));
+        Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
+        locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
 
         return locs;
     }
