@@ -3,13 +3,17 @@ package me.gamercoder215.starcosmetics.api.player;
 import me.gamercoder215.starcosmetics.api.Completion;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.Gadget;
+import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,6 +72,13 @@ public final class StarPlayer {
      */
     @NotNull
     public String getName() { return player.getName(); }
+
+    /**
+     * Utility method to check whether a player is online.
+     * @return true if the player is online, false otherwise
+     * @see OfflinePlayer#isOnline()
+     */
+    public boolean isOnline() { return player.isOnline(); }
 
     /**
      * Fetches the player's UUID.
@@ -191,13 +202,42 @@ public final class StarPlayer {
      * @return Selected Cosmetic for this Cosmetic Class
      */
     @Nullable
-    public CosmeticLocation<?> getSelectedCosmetic(@Nullable Class<Cosmetic> clazz) {
+    public CosmeticLocation<?> getSelectedCosmetic(@Nullable Class<? extends Cosmetic> clazz) {
         if (clazz == null) return null;
         if (Cosmetic.class.equals(clazz) || Trail.class.equals(clazz)) return null;
 
-        String path = "cosmetics." + clazz.getSimpleName().toLowerCase();
+        String path = "cosmetics." + toString(clazz);
 
         return CosmeticLocation.getByFullKey(config.getString(path, null));
+    }
+
+    private static String toString(Class<? extends Cosmetic> clazz) {
+        if (Trail.class.isAssignableFrom(clazz)) return "trails";
+        if (ParticleShape.class.isAssignableFrom(clazz)) return "particle_shape";
+        if (Gadget.class.isAssignableFrom(clazz)) return "gadget";
+
+        return clazz.getSimpleName().toLowerCase();
+    }
+
+    /**
+     * Ticks this StarPlayer, running any necessary tasks (i.e. particle shapes) every tick.
+     */
+    @SuppressWarnings("unchecked")
+    public void tick() {
+        if (!player.isOnline()) return;
+        Player p = player.getPlayer();
+
+        CosmeticLocation<Particle> shape = (CosmeticLocation<Particle>) getSelectedCosmetic(ParticleShape.class);
+        if (shape != null) shape.getParent().run(p.getLocation().add(0, .25, 0), shape);
+    }
+
+    /**
+     * Whether this StarPlayer has a selected cosmetic for this class.
+     * @param clazz The class of the cosmetic to set.
+     * @return true if selected, false otherwise
+     */
+    public boolean hasSelectedCosmetic(@Nullable Class<? extends Cosmetic> clazz) {
+        return getSelectedCosmetic(clazz) != null;
     }
 
     /**
@@ -233,13 +273,14 @@ public final class StarPlayer {
      * @param clazz The class of the cosmetic to set.
      * @param loc The location to set the cosmetic to.
      */
-    public void setSelectedCosmetic(@NotNull Class<? extends Cosmetic> clazz, @NotNull CosmeticLocation<?> loc) {
-        if (clazz == null || loc == null) return;
+    public void setSelectedCosmetic(@NotNull Class<? extends Cosmetic> clazz, @Nullable CosmeticLocation<?> loc) {
+        if (clazz == null) return;
         if (Cosmetic.class.equals(clazz)) return;
 
-        String path = "cosmetics." + clazz.getSimpleName().toLowerCase();
+        String path = "cosmetics." + toString(clazz);
 
-        config.set(path, loc.getFullKey());
+        if (loc == null) config.set(path, null);
+        else config.set(path, loc.getFullKey());
         save();
     }
 
