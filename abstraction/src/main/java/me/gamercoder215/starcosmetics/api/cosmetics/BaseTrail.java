@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Location;
@@ -89,7 +90,7 @@ public final class BaseTrail<T> implements Trail<T> {
 
                     for (Player pl : p.getWorld().getPlayers()) w.spawnFakeEntity(pl, type, p.getLocation(), 10);
                 }
-            }.runTaskTimer(StarConfig.getPlugin(), 6, 6);
+            }.runTaskTimer(StarConfig.getPlugin(), 6, 2);
         }
 
         if (o instanceof Collection<?>) {
@@ -125,6 +126,7 @@ public final class BaseTrail<T> implements Trail<T> {
             switch (str.toLowerCase()) {
                 case "riptide": {
                     w.attachRiptide(p);
+                    StarSound.ITEM_TRIDENT_RIPTIDE_1.play(p, 5F, 1F);
                     break;
                 }
             }
@@ -274,6 +276,11 @@ public final class BaseTrail<T> implements Trail<T> {
     @Override
     public void run(@NotNull Entity en, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException {
         trail.accept(en, location);
+    }
+
+    @Override
+    public String toString() {
+        return "Trail[" + name + "]";
     }
 
     @Override
