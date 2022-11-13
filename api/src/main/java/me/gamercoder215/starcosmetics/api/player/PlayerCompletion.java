@@ -10,9 +10,19 @@ import org.jetbrains.annotations.NotNull;
 public enum PlayerCompletion implements Completion {
 
     /**
+     * Completion for being struck by lightning.
+     */
+    LIGHTNING(Rarity.RARE),
+
+    /**
      * Completion for reaching the roof of the Nether.
      */
-    NETHER_ROOF(Rarity.EPIC)
+    NETHER_ROOF(Rarity.EPIC),
+
+    /**
+     * Completion for dying to a warden with its sonic boom attack.
+     */
+    SONIC_BOOM_DEATH(Rarity.LEGENDARY),
     ;
 
     private final Rarity rarity;
