@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
@@ -13,8 +14,9 @@ import org.bukkit.entity.EntityType;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
 public class CosmeticSelections1_14 implements CosmeticSelections {
 
@@ -22,11 +24,14 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
-            // Items + FFancy Items
+            // Items + Fancy Items
             .add(new TrailSelection("lantern", BaseTrail.PROJECTILE_TRAIL, Material.LANTERN,
                     CompletionCriteria.fromCrafted(30, Material.TORCH), Rarity.COMMON))
 
-            .add(new TrailSelection("wither_roses", BaseTrail.PROJECTILE_TRAIL, Material.WITHER_ROSE,
+            .add(new TrailSelection("bamboo", BaseTrail.PROJECTILE_TRAIL, Material.BAMBOO,
+                    CompletionCriteria.fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
+
+            .add(new TrailSelection("wither_rose", BaseTrail.PROJECTILE_TRAIL, Material.WITHER_ROSE,
                     CompletionCriteria.fromKilled(1000, EntityType.WITHER), Rarity.MYTHICAL))
 
             .build();
@@ -34,10 +39,14 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
-            .put(BaseTrail.PROJECTILE_TRAIL, Stream.concat(
-                    CosmeticSelections.getForVersion(BaseTrail.PROJECTILE_TRAIL, "1_13").stream(),
-                    PROJECTILE_TRAILS.stream()).collect(Collectors.toList())
-            )
+            .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_13"))
+            .put(BaseTrail.GROUND_TRAIL, getForVersion(BaseTrail.GROUND_TRAIL, "1_13"))
+            .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_13"))
+
+            .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_13"))
+            .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_13"))
+            .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_13"))
+            .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_13"))
             .build();
 
     @Override
