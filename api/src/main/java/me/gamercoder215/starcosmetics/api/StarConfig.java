@@ -161,6 +161,27 @@ public interface StarConfig {
     }
 
     /**
+     * Fetches a String from the Language File.
+     * @param key Key to fetch.
+     * @param args Arguments to replace in the String.
+     * @return String from the Language File according to the current Language
+     */
+    default String getWithArgs(String key, Object... args) {
+        return String.format(get(key), args);
+    }
+
+    /**
+     * Fetches a String from the Language File.
+     * @param key Key to fetch.
+     * @param def Default String to return if the key is not found.
+     * @param args Arguments to replace in the String.
+     * @return String from the Language File according to the current Language
+     */
+    default String getWithArgs(String key, String def, Object... args) {
+        return String.format(get(key, def), args);
+    }
+
+    /**
      * Fetches a String from the Language File with the plugin prefix in front.
      * @param key Key to fetch.
      * @return Message from the Language File according to the current Language
