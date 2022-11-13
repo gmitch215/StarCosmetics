@@ -15,18 +15,19 @@ import java.util.function.BiConsumer;
 
 public enum BaseShape implements ParticleShape {
     
-    SMALL_RING((l, p) -> circle(l, p, 10, 4)),
+    SMALL_RING((l, p) -> circle(l, p, 35, 4)),
 
     SMALL_DETAILED_RING((l, p) -> {
-        circle(l, p, 20, 5);
-        circle(l, p, 10, 3);
+        circle(l, p, 50, 5);
+        circle(l, p, 35, 3);
     }),
 
-    LARGE_RING((l, p) -> circle(l, p, 20, 7)),
+    LARGE_RING((l, p) -> circle(l, p, 50, 7)),
 
     LARGE_DETAILED_RING((l, p) -> {
-        circle(l, p, 40, 10);
-        circle(l, p, 20, 7);
+        circle(l, p, 60, 10);
+        circle(l, p, 45, 7);
+        circle(l, p, 20, 2);
     }),
     ;
 
@@ -57,7 +58,7 @@ public enum BaseShape implements ParticleShape {
 
     @Override
     public String getDisplayName() {
-        return StarConfig.getConfig().get("cosmetics.particle_shapes");
+        return StarConfig.getConfig().get("menu.cosmetics.shape");
     }
 
     @Override
