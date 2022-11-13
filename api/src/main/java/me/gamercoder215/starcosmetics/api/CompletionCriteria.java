@@ -43,6 +43,10 @@ public final class CompletionCriteria {
         this(criteria, criteria, displayKey, displayArguments);
     }
 
+    private static String comma(int i) {
+        return String.format("%,.0f", (double) i);
+    }
+
     /**
      * Fetches the criteria needed to unlock a Cosmetic.
      * @return Predicate representing the criteria
@@ -97,7 +101,7 @@ public final class CompletionCriteria {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.MINE_BLOCK, m) >= amount,
                 p -> p.getStatistic(Statistic.MINE_BLOCK, m) == amount,
-                "criteria.amount.mined", amount, WordUtils.capitalizeFully(m.name().replace("_", " ")));
+                "criteria.amount.mined", comma(amount), WordUtils.capitalizeFully(m.name().replace("_", " ")));
     }
 
     /**
@@ -115,7 +119,7 @@ public final class CompletionCriteria {
             int count = 0;
             for (Material m : materials) count += p.getStatistic(Statistic.MINE_BLOCK, m);
             return count >= amount;
-        }, "criteria.amount.mined.list." + materials.size(), amount, materials.stream()
+        }, "criteria.amount.mined.list." + materials.size(), comma(amount), materials.stream()
                 .map(m -> WordUtils.capitalizeFully(m.name().replace("_", " "))).toArray());
     }
 
@@ -139,7 +143,7 @@ public final class CompletionCriteria {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.KILL_ENTITY, type) >= amount,
                 p -> p.getStatistic(Statistic.KILL_ENTITY, type) == amount,
-                "criteria.amount.killed", amount, WordUtils.capitalizeFully(type.name().replace("_", " ")));
+                "criteria.amount.killed", comma(amount), WordUtils.capitalizeFully(type.name().replace("_", " ")));
     }
 
     /**
@@ -152,7 +156,7 @@ public final class CompletionCriteria {
     public static CompletionCriteria fromStatistic(Statistic stat, int amount) {
         return new CompletionCriteria(
                 p -> p.getStatistic(stat) >= amount,
-                p -> p.getStatistic(stat) == amount,"criteria.amount." + stat.name().toLowerCase(), amount);
+                p -> p.getStatistic(stat) == amount,"criteria.amount." + stat.name().toLowerCase(), comma(amount));
     }
 
     /**
@@ -165,7 +169,7 @@ public final class CompletionCriteria {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.CRAFT_ITEM, m) >= amount,
                 p -> p.getStatistic(Statistic.CRAFT_ITEM, m) == amount,
-                "criteria.amount.crafted", amount, WordUtils.capitalizeFully(m.name().replace("_", " ")));
+                "criteria.amount.crafted", comma(amount), WordUtils.capitalizeFully(m.name().replace("_", " ")));
     }
 
     /**
@@ -193,7 +197,7 @@ public final class CompletionCriteria {
             int count = 0;
             for (Material m : materials) count += p.getStatistic(Statistic.CRAFT_ITEM, m);
             return count == amount;
-        },"criteria.amount.crafted.list." + materials.size(), amount, materials.stream()
+        },"criteria.amount.crafted.list." + materials.size(), comma(amount), materials.stream()
                 .map(m -> WordUtils.capitalizeFully(m.name().replace("_", " "))).toArray());
     }
 
