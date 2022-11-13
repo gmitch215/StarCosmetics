@@ -38,6 +38,10 @@ public interface Wrapper {
         return StarConfig.getConfig().get(key, def);
     }
 
+    static String getWithArgs(String key, Object... args) {
+        return StarConfig.getConfig().getWithArgs(key, args);
+    }
+
     static String getMessage(String key) {
         return StarConfig.getConfig().getMessage(key);
     }
