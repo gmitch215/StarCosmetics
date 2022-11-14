@@ -1,13 +1,18 @@
 package me.gamercoder215.starcosmetics.wrapper.nbt;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.event.Event;
 
+import java.util.Date;
 import java.util.UUID;
 
-public class NBTWrapper1_18_R1 extends NBTWrapper {
+public final class NBTWrapper1_18_R1 extends NBTWrapper {
 
     public NBTWrapper1_18_R1(org.bukkit.inventory.ItemStack item) {
         super(item);
@@ -142,6 +147,45 @@ public class NBTWrapper1_18_R1 extends NBTWrapper {
         tag.put(ROOT, starcosmetics);
         nmsitem.setTag(tag);
         this.item = CraftItemStack.asBukkitCopy(nmsitem);
+    }
+
+    @Override
+    public void set(String key, SoundEventSelection value) {
+        ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+        CompoundTag tag = nmsitem.getOrCreateTag();
+        CompoundTag starcosmetics = tag.getCompound(ROOT);
+
+        CompoundTag selection = new CompoundTag();
+        selection.putString("sound", value.getSound().name());
+        selection.putString("event", value.getEvent().getName());
+        selection.putLong("timestamp", value.getTimestamp().getTime());
+        selection.putUUID("player", value.getPlayer().getUniqueId());
+
+        starcosmetics.put(key, selection);
+        tag.put(ROOT, starcosmetics);
+        nmsitem.setTag(tag);
+        this.item = CraftItemStack.asBukkitCopy(nmsitem);
+    }
+
+    @Override
+    public SoundEventSelection getSoundEventSelection(String key) {
+        try {
+            ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+            CompoundTag tag = nmsitem.getOrCreateTag();
+            CompoundTag starcosmetics = tag.getCompound(ROOT);
+
+            CompoundTag selection = starcosmetics.getCompound(key);
+
+            return SoundEventSelection.of(
+                    Class.forName(selection.getString("event")).asSubclass(Event.class),
+                    Sound.valueOf(selection.getString("sound")),
+                    Bukkit.getOfflinePlayer(selection.getUUID("player")),
+                    new Date(selection.getLong("timestamp"))
+            );
+        } catch (ClassNotFoundException | ClassCastException e) {
+            StarConfig.print(e);
+            return null;
+        }
     }
 
 }
