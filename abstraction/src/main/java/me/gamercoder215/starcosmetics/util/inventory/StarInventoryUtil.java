@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
@@ -31,17 +32,18 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
-public class StarInventoryUtil {
+public final class StarInventoryUtil {
 
     private static final Wrapper w = getWrapper();
 
@@ -60,13 +62,53 @@ public class StarInventoryUtil {
         if (chosen == null && n.contains("vehicle")) chosen = Material.MINECART;
 
         switch (n) {
-            case "asyncplayerchatevent": return StarMaterial.COMMAND_BLOCK.find();
             case "playerjoinevent": return StarMaterial.GRASS_BLOCK.find();
+            case "playerfishevent": return Material.FISHING_ROD;
             case "playerrespawnevent": return Material.BEACON;
+            case "signchangeevent": return StarMaterial.OAK_SIGN.find();
+            case "playerriptideevent": return Material.matchMaterial("TRIDENT");
+            case "playerdeathevent": return StarMaterial.WITHER_SKELETON_SKULL.find();
+            case "furnaceextractevent": return Material.FURNACE;
+            case "playerbedenterevent": return StarMaterial.RED_BED.find();
+            case "playerexpchangeevent": return StarMaterial.EXPERIENCE_BOTTLE.find();
+            case "playereggthrowevent": return Material.EGG;
+            case "blockbreakevent": return Material.IRON_PICKAXE;
+            case "sheepdyewoolevent": return StarMaterial.WHITE_WOOL.find();
         }
 
         if (chosen == null) chosen = Material.REDSTONE;
         return chosen;
+    }
+
+    @NotNull
+    public static ItemStack toItemStack(@NotNull SoundEventSelection s) {
+        ItemStack item = new ItemStack(toMaterial(s.getEvent()));
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.YELLOW + s.getEvent().getSimpleName());
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.AQUA + get("constants.menu.sound") + " " + ChatColor.GOLD + getFriendlyName(s.getSound()));
+
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("EEEE, LLL d, yyyy 'at' h:mm:ss a")
+                .withLocale(StarConfig.getConfig().getLocale())
+                .withZone(ZoneId.systemDefault());
+
+        lore.add(ChatColor.GREEN + getWithArgs("constants.menu.created_at", ChatColor.AQUA + f.format(s.getTimestamp().toInstant())));
+
+        lore.add(" ");
+        lore.add(ChatColor.YELLOW + get("constants.menu.left_click_edit"));
+        lore.add(ChatColor.YELLOW + get("constants.menu.right_click_delete"));
+
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
+
+        NBTWrapper nbt = of(item);
+        nbt.setID("manage:soundevent");
+        nbt.set("selection", s);
+        item = nbt.getItem();
+
+        return item;
     }
 
     @NotNull
@@ -137,7 +179,7 @@ public class StarInventoryUtil {
     public static ItemStack getHead(String key) {
         try {
             Properties p = new Properties();
-            p.load(MaterialSelector.class.getResourceAsStream("/util/heads.properties"));
+            p.load(InventorySelector.class.getResourceAsStream("/util/heads.properties"));
 
             String value = p.getProperty(key);
             if (value == null) return null;
