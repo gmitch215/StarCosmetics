@@ -10,8 +10,10 @@ import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarSound;
+import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
@@ -182,7 +184,7 @@ public final class ClickEvents implements Listener {
                 inv.setItem(e.getSlot(), StarInventoryUtil.toItemStack(p, loc));
 
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
-                StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
+                updateCache(p);
             })
             .put("cosmetic:selection", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
@@ -251,16 +253,88 @@ public final class ClickEvents implements Listener {
 
                 sp.setSelectedCosmetic(ParticleShape.class, null);
                 StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
-                StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
+                updateCache(p);
+            })
+            .put("cosmetic:selection:custom_inventory", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+                String key = nbt.getString("inventory_key");
+
+                StarInventory toOpen = inv.getAttribute(key, StarInventory.class);
+                p.openInventory(toOpen);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("manage:soundevent", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+
+                NBTWrapper nbt = of(item);
+                SoundEventSelection selection = nbt.getSoundEventSelection("selection");
+
+                switch (e.getClick()) {
+                    case LEFT:
+                    case SHIFT_LEFT: {
+                        // TODO Edit Implementation
+                        break;
+                    }
+                    case RIGHT:
+                    case SHIFT_RIGHT: {
+                        InventorySelector.confirm(p, () -> {
+                            StarPlayer sp = new StarPlayer(p);
+                            sp.removeSelection(selection);
+
+                            p.sendMessage(ChatColor.GREEN + get("sucess.cosmetics.remove_selection"));
+                            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+
+                            p.openInventory(Generator.createSoundSelectionInventory(p));
+
+                            updateCache(p);
+                        });
+                        break;
+                    }
+                    default: {
+                        StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                        break;
+                    }
+                }
+            })
+            .put("add:soundevent", (inv, e) -> {
+                final Player p = (Player) e.getWhoClicked();
+                final StarPlayer sp = new StarPlayer(p);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+
+                InventorySelector.chooseEvent(p, event -> {
+
+                    StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+                    InventorySelector.chooseSound(p, sound -> InventorySelector.confirm(p, () -> {
+                        SoundEventSelection sel = SoundEventSelection.builder()
+                                .event(event)
+                                .sound(sound)
+                                .player(p)
+                                .build();
+
+                        sp.addSelection(sel);
+                        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+
+                        p.openInventory(Generator.createSoundSelectionInventory(p));
+                    }, () -> p.openInventory(Generator.createSoundSelectionInventory(p))),
+                            pl -> pl.openInventory(Generator.createSoundSelectionInventory(pl) ));
+                }, pl -> pl.openInventory(Generator.createSoundSelectionInventory(pl) ));
             })
 
             .build();
+
+    private static void updateCache(Player p) {
+        StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
+    }
 
     private static final Map<String, BiConsumer<StarInventory, InventoryClickEvent>> CLICK_INVENTORY = ImmutableMap.<String, BiConsumer<StarInventory, InventoryClickEvent>>builder()
             .put("choose:event_inv", (inv, e) -> {
                 ItemStack item = e.getCurrentItem();
                 NBTWrapper nbt = of(item);
                 if (nbt.getID().startsWith("scroll")) return;
+                if (nbt.getID().startsWith("back")) return;
 
                 Class<? extends Event> clazz = nbt.getClass("event", Event.class);
 
@@ -271,11 +345,33 @@ public final class ClickEvents implements Listener {
                 ItemStack item = e.getCurrentItem();
                 NBTWrapper nbt = of(item);
                 if (nbt.getID().startsWith("scroll")) return;
+                if (nbt.getID().startsWith("back")) return;
 
                 Sound s = Sound.valueOf(nbt.getString("sound"));
 
                 Consumer<Sound> action = inv.getAttribute("chosen_action", Consumer.class);
                 action.accept(s);
+            })
+            .put("confirm_inv", (inv, e) -> {
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+
+                Runnable confirmR = inv.getAttribute("confirm_action", Runnable.class);
+                Runnable cancelR = inv.getAttribute("cancel_action", Runnable.class);
+
+                switch (nbt.getString("item")) {
+                    case "confirm": {
+                        confirmR.run();
+                        return;
+                    }
+                    case "cancel": {
+                        cancelR.run();
+                        return;
+                    }
+                    default: {
+                        throw new AssertionError("Unknown Confirm Inventory Item: " + nbt.getString("item"));
+                    }
+                }
             })
             .build();
 
