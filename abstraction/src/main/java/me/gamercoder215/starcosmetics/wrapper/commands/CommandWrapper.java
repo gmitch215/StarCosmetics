@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
@@ -17,6 +18,7 @@ import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -70,22 +72,22 @@ public interface CommandWrapper {
 
     default void reloadConfig(CommandSender sender) {
         if (!sender.hasPermission("starcosmetics.admin.reloadconfig")) {
-            send(sender, "error.permission");
+            sendError(sender, "error.permission");
             return;
         }
 
-        send(sender, "command.reload.reloading");
+        sendMessage(sender, "command.reload.reloading", ChatColor.GOLD);
         Plugin plugin = StarConfig.getPlugin();
 
         plugin.reloadConfig();
 
-        send(sender, "command.reload.reloaded");
+        sendMessage(sender, "command.reload.reloaded", ChatColor.YELLOW);
         if (sender instanceof Player) StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess((Player) sender);
     }
 
     default void about(Player p) {
         StarInventory inv = Generator.genGUI("about", 27, get("menu.about"));
-        inv.setAttribute("cancel", true);
+        inv.setCancelled();
 
         ItemStack head = Generator.generateHead(p);
         ItemMeta hMeta = head.getItemMeta();
@@ -132,22 +134,32 @@ public interface CommandWrapper {
         inv.setAttribute("items_display", "menu.cosmetics.shape");
 
         ItemStack particles = StarMaterial.FIREWORK_STAR.findStack();
-        FireworkEffectMeta meta = (FireworkEffectMeta) particles.getItemMeta();
-        meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.shape"));
-        meta.setEffect(FireworkEffect.builder()
+        FireworkEffectMeta pMeta = (FireworkEffectMeta) particles.getItemMeta();
+        pMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.shape"));
+        pMeta.setEffect(FireworkEffect.builder()
                 .withColor(Color.fromRGB(r.nextInt(16777216)))
                 .build());
 
-        meta.addItemFlags(ItemFlag.values());
+        pMeta.addItemFlags(ItemFlag.values());
 
-        particles.setItemMeta(meta);
+        particles.setItemMeta(pMeta);
         NBTWrapper pnbt = of(particles);
         pnbt.setID("cosmetic:selection:custom");
         pnbt.set("type", "particle");
         particles = pnbt.getItem();
         inv.setItem(24, particles);
         
-        // TODO Create the rest of the cosmetics menus
+        ItemStack soundEvents = new ItemStack(Material.NOTE_BLOCK);
+        ItemMeta sMeta = soundEvents.getItemMeta();
+        sMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.sound"));
+
+        soundEvents.setItemMeta(sMeta);
+        NBTWrapper snbt = of(soundEvents);
+        snbt.setID("cosmetic:selection:custom_inventory");
+        snbt.set("inventory_key", "sound_events");
+        soundEvents = snbt.getItem();
+        inv.setItem(31, soundEvents);
+        inv.setAttribute("sound_events", Generator.createSoundSelectionInventory(p));
 
         p.openInventory(inv);
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
@@ -175,11 +187,16 @@ public interface CommandWrapper {
     }
 
     static long getCosmeticCount() {
-        return Wrapper.getCosmeticSelections().getAllSelections()
+        long count = 0;
+        count += Wrapper.getCosmeticSelections().getAllSelections()
                 .values()
                 .stream()
                 .mapToLong(List::size)
                 .sum();
+
+        count += SoundEventSelection.AVAILABLE_EVENTS.size();
+
+        return count;
     }
 
     static String comma(long l) {
