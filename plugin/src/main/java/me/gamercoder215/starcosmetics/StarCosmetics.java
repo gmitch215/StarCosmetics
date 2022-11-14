@@ -24,6 +24,10 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -59,6 +63,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         new ClickEvents(this);
         new CompletionEvents(this);
         new CosmeticEvents(this);
+        new InternalEvents(this);
 
         w.registerEvents();
     }
@@ -260,5 +265,28 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                 .filter(c -> c.getNamespace().equalsIgnoreCase(key))
                 .findFirst()
                 .orElse(null);
+    }
+
+    private static final class InternalEvents implements Listener {
+
+        private final StarCosmetics plugin;
+
+        public InternalEvents(StarCosmetics plugin) {
+            this.plugin = plugin;
+        }
+
+        @EventHandler
+        public void onStatistic(PlayerStatisticIncrementEvent e) {
+            Player p = e.getPlayer();
+            StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
+        }
+
+        @EventHandler
+        public void onLeave(PlayerQuitEvent e) {
+            Player p = e.getPlayer();
+            StarPlayer sp = new StarPlayer(p);
+            sp.getSelectionLimit();
+        }
+
     }
 }
