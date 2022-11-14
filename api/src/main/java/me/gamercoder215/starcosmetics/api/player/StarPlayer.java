@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api.player;
 
 import me.gamercoder215.starcosmetics.api.Completion;
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.Gadget;
@@ -11,15 +12,18 @@ import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -220,7 +224,7 @@ public final class StarPlayer {
     }
 
     /**
-     * Ticks this StarPlayer, running any necessary tasks (i.e. particle shapes) every tick.
+     * Ticks this StarPlayer, running any necessary tasks (i.e. particle shapes) every tick. Ran asynchronously and is thread safe.
      */
     @SuppressWarnings("unchecked")
     public void tick() {
@@ -305,12 +309,147 @@ public final class StarPlayer {
     }
 
     /**
+     * Adds an event selection to this player.
+     * @param s Selection to Add
+     * @throws IllegalArgumentException if added selections exceed limit or does not match owner
+     */
+    public void addSelection(@NotNull SoundEventSelection s) throws IllegalArgumentException {
+        if (s == null) return;
+        if (!s.getPlayer().getUniqueId().equals(player.getUniqueId()))
+            throw new IllegalArgumentException("Selection Owner " + s.getPlayer().getName() + " does not match this StarPlayer of " + player.getName());
+
+        List<SoundEventSelection> selections = getSoundSelections();
+        selections.add(s);
+
+        if (selections.size() > getSelectionLimit()) throw new IllegalArgumentException("Selection limit exceeded!");
+
+        sounds.set("sounds", selections);
+        save();
+    }
+
+    /**
+     * Adds an iterable of SoundEventSelections to this player.
+     * @param it Iterable of SoundEventSelections to add
+     * @throws IllegalArgumentException if added selections exceed limit or does not match owner
+     */
+    public void addSelections(@NotNull Iterable<SoundEventSelection> it) throws IllegalArgumentException {
+        if (it == null) return;
+
+        List<SoundEventSelection> selections = getSoundSelections();
+        for (SoundEventSelection s : it) {
+            if (s == null) continue;
+            if (!s.getPlayer().getUniqueId().equals(player.getUniqueId()))
+                throw new IllegalArgumentException("Selection Owner " + s.getPlayer().getName() + " does not match this StarPlayer of " + player.getName());
+            selections.add(s);
+        }
+
+        if (selections.size() > getSelectionLimit()) throw new IllegalArgumentException("Selection limit exceeded!");
+
+        sounds.set("sounds", selections);
+        save();
+    }
+
+    /**
+     * Adds an array of SoundEventSelections to this player.
+     * @param selections Array of SoundEventSelections to add
+     * @throws IllegalArgumentException if added selections exceed limit or does not match owner
+     */
+    public void addSelections(@NotNull SoundEventSelection... selections) throws IllegalArgumentException {
+        if (selections == null) return;
+        addSelections(Arrays.asList(selections));
+    }
+
+    /**
+     * Removes an event selection from this player.
+     * @param selection Selection to Remove
+     */
+    public void removeSelection(@NotNull SoundEventSelection selection) {
+        if (selection == null) return;
+
+        List<SoundEventSelection> selections = getSoundSelections();
+        selections.remove(selection);
+
+        sounds.set("sounds", selections);
+        save();
+    }
+
+    /**
+     * Removes an event selection from this player.
+     * @param clazz Class of the selection's event to remove
+     */
+    public void removeSelection(@NotNull Class<? extends Event> clazz) {
+        if (clazz == null) return;
+
+        List<SoundEventSelection> selections = getSoundSelections();
+        selections.removeIf(s -> s.getEvent().equals(clazz));
+
+        sounds.set("sounds", selections);
+        save();
+    }
+
+    /**
+     * Removes an event selection from this player.
+     * @param s Sound to remove
+     */
+    public void removeSelection(@NotNull Sound s) {
+        if (s == null) return;
+
+        List<SoundEventSelection> selections = getSoundSelections();
+        selections.removeIf(sel -> sel.getSound().equals(s));
+
+        sounds.set("sounds", selections);
+        save();
+    }
+
+    /**
+     * Removes all event selections from this player.
+     */
+    public void clearEventSelections() {
+        sounds.set("sounds", new ArrayList<>());
+        save();
+    }
+
+    /**
+     * Fetches the limit of sound event selections this player can have.
+     * @return {@link SoundEventSelection} Limit
+     */
+    public int getSelectionLimit() {
+        if (!player.isOnline()) return sounds.getInt("limit", 1);
+        Player p = player.getPlayer();
+
+        int limit = 1;
+        CompletionCriteria criteria = CompletionCriteria.fromSelectionLimit(limit);
+        while (criteria.getCriteria().test(p) && limit < 36) {
+            limit++;
+            criteria = CompletionCriteria.fromSelectionLimit(limit);
+        }
+
+        sounds.set("limit", limit);
+        save();
+
+        return limit;
+    }
+
+    /**
+     * Sets the limit of sound event selections this player can have.
+     * @param limit Limit to set
+     * @throws IllegalArgumentException if limit is less than 0 or bigger than 35
+     */
+    public void setSelectionLimit(int limit) throws IllegalArgumentException {
+        if (limit < 0 || limit > 35) throw new IllegalArgumentException("Limit must be between 0 and 35");
+
+        sounds.set("limit", limit);
+        save();
+    }
+
+    /**
      * <p>Saves all of this StarPlayer's configuration.</p>
      * <p>Methods that edit the configuration automatically save the configuration, so an additional call is not necessary.</p>
      */
     public void save() {
         try {
             config.save(configF);
+            sounds.save(soundF);
         } catch (IOException e) {
             StarConfig.print(e);
         }

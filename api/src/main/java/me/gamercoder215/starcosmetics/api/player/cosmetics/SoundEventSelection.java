@@ -17,10 +17,7 @@ import org.bukkit.event.player.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,10 +29,30 @@ public final class SoundEventSelection implements ConfigurationSerializable {
     private final Sound sound;
     private final Class<? extends Event> event;
 
-    private SoundEventSelection(Class<? extends Event> event, Sound sound, OfflinePlayer player) {
+    private final Date timestamp;
+
+    private SoundEventSelection(Class<? extends Event> event, Sound sound, OfflinePlayer player, Date timestamp) {
         this.event = event;
         this.player = player;
         this.sound = sound;
+        this.timestamp = timestamp;
+    }
+
+    /**
+     * Creates a new instance.
+     * @param event The event to play the sound on.
+     * @param sound The sound to play.
+     * @param player The Player that owns this SoundEventSelection.
+     * @param date The Timestamp that this sound was created at.
+     * @return Constructed SoundEventSelection
+     */
+    public static SoundEventSelection of(@NotNull Class<? extends Event> event, @NotNull Sound sound, @NotNull OfflinePlayer player, @NotNull Date date) {
+        if (event == null) throw new IllegalArgumentException("Event cannot be null");
+        if (sound == null) throw new IllegalArgumentException("Sound cannot be null");
+        if (player == null) throw new IllegalArgumentException("Player cannot be null");
+        if (date == null) throw new IllegalArgumentException("Date cannot be null");
+
+        return new SoundEventSelection(event, sound, player, date);
     }
 
     /**
@@ -62,6 +79,7 @@ public final class SoundEventSelection implements ConfigurationSerializable {
             add(optional("player.PlayerRiptideEvent"));
             add(SheepDyeWoolEvent.class);
             add(SignChangeEvent.class);
+            add(PlayerInteractEntityEvent.class);
         }}.stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 
@@ -93,12 +111,82 @@ public final class SoundEventSelection implements ConfigurationSerializable {
     }
 
     /**
+     * Fetches the Date this SoundEventSelection was created.
+     * @return Timestamp of Creation
+     */
+    @NotNull
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    /**
      * Fetches the Event that this SoundEventSelection is listening for.
      * @return Class of the Event
      */
     @NotNull
     public Class<? extends Event> getEvent() {
         return event;
+    }
+
+    /**
+     * Clones this SoundEventSelection with a new owner.
+     * @param player The new owner of this SoundEventSelection.
+     * @return Cloned SoundEventSelection
+     */
+    @NotNull
+    public SoundEventSelection cloneTo(@NotNull OfflinePlayer player) {
+        return new SoundEventSelection(event, sound, player, timestamp);
+    }
+
+    /**
+     * Clones this SoundEventSelection with a new Sound.
+     * @param s The new Sound to play.
+     * @return Cloned SoundEventSelection
+     */
+    @NotNull
+    public SoundEventSelection cloneTo(@NotNull Sound s) {
+        return new SoundEventSelection(event, s, player, timestamp);
+    }
+
+    /**
+     * Clones this SoundEventSelection with a new Event.
+     * @param e The new Event to listen for.
+     * @return Cloned SoundEventSelection
+     */
+    @NotNull
+    public SoundEventSelection cloneTo(@NotNull Class<? extends Event> e) {
+        return new SoundEventSelection(e, sound, player, timestamp);
+    }
+
+    @Override
+    public String toString() {
+        return "SoundEventSelection{" +
+                "player=" + player +
+                ", sound=" + sound +
+                ", event=" + event +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SoundEventSelection that = (SoundEventSelection) o;
+        return player.getUniqueId().equals(that.player.getUniqueId()) && sound == that.sound && event.equals(that.event);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(player.getUniqueId(), sound, event);
+    }
+
+    /**
+     * Whether this SoundEventSelection equals another SoundEventSelection, ignoring the player.
+     * @param other The other SoundEventSelection
+     * @return Whether the two SoundEventSelections are equal without the player
+     */
+    public boolean equalsIgnorePlayer(@NotNull SoundEventSelection other) {
+        return sound == other.sound && event.equals(other.event);
     }
 
     /**
@@ -111,7 +199,8 @@ public final class SoundEventSelection implements ConfigurationSerializable {
             return new SoundEventSelection(
                     Class.forName(serial.get("event").toString()).asSubclass(Event.class),
                     Sound.valueOf(serial.get("sound").toString()),
-                    (OfflinePlayer) serial.get("player")
+                    (OfflinePlayer) serial.get("player"),
+                    new Date((long) serial.get("timestamp"))
             );
         } catch (ClassNotFoundException e) {
             StarConfig.print(e);
@@ -126,6 +215,7 @@ public final class SoundEventSelection implements ConfigurationSerializable {
                 .put("event", event.getName())
                 .put("sound", sound.name())
                 .put("player", player)
+                .put("timestamp", timestamp.getTime())
                 .build();
     }
 
@@ -198,7 +288,7 @@ public final class SoundEventSelection implements ConfigurationSerializable {
             if (player == null) throw new IllegalStateException("Player cannot be null");
             if (sound == null) throw new IllegalStateException("Sound cannot be null");
             if (event == null) throw new IllegalStateException("Event cannot be null");
-            return new SoundEventSelection(event, sound, player);
+            return new SoundEventSelection(event, sound, player, new Date());
         }
 
 

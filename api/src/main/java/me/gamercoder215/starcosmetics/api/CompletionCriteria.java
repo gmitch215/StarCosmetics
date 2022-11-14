@@ -18,29 +18,27 @@ import java.util.function.Predicate;
  */
 public final class CompletionCriteria {
 
+    /**
+     * Represents a CompletionCriteria that requires nothing.
+     */
+    public static final CompletionCriteria NONE = new CompletionCriteria(p -> true, "");
+
     private final Predicate<Player> criteria;
-    private final Predicate<Player> unlockCriteria;
     private final String displayKey;
 
     private final Object[] displayArguments;
 
-    private CompletionCriteria(Predicate<Player> criteria, Predicate<Player> unlockCriteria, String displayKey, Object... displayArguments) {
+    private CompletionCriteria(Predicate<Player> criteria, String displayKey, Object... displayArguments) {
         if (criteria == null) throw new IllegalArgumentException("Criteria cannot be null!");
-        if (unlockCriteria == null) throw new IllegalArgumentException("Unlock Criteria cannot be null!");
         if (displayKey == null) throw new IllegalArgumentException("Display Key cannot be null!");
 
         this.criteria = p -> p.hasPermission("starcosmetics.admin.bypasscheck") || criteria.test(p);
         this.displayKey = displayKey;
         this.displayArguments = displayArguments;
-        this.unlockCriteria = unlockCriteria;
     }
 
-    private CompletionCriteria(Predicate<Player> criteria, Predicate<Player> unlockCriteria, String displayKey, Object firstArg, Object[] displayArguments) {
-        this(criteria, unlockCriteria, displayKey, ImmutableList.builder().add(firstArg).add(displayArguments).build().toArray());
-    }
-
-    private CompletionCriteria(Predicate<Player> criteria, String displayKey, Object... displayArguments) {
-        this(criteria, criteria, displayKey, displayArguments);
+    private CompletionCriteria(Predicate<Player> criteria, String displayKey, Object firstArg, Object[] displayArguments) {
+        this(criteria, displayKey, ImmutableList.builder().add(firstArg).add(displayArguments).build().toArray());
     }
 
     private static String comma(int i) {
@@ -54,16 +52,6 @@ public final class CompletionCriteria {
     @NotNull
     public Predicate<Player> getCriteria() {
         return criteria;
-    }
-
-    /**
-     * <p>Fetches the criteria needed to unlock a Cosmetic for the first time.</p>
-     * <p>This method is used for things like X number of blocks mined/entities killed in unlock messages.</p>
-     * @return Predicate representing the criteria to unlock for the first time
-     */
-    @NotNull
-    public Predicate<Player> getUnlockCriteria() {
-        return unlockCriteria;
     }
 
     /**
@@ -100,7 +88,6 @@ public final class CompletionCriteria {
     public static CompletionCriteria fromMined(int amount, Material m) {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.MINE_BLOCK, m) >= amount,
-                p -> p.getStatistic(Statistic.MINE_BLOCK, m) == amount,
                 "criteria.amount.mined", comma(amount), WordUtils.capitalizeFully(m.name().replace("_", " ")));
     }
 
@@ -112,10 +99,6 @@ public final class CompletionCriteria {
      */
     public static CompletionCriteria fromMined(int amount, Collection<Material> materials) {
         return new CompletionCriteria(p -> {
-            int count = 0;
-            for (Material m : materials) count += p.getStatistic(Statistic.MINE_BLOCK, m);
-            return count >= amount;
-        }, p -> {
             int count = 0;
             for (Material m : materials) count += p.getStatistic(Statistic.MINE_BLOCK, m);
             return count >= amount;
@@ -142,7 +125,6 @@ public final class CompletionCriteria {
     public static CompletionCriteria fromKilled(int amount, EntityType type) {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.KILL_ENTITY, type) >= amount,
-                p -> p.getStatistic(Statistic.KILL_ENTITY, type) == amount,
                 "criteria.amount.killed", comma(amount), WordUtils.capitalizeFully(type.name().replace("_", " ")));
     }
 
@@ -155,8 +137,7 @@ public final class CompletionCriteria {
      */
     public static CompletionCriteria fromStatistic(Statistic stat, int amount) {
         return new CompletionCriteria(
-                p -> p.getStatistic(stat) >= amount,
-                p -> p.getStatistic(stat) == amount,"criteria.amount." + stat.name().toLowerCase(), comma(amount));
+                p -> p.getStatistic(stat) >= amount, "criteria.amount." + stat.name().toLowerCase(), comma(amount));
     }
 
     /**
@@ -168,7 +149,6 @@ public final class CompletionCriteria {
     public static CompletionCriteria fromCrafted(int amount, Material m) {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.CRAFT_ITEM, m) >= amount,
-                p -> p.getStatistic(Statistic.CRAFT_ITEM, m) == amount,
                 "criteria.amount.crafted", comma(amount), WordUtils.capitalizeFully(m.name().replace("_", " ")));
     }
 
@@ -193,10 +173,6 @@ public final class CompletionCriteria {
             int count = 0;
             for (Material m : materials) count += p.getStatistic(Statistic.CRAFT_ITEM, m);
             return count >= amount;
-        }, p -> {
-            int count = 0;
-            for (Material m : materials) count += p.getStatistic(Statistic.CRAFT_ITEM, m);
-            return count == amount;
         },"criteria.amount.crafted.list." + materials.size(), comma(amount), materials.stream()
                 .map(m -> WordUtils.capitalizeFully(m.name().replace("_", " "))).toArray());
     }
@@ -221,10 +197,25 @@ public final class CompletionCriteria {
         return new CompletionCriteria(p -> {
             long time = p.getStatistic(stat);
             return time >= ticks;
-        }, p -> {
-            long time = p.getStatistic(stat);
-            return time == ticks;
         }, "criteria.amount.playtime", formatTime(ticks));
+    }
+
+    /**
+     * Constructs a CompletionCriteria required to have the given selection limit.
+     * @param limit Selection Limit
+     * @return CompletionCriteria based on selection limit
+     * @throws IllegalArgumentException if the limit is not positive
+     */
+    @NotNull
+    public static CompletionCriteria fromSelectionLimit(int limit) throws IllegalArgumentException {
+        if (limit < 1) throw new IllegalArgumentException("Selection limit must be positive");
+
+        if (limit < 5) return CompletionCriteria.fromKilled(200 + (limit * 30), EntityType.ZOMBIE);
+        if (limit < 10) return CompletionCriteria.fromMined(260 + (limit * 40), Material.GOLD_ORE);
+        if (limit < 20) return CompletionCriteria.fromStatistic(Statistic.ITEM_ENCHANTED, 100 + (limit * 20));
+        if (limit < 30) return CompletionCriteria.fromKilled(15 + (limit * 3), EntityType.ENDER_DRAGON);
+
+        return CompletionCriteria.fromCrafted(260, Material.JUKEBOX);
     }
 
     private static String formatTime(long ticks) {
