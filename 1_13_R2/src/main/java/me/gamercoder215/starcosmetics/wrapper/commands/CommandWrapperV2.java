@@ -10,8 +10,6 @@ import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
 
-import java.util.Locale;
-
 public class CommandWrapperV2 implements CommandWrapper {
 
     private static BukkitCommandHandler handler;
@@ -22,7 +20,7 @@ public class CommandWrapperV2 implements CommandWrapper {
 
         handler.register(this);
         handler.registerBrigadier();
-        handler.setLocale(new Locale(StarConfig.getConfig().getLanguage()));
+        handler.setLocale(StarConfig.getConfig().getLocale());
 
         plugin.getLogger().info("Loaded Command Wrapper V2 (1.13+)");
     }

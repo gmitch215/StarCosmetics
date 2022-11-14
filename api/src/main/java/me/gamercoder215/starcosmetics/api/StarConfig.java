@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
@@ -140,6 +141,24 @@ public interface StarConfig {
      */
     @NotNull
     String getLanguage();
+
+    /**
+     * Fetches the locale based on {@link #getLanguage()}.
+     * @return Language Locale
+     */
+    @NotNull
+    default Locale getLocale() {
+        String l = getLanguage().toLowerCase(Locale.ROOT);
+        switch (l) {
+            case "en": return Locale.ENGLISH;
+            case "it": return Locale.ITALIAN;
+            case "zh": return Locale.CHINESE;
+            case "fr": return Locale.FRENCH;
+            case "de": return Locale.GERMAN;
+            case "ja": return Locale.JAPANESE;
+            default: return new Locale(l);
+        }
+    }
 
     /**
      * Fetches a String from the Language File.
