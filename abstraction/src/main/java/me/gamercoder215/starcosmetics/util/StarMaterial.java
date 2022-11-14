@@ -68,7 +68,11 @@ public enum StarMaterial {
 
     EXPERIENCE_BOTTLE("exp_bottle"),
 
-    ENCHANTING_TABLE("enchantment_table")
+    ENCHANTING_TABLE("enchantment_table"),
+
+    OAK_SIGN(OAK_LOG.find(), "sign"),
+
+    RED_BED(OAK_LOG.find(), "bed"),
     ;
 
     private final Material defaultV;
