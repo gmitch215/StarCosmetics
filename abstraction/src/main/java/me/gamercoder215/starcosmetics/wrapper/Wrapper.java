@@ -8,6 +8,7 @@ import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -51,10 +52,18 @@ public interface Wrapper {
     }
 
     static void sendMessage(CommandSender sender, String key) {
-        sender.sendMessage(getMessage(key));
+        sendMessage(sender, key, "");
     }
 
-    static void send(CommandSender sender, String key, Object... args) {
+    static void sendMessage(CommandSender sender, String key, Object prefix) {
+        sender.sendMessage(prefix.toString() + getMessage(key));
+    }
+
+    static void sendError(CommandSender sender, String key) {
+        sendMessage(sender, key, ChatColor.RED);
+    }
+
+    static void sendWithArgs(CommandSender sender, String key, Object... args) {
         sender.sendMessage(String.format(get(key), args));
     }
 
