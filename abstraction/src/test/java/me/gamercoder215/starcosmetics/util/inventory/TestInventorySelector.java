@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.security.SecureRandom;
 
-public class TestMaterialSelector {
+public class TestInventorySelector {
 
     private static SecureRandom r;
 
