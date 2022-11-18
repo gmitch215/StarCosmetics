@@ -18,10 +18,10 @@ import static me.gamercoder215.starcosmetics.api.player.PlayerCompletion.SONIC_B
 
 public final class CompletionEvents implements Listener {
 
-    private final StarCosmetics plugin;
+    // private final StarCosmetics plugin;
 
     public CompletionEvents(StarCosmetics plugin) {
-        this.plugin = plugin;
+        // this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 

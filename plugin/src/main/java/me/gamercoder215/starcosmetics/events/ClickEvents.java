@@ -18,7 +18,6 @@ import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -44,14 +43,13 @@ import java.util.function.Consumer;
 import static me.gamercoder215.starcosmetics.StarCosmetics.cw;
 import static me.gamercoder215.starcosmetics.util.Generator.genGUI;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 @SuppressWarnings("unchecked")
 public final class ClickEvents implements Listener {
 
     private static StarCosmetics plugin;
-    private static final Wrapper w = getWrapper();
+    // private static final Wrapper w = getWrapper();
 
     public ClickEvents(StarCosmetics plugin) {
         ClickEvents.plugin = plugin;
@@ -275,7 +273,16 @@ public final class ClickEvents implements Listener {
                 switch (e.getClick()) {
                     case LEFT:
                     case SHIFT_LEFT: {
-                        // TODO Edit Implementation
+                        InventorySelector.editSelection(p, selection, sel -> {
+                            StarPlayer sp = new StarPlayer(p);
+                            sp.removeSelection(selection);
+                            sp.addSelection(sel);
+
+                            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                            p.openInventory(Generator.createSelectionInventory(p));
+
+                            updateCache(p);
+                        });
                         break;
                     }
                     case RIGHT:
@@ -287,7 +294,7 @@ public final class ClickEvents implements Listener {
                             p.sendMessage(ChatColor.GREEN + get("sucess.cosmetics.remove_selection"));
                             StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
 
-                            p.openInventory(Generator.createSoundSelectionInventory(p));
+                            p.openInventory(Generator.createSelectionInventory(p));
 
                             updateCache(p);
                         });
@@ -317,10 +324,10 @@ public final class ClickEvents implements Listener {
                         sp.addSelection(sel);
                         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
 
-                        p.openInventory(Generator.createSoundSelectionInventory(p));
-                    }, () -> p.openInventory(Generator.createSoundSelectionInventory(p))),
-                            pl -> pl.openInventory(Generator.createSoundSelectionInventory(pl) ));
-                }, pl -> pl.openInventory(Generator.createSoundSelectionInventory(pl) ));
+                        p.openInventory(Generator.createSelectionInventory(p));
+                    }, () -> p.openInventory(Generator.createSelectionInventory(p))),
+                            pl -> pl.openInventory(Generator.createSelectionInventory(pl) ));
+                }, pl -> pl.openInventory(Generator.createSelectionInventory(pl) ));
             })
 
             .build();
@@ -370,6 +377,41 @@ public final class ClickEvents implements Listener {
                     }
                     default: {
                         throw new AssertionError("Unknown Confirm Inventory Item: " + nbt.getString("item"));
+                    }
+                }
+            })
+            .put("edit:soundevent", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+
+                SoundEventSelection initial = inv.getAttribute("current_event", SoundEventSelection.class);
+                Consumer<SoundEventSelection> action = inv.getAttribute("chosen_action", Consumer.class);
+
+                NBTWrapper nbt = of(item);
+                switch (nbt.getString("item")) {
+                    case "sound": {
+                        InventorySelector.chooseSound(p, sound -> {
+                            SoundEventSelection sel = initial.cloneTo(sound);
+                            inv.setAttribute("current_event", sel);
+                            
+                            InventorySelector.editSelection(p, sel, action);
+                            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                        }, pl -> pl.openInventory(inv));
+                        break;
+                    }
+                    case "event": {
+                        InventorySelector.chooseEvent(p, event -> {
+                            SoundEventSelection sel = initial.cloneTo(event);
+                            inv.setAttribute("current_event", sel);
+                            
+                            InventorySelector.editSelection(p, sel, action);
+                            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                        }, pl -> pl.openInventory(inv));
+                        break;
+                    }
+                    case "save": {
+                        action.accept(initial);
+                        break;
                     }
                 }
             })
