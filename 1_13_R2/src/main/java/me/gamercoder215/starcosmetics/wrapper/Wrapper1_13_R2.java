@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
@@ -64,9 +65,8 @@ public final class Wrapper1_13_R2 implements Wrapper {
     }
 
     @Override
-    public void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks) {
+    public void spawnFakeItem(ItemStack item, Location loc, long deathTicks) {
         WorldServer ws = ((CraftWorld) loc.getWorld()).getHandle();
-        EntityPlayer sp = ((CraftPlayer) p).getHandle();
         EntityItem nmsEntity = new EntityItem(ws, loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
         nmsEntity.p();
         ws.addEntity(nmsEntity);
@@ -160,7 +160,12 @@ public final class Wrapper1_13_R2 implements Wrapper {
 
     @Override
     public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
-        en.setRotation(yaw, pitch);
+        Entity nmsEntity = ((CraftEntity) en).getHandle();
+        nmsEntity.yaw = yaw;
+        nmsEntity.pitch = pitch;
+        nmsEntity.lastYaw = yaw;
+        nmsEntity.lastPitch = pitch;
+        nmsEntity.setHeadRotation(yaw);
     }
 
 

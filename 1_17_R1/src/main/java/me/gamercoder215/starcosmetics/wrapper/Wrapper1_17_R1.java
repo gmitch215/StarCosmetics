@@ -31,8 +31,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.security.KeyPairGenerator;
-import java.security.PublicKey;
 import java.util.UUID;
 
 public final class Wrapper1_17_R1 implements Wrapper {
@@ -77,9 +75,8 @@ public final class Wrapper1_17_R1 implements Wrapper {
     }
 
     @Override
-    public void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks) {
+    public void spawnFakeItem(ItemStack item, Location loc, long deathTicks) {
         WorldServer ws = ((CraftWorld) loc.getWorld()).getHandle();
-        EntityPlayer sp = ((CraftPlayer) p).getHandle();
         EntityItem nmsEntity = new EntityItem(ws, loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
         nmsEntity.p();
         ws.addEntity(nmsEntity);
@@ -96,10 +93,6 @@ public final class Wrapper1_17_R1 implements Wrapper {
         try {
             DedicatedServer srv = ((CraftServer) Bukkit.getServer()).getServer();
             WorldServer sw = ((CraftWorld) loc.getWorld()).getHandle();
-
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(2048);
-            PublicKey pub = keyGen.generateKeyPair().getPublic();
 
             UUID uid = UUID.randomUUID();
             EntityPlayer sp = new EntityPlayer(srv, sw, new GameProfile(uid, uid.toString().substring(0, 16)));

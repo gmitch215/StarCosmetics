@@ -74,9 +74,8 @@ public final class Wrapper1_19_R1 implements Wrapper {
     }
 
     @Override
-    public void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks) {
+    public void spawnFakeItem(ItemStack item, Location loc, long deathTicks) {
         ServerLevel sw = ((CraftWorld) loc.getWorld()).getHandle();
-        ServerPlayer sp = ((CraftPlayer) p).getHandle();
         ItemEntity nmsEntity = new ItemEntity(sw, loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
         nmsEntity.setNeverPickUp();
         sw.addFreshEntity(nmsEntity);
@@ -197,4 +196,5 @@ public final class Wrapper1_19_R1 implements Wrapper {
     public void registerEvents() {
         new CompletionEvents1_12_R1();
     }
+
 }

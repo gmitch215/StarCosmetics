@@ -52,9 +52,8 @@ public final class Wrapper1_9_R1 implements Wrapper {
     }
 
     @Override
-    public void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks) {
+    public void spawnFakeItem(ItemStack item, Location loc, long deathTicks) {
         WorldServer ws = ((CraftWorld) loc.getWorld()).getHandle();
-        EntityPlayer sp = ((CraftPlayer) p).getHandle();
         EntityItem nmsEntity = new EntityItem(ws, loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
         nmsEntity.s();
         ws.addEntity(nmsEntity);

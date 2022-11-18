@@ -134,7 +134,7 @@ public interface Wrapper {
 
     void spawnFakeEntity(Player p, EntityType type, Location loc, long deathTicks);
 
-    void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks);
+    void spawnFakeItem(ItemStack item, Location loc, long deathTicks);
 
     void attachRiptide(Entity en);
 
