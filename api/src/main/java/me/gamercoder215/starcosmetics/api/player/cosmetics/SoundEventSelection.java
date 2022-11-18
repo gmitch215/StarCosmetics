@@ -56,7 +56,8 @@ public final class SoundEventSelection implements ConfigurationSerializable {
     }
 
     /**
-     * A List of all Available Events to be used in a {@link SoundEventSelection}.
+     * <p>A List of all Available Events to be used in a {@link SoundEventSelection}.</p>
+     * <strong>This list is not mutable; Integration for custom events is supported.</strong>
      */
     public static final List<Class<? extends Event>> AVAILABLE_EVENTS;
 
@@ -75,8 +76,12 @@ public final class SoundEventSelection implements ConfigurationSerializable {
             add(PlayerExpChangeEvent.class);
             add(PlayerFishEvent.class);
             add(PlayerJoinEvent.class);
+            add(PlayerItemBreakEvent.class);
+            add(PlayerItemConsumeEvent.class);
             add(PlayerRespawnEvent.class);
             add(optional("player.PlayerRiptideEvent"));
+            add(optional("player.PlayerItemMendEvent"));
+            add(PlayerGameModeChangeEvent.class);
             add(SheepDyeWoolEvent.class);
             add(SignChangeEvent.class);
             add(PlayerInteractEntityEvent.class);
