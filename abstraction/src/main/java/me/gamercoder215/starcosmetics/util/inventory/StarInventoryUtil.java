@@ -62,7 +62,9 @@ public final class StarInventoryUtil {
         if (chosen == null && n.contains("vehicle")) chosen = Material.MINECART;
 
         switch (n) {
-            case "playerjoinevent": return StarMaterial.GRASS_BLOCK.find();
+            case "playerjoinevent": 
+            case "playergamemodechangeevent": return StarMaterial.GRASS_BLOCK.find();
+            
             case "playerfishevent": return Material.FISHING_ROD;
             case "playerrespawnevent": return Material.BEACON;
             case "signchangeevent": return StarMaterial.OAK_SIGN.find();
@@ -74,6 +76,8 @@ public final class StarInventoryUtil {
             case "playereggthrowevent": return Material.EGG;
             case "blockbreakevent": return Material.IRON_PICKAXE;
             case "sheepdyewoolevent": return StarMaterial.WHITE_WOOL.find();
+            case "playeritembreakevent": return Material.DIAMOND_PICKAXE;
+            case "playeritemconsumeevent": return Material.BREAD;    
         }
 
         if (chosen == null) chosen = Material.REDSTONE;
@@ -261,7 +265,7 @@ public final class StarInventoryUtil {
 
         if (input instanceof String) {
             String s = input.toString();
-            if (s.startsWith("fancy_item:")) return WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
+            if (s.startsWith("fancy_item:") || s.startsWith("fancy_block:")) return WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
 
             return WordUtils.capitalizeFully(s);
         }
@@ -284,7 +288,7 @@ public final class StarInventoryUtil {
 
         if (input instanceof String) {
             String s = input.toString();
-            if (s.startsWith("fancy_item")) return Material.matchMaterial(s.split(":")[1]);
+            if (s.startsWith("fancy_item") || s.startsWith("fancy_block")) return Material.matchMaterial(s.split(":")[1]);
 
             switch (s.toLowerCase()) {
                 case "riptide": return Material.matchMaterial("TRIDENT");
@@ -310,7 +314,7 @@ public final class StarInventoryUtil {
 
         ChatColor c = loc.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
 
-        if (!loc.getRarity().isSecret()) {
+        if (!loc.getRarity().isSecret() || loc.isUnlocked(p)) {
             lore.add(" ");
             lore.addAll(Arrays.stream(
                     ChatPaginator.wordWrap(loc.getCompletionCriteria().getDisplayMessage(), 30)

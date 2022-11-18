@@ -156,7 +156,7 @@ public final class Generator {
     };
 
     @NotNull
-    public static StarInventory createSoundSelectionInventory(@NotNull Player p) {
+    public static StarInventory createSelectionInventory(@NotNull Player p) {
         StarInventory inv = genGUI(54, get("menu.cosmetics.selection"));
         inv.setCancelled();
         for (int i = 46; i < 53; i++) inv.setItem(i, null);

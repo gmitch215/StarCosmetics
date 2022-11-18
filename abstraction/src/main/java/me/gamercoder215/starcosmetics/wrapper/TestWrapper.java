@@ -9,7 +9,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class TestWrapper implements Wrapper {
+public final class TestWrapper implements Wrapper {
     @Override
     public int getCommandVersion() {
         return 1;
@@ -37,11 +37,12 @@ public class TestWrapper implements Wrapper {
     public void spawnFakeEntity(Player p, EntityType type, Location loc, long deathTicks) {}
 
     @Override
-    public void spawnFakeItem(Player p, ItemStack item, Location loc, long deathTicks) {}
+    public void spawnFakeItem(ItemStack item, Location loc, long deathTicks) {}
 
     @Override
     public void attachRiptide(Entity en) {}
 
     @Override
     public void setRotation(Entity en, float yaw, float pitch) {}
+
 }

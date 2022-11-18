@@ -72,7 +72,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         return;
                     }
                     
-                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeItem(pl, item, p.getLocation(), 5);
+                    w.spawnFakeItem(item, p.getLocation(), 5);
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 5, 2);
         }
@@ -110,10 +110,8 @@ public final class BaseTrail<T> implements Trail<T> {
                             return;
                         }
 
-                        for (Player pl : p.getWorld().getPlayers()) {
-                            ItemStack item = items.get(r.nextInt(items.size()));
-                            w.spawnFakeItem(pl, item, p.getLocation(), 10);
-                        }
+                        ItemStack item = items.get(r.nextInt(items.size()));
+                        w.spawnFakeItem(item, p.getLocation(), 10);
                     }
                 }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
             }
@@ -179,6 +177,46 @@ public final class BaseTrail<T> implements Trail<T> {
                         }.runTaskTimer(StarConfig.getPlugin(), 5, 1);
                         break;
                     }
+                    case "fancy_block": {
+                        Material m = Material.matchMaterial(input);
+                        ItemStack item = new ItemStack(m);
+                        
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (StarSelector.isStopped(en)) {
+                                    cancel();
+                                    return;
+                                }
+
+                                Location spawn = p.getLocation().subtract(0, 1, 0).setDirection(new Vector(0, 0, 0));
+                                
+                                ArmorStand as = p.getWorld().spawn(spawn, ArmorStand.class);
+                                as.setInvulnerable(true);
+                                as.setBasePlate(false);
+                                as.setVisible(false);
+                                as.setArms(true);
+                                as.setMarker(true);
+
+                                Location l = p.getLocation();
+
+                                as.setHeadPose(new EulerAngle(
+                                    Math.toRadians(l.getYaw()) - 180.0F,
+                                    Math.toRadians(l.getPitch()) - 180.0F,
+                                    0
+                                ));
+                                as.getEquipment().setHelmet(item);
+
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        as.remove();
+                                    }
+                                }.runTaskLater(StarConfig.getPlugin(), 4);
+                            }
+                        }.runTaskTimer(StarConfig.getPlugin(), 5, 1);
+                        break;
+                    }
                 }
             }
         }
@@ -197,7 +235,7 @@ public final class BaseTrail<T> implements Trail<T> {
 
         if (o instanceof Material || o instanceof ItemStack) {
             ItemStack item = o instanceof Material ? new ItemStack((Material) o) : (ItemStack) o;
-            for (Player pl : e.getWorld().getPlayers()) w.spawnFakeItem(pl, item, loc, 5);
+            w.spawnFakeItem(item, loc, 5);
         }
     });
 

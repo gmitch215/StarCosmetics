@@ -159,7 +159,7 @@ public interface CommandWrapper {
         snbt.set("inventory_key", "sound_events");
         soundEvents = snbt.getItem();
         inv.setItem(31, soundEvents);
-        inv.setAttribute("sound_events", Generator.createSoundSelectionInventory(p));
+        inv.setAttribute("sound_events", Generator.createSelectionInventory(p));
 
         p.openInventory(inv);
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);

@@ -4,7 +4,6 @@ import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,11 +24,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 public final class InventorySelector {
 
-    private static final Wrapper w = getWrapper();
+    // private static final Wrapper w = getWrapper();
     
     private InventorySelector() { throw new UnsupportedOperationException(); }
 
@@ -64,7 +63,7 @@ public final class InventorySelector {
 
             item.setItemMeta(meta);
 
-            NBTWrapper nbt = NBTWrapper.of(item);
+            NBTWrapper nbt = of(item);
             nbt.set("sound", s.name());
             item = nbt.getItem();
 
@@ -112,7 +111,7 @@ public final class InventorySelector {
             meta.addItemFlags(ItemFlag.values());
             item.setItemMeta(meta);
 
-            NBTWrapper nbt = NBTWrapper.of(item);
+            NBTWrapper nbt = of(item);
             nbt.set("event", clazz);
             item = nbt.getItem();
 
@@ -139,7 +138,7 @@ public final class InventorySelector {
         cMeta.setDisplayName(ChatColor.GREEN + get("menu.confirm"));
         confirm.setItemMeta(cMeta);
 
-        NBTWrapper confirmNBT = NBTWrapper.of(confirm);
+        NBTWrapper confirmNBT = of(confirm);
         confirmNBT.set("item", "confirm");
         confirm = confirmNBT.getItem();
         inv.setItem(11, confirm);
@@ -149,7 +148,7 @@ public final class InventorySelector {
         caMeta.setDisplayName(ChatColor.RED + get("menu.cancel"));
         cancel.setItemMeta(caMeta);
 
-        NBTWrapper cancelNBT = NBTWrapper.of(cancel);
+        NBTWrapper cancelNBT = of(cancel);
         cancelNBT.set("item", "cancel");
         cancel = cancelNBT.getItem();
         inv.setItem(15, cancel);
@@ -162,6 +161,44 @@ public final class InventorySelector {
             p.closeInventory();
             StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
         });
+    }
+
+    public static void editSelection(@NotNull Player p, @NotNull SoundEventSelection initial, @NotNull Consumer<SoundEventSelection> edited) {
+        StarInventory inv = Generator.genGUI("edit:soundevent", 27, get("menu.cosmetics.sound.edit"));
+        inv.setAttribute("current_event", initial);
+        inv.setAttribute("edited_action", edited);
+
+        ItemStack sound = new ItemStack(Material.NOTE_BLOCK);
+        ItemMeta sMeta = sound.getItemMeta();
+        sMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.sound.edit.sound"));
+        sound.setItemMeta(sMeta);
+
+        NBTWrapper soundNBT = of(sound);
+        soundNBT.set("item", "sound");
+        sound = soundNBT.getItem();
+        inv.setItem(11, sound);
+
+        ItemStack event = new ItemStack(Material.BOOK);
+        ItemMeta eMeta = event.getItemMeta();
+        eMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.sound.edit.event"));
+        event.setItemMeta(eMeta);
+
+        NBTWrapper eNBT = of(event);
+        eNBT.set("item", "event");
+        event = eNBT.getItem();
+        inv.setItem(15, event);
+
+        ItemStack save = StarMaterial.LIME_WOOL.findStack();
+        ItemMeta saMeta = save.getItemMeta();
+        saMeta.setDisplayName(ChatColor.GREEN + get("constants.save"));
+        save.setItemMeta(saMeta);
+
+        NBTWrapper saNBT = of(save);
+        saNBT.set("item", "save");
+        save = saNBT.getItem();
+        inv.setItem(22, save);
+
+        p.openInventory(inv);
     }
 
 }
