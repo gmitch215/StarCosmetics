@@ -141,6 +141,19 @@ public final class CompletionCriteria {
     }
 
     /**
+     * Generates a CompletionCriteria from the amount of blocks mined.
+     * @param amount Blocks Mined
+     * @return CompletionCriteria with the given criteria
+     */
+    public static CompletionCriteria fromBlocksMined(int amount) {
+        return new CompletionCriteria(p -> {
+            int count = 0;
+            for (Material m : Material.values()) if (m.isBlock()) count += p.getStatistic(Statistic.MINE_BLOCK, m);
+            return count >= amount;
+        }, "criteria.amount.mined.all", comma(amount));
+    }
+
+    /**
      * Generates a CompletionCriteria with {@link Statistic#CRAFT_ITEM}.
      * @param amount The amount of items crafted
      * @param m The material to check for
