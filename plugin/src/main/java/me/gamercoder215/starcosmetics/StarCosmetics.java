@@ -269,10 +269,11 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     private static final class InternalEvents implements Listener {
 
-        private final StarCosmetics plugin;
+        // private final StarCosmetics plugin;
 
         public InternalEvents(StarCosmetics plugin) {
-            this.plugin = plugin;
+            // this.plugin = plugin;
+            Bukkit.getPluginManager().registerEvents(this, plugin);
         }
 
         @EventHandler
