@@ -44,6 +44,9 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
                     CompletionCriteria.fromCompletion(PlayerCompletion.SONIC_BOOM_DEATH), Rarity.LEGENDARY))
 
             // Particles
+            .add(new TrailSelection("sonic_boom", BaseTrail.PROJECTILE_TRAIL, Particle.SONIC_BOOM,
+                    CompletionCriteria.fromMined(500, Material.SCULK), Rarity.RARE))
+
             .add(new TrailSelection("sculk_soul", BaseTrail.PROJECTILE_TRAIL, Particle.SCULK_CHARGE,
                     CompletionCriteria.fromKilled(5, EntityType.WARDEN), Rarity.EPIC))
 
@@ -51,6 +54,8 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
             .add(new TrailSelection("allay", BaseTrail.PROJECTILE_TRAIL, EntityType.ALLAY,
                     CompletionCriteria.fromKilled(450, EntityType.PILLAGER), Rarity.RARE))
 
+
+            
             .build();
 
     // Sound Trails

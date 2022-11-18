@@ -48,7 +48,12 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromKilled(55, EntityType.COW), Rarity.COMMON))
             .add(new TrailSelection("flint", BaseTrail.PROJECTILE_TRAIL, Material.FLINT,
                     CompletionCriteria.fromMined(80, Material.GRAVEL), Rarity.COMMON))
-
+            .add(new TrailSelection("glass", BaseTrail.PROJECTILE_TRAIL, "fancy_block:glass",
+                    CompletionCriteria.fromMined(100, Material.SAND), Rarity.COMMON))
+            .add(new TrailSelection("stone_bricks", BaseTrail.PROJECTILE_TRAIL, "fancy_block:stone_bricks",
+                    CompletionCriteria.fromMined(150, Material.STONE), Rarity.COMMON))
+            
+            
             .add(new TrailSelection("iron", BaseTrail.PROJECTILE_TRAIL, Material.IRON_INGOT,
                     CompletionCriteria.fromMined(185, Material.IRON_ORE), Rarity.OCCASIONAL))
             .add(new TrailSelection("redstone", BaseTrail.PROJECTILE_TRAIL, Material.REDSTONE,
@@ -95,6 +100,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 1500), Rarity.EPIC))
             .add(new TrailSelection("ender_pearl", BaseTrail.PROJECTILE_TRAIL, Material.ENDER_PEARL,
                     CompletionCriteria.fromKilled(900, EntityType.ENDERMAN), Rarity.EPIC))
+            .add(new TrailSelection("enchanted_book", BaseTrail.PROJECTILE_TRAIL, Material.ENCHANTED_BOOK,
+                    CompletionCriteria.fromKilled(600, EntityType.WITCH), Rarity.EPIC))
             
             .add(new TrailSelection("diamond_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:diamond_sword",
                     CompletionCriteria.fromKilled(75, EntityType.WITHER), Rarity.LEGENDARY))
@@ -105,7 +112,14 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new TrailSelection("ender_crystals", BaseTrail.PROJECTILE_TRAIL, Material.END_CRYSTAL,
                     CompletionCriteria.fromKilled(120, EntityType.ENDER_DRAGON), Rarity.MYTHICAL))
-
+            .add(new TrailSelection("beacon", BaseTrail.PROJECTILE_TRAIL, "fancy_item:beacon",
+                    CompletionCriteria.fromKilled(130, EntityType.WITHER), Rarity.MYTHICAL))
+            
+            .add(new TrailSelection("dragon_egg", BaseTrail.PROJECTILE_TRAIL, "fancy_block:dragon_egg",
+                    CompletionCriteria.fromMined(165800, StarMaterial.END_STONE.find()), Rarity.ULTRA))
+            .add(new TrailSelection("structure_block", BaseTrail.PROJECTILE_TRAIL, "fancy_block:structure_block",
+                    CompletionCriteria.fromBlocksMined(500000), Rarity.ULTRA))
+            
             .add(new TrailSelection("command_blocks", BaseTrail.PROJECTILE_TRAIL,
                     Arrays.asList(StarMaterial.COMMAND_BLOCK.find(), StarMaterial.CHAIN_COMMAND_BLOCK.find(), StarMaterial.REPEATING_COMMAND_BLOCK.find()),
                     CompletionCriteria.fromCompletion(PlayerCompletion.NETHER_ROOF), Rarity.SPECIAL))
@@ -129,7 +143,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             
             .add(new TrailSelection("dragon_breath", BaseTrail.PROJECTILE_TRAIL, Particle.DRAGON_BREATH,
                     CompletionCriteria.fromKilled(10, EntityType.ENDER_DRAGON), Rarity.EPIC))
-            
+
             // Entities
             .add(new TrailSelection("chickens", BaseTrail.PROJECTILE_TRAIL, EntityType.CHICKEN,
                     CompletionCriteria.fromKilled(200, EntityType.CHICKEN), Rarity.OCCASIONAL))

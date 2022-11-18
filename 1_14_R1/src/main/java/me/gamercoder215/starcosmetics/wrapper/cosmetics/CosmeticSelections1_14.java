@@ -10,6 +10,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
 
 import java.util.List;
@@ -31,9 +32,21 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
             .add(new TrailSelection("bamboo", BaseTrail.PROJECTILE_TRAIL, Material.BAMBOO,
                     CompletionCriteria.fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
 
+            .add(new TrailSelection("crossbow", BaseTrail.PROJECTILE_TRAIL, "fancy_item:crossbow",
+                    CompletionCriteria.fromKilled(550, EntityType.PILLAGER), Rarity.EPIC))
+            
             .add(new TrailSelection("wither_rose", BaseTrail.PROJECTILE_TRAIL, Material.WITHER_ROSE,
                     CompletionCriteria.fromKilled(1000, EntityType.WITHER), Rarity.MYTHICAL))
+            
+            .add(new TrailSelection("jigsaw", BaseTrail.PROJECTILE_TRAIL, "fancy_block:jigsaw",
+                    CompletionCriteria.fromBlocksMined(1000000), Rarity.SPECIAL))
+            
+            // Particles
+            .add(new TrailSelection("smoke", BaseTrail.PROJECTILE_TRAIL, Particle.CAMPFIRE_COSY_SMOKE,
+                    CompletionCriteria.fromCrafted(50, Material.TORCH), Rarity.COMMON))
 
+            
+            
             .build();
 
     // Selections

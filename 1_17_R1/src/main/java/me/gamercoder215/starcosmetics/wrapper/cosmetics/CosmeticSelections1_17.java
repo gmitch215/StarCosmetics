@@ -27,12 +27,15 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Items + Fancy Items
             .add(new TrailSelection("deepslate", BaseTrail.PROJECTILE_TRAIL, Material.DEEPSLATE,
                     CompletionCriteria.fromMined(370, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE), Rarity.OCCASIONAL))
 
             .add(new TrailSelection("copper", BaseTrail.PROJECTILE_TRAIL,
                     Arrays.asList(Material.COPPER_BLOCK, Material.WEATHERED_COPPER, Material.EXPOSED_COPPER, Material.OXIDIZED_COPPER),
                     CompletionCriteria.fromMined(340, Material.COPPER_ORE, Material.DEEPSLATE_COPPER_ORE), Rarity.UNCOMMON))
+            .add(new TrailSelection("glow_berries", BaseTrail.PROJECTILE_TRAIL, Material.GLOW_BERRIES,
+                    CompletionCriteria.fromMined(200, Material.GLOW_LICHEN), Rarity.UNCOMMON))  
 
             .add(new TrailSelection("raw_ores", BaseTrail.PROJECTILE_TRAIL,
                     Arrays.asList(Material.RAW_IRON, Material.RAW_GOLD, Material.RAW_COPPER),
@@ -43,6 +46,7 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
 
             .add(new TrailSelection("super_amethyst", BaseTrail.PROJECTILE_TRAIL, Material.AMETHYST_BLOCK,
                     CompletionCriteria.fromMined(5000, Material.AMETHYST_BLOCK), Rarity.LEGENDARY))
+            
             
             .build();
 
