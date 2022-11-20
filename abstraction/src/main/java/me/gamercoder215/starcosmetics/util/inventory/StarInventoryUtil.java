@@ -13,7 +13,10 @@ import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.apache.commons.lang3.text.WordUtils;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -136,8 +139,6 @@ public final class StarInventoryUtil {
 
             for (EntityType e : EntityType.values())
                 if (n.contains(e.name())) return toMaterial(e);
-
-            Bukkit.broadcastMessage(entity);
 
             switch (entity) {
                 case "generic": return LEATHER_CHESTPLATE;
