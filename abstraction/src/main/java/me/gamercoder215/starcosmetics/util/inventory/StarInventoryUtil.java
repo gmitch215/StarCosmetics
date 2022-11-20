@@ -13,10 +13,7 @@ import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.apache.commons.lang3.text.WordUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -42,6 +39,7 @@ import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
+import static org.bukkit.Material.*;
 
 public final class StarInventoryUtil {
 
@@ -54,33 +52,33 @@ public final class StarInventoryUtil {
         String n = eventClass.getSimpleName().toLowerCase();
         Material chosen = null;
 
-        if (n.contains("player")) chosen = Material.IRON_SWORD;
-        if (chosen == null && n.contains("block")) chosen = Material.DIRT;
+        if (n.contains("player")) chosen = IRON_SWORD;
+        if (chosen == null && n.contains("block")) chosen = DIRT;
         if (chosen == null && n.contains("server")) chosen = StarMaterial.OBSERVER.find();
         if (chosen == null && n.contains("inventory")) chosen = StarMaterial.CRAFTING_TABLE.find();
-        if (chosen == null && n.contains("weather")) chosen = Material.BUCKET;
-        if (chosen == null && n.contains("vehicle")) chosen = Material.MINECART;
+        if (chosen == null && n.contains("weather")) chosen = BUCKET;
+        if (chosen == null && n.contains("vehicle")) chosen = MINECART;
 
         switch (n) {
             case "playerjoinevent": 
             case "playergamemodechangeevent": return StarMaterial.GRASS_BLOCK.find();
             
-            case "playerfishevent": return Material.FISHING_ROD;
-            case "playerrespawnevent": return Material.BEACON;
+            case "playerfishevent": return FISHING_ROD;
+            case "playerrespawnevent": return BEACON;
             case "signchangeevent": return StarMaterial.OAK_SIGN.find();
-            case "playerriptideevent": return Material.matchMaterial("TRIDENT");
+            case "playerriptideevent": return matchMaterial("TRIDENT");
             case "playerdeathevent": return StarMaterial.WITHER_SKELETON_SKULL.find();
-            case "furnaceextractevent": return Material.FURNACE;
+            case "furnaceextractevent": return FURNACE;
             case "playerbedenterevent": return StarMaterial.RED_BED.find();
             case "playerexpchangeevent": return StarMaterial.EXPERIENCE_BOTTLE.find();
-            case "playereggthrowevent": return Material.EGG;
-            case "blockbreakevent": return Material.IRON_PICKAXE;
+            case "playereggthrowevent": return EGG;
+            case "blockbreakevent": return IRON_PICKAXE;
             case "sheepdyewoolevent": return StarMaterial.WHITE_WOOL.find();
-            case "playeritembreakevent": return Material.DIAMOND_PICKAXE;
-            case "playeritemconsumeevent": return Material.BREAD;    
+            case "playeritembreakevent": return DIAMOND_PICKAXE;
+            case "playeritemconsumeevent": return BREAD;    
         }
 
-        if (chosen == null) chosen = Material.REDSTONE;
+        if (chosen == null) chosen = REDSTONE;
         return chosen;
     }
 
@@ -92,6 +90,9 @@ public final class StarInventoryUtil {
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + get("constants.menu.sound") + " " + ChatColor.GOLD + getFriendlyName(s.getSound()));
+        lore.add(ChatColor.AQUA + getWithArgs("constants.menu.pitch", ChatColor.GOLD + String.format("%,.1f", s.getPitch())));
+        lore.add(ChatColor.AQUA + getWithArgs("constants.menu.volume", ChatColor.GOLD + String.format("%,.1f", s.getVolume())));
+        lore.add(" ");
 
         DateTimeFormatter f = DateTimeFormatter.ofPattern("EEEE, LLL d, yyyy 'at' h:mm:ss a")
                 .withLocale(StarConfig.getConfig().getLocale())
@@ -105,6 +106,7 @@ public final class StarInventoryUtil {
 
         meta.setLore(lore);
 
+        meta.addItemFlags(ItemFlag.values());
         item.setItemMeta(meta);
 
         NBTWrapper nbt = of(item);
@@ -118,43 +120,79 @@ public final class StarInventoryUtil {
     @NotNull
     public static Material toMaterial(@NotNull Sound s) {
         String n = s.name();
-        Material chosen = null;
+
+        switch (n.toLowerCase()) {
+            case "item_bucket_empty_axolotl": return matchMaterial("AXOLOTL_BUCKET");
+            case "entity_parrot_imitate_illusioner": return matchMaterial("CROSSBOW");
+        }
+
+        if (n.startsWith("item.crossbow")) return matchMaterial("CROSSBOW");
 
         for (Material m : Arrays.stream(Material.values()).filter(w::isItem).collect(Collectors.toList()))
             if (n.equals(m.name()) || n.contains(m.name())) return m; // Takes Absolute Priority
 
-        if (chosen == null && n.startsWith("ENTITY")) chosen = StarMaterial.POPPY.find();
-        if (chosen == null && n.contains("GENERIC")) chosen = Material.LEATHER_CHESTPLATE;
-        if (chosen == null && n.contains("VILLAGER")) chosen = Material.EMERALD;
+        if (n.startsWith("ENTITY")) {
+            String entity = n.split("_")[1].toLowerCase();
 
-        if (n.startsWith("MUSIC")) if (n.contains("OVERWORLD")) chosen = StarMaterial.GRASS_BLOCK.find();
-        else if (n.contains("NETHER")) chosen = Material.NETHERRACK;
-        else chosen = Material.NOTE_BLOCK;
+            for (EntityType e : EntityType.values())
+                if (n.contains(e.name())) return toMaterial(e);
 
-        if (chosen == null && n.startsWith("RECORD")) chosen = Material.JUKEBOX;
-        if (chosen == null && n.startsWith("UI")) chosen = Material.REDSTONE_BLOCK;
-        if (chosen == null && n.startsWith("WEATHER")) chosen = Material.BUCKET;
+            Bukkit.broadcastMessage(entity);
 
-        return chosen == null ? Material.STONE : chosen;
+            switch (entity) {
+                case "generic": return LEATHER_CHESTPLATE;
+                case "fishing_bobber": return FISHING_ROD;
+                case "hostile": return ROTTEN_FLESH;
+                case "item": return CHEST;
+                case "leash_knot": return StarMaterial.LEAD.find();
+                case "mooshroom": return toMaterial(EntityType.MUSHROOM_COW);
+                case "puffer_fish": return matchMaterial("PUFFERFISH");
+            }
+
+            return StarMaterial.POPPY.find();
+        }
+
+        if (n.startsWith("ITEM")) {
+            String mat = n.split("_")[1].toLowerCase();
+            if (matchMaterial(mat) != null) return matchMaterial(mat);
+
+            switch (mat) {
+                case "axe": return IRON_AXE;
+                case "hoe": return IRON_HOE;
+                case "shovel": return StarMaterial.IRON_SHOVEL.find();
+                case "pickaxe": return IRON_PICKAXE;
+                case "bottle": return GLASS_BOTTLE;
+                case "armor": return IRON_CHESTPLATE;
+                case "dye": return StarMaterial.POPPY.find();
+                case "firecharge": return StarMaterial.FIRE_CHARGE.find();
+                case "totem": StarMaterial.TOTEM_OF_UNDYING.find();
+            }
+
+            return APPLE;
+        }
+
+        if (n.contains("GENERIC")) return LEATHER_CHESTPLATE;
+        if (n.contains("VILLAGER")) return EMERALD;
+
+        if (n.startsWith("MUSIC"))
+            if (n.contains("OVERWORLD")) return StarMaterial.GRASS_BLOCK.find();
+            else if (n.contains("NETHER")) return NETHERRACK;
+            else return NOTE_BLOCK;
+
+        if (n.startsWith("RECORD")) return JUKEBOX;
+        if (n.startsWith("UI")) return REDSTONE_BLOCK;
+        if (n.startsWith("WEATHER")) return BUCKET;
+        if (n.startsWith("ENCHANT")) return ENCHANTED_BOOK;
+        if (n.startsWith("EVENT")) return REDSTONE;
+        if (n.startsWith("PARTICLE")) return SOUL_SAND;
+
+        return STONE;
     }
 
     @NotNull
     public static String getFriendlyName(@Nullable Sound s) {
         if (s == null) return "";
-
-        String n = WordUtils.capitalizeFully(s.name().replace("_", " "));
-        String prefix = n.split(" ")[0].toLowerCase();
-        String suffix = n.substring(prefix.length());
-
-        switch (prefix) {
-            case "entity": return get("constants.friendly.entity") + " - " + suffix;
-            case "music": return get("constants.friendly.music") + " - " + suffix;
-            case "record": return get("constants.friendly.record") + " - " + suffix;
-            case "ui": return get("constants.friendly.ui") + " - " + suffix;
-            case "weather": return get("constants.friendly.weather") + " - " + suffix;
-        }
-
-        return n;
+        return w.getKey(s);
     }
 
     public static void setScrolls(StarInventory inv) {
@@ -188,7 +226,7 @@ public final class StarInventoryUtil {
             String value = p.getProperty(key);
             if (value == null) return null;
 
-            ItemStack head = w.isLegacy() ? new ItemStack(Material.matchMaterial("SKULL_ITEM"), 1, (short) 3) : new ItemStack(Material.matchMaterial("PLAYER_HEAD"));
+            ItemStack head = w.isLegacy() ? new ItemStack(matchMaterial("SKULL_ITEM"), 1, (short) 3) : new ItemStack(matchMaterial("PLAYER_HEAD"));
             SkullMeta hMeta = (SkullMeta) head.getItemMeta();
 
             GameProfile profile = new GameProfile(UUID.randomUUID(), null);
@@ -245,10 +283,7 @@ public final class StarInventoryUtil {
     public static String toInputString(@NotNull Object input) {
         if (input instanceof Sound || input instanceof StarSound) {
             Sound s = input instanceof StarSound ? ((StarSound) input).find() : (Sound) input;
-            String n = s.name();
-            return WordUtils.capitalizeFully(n.split("_")[0])
-                    + " - "
-                    + WordUtils.capitalizeFully(n.substring(n.indexOf("_") + 1).replace("_", " "));
+            return getFriendlyName(s);
         }
 
         if (input instanceof Enum<?>) {
@@ -275,7 +310,7 @@ public final class StarInventoryUtil {
 
     @NotNull
     public static Material toInputMaterial(@NotNull Object input) {
-        if (input instanceof Material) return (Material) input;
+        if (input instanceof Material || input instanceof StarMaterial) return input instanceof StarMaterial ? ((StarMaterial) input).find() : (Material) input;
         if (input instanceof Particle) return toMaterial((Particle) input);
         if (input instanceof EntityType) return toMaterial((EntityType) input);
         if (input instanceof Sound) return toMaterial((Sound) input);
@@ -288,10 +323,10 @@ public final class StarInventoryUtil {
 
         if (input instanceof String) {
             String s = input.toString();
-            if (s.startsWith("fancy_item") || s.startsWith("fancy_block")) return Material.matchMaterial(s.split(":")[1]);
+            if (s.startsWith("fancy_item") || s.startsWith("fancy_block")) return matchMaterial(s.split(":")[1]);
 
             switch (s.toLowerCase()) {
-                case "riptide": return Material.matchMaterial("TRIDENT");
+                case "riptide": return matchMaterial("TRIDENT");
             }
         }
 
@@ -343,31 +378,27 @@ public final class StarInventoryUtil {
 
     @NotNull
     public static Material toMaterial(@NotNull EntityType type) {
-        Material m = null;
-
-        for (Material mat : Material.values()) {
-            if (mat.name().equalsIgnoreCase(type.name())) {
-                m = mat;
-                break;
-            }
-
-            if (mat.name().equalsIgnoreCase(type.name() + "_SPAWN_EGG")) {
-                m = mat;
-                break;
-            }
+        for (Material mat : values()) {
+            if (mat.name().equalsIgnoreCase(type.name())) return mat;
+            if (mat.name().equalsIgnoreCase(type.name() + "_SPAWN_EGG")) return mat;
         }
 
-        if (type == EntityType.WITHER) m = StarMaterial.WITHER_SKELETON_SKULL.find();
-        if (type == EntityType.ENDER_DRAGON) m = Material.DRAGON_EGG;
+        switch (type.name()) {
+            case "WITHER": return StarMaterial.WITHER_SKELETON_SKULL.find();
+            case "ENDER_DRAGON": return DRAGON_EGG;
+            case "EXPERIENCE_ORB": return StarMaterial.EXPERIENCE_BOTTLE.find();
+            case "BOAT": return StarMaterial.OAK_BOAT.find();
+            case "DRAGON_FIREBALL": return StarMaterial.FIRE_CHARGE.find();
+            case "IRON_GOLEM": return StarMaterial.CARVED_PUMPKIN.find();
+            case "PLAYER": return StarMaterial.PLAYER_HEAD.find();
+            case "SHULKER_BULLET": return PURPUR_BLOCK;
+            case "EVOKER_FANGS": return StarMaterial.TOTEM_OF_UNDYING.find();
+        }
 
-        if (m == null) m = Material.APPLE;
-
-        return m;
+        return APPLE;
     }
 
-    public static void setBack(@NotNull StarInventory inv, @NotNull Consumer<Player> action) {
-        int size = inv.getSize();
-
+    public static void setBack(@NotNull StarInventory inv, int slot, @NotNull Consumer<Player> action) {
         ItemStack back = getHead("arrow_left");
         ItemMeta meta = back.getItemMeta();
         meta.setDisplayName(ChatColor.RED + get("constants.back"));
@@ -377,8 +408,12 @@ public final class StarInventoryUtil {
         nbt.setID("back");
         back = nbt.getItem();
 
-        inv.setItem(size - 5, back);
+        inv.setItem(slot, back);
         inv.setAttribute("back_inventory_action", action);
+    }
+
+    public static void setBack(@NotNull StarInventory inv, @NotNull Consumer<Player> action) {
+        setBack(inv, inv.getSize() - 5, action);
     }
 
     public static void setPages(@NotNull List<StarInventory> pages) {
@@ -411,104 +446,104 @@ public final class StarInventoryUtil {
 
     @NotNull
     public static Material toMaterial(@NotNull Particle particle) {
-        for (Material m : Material.values()) if (particle.name().equalsIgnoreCase(m.name())) return m;
+        for (Material m : values()) if (particle.name().equalsIgnoreCase(m.name())) return m;
 
         switch (particle.name().toLowerCase()) {
             case "white_ash":
-            case "ash": return Material.FLINT_AND_STEEL;
+            case "ash": return FLINT_AND_STEEL;
             case "block_crack":
             case "block_dust":
-            case "block_marker": return Material.STONE;
+            case "block_marker": return STONE;
             case "bubble_column_up":
-            case "bubble_pop": return Material.matchMaterial("SEAGRASS");
+            case "bubble_pop": return matchMaterial("SEAGRASS");
             case "campire_cosy_smoke":
-            case "campfire_signal_smoke": return Material.matchMaterial("CAMPFIRE");
+            case "campfire_signal_smoke": return matchMaterial("CAMPFIRE");
             case "cloud": return StarMaterial.WHITE_WOOL.find();
-            case "composter": return Material.matchMaterial("COMPOSTER");
-            case "crimson_spore": return Material.matchMaterial("CRIMSON_NYLIUM");
-            case "crit": return Material.DIAMOND_SWORD;
-            case "crit_magic": return Material.ENCHANTED_BOOK;
-            case "current_down": return Material.matchMaterial("TRIDENT");
-            case "damage_indicator": return Material.IRON_AXE;
-            case "dolphin": return Material.matchMaterial("DOLPHIN_SPAWN_EGG");
-            case "dragon_breath": return Material.DRAGON_EGG;
+            case "composter": return matchMaterial("COMPOSTER");
+            case "crimson_spore": return matchMaterial("CRIMSON_NYLIUM");
+            case "crit": return DIAMOND_SWORD;
+            case "crit_magic": return ENCHANTED_BOOK;
+            case "current_down": return matchMaterial("TRIDENT");
+            case "damage_indicator": return IRON_AXE;
+            case "dolphin": return matchMaterial("DOLPHIN_SPAWN_EGG");
+            case "dragon_breath": return DRAGON_EGG;
             case "dripping_dripstone_lava":
             case "falling_dripstone_lava":
             case "falling_lava":
             case "landing_lava":
             case "lava":
-            case "drip_lava": return Material.LAVA_BUCKET;
+            case "drip_lava": return LAVA_BUCKET;
             case "enchantment_table": return StarMaterial.ENCHANTING_TABLE.find();
             case "dripping_dripstone_water":
             case "falling_dripstone_water":
             case "falling_water":
-            case "drip_water": return Material.WATER_BUCKET;
+            case "drip_water": return WATER_BUCKET;
             case "falling_honey":
             case "landing_honey":
-            case "dripping_honey": return Material.matchMaterial("HONEY_BLOCK");
+            case "dripping_honey": return matchMaterial("HONEY_BLOCK");
             case "falling_obsidian_tear":
             case "landing_obsidian_tear":
-            case "dripping_obsidian_tear": return Material.matchMaterial("CRYING_OBSIDIAN");
+            case "dripping_obsidian_tear": return matchMaterial("CRYING_OBSIDIAN");
             case "falling_nectar":
             case "wax_on":
-            case "wax_off": return Material.matchMaterial("HONEYCOMB");
-            case "dust_color_transition": return Material.FLINT;
-            case "electric_spark": return Material.END_ROD;
+            case "wax_off": return matchMaterial("HONEYCOMB");
+            case "dust_color_transition": return FLINT;
+            case "electric_spark": return END_ROD;
             case "explosion_huge":
             case "explosion_large":
-            case "explosion_normal": return Material.TNT;
-            case "falling_dust": return Material.GRAVEL;
+            case "explosion_normal": return TNT;
+            case "falling_dust": return GRAVEL;
             case "spore_blossom_air":
-            case "falling_spore_blossom": return Material.matchMaterial("SPORE_BLOSSOM");
-            case "fireworks_spawrk": return Material.FIREWORK;
+            case "falling_spore_blossom": return matchMaterial("SPORE_BLOSSOM");
+            case "fireworks_spawrk": return FIREWORK;
             case "small_flame":
-            case "flame": return Material.TORCH;
-            case "flash": return Material.matchMaterial("LIGHTNING_ROD");
-            case "glow": return Material.SEA_LANTERN;
-            case "glow_squid_ink": return Material.matchMaterial("GLOW_INK_SAC");
-            case "heart": return Material.GOLDEN_APPLE;
-            case "item_crack": return Material.IRON_PICKAXE;
-            case "mob_appearence": return Material.ROTTEN_FLESH;
-            case "nautilus": return Material.matchMaterial("NAUTILUS_SHELL");
-            case "note": return Material.NOTE_BLOCK;
+            case "flame": return TORCH;
+            case "flash": return matchMaterial("LIGHTNING_ROD");
+            case "glow": return SEA_LANTERN;
+            case "glow_squid_ink": return matchMaterial("GLOW_INK_SAC");
+            case "heart": return GOLDEN_APPLE;
+            case "item_crack": return IRON_PICKAXE;
+            case "mob_appearence": return ROTTEN_FLESH;
+            case "nautilus": return matchMaterial("NAUTILUS_SHELL");
+            case "note": return NOTE_BLOCK;
             case "reverse_portal":
-            case "portal": return Material.OBSIDIAN;
-            case "scrape": return Material.IRON_BLOCK;
+            case "portal": return OBSIDIAN;
+            case "scrape": return IRON_BLOCK;
             case "sculk_charge":
             case "sculk_charge_pop":
             case "vibration":
-            case "sculk_soul": return Material.matchMaterial("SCULK_SENSOR");
-            case "shriek": return Material.matchMaterial("SCULK_SHRIEKER");
-            case "slime": return Material.SLIME_BLOCK;
+            case "sculk_soul": return matchMaterial("SCULK_SENSOR");
+            case "shriek": return matchMaterial("SCULK_SHRIEKER");
+            case "slime": return SLIME_BLOCK;
             case "smoke_large":
-            case "smoke_normal": return Material.FURNACE;
-            case "sneeze": return Material.PAPER;
-            case "snow_shovel": return Material.IRON_HOE;
+            case "smoke_normal": return FURNACE;
+            case "sneeze": return PAPER;
+            case "snow_shovel": return IRON_HOE;
             case "snowflake":
-            case "snowball": return Material.SNOW_BALL;
-            case "sonic_boom": return Material.matchMaterial("SCULK");
-            case "soul": return Material.SOUL_SAND;
-            case "soul_fire_flame": return Material.matchMaterial("SOUL_TORCH");
+            case "snowball": return SNOW_BALL;
+            case "sonic_boom": return matchMaterial("SCULK");
+            case "soul": return SOUL_SAND;
+            case "soul_fire_flame": return matchMaterial("SOUL_TORCH");
             case "spell_mob":
             case "spell_witch":
             case "spell_mob_ambient":
-            case "spell": return Material.ENCHANTMENT_TABLE;
+            case "spell": return ENCHANTMENT_TABLE;
             case "spit": return StarMaterial.LEAD.find();
-            case "squid_ink": return Material.INK_SACK;
+            case "squid_ink": return INK_SACK;
             case "suspended_depth":
-            case "suspended": return Material.STRING;
-            case "sweep_attack": return Material.GOLD_SWORD;
+            case "suspended": return STRING;
+            case "sweep_attack": return GOLD_SWORD;
             case "totem": return StarMaterial.TOTEM_OF_UNDYING.find();
             case "villager_angry":
             case "villager_happy":
-            case "town_aura": return Material.EMERALD;
-            case "warped_spore": return Material.matchMaterial("WARPED_NYLIUM");
+            case "town_aura": return EMERALD;
+            case "warped_spore": return matchMaterial("WARPED_NYLIUM");
             case "water_drop":
             case "water_wake":
             case "water_bubble": return StarMaterial.LILY_PAD.find();
         }
 
-        return Material.CLAY_BALL;
+        return CLAY_BALL;
     }
 
     @SafeVarargs

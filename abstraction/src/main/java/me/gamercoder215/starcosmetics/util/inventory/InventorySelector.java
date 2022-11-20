@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
@@ -16,14 +17,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static me.gamercoder215.starcosmetics.util.inventory.ItemBuilder.SAVE;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 public final class InventorySelector {
@@ -32,21 +33,31 @@ public final class InventorySelector {
     
     private InventorySelector() { throw new UnsupportedOperationException(); }
 
-    public static void chooseSound(Player p, Consumer<Sound> clickAction) {
-        chooseSound(p, clickAction, null);
-    }
+    // Generator Methods
 
-    public static void chooseSound(@NotNull Player p, Consumer<Sound> clickAction, Consumer<Player> back) {
-        StarInventory inv = Generator.genGUI("choose:sound_inv", 54, get("menu.cosmetics.choose.sound.item"));
-        inv.setCancelled();
-        inv.setAttribute("chosen_action", clickAction);
+    public static void loadInventories() {
+        // CHOOSE_SOUND_INVENTORIES
+        Map<String, StarInventory> categories = new HashMap<>();
+        Map<String, List<ItemStack>> categoryItems = new HashMap<>();
 
-        List<ItemStack> items = new ArrayList<>();
         for (Sound s : Sound.values()) {
+            String category = s.name().split("_")[0].toLowerCase();
+            if (!categories.containsKey(category)) {
+                StarInventory inv = Generator.genGUI("choose:sound_inv", 54, get("menu.cosmetics.choose.sound.item"));
+                inv.setCancelled();
+                inv.setAttribute("_category", category);
+
+                categories.put(category, inv);
+                categoryItems.put(category, new ArrayList<>());
+            }
+
+            StarInventory inv = categories.get(category);
+            List<ItemStack> items = categoryItems.get(category);
+
             Material m = StarInventoryUtil.toMaterial(s);
             ItemStack item = new ItemStack(m);
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.YELLOW + StarInventoryUtil.getFriendlyName(s));
+            meta.setDisplayName(ChatColor.GOLD + StarInventoryUtil.getFriendlyName(s));
 
             List<String> lore = new ArrayList<>();
             String desc = get("menu.cosmetics.choose.sound_desc." + s.name().toLowerCase(), "");
@@ -57,10 +68,15 @@ public final class InventorySelector {
                         .map(str -> ChatColor.GRAY + str)
                         .collect(Collectors.toList()));
                 lore.add(" ");
-
-                meta.setLore(lore);
             }
 
+            lore.add(" ");
+            lore.add(ChatColor.YELLOW + get("constants.menu.right_click_hear"));
+            lore.add(ChatColor.YELLOW + get("constants.menu.left_click_select"));
+
+            meta.setLore(lore);
+
+            meta.addItemFlags(ItemFlag.values());
             item.setItemMeta(meta);
 
             NBTWrapper nbt = of(item);
@@ -70,13 +86,42 @@ public final class InventorySelector {
             items.add(item);
         }
 
-        Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
-        inv.setAttribute("rows", rows);
-        StarInventoryUtil.setRows(inv, rows);
-        StarInventoryUtil.setScrolls(inv);
-        if (back != null) StarInventoryUtil.setBack(inv, back);
+        categories.values().forEach(inv -> {
+            inv.setItem(18, ItemBuilder.STOP_SOUND);
 
-        p.openInventory(inv);
+            String category = inv.getAttribute("_category", String.class);
+
+            List<ItemStack> items = categoryItems.get(category);
+            Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
+            inv.setAttribute("rows", rows);
+            StarInventoryUtil.setRows(inv, rows);
+            StarInventoryUtil.setScrolls(inv);
+        });
+
+        CHOOSE_SOUND_INVENTORIES = categories;
+    }
+
+    public static Map<String, StarInventory> CHOOSE_SOUND_INVENTORIES;
+
+    public static void chooseSound(Player p, Consumer<Sound> clickAction) {
+        chooseSound(p, clickAction, null);
+    }
+
+    public static void chooseSound(@NotNull Player p, Consumer<Sound> clickAction, Consumer<Player> back) {
+        List<StarInventory> pages = CHOOSE_SOUND_INVENTORIES.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
+
+        StarInventoryUtil.setPages(pages);
+
+        pages.forEach(inv -> {
+            inv.setAttribute("chosen_action", clickAction);
+            if (back != null) StarInventoryUtil.setBack(inv, back);
+        });
+
+        p.openInventory(pages.get(0));
     }
 
     public static void chooseEvent(@NotNull Player p, Consumer<Class<? extends Event>> clickAction) {
@@ -163,14 +208,78 @@ public final class InventorySelector {
         });
     }
 
+    public static void choosePitchVolume(@NotNull Player p, @NotNull Sound sound, @NotNull BiConsumer<Float, Float> clickAction, @NotNull Consumer<Player> back) {
+        StarInventory inv = Generator.genGUI("choose:pitch_volume_inv", 36, get("menu.cosmetics.choose.pitch_volume"));
+        inv.setAttribute("chosen_action", clickAction);
+        inv.setAttribute("sound", sound);
+        inv.setCancelled();
+
+        ItemStack pitch = new ItemStack(Material.NOTE_BLOCK);
+        ItemMeta pMeta = pitch.getItemMeta();
+        pMeta.setDisplayName(ChatColor.YELLOW + get("constants.pitch"));
+        pMeta.setLore(Arrays.asList(
+                ChatColor.GREEN + "1.0",
+                " ",
+                ChatColor.YELLOW + get("constants.menu.right_click_up"),
+                ChatColor.YELLOW + get("constants.menu.left_click_down")
+        ));
+        pitch.setItemMeta(pMeta);
+
+        NBTWrapper pitchNBT = of(pitch);
+        pitchNBT.set("item", "pitch");
+        pitchNBT.set("value", 1.0f);
+        pitchNBT.set("min", 0.0f);
+        pitchNBT.set("max", 2.0f);
+        pitch = pitchNBT.getItem();
+        inv.setItem(11, pitch);
+
+        ItemStack volume = new ItemStack(Material.JUKEBOX);
+        ItemMeta vMeta = volume.getItemMeta();
+        vMeta.setDisplayName(ChatColor.YELLOW + get("constants.volume"));
+        vMeta.setLore(Arrays.asList(
+                ChatColor.GREEN + "2.0",
+                " ",
+                ChatColor.YELLOW + get("constants.menu.right_click_up"),
+                ChatColor.YELLOW + get("constants.menu.left_click_down")
+        ));
+        volume.setItemMeta(vMeta);
+
+        NBTWrapper volumeNBT = of(volume);
+        volumeNBT.set("item", "volume");
+        volumeNBT.set("value", 2.0f);
+        volumeNBT.set("max", 10.0f);
+        volumeNBT.set("min", 0.1f);
+        volume = volumeNBT.getItem();
+        inv.setItem(15, volume);
+
+        ItemStack test = new ItemStack(StarInventoryUtil.toMaterial(sound));
+        ItemMeta tMeta = test.getItemMeta();
+        tMeta.setDisplayName(ChatColor.YELLOW + get("constants.test_sound"));
+        test.setItemMeta(tMeta);
+
+        NBTWrapper testNBT = of(test);
+        testNBT.set("item", "test");
+        test = testNBT.getItem();
+        inv.setItem(22, test);
+
+        inv.setItem(23, ItemBuilder.STOP_SOUND);
+
+        if (back != null) {
+            StarInventoryUtil.setBack(inv, 32, back);
+            inv.setItem(30, SAVE);
+        } else inv.setItem(31, SAVE);
+
+        p.openInventory(inv);
+    }
+
     public static void editSelection(@NotNull Player p, @NotNull SoundEventSelection initial, @NotNull Consumer<SoundEventSelection> edited) {
-        StarInventory inv = Generator.genGUI("edit:soundevent", 27, get("menu.cosmetics.sound.edit"));
+        StarInventory inv = Generator.genGUI("edit:soundevent", 27, get("constants.menu.edit.sound_event"));
         inv.setAttribute("current_event", initial);
-        inv.setAttribute("edited_action", edited);
+        inv.setAttribute("chosen_action", edited);
 
         ItemStack sound = new ItemStack(Material.NOTE_BLOCK);
         ItemMeta sMeta = sound.getItemMeta();
-        sMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.sound.edit.sound"));
+        sMeta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.sound"));
         sound.setItemMeta(sMeta);
 
         NBTWrapper soundNBT = of(sound);
@@ -178,9 +287,24 @@ public final class InventorySelector {
         sound = soundNBT.getItem();
         inv.setItem(11, sound);
 
+        ItemStack pitchVolume = new ItemStack(Material.NOTE_BLOCK);
+        ItemMeta pMeta = pitchVolume.getItemMeta();
+        pMeta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.pitch_volume"));
+        pMeta.setLore(Arrays.asList(
+                ChatColor.GREEN + getWithArgs("constants.menu.pitch", initial.getPitch()),
+                ChatColor.GREEN + getWithArgs("constants.menu.volume", initial.getVolume())
+        ));
+        pitchVolume.setItemMeta(pMeta);
+
+        NBTWrapper pitchNBT = of(pitchVolume);
+        pitchNBT.set("item", "pitch_volume");
+        pitchVolume = pitchNBT.getItem();
+
+        inv.setItem(13, pitchVolume);
+
         ItemStack event = new ItemStack(Material.BOOK);
         ItemMeta eMeta = event.getItemMeta();
-        eMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.sound.edit.event"));
+        eMeta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.event"));
         event.setItemMeta(eMeta);
 
         NBTWrapper eNBT = of(event);
@@ -188,17 +312,45 @@ public final class InventorySelector {
         event = eNBT.getItem();
         inv.setItem(15, event);
 
-        ItemStack save = StarMaterial.LIME_WOOL.findStack();
-        ItemMeta saMeta = save.getItemMeta();
-        saMeta.setDisplayName(ChatColor.GREEN + get("constants.save"));
-        save.setItemMeta(saMeta);
-
-        NBTWrapper saNBT = of(save);
-        saNBT.set("item", "save");
-        save = saNBT.getItem();
-        inv.setItem(22, save);
+        inv.setItem(22, SAVE);
 
         p.openInventory(inv);
+    }
+
+    public static void createSelection(final Player p) {
+        final StarPlayer sp = new StarPlayer(p);
+        final Consumer<Player> back = pl -> {
+            pl.openInventory(Generator.createSelectionInventory(pl));
+            StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(pl);
+        };
+
+        final Runnable backR = () -> back.accept(p);
+
+        StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+        InventorySelector.chooseEvent(p, event -> {
+
+            StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+            InventorySelector.chooseSound(p, sound -> {
+
+                p.getWorld().playSound(p.getLocation(), sound, 2F, 1F);
+                InventorySelector.choosePitchVolume(p, sound, (pitch, volume) -> {
+
+                    p.getWorld().playSound(p.getLocation(), sound, volume, pitch);
+                    InventorySelector.confirm(p, () -> {
+                        SoundEventSelection sel = SoundEventSelection.builder()
+                                .event(event)
+                                .sound(sound, volume, pitch)
+                                .player(p)
+                                .build();
+
+                        sp.addSelection(sel);
+                        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+
+                        p.openInventory(Generator.createSelectionInventory(p));
+                    }, backR);
+                }, back);
+            }, back);
+        }, back);
     }
 
 }
