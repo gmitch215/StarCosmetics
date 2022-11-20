@@ -13,6 +13,7 @@ import me.gamercoder215.starcosmetics.events.CompletionEvents;
 import me.gamercoder215.starcosmetics.events.CosmeticEvents;
 import me.gamercoder215.starcosmetics.placeholders.StarPlaceholders;
 import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
@@ -74,6 +75,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             .add(SoundEventSelection.class)
             .build();
 
+    private void loadConstructors() {
+        InventorySelector.loadInventories();
+    }
+
     @Override
     public void onEnable() {
         if (!checkCompatible()) return;
@@ -85,6 +90,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         registerEvents();
         cw = getCommandWrapper();
         SERIALIZABLE.forEach(ConfigurationSerialization::registerClass);
+        loadConstructors();
         getLogger().info("Loaded Classes...");
 
         ASYNC_TICK_RUNNABLE.runTaskTimerAsynchronously(this, 0, 1);

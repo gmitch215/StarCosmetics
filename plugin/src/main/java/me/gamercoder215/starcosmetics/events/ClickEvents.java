@@ -18,6 +18,7 @@ import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -35,6 +37,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -42,14 +45,15 @@ import java.util.function.Consumer;
 
 import static me.gamercoder215.starcosmetics.StarCosmetics.cw;
 import static me.gamercoder215.starcosmetics.util.Generator.genGUI;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 @SuppressWarnings("unchecked")
 public final class ClickEvents implements Listener {
 
     private static StarCosmetics plugin;
-    // private static final Wrapper w = getWrapper();
+    private static final Wrapper w = getWrapper();
+
 
     public ClickEvents(StarCosmetics plugin) {
         ClickEvents.plugin = plugin;
@@ -120,7 +124,8 @@ public final class ClickEvents implements Listener {
 
                 p.openInventory(pages.get(page - 1));
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
-            }).put("back", (inv, e) -> {
+            })
+            .put("back", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
                 Consumer<Player> backAction = inv.getAttribute("back_inventory_action", Consumer.class);
                 boolean sound = inv.getAttribute("back_inventory_sound", true, Boolean.class);
@@ -268,7 +273,7 @@ public final class ClickEvents implements Listener {
                 ItemStack item = e.getCurrentItem();
 
                 NBTWrapper nbt = of(item);
-                SoundEventSelection selection = nbt.getSoundEventSelection("selection");
+                final SoundEventSelection selection = nbt.getSoundEventSelection("selection");
 
                 switch (e.getClick()) {
                     case LEFT:
@@ -291,7 +296,7 @@ public final class ClickEvents implements Listener {
                             StarPlayer sp = new StarPlayer(p);
                             sp.removeSelection(selection);
 
-                            p.sendMessage(ChatColor.GREEN + get("sucess.cosmetics.remove_selection"));
+                            p.sendMessage(prefix() + ChatColor.GREEN + getWithArgs("success.cosmetics.remove_selection", selection.getEvent().getSimpleName()));
                             StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
 
                             p.openInventory(Generator.createSelectionInventory(p));
@@ -307,27 +312,12 @@ public final class ClickEvents implements Listener {
                 }
             })
             .put("add:soundevent", (inv, e) -> {
-                final Player p = (Player) e.getWhoClicked();
-                final StarPlayer sp = new StarPlayer(p);
-                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
-
-                InventorySelector.chooseEvent(p, event -> {
-
-                    StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
-                    InventorySelector.chooseSound(p, sound -> InventorySelector.confirm(p, () -> {
-                        SoundEventSelection sel = SoundEventSelection.builder()
-                                .event(event)
-                                .sound(sound)
-                                .player(p)
-                                .build();
-
-                        sp.addSelection(sel);
-                        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
-
-                        p.openInventory(Generator.createSelectionInventory(p));
-                    }, () -> p.openInventory(Generator.createSelectionInventory(p))),
-                            pl -> pl.openInventory(Generator.createSelectionInventory(pl) ));
-                }, pl -> pl.openInventory(Generator.createSelectionInventory(pl) ));
+                Player p = (Player) e.getWhoClicked();
+                InventorySelector.createSelection(p);
+            })
+            .put("stop_sound", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                w.stopSound(p);
             })
 
             .build();
@@ -339,9 +329,8 @@ public final class ClickEvents implements Listener {
     private static final Map<String, BiConsumer<StarInventory, InventoryClickEvent>> CLICK_INVENTORY = ImmutableMap.<String, BiConsumer<StarInventory, InventoryClickEvent>>builder()
             .put("choose:event_inv", (inv, e) -> {
                 ItemStack item = e.getCurrentItem();
+                if (checkMenuItem(item)) return;
                 NBTWrapper nbt = of(item);
-                if (nbt.getID().startsWith("scroll")) return;
-                if (nbt.getID().startsWith("back")) return;
 
                 Class<? extends Event> clazz = nbt.getClass("event", Event.class);
 
@@ -349,15 +338,31 @@ public final class ClickEvents implements Listener {
                 action.accept(clazz);
             })
             .put("choose:sound_inv", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
                 ItemStack item = e.getCurrentItem();
+                if (checkMenuItem(item)) return;
                 NBTWrapper nbt = of(item);
-                if (nbt.getID().startsWith("scroll")) return;
-                if (nbt.getID().startsWith("back")) return;
 
                 Sound s = Sound.valueOf(nbt.getString("sound"));
 
-                Consumer<Sound> action = inv.getAttribute("chosen_action", Consumer.class);
-                action.accept(s);
+                switch (e.getClick()) {
+                    case LEFT:
+                    case SHIFT_LEFT: {
+                        Consumer<Sound> action = inv.getAttribute("chosen_action", Consumer.class);
+                        action.accept(s);
+                        break;
+                    }
+                    case RIGHT:
+                    case SHIFT_RIGHT: {
+                        p.getWorld().playSound(p.getLocation(), s, 2F, 1F);
+                        break;
+                    }
+                    default: {
+                        StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                        break;
+                    }
+                }
+
             })
             .put("confirm_inv", (inv, e) -> {
                 ItemStack item = e.getCurrentItem();
@@ -409,13 +414,108 @@ public final class ClickEvents implements Listener {
                         }, pl -> pl.openInventory(inv));
                         break;
                     }
+                    case "pitch_volume": {
+                        InventorySelector.choosePitchVolume(p, initial.getSound(), (pitch, volume) -> {
+                            SoundEventSelection sel = initial.cloneTo(initial.getSound(), volume, pitch);
+                            inv.setAttribute("current_event", sel);
+
+                            InventorySelector.editSelection(p, sel, action);
+                            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                        }, pl -> pl.openInventory(inv));
+                        break;
+                    }
                     case "save": {
                         action.accept(initial);
                         break;
                     }
                 }
             })
+            .put("choose:pitch_volume_inv", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+
+                NBTWrapper nbt = of(item);
+                if (nbt.getID().startsWith("scroll")) return;
+                if (nbt.getID().startsWith("back")) return;
+
+                String type = nbt.getString("item");
+
+                switch (type) {
+                    case "save": {
+                        float pitch = NBTWrapper.getFloat(inv.getItem(11), "value");
+                        float volume = NBTWrapper.getFloat(inv.getItem(15), "value");
+
+                        BiConsumer<Float, Float> action = inv.getAttribute("chosen_action", BiConsumer.class);
+                        action.accept(pitch, volume);
+                        break;
+                    }
+                    case "test": {
+                        Sound sound = inv.getAttribute("sound", Sound.class);
+
+                        float pitch = NBTWrapper.getFloat(inv.getItem(11), "value");
+                        float volume = NBTWrapper.getFloat(inv.getItem(15), "value");
+
+                        p.getWorld().playSound(p.getLocation(), sound, volume, pitch);
+                        break;
+                    }
+                    case "volume":
+                    case "pitch": {
+                        ClickType click = e.getClick();
+
+                        if (!click.isLeftClick() && !click.isRightClick()) {
+                            StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                            return;
+                        }
+
+                        float value = nbt.getFloat("value");
+                        float min = nbt.getFloat("min");
+                        float max = nbt.getFloat("max");
+
+                        float newV = click.isRightClick() ? value + 0.1f : value - 0.1f;
+
+                        if (min > newV || max < newV) {
+                            StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                            return;
+                        }
+
+                        ItemStack newItem = item.clone();
+                        ItemMeta meta = newItem.getItemMeta();
+                        meta.setLore(Arrays.asList(
+                                ChatColor.GREEN + String.format("%,.1f", newV),
+                                " ",
+                                ChatColor.YELLOW + get("constants.menu.right_click_up"),
+                                ChatColor.YELLOW + get("constants.menu.left_click_down")
+                        ));
+                        newItem.setItemMeta(meta);
+
+                        NBTWrapper newNBT = of(newItem);
+                        newNBT.set("value", newV);
+                        newNBT.set("min", min);
+                        newNBT.set("max", max);
+                        newNBT.set("item", type);
+                        newItem = newNBT.getItem();
+
+                        inv.setItem(e.getSlot(), newItem);
+                        if (click.isRightClick()) StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                        else StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+                        break;
+                    }
+                }
+            })
             .build();
+
+    private static boolean checkMenuItem(ItemStack item) {
+        if (ItemBuilder.GUI_BACKGROUND.isSimilar(item)) return true;
+
+        NBTWrapper nbt = of(item);
+        String id = nbt.getID();
+
+        if (id.startsWith("scroll")) return true;
+        if (id.startsWith("back")) return true;
+        if (id.equalsIgnoreCase("stop_sound")) return true;
+
+        return id.contains("page");
+    }
 
     @EventHandler
     public void click(InventoryClickEvent e) {

@@ -1,18 +1,22 @@
 package me.gamercoder215.starcosmetics.events;
 
 import me.gamercoder215.starcosmetics.StarCosmetics;
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
+import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.RegisteredListener;
+
+import java.lang.reflect.Method;
 
 public final class CosmeticEvents implements Listener {
     
@@ -21,6 +25,45 @@ public final class CosmeticEvents implements Listener {
     public CosmeticEvents(StarCosmetics plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
+
+        RegisteredListener reg = new RegisteredListener(this, (l, e) -> onEvent(e), EventPriority.NORMAL, plugin, false);
+        for (HandlerList h : HandlerList.getHandlerLists()) h.register(reg);
+    }
+
+    public void onEvent(Event e) {
+        if (SoundEventSelection.isValid(e.getClass())) {
+            Player p = null;
+            try {
+                Method get = e.getClass().getDeclaredMethod("getPlayer");
+                get.setAccessible(true);
+                p = (Player) get.invoke(e);
+            } catch (NoSuchMethodException ignored) {
+                Class<?> superC = e.getClass();
+                while (superC.getSuperclass() != null) try {
+                    superC = superC.getSuperclass();
+                    Method get = superC.getDeclaredMethod("getPlayer");
+                    get.setAccessible(true);
+
+                    p = (Player) get.invoke(e);
+                    break;
+                } catch (NoSuchMethodException ignored2) {
+                } catch (ReflectiveOperationException err2) {
+                    StarConfig.print(err2);
+                }
+            } catch (ReflectiveOperationException err) {
+                StarConfig.print(err);
+            }
+
+            if (p == null) throw new IllegalStateException("Invalid Selection Event: " + e.getClass().getName());
+
+            StarPlayer sp = new StarPlayer(p);
+
+            for (SoundEventSelection sel : sp.getSoundSelections())
+                if (sel.getEvent().isAssignableFrom(e.getClass())) {
+                    sel.play(p);
+                    break;
+                }
+        }
     }
 
     @EventHandler
