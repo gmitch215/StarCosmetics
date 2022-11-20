@@ -2,9 +2,11 @@ package me.gamercoder215.starcosmetics.api.player.cosmetics;
 
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -28,12 +30,16 @@ public final class SoundEventSelection implements ConfigurationSerializable {
     private final OfflinePlayer player;
     private final Sound sound;
     private final Class<? extends Event> event;
+    private final float volume;
+    private final float pitch;
 
     private final Date timestamp;
 
-    private SoundEventSelection(Class<? extends Event> event, Sound sound, OfflinePlayer player, Date timestamp) {
+    private SoundEventSelection(Class<? extends Event> event, Sound sound, float volume, float pitch, OfflinePlayer player, Date timestamp) {
         this.event = event;
         this.player = player;
+        this.volume = volume;
+        this.pitch = pitch;
         this.sound = sound;
         this.timestamp = timestamp;
     }
@@ -42,17 +48,22 @@ public final class SoundEventSelection implements ConfigurationSerializable {
      * Creates a new instance.
      * @param event The event to play the sound on.
      * @param sound The sound to play.
+     * @param volume The volume of the sound.
+     * @param pitch The pitch of the sound.
      * @param player The Player that owns this SoundEventSelection.
      * @param date The Timestamp that this sound was created at.
      * @return Constructed SoundEventSelection
      */
-    public static SoundEventSelection of(@NotNull Class<? extends Event> event, @NotNull Sound sound, @NotNull OfflinePlayer player, @NotNull Date date) {
+    public static SoundEventSelection of(@NotNull Class<? extends Event> event, @NotNull Sound sound, float volume, float pitch, @NotNull OfflinePlayer player, @NotNull Date date) {
         if (event == null) throw new IllegalArgumentException("Event cannot be null");
         if (sound == null) throw new IllegalArgumentException("Sound cannot be null");
         if (player == null) throw new IllegalArgumentException("Player cannot be null");
         if (date == null) throw new IllegalArgumentException("Date cannot be null");
 
-        return new SoundEventSelection(event, sound, player, date);
+        if (volume < 0) throw new IllegalArgumentException("Volume cannot be less than 0");
+        if (pitch < 0 || pitch > 2) throw new IllegalArgumentException("Pitch must be between 0 and 2: " + pitch);
+
+        return new SoundEventSelection(event, sound, volume, pitch, player, date);
     }
 
     /**
@@ -60,6 +71,19 @@ public final class SoundEventSelection implements ConfigurationSerializable {
      * <strong>This list is not mutable; Integration for custom events is supported.</strong>
      */
     public static final List<Class<? extends Event>> AVAILABLE_EVENTS;
+
+    /**
+     * Checks whether this event is valid to listen to.
+     * @param event The event to check.
+     * @return true if valid, false otherwise
+     */
+    public static boolean isValid(@NotNull Class<? extends Event> event) {
+        if (event == null) return false;
+
+        for (Class<? extends Event> e : AVAILABLE_EVENTS) if (e.isAssignableFrom(event)) return true;
+
+        return false;
+    }
 
     static {
         AVAILABLE_EVENTS = new ArrayList<Class<? extends Event>>(){{
@@ -125,6 +149,39 @@ public final class SoundEventSelection implements ConfigurationSerializable {
     }
 
     /**
+     * Fetches the volume of the sound.
+     * @return Sound Volume
+     */
+    public float getVolume() {
+        return volume;
+    }
+
+    /**
+     * Plays this sound with its volume and pitch.
+     * @param loc The location to play the sound at.
+     */
+    public void play(@NotNull Location loc) {
+        if (loc == null) return;
+        loc.getWorld().playSound(loc, sound, volume, pitch);
+    }
+
+    /**
+     * Plays this sound with its volume and pitch.
+     * @param en The entity to play the sound at.
+     */
+    public void play(@NotNull Entity en) {
+        play(en.getLocation());
+    }
+
+    /**
+     * Fetches the pitch of the sound.
+     * @return Sound Pitch
+     */
+    public float getPitch() {
+        return pitch;
+    }
+
+    /**
      * Fetches the Event that this SoundEventSelection is listening for.
      * @return Class of the Event
      */
@@ -140,7 +197,19 @@ public final class SoundEventSelection implements ConfigurationSerializable {
      */
     @NotNull
     public SoundEventSelection cloneTo(@NotNull OfflinePlayer player) {
-        return new SoundEventSelection(event, sound, player, timestamp);
+        return of(event, sound, volume, pitch, player, timestamp);
+    }
+
+    /**
+     * Clones this SoundEventSelection with a new Sound, pitch, and volume.
+     * @param s The new Sound to play.
+     * @param volume The new volume of the sound.
+     * @param pitch The new pitch of the sound.
+     * @return Cloned SoundEventSelection
+     */
+    @NotNull
+    public SoundEventSelection cloneTo(@NotNull Sound s, float volume, float pitch) {
+        return of(event, s, volume, pitch, player, timestamp);
     }
 
     /**
@@ -150,7 +219,7 @@ public final class SoundEventSelection implements ConfigurationSerializable {
      */
     @NotNull
     public SoundEventSelection cloneTo(@NotNull Sound s) {
-        return new SoundEventSelection(event, s, player, timestamp);
+        return cloneTo(s, volume, pitch);
     }
 
     /**
@@ -160,15 +229,18 @@ public final class SoundEventSelection implements ConfigurationSerializable {
      */
     @NotNull
     public SoundEventSelection cloneTo(@NotNull Class<? extends Event> e) {
-        return new SoundEventSelection(e, sound, player, timestamp);
+        return of(e, sound, volume, pitch, player, timestamp);
     }
 
     @Override
     public String toString() {
         return "SoundEventSelection{" +
-                "player=" + player +
+                "player=" + player.getName() +
                 ", sound=" + sound +
-                ", event=" + event +
+                ", event=" + event.getName() +
+                ", volume=" + volume +
+                ", pitch=" + pitch +
+                ", timestamp=" + timestamp +
                 '}';
     }
 
@@ -177,12 +249,13 @@ public final class SoundEventSelection implements ConfigurationSerializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SoundEventSelection that = (SoundEventSelection) o;
-        return player.getUniqueId().equals(that.player.getUniqueId()) && sound == that.sound && event.equals(that.event);
+        return player.getUniqueId().equals(that.player.getUniqueId()) && sound == that.sound && event.equals(that.event)
+                && volume == that.volume && pitch == that.pitch;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(player.getUniqueId(), sound, event);
+        return Objects.hash(player.getUniqueId(), sound, volume, pitch, event);
     }
 
     /**
@@ -191,7 +264,7 @@ public final class SoundEventSelection implements ConfigurationSerializable {
      * @return Whether the two SoundEventSelections are equal without the player
      */
     public boolean equalsIgnorePlayer(@NotNull SoundEventSelection other) {
-        return sound == other.sound && event.equals(other.event);
+        return sound == other.sound && event.equals(other.event) && volume == other.volume && pitch == other.pitch;
     }
 
     /**
@@ -200,10 +273,13 @@ public final class SoundEventSelection implements ConfigurationSerializable {
      * @return Deserialized SoundEventSelection
      */
     public static @Nullable SoundEventSelection deserialize(@NotNull Map<String, Object> serial) {
+        if (serial == null) return null;
         try {
             return new SoundEventSelection(
                     Class.forName(serial.get("event").toString()).asSubclass(Event.class),
                     Sound.valueOf(serial.get("sound").toString()),
+                    Float.parseFloat(serial.get("volume").toString()),
+                    Float.parseFloat(serial.get("pitch").toString()),
                     (OfflinePlayer) serial.get("player"),
                     new Date((long) serial.get("timestamp"))
             );
@@ -221,6 +297,8 @@ public final class SoundEventSelection implements ConfigurationSerializable {
                 .put("sound", sound.name())
                 .put("player", player)
                 .put("timestamp", timestamp.getTime())
+                .put("volume", volume)
+                .put("pitch", pitch)
                 .build();
     }
 
@@ -240,6 +318,8 @@ public final class SoundEventSelection implements ConfigurationSerializable {
 
         private OfflinePlayer player;
         private Sound sound;
+        private float volume;
+        private float pitch;
         private Class<? extends Event> event;
 
         private Builder() {}
@@ -260,13 +340,17 @@ public final class SoundEventSelection implements ConfigurationSerializable {
         /**
          * Sets the Sound that this SoundEventSelection will play.
          * @param sound Sound
+         * @param volume Volume of Sound
+         * @param pitch Pitch of Sound
          * @return this class, for chaining
          * @throws IllegalArgumentException if sound is null
          */
         @NotNull
-        public Builder sound(@NotNull Sound sound) throws IllegalArgumentException {
+        public Builder sound(@NotNull Sound sound, float volume, float pitch) throws IllegalArgumentException {
             if (sound == null) throw new IllegalArgumentException("Sound cannot be null");
             this.sound = sound;
+            this.volume = volume;
+            this.pitch = pitch;
             return this;
         }
 
@@ -293,7 +377,10 @@ public final class SoundEventSelection implements ConfigurationSerializable {
             if (player == null) throw new IllegalStateException("Player cannot be null");
             if (sound == null) throw new IllegalStateException("Sound cannot be null");
             if (event == null) throw new IllegalStateException("Event cannot be null");
-            return new SoundEventSelection(event, sound, player, new Date());
+            if (volume < 0) throw new IllegalStateException("Volume cannot be negative");
+            if (pitch < 0 || pitch > 2) throw new IllegalStateException("Pitch must be between 0 and 2: " + pitch);
+
+            return new SoundEventSelection(event, sound, volume, pitch, player, new Date());
         }
 
 
