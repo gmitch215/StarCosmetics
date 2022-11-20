@@ -73,6 +73,14 @@ public enum StarMaterial {
     OAK_SIGN(OAK_LOG.find(), "sign"),
 
     RED_BED(OAK_LOG.find(), "bed"),
+
+    OAK_BOAT("boat"),
+
+    FIRE_CHARGE("fireball"),
+
+    CARVED_PUMPKIN("pumpkin"),
+
+    IRON_SHOVEL(Material.IRON_PICKAXE),
     ;
 
     private final Material defaultV;
