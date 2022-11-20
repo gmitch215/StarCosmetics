@@ -160,6 +160,8 @@ public final class NBTWrapper1_19_R1 extends NBTWrapper {
         selection.putString("event", value.getEvent().getName());
         selection.putLong("timestamp", value.getTimestamp().getTime());
         selection.putUUID("player", value.getPlayer().getUniqueId());
+        selection.putFloat("volume", value.getVolume());
+        selection.putFloat("pitch", value.getPitch());
 
         starcosmetics.put(key, selection);
         tag.put(ROOT, starcosmetics);
@@ -179,6 +181,8 @@ public final class NBTWrapper1_19_R1 extends NBTWrapper {
             return SoundEventSelection.of(
                     Class.forName(selection.getString("event")).asSubclass(Event.class),
                     Sound.valueOf(selection.getString("sound")),
+                    selection.getFloat("volume"),
+                    selection.getFloat("pitch"),
                     Bukkit.getOfflinePlayer(selection.getUUID("player")),
                     new Date(selection.getLong("timestamp"))
             );
@@ -186,6 +190,27 @@ public final class NBTWrapper1_19_R1 extends NBTWrapper {
             StarConfig.print(e);
             return null;
         }
+    }
+
+    @Override
+    public void set(String key, float value) {
+        ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+        CompoundTag tag = nmsitem.getOrCreateTag();
+        CompoundTag starcosmetics = tag.getCompound(ROOT);
+
+        starcosmetics.putFloat(key, value);
+        tag.put(ROOT, starcosmetics);
+        nmsitem.setTag(tag);
+        this.item = CraftItemStack.asBukkitCopy(nmsitem);
+    }
+
+    @Override
+    public float getFloat(String key) {
+        ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+        CompoundTag tag = nmsitem.getOrCreateTag();
+        CompoundTag starcosmetics = tag.getCompound(ROOT);
+
+        return starcosmetics.getFloat(key);
     }
 
 }

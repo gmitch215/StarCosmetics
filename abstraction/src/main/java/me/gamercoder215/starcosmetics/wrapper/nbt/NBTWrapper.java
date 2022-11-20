@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.nbt;
 import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -24,6 +25,10 @@ public abstract class NBTWrapper {
 
     public static NBTWrapper of(ItemStack item) {
         return getWrapper().getNBTWrapper(item);
+    }
+
+    public static float getFloat(ItemStack item, String key) {
+        return of(item).getFloat(key);
     }
 
     public static ItemStack setID(ItemStack item, String id) {
@@ -72,7 +77,12 @@ public abstract class NBTWrapper {
 
     public abstract SoundEventSelection getSoundEventSelection(String key);
 
-    public <T> Class<? extends T> getClass(String key, Class<T> parent) {
+    public abstract float getFloat(String key);
+
+    public abstract void set(String key, float value);
+
+    @Nullable
+    public final <T> Class<? extends T> getClass(String key, Class<T> parent) {
         Class<?> clazz = getClass(key);
         return parent.isAssignableFrom(clazz) ? clazz.asSubclass(parent) : null;
     }
