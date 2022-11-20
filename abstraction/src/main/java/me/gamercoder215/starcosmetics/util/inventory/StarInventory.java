@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
-public interface StarInventory extends Inventory {
+public interface StarInventory extends Inventory, Cloneable {
 
     @Nullable
     String getKey();
@@ -22,7 +22,7 @@ public interface StarInventory extends Inventory {
     }
 
     default StarInventory copy() {
-        StarInventory inv = getWrapper().createInventory(getKey(), getSize(), getTitle());
+        StarInventory inv = getWrapper().createInventory(getKey(), getSize(), getAttribute("_name", String.class));
         inv.setContents(getContents());
         inv.setAttributes(getAllAttributes());
         return inv;

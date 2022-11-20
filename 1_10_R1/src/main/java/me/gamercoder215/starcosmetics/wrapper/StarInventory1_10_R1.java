@@ -1,13 +1,11 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.common.collect.ImmutableMap;
+import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftInventoryCustom;
 
-import com.google.common.collect.ImmutableMap;
-
-import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class StarInventory1_10_R1 extends CraftInventoryCustom implements StarInventory {
     
@@ -17,6 +15,8 @@ public final class StarInventory1_10_R1 extends CraftInventoryCustom implements 
     StarInventory1_10_R1(String key, int size, String title) {
         super(null, size, title);
         this.key = key;
+
+        setAttribute("_name", title);
     }
 
     @Override
