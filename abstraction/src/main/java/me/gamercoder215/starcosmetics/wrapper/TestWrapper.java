@@ -4,6 +4,7 @@ import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -44,5 +45,14 @@ public final class TestWrapper implements Wrapper {
 
     @Override
     public void setRotation(Entity en, float yaw, float pitch) {}
+
+    @Override
+    public String getKey(Sound s) {
+        return s.name().toLowerCase();
+    }
+
+    @Override
+    public void stopSound(Player p) {}
+
 
 }
