@@ -12,7 +12,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
@@ -44,6 +46,20 @@ public final class Wrapper1_13_R2 implements Wrapper {
     @Override
     public void sendActionbar(Player p, String message) {
         p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
+    }
+
+    @Override
+    public String getKey(Sound s) {
+        SoundEffect se = CraftSound.getSoundEffect(CraftSound.getSound(s));
+        MinecraftKey key = IRegistry.SOUND_EVENT.getKey(se);
+
+        return key.toString();
+    }
+
+    @Override
+    public void stopSound(Player p) {
+        PacketPlayOutStopSound packet = new PacketPlayOutStopSound(null, SoundCategory.MASTER);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override

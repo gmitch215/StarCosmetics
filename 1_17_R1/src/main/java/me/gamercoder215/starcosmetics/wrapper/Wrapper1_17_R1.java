@@ -18,10 +18,12 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.sounds.SoundCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.EntityItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
@@ -171,6 +173,17 @@ public final class Wrapper1_17_R1 implements Wrapper {
     @Override
     public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
         en.setRotation(yaw, pitch);
+    }
+
+    @Override
+    public String getKey(Sound s) {
+        return s.getKey().toString();
+    }
+
+    @Override
+    public void stopSound(Player p) {
+        PacketPlayOutStopSound packet = new PacketPlayOutStopSound(null, SoundCategory.a);
+        ((CraftPlayer) p).getHandle().b.sendPacket(packet);
     }
 
     @Override

@@ -22,6 +22,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
@@ -176,6 +177,16 @@ public final class Wrapper1_18_R2 implements Wrapper {
     @Override
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_18_R2(key, size, title);
+    }
+
+    @Override
+    public String getKey(Sound s) {
+        return s.getKey().toString();
+    }
+
+    @Override
+    public void stopSound(Player p) {
+        p.stopAllSounds();
     }
 
     @Override

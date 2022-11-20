@@ -24,6 +24,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.ProfilePublicKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -179,6 +180,16 @@ public final class Wrapper1_19_R1 implements Wrapper {
     @Override
     public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
         en.setRotation(yaw, pitch);
+    }
+
+    @Override
+    public String getKey(Sound s) {
+        return s.getKey().toString();
+    }
+
+    @Override
+    public void stopSound(Player p) {
+        p.stopAllSounds();
     }
 
     @Override

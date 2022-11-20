@@ -12,7 +12,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
@@ -167,6 +169,21 @@ public final class Wrapper1_16_R2 implements Wrapper {
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_16_R2(key, size, title);
     }
+
+    @Override
+    public String getKey(Sound s) {
+        SoundEffect se = CraftSound.getSoundEffect(CraftSound.getSound(s));
+        MinecraftKey key = IRegistry.SOUND_EVENT.getKey(se);
+
+        return key.toString();
+    }
+
+    @Override
+    public void stopSound(Player p) {
+        PacketPlayOutStopSound packet = new PacketPlayOutStopSound(null, SoundCategory.MASTER);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+    }
+
 
     @Override
     public void registerEvents() {

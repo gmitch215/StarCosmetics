@@ -12,7 +12,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_13_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
@@ -42,6 +44,14 @@ public final class Wrapper1_13_R1 implements Wrapper {
     }
 
     @Override
+    public String getKey(Sound s) {
+        SoundEffect se = CraftSound.getSoundEffect(CraftSound.getSound(s));
+        MinecraftKey key = SoundEffect.a.b(se);
+
+        return key.toString();
+    }
+
+    @Override
     public void spawnFakeEntity(Player p, EntityType type, Location loc, long deathTicks) {
         CraftWorld cw = (CraftWorld) loc.getWorld();
         EntityPlayer sp = ((CraftPlayer) p).getHandle();
@@ -57,6 +67,12 @@ public final class Wrapper1_13_R1 implements Wrapper {
                 sp.playerConnection.sendPacket(remove);
             }
         }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+    }
+
+    @Override
+    public void stopSound(Player p) {
+        PacketPlayOutStopSound packet = new PacketPlayOutStopSound(null, SoundCategory.MASTER);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override

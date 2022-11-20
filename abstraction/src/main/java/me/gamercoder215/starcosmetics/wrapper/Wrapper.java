@@ -7,10 +7,7 @@ import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -30,42 +27,6 @@ public interface Wrapper {
     }
 
     default void registerEvents() {}
-
-    static String get(String key) {
-        return StarConfig.getConfig().get(key);
-    }
-
-    static String get(String key, String def) {
-        return StarConfig.getConfig().get(key, def);
-    }
-
-    static String getWithArgs(String key, Object... args) {
-        return StarConfig.getConfig().getWithArgs(key, args);
-    }
-
-    static String getMessage(String key) {
-        return StarConfig.getConfig().getMessage(key);
-    }
-
-    static void send(CommandSender sender, String key) {
-        sender.sendMessage(get(key));
-    }
-
-    static void sendMessage(CommandSender sender, String key) {
-        sendMessage(sender, key, "");
-    }
-
-    static void sendMessage(CommandSender sender, String key, Object prefix) {
-        sender.sendMessage(prefix.toString() + getMessage(key));
-    }
-
-    static void sendError(CommandSender sender, String key) {
-        sendMessage(sender, key, ChatColor.RED);
-    }
-
-    static void sendWithArgs(CommandSender sender, String key, Object... args) {
-        sender.sendMessage(String.format(get(key), args));
-    }
 
     static String getServerVersion() {
         if (Bukkit.getServer() == null) return ""; // Using Test Server
@@ -101,13 +62,6 @@ public interface Wrapper {
         }
     }
 
-    static <T extends Enum<T> & Cosmetic> List<CosmeticSelection<?>> allFor(Class<T> clazz) {
-        List<CosmeticSelection<?>> selections = new ArrayList<>();
-        for (T cosmetic : clazz.getEnumConstants()) selections.addAll(getCosmeticSelections().getSelections(cosmetic));
-
-        return selections;
-    }
-
     int getCommandVersion();
 
     boolean isItem(Material m);
@@ -140,6 +94,57 @@ public interface Wrapper {
 
     void setRotation(Entity en, float yaw, float pitch);
 
+    String getKey(Sound s);
+
+    void stopSound(Player p);
+
     // Other Utilities
+
+    static <T extends Enum<T> & Cosmetic> List<CosmeticSelection<?>> allFor(Class<T> clazz) {
+        List<CosmeticSelection<?>> selections = new ArrayList<>();
+        for (T cosmetic : clazz.getEnumConstants()) selections.addAll(getCosmeticSelections().getSelections(cosmetic));
+
+        return selections;
+    }
+
+    static String get(String key) {
+        return StarConfig.getConfig().get(key);
+    }
+
+    static String get(String key, String def) {
+        return StarConfig.getConfig().get(key, def);
+    }
+
+    static String getWithArgs(String key, Object... args) {
+        return StarConfig.getConfig().getWithArgs(key, args);
+    }
+
+    static String prefix() {
+        return get("plugin.prefix");
+    }
+
+    static String getMessage(String key) {
+        return StarConfig.getConfig().getMessage(key);
+    }
+
+    static void send(CommandSender sender, String key) {
+        sender.sendMessage(get(key));
+    }
+
+    static void sendMessage(CommandSender sender, String key) {
+        sendMessage(sender, key, "");
+    }
+
+    static void sendMessage(CommandSender sender, String key, Object prefix) {
+        sender.sendMessage(prefix.toString() + getMessage(key));
+    }
+
+    static void sendError(CommandSender sender, String key) {
+        sendMessage(sender, key, ChatColor.RED);
+    }
+
+    static void sendWithArgs(CommandSender sender, String key, Object... args) {
+        sender.sendMessage(String.format(get(key), args));
+    }
 
 }

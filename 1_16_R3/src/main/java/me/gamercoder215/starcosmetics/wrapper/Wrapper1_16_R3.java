@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
@@ -161,6 +162,17 @@ public final class Wrapper1_16_R3 implements Wrapper {
     @Override
     public void setRotation(org.bukkit.entity.Entity en, float yaw, float pitch) {
         en.setRotation(yaw, pitch);
+    }
+
+    @Override
+    public String getKey(Sound s) {
+        return s.getKey().toString();
+    }
+
+    @Override
+    public void stopSound(Player p) {
+        PacketPlayOutStopSound packet = new PacketPlayOutStopSound(null, SoundCategory.MASTER);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override

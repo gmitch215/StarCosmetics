@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
+import io.netty.buffer.Unpooled;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
@@ -8,6 +9,8 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_11_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
@@ -32,6 +35,20 @@ public final class Wrapper1_11_R1 implements Wrapper {
     @Override
     public void sendActionbar(Player p, String message) {
         p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
+    }
+
+    @Override
+    public String getKey(Sound s) {
+        SoundEffect se = CraftSound.getSoundEffect(CraftSound.getSound(s));
+        MinecraftKey key = SoundEffect.a.b(se);
+
+        return key.toString();
+    }
+
+    @Override
+    public void stopSound(Player p) {
+        PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload("MC|StopSound", new PacketDataSerializer(Unpooled.buffer()).a(""));
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     @Override
