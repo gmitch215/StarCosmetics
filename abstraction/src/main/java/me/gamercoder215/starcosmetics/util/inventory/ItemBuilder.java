@@ -3,12 +3,16 @@ package me.gamercoder215.starcosmetics.util.inventory;
 import com.google.common.collect.ImmutableList;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
+
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 
 public final class ItemBuilder {
 
@@ -18,6 +22,17 @@ public final class ItemBuilder {
             .id("gui_background")
             .name(" ")
             .build();
+
+    public static final ItemStack SAVE = ItemBuilder.of(StarMaterial.LIME_WOOL)
+            .name(ChatColor.GREEN + get("constants.save"))
+            .nbt(nbt -> nbt.set("item", "save"))
+            .build();
+
+    public static final ItemStack STOP_SOUND = ItemBuilder.of(Material.BARRIER)
+            .name(ChatColor.RED + get("constants.stop_sound"))
+            .id("stop_sound")
+            .build();
+
 
     private ItemBuilder(ItemStack item) {
         this.item = item;
@@ -62,6 +77,13 @@ public final class ItemBuilder {
     public ItemBuilder id(@NotNull String id) {
         NBTWrapper w = NBTWrapper.of(item);
         w.setID(id);
+        this.item = w.getItem();
+        return this;
+    }
+
+    public ItemBuilder nbt(@NotNull Consumer<NBTWrapper> nbt) {
+        NBTWrapper w = NBTWrapper.of(item);
+        nbt.accept(w);
         this.item = w.getItem();
         return this;
     }
