@@ -30,6 +30,7 @@ import java.util.UUID;
 /**
  * Represents a player used by StarCosmetics to manage their configuration.
 */
+@SuppressWarnings("unchecked")
 public final class StarPlayer {
 
     private final OfflinePlayer player;
@@ -166,38 +167,44 @@ public final class StarPlayer {
     // Settings
 
     /**
-     * Whether or not the player has the specified setting enabled.
+     * Fetches the setting's value.
      * @param s The setting to check.
-     * @return true if enabled, false otherwise
+     * @param <T> The type of the setting.
+     * @return Setting Value
      */
-    public boolean getSetting(@NotNull PlayerSetting s) {
-        if (s == null) return false;
-        return getSetting(s, false);
+    @Nullable
+    public <T> T getSetting(@NotNull PlayerSetting<T> s) {
+        if (s == null) return null;
+        return getSetting(s, null);
     }
 
     /**
-     * Whether or not the player has the specified setting enabled.
+     * Fetches the setting's value.
      * @param setting The setting to check.
      * @param def The default value to return if the setting is not set.
+     * @param <T> The type of the setting.
      * @return true if enabled, false otherwise
      */
-    public boolean getSetting(@NotNull PlayerSetting setting, boolean def) {
-        if (setting == null) return false;
+    @Nullable
+    public <T> T getSetting(@NotNull PlayerSetting<T> setting, T def) {
+        if (setting == null) return null;
 
-        return config.getBoolean("settings." + setting.name().toLowerCase(), def);
+        return (T) config.get("settings." + setting.getId().toLowerCase(), def);
     }
 
     /**
      * Sets the specified setting to the specified value.
      * @param setting The setting to set.
-     * @param b The value to set the setting to.
-     * @return true if enabled, false otherwise
+     * @param value The value to set the setting to.
+     * @param <T> Setting Type
+     * @return value set
      */
-    public boolean setSetting(@NotNull PlayerSetting setting, boolean b) {
-        config.set("settings." + setting.name().toLowerCase(), b);
+    @Nullable
+    public <T> T setSetting(@NotNull PlayerSetting<T> setting, @Nullable T value) {
+        config.set("settings." + setting.getId().toLowerCase(), value);
         save();
 
-        return b;
+        return value;
     }
 
     /**
