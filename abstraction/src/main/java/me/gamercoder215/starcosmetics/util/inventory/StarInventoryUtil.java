@@ -301,7 +301,7 @@ public final class StarInventoryUtil {
 
         if (input instanceof String) {
             String s = input.toString();
-            if (s.startsWith("fancy_item:") || s.startsWith("fancy_block:")) return WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
+            if (s.contains(":")) return WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
 
             return WordUtils.capitalizeFully(s);
         }
@@ -324,7 +324,7 @@ public final class StarInventoryUtil {
 
         if (input instanceof String) {
             String s = input.toString();
-            if (s.startsWith("fancy_item") || s.startsWith("fancy_block")) return matchMaterial(s.split(":")[1]);
+            if (s.contains(":")) return matchMaterial(s.split(":")[1]);
 
             switch (s.toLowerCase()) {
                 case "riptide": return matchMaterial("TRIDENT");
@@ -335,7 +335,7 @@ public final class StarInventoryUtil {
     }
 
     @NotNull
-    public static ItemStack toItemStack(Player p, @NotNull CosmeticLocation<?> loc) {
+    public static ItemStack toItemStack(@NotNull Player p, @NotNull CosmeticLocation<?> loc) {
         Object input = loc.getInput();
         Material type = toInputMaterial(input);
         StarPlayer sp = new StarPlayer(p);
