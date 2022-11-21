@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 import com.mojang.authlib.GameProfile;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.events.CompletionEvents1_12_R1;
+import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
@@ -81,12 +82,7 @@ public final class Wrapper1_19_R1 implements Wrapper {
         nmsEntity.setNeverPickUp();
         sw.addFreshEntity(nmsEntity);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                nmsEntity.kill();
-            }
-        }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+        StarRunnable.syncLater(nmsEntity::kill, deathTicks);
     }
 
     private static ServerPlayer createPlayer(Location loc) {
@@ -112,12 +108,8 @@ public final class Wrapper1_19_R1 implements Wrapper {
                 ServerPlayer sph = ((CraftPlayer) p).getHandle();
                 sph.connection.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, sp));
                 sph.connection.send(new ClientboundAddPlayerPacket(sp));
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        sph.connection.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, sp));
-                    }
-                }.runTaskLaterAsynchronously(StarConfig.getPlugin(), 1);
+                StarRunnable.asyncLater(() -> sph.connection.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, sp)),
+                        1);
             }
 
             return sp;

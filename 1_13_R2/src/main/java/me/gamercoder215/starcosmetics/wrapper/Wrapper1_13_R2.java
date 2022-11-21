@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 import com.mojang.authlib.GameProfile;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.events.CompletionEvents1_12_R1;
+import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
@@ -71,13 +72,10 @@ public final class Wrapper1_13_R2 implements Wrapper {
         PacketPlayOutSpawnEntity add = new PacketPlayOutSpawnEntity(nmsEntity, 0);
         sp.playerConnection.sendPacket(add);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                PacketPlayOutEntityDestroy remove = new PacketPlayOutEntityDestroy(nmsEntity.getId());
-                sp.playerConnection.sendPacket(remove);
-            }
-        }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+        StarRunnable.syncLater(() -> {
+            PacketPlayOutEntityDestroy remove = new PacketPlayOutEntityDestroy(nmsEntity.getId());
+            sp.playerConnection.sendPacket(remove);
+        }, deathTicks);
     }
 
     @Override
@@ -87,12 +85,7 @@ public final class Wrapper1_13_R2 implements Wrapper {
         nmsEntity.p();
         ws.addEntity(nmsEntity);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                nmsEntity.killEntity();
-            }
-        }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+        StarRunnable.syncLater(nmsEntity::killEntity, deathTicks);
     }
 
     private static EntityPlayer createPlayer(Location loc) {
@@ -109,12 +102,9 @@ public final class Wrapper1_13_R2 implements Wrapper {
                 EntityPlayer sph = ((CraftPlayer) p).getHandle();
                 sph.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, sp));
                 sph.playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(sp));
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        sph.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, sp));
-                    }
-                }.runTaskLaterAsynchronously(StarConfig.getPlugin(), 1);
+
+                StarRunnable.asyncLater(() -> sph.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, sp)),
+                        1);
             }
 
             return sp;

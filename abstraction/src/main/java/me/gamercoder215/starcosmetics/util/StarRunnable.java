@@ -23,4 +23,22 @@ public final class StarRunnable {
         }.runTask(StarConfig.getPlugin());
     }
 
+    public static void syncLater(Runnable run, long delay) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                run.run();
+            }
+        }.runTaskLater(StarConfig.getPlugin(), delay);
+    }
+
+    public static void asyncLater(Runnable run, long delay) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                run.run();
+            }
+        }.runTaskLaterAsynchronously(StarConfig.getPlugin(), delay);
+    }
+
 }

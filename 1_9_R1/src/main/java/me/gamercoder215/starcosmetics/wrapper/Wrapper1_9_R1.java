@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 
 import io.netty.buffer.Unpooled;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_9_R1;
@@ -59,13 +60,10 @@ public final class Wrapper1_9_R1 implements Wrapper {
         PacketPlayOutSpawnEntity add = new PacketPlayOutSpawnEntity(nmsEntity, 0);
         sp.playerConnection.sendPacket(add);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                PacketPlayOutEntityDestroy remove = new PacketPlayOutEntityDestroy(nmsEntity.getId());
-                sp.playerConnection.sendPacket(remove);
-            }
-        }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+        StarRunnable.syncLater(() -> {
+            PacketPlayOutEntityDestroy remove = new PacketPlayOutEntityDestroy(nmsEntity.getId());
+            sp.playerConnection.sendPacket(remove);
+        },  deathTicks);
     }
 
     @Override

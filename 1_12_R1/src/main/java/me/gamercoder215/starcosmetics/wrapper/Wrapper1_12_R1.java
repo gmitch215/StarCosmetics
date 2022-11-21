@@ -1,8 +1,8 @@
 package me.gamercoder215.starcosmetics.wrapper;
 
 import io.netty.buffer.Unpooled;
-import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.events.CompletionEvents1_12_R1;
+import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_12_R1;
@@ -19,7 +19,6 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public final class Wrapper1_12_R1 implements Wrapper {
 
@@ -61,13 +60,10 @@ public final class Wrapper1_12_R1 implements Wrapper {
         PacketPlayOutSpawnEntity add = new PacketPlayOutSpawnEntity(nmsEntity, 0);
         sp.playerConnection.sendPacket(add);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                PacketPlayOutEntityDestroy remove = new PacketPlayOutEntityDestroy(nmsEntity.getId());
-                sp.playerConnection.sendPacket(remove);
-            }
-        }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+        StarRunnable.syncLater(() -> {
+            PacketPlayOutEntityDestroy remove = new PacketPlayOutEntityDestroy(nmsEntity.getId());
+            sp.playerConnection.sendPacket(remove);
+        }, deathTicks);
     }
 
     @Override
@@ -77,12 +73,7 @@ public final class Wrapper1_12_R1 implements Wrapper {
         nmsEntity.s();
         ws.addEntity(nmsEntity);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                nmsEntity.killEntity();
-            }
-        }.runTaskLater(StarConfig.getPlugin(), deathTicks);
+        StarRunnable.syncLater(nmsEntity::killEntity, deathTicks);
     }
 
     @Override
