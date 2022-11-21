@@ -195,6 +195,15 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     }
 
 
+    public static StarPlayer getCached(@NotNull Player p) {
+        StarPlayer sp = STAR_PLAYER_CACHE.get(p.getUniqueId());
+        if (sp == null) {
+            sp = new StarPlayer(p);
+            STAR_PLAYER_CACHE.put(p.getUniqueId(), sp);
+        }
+        return sp;
+    }
+
     public static final Map<UUID, StarPlayer> STAR_PLAYER_CACHE = new HashMap<>();
 
     public static final Runnable ASYNC_TICK_TASK = () -> {
