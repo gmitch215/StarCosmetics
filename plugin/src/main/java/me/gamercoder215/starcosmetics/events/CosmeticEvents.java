@@ -8,11 +8,13 @@ import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.RegisteredListener;
 
@@ -84,6 +86,24 @@ public final class CosmeticEvents implements Listener {
     public void onHit(ProjectileHitEvent e) {
         Projectile en = e.getEntity();
         en.setMetadata("stopped", new FixedMetadataValue(plugin, true));
+    }
+
+    private static boolean pitchChanged(Location l1, Location l2) {
+        return !l1.getDirection().equals(l2.getDirection()) &&
+                l1.getX() == l2.getX() &&
+                l1.getY() == l2.getY() &&
+                l1.getZ() == l2.getZ();
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+        if (pitchChanged(e.getFrom(), e.getTo())) return;
+
+        Player p = e.getPlayer();
+        StarPlayer sp = StarCosmetics.getCached(p);
+
+        CosmeticLocation<?> ground = sp.getSelectedTrail(TrailType.GROUND);
+        if (ground != null) ((Trail<?>) ground.getParent()).run(p, ground);
     }
 
 }
