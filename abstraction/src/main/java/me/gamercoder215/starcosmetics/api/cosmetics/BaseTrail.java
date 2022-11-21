@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
@@ -19,16 +20,15 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.util.Constants.r;
 import static me.gamercoder215.starcosmetics.util.entity.StarSelector.isStopped;
+import static org.bukkit.Material.*;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "deprecation"})
 public final class BaseTrail<T> implements Trail<T> {
 
     public static final Wrapper w = Wrapper.getWrapper();
@@ -42,7 +42,7 @@ public final class BaseTrail<T> implements Trail<T> {
         return Math.toRadians(v);
     }
     
-    public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile", Object.class, TrailType.PROJECTILE, Material.ARROW, (en, cloc) -> {
+    public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile", Object.class, TrailType.PROJECTILE, ARROW, (en, cloc) -> {
         if (!(en instanceof Projectile)) return;
         Projectile p = (Projectile) en;
         Object o = cloc.getInput();
@@ -135,7 +135,7 @@ public final class BaseTrail<T> implements Trail<T> {
                 String input = str.split(":")[1];
                 switch (type) {
                     case "fancy_item": {
-                        Material m = Material.matchMaterial(input);
+                        Material m = matchMaterial(input);
                         ItemStack item = new ItemStack(m);
                         
                         new BukkitRunnable() {
@@ -178,7 +178,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         break;
                     }
                     case "fancy_block": {
-                        Material m = Material.matchMaterial(input);
+                        Material m = matchMaterial(input);
                         ItemStack item = new ItemStack(m);
                         
                         new BukkitRunnable() {
@@ -222,7 +222,7 @@ public final class BaseTrail<T> implements Trail<T> {
         }
     });
 
-    public static final BaseTrail<Object> GROUND_TRAIL = new BaseTrail<>("ground", Object.class, TrailType.GROUND, Material.STONE, (e, cloc) -> {
+    public static final BaseTrail<Object> GROUND_TRAIL = new BaseTrail<>("ground", Object.class, TrailType.GROUND, STONE, (e, cloc) -> {
         if (!(e instanceof Player)) return;
         Player p = (Player) e;
         Location loc = p.getLocation().add(0, 0.1, 0);
@@ -233,13 +233,53 @@ public final class BaseTrail<T> implements Trail<T> {
             e.getWorld().spawnParticle(part, loc, r.nextInt(2), 0, 0, 0, 0);
         }
 
+        if (o instanceof String) {
+            String s = o.toString();
+            String prefix = s.split(":")[0];
+            String input = s.split(":")[1];
+
+            switch (prefix) {
+                case "ground_block": {
+                    Material m = matchMaterial(input);
+
+                    Set<Location> area = new HashSet<>();
+                    area.add(p.getLocation().subtract(0, 1, 0));
+
+                    Location behind = p.getLocation()
+                            .subtract(0, 1, 0)
+                            .subtract(p.getLocation().getDirection());
+
+                    area.add(behind);
+                    area.add(behind.add(1, 0, 0));
+                    area.add(behind.add(0, 0, 1));
+                    if (r.nextBoolean()) area.add(behind.add(-1, 0, 0)); else area.add(behind.add(0, 0, -1));
+
+                    final boolean onGround = Math.abs(p.getVelocity().getY()) < 0.1 && !p.isFlying();
+
+                    area.forEach(l -> {
+                        if (onGround && l.getBlock().getType().isSolid()) {
+                            Material original = l.getBlock().getType();
+                            byte data = l.getBlock().getData();
+
+                            p.sendBlockChange(l, m, (byte) 0);
+
+                            StarRunnable.syncLater(() -> p.sendBlockChange(l, original, data), 60);
+                        }
+                    });
+
+                    break;
+                }
+            }
+
+        }
+
         if (o instanceof Material || o instanceof ItemStack) {
             ItemStack item = o instanceof Material ? new ItemStack((Material) o) : (ItemStack) o;
-            w.spawnFakeItem(item, loc, 5);
+            w.spawnFakeItem(item, loc, 10);
         }
     });
 
-    public static final BaseTrail<Sound> SOUND_TRAIL = new BaseTrail<>("sound", Sound.class, TrailType.PROJECTILE_SOUND, Material.JUKEBOX, (e, cloc) -> {
+    public static final BaseTrail<Sound> SOUND_TRAIL = new BaseTrail<>("sound", Sound.class, TrailType.PROJECTILE_SOUND, JUKEBOX, (e, cloc) -> {
         Object o = cloc.getInput();
         if (!(o instanceof Sound)) return;
         Sound sound = (Sound) o;
