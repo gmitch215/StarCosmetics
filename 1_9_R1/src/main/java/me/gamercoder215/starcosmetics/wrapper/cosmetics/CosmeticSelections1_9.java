@@ -166,13 +166,49 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
     // Ground Trails
 
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("stone", BaseTrail.GROUND_TRAIL, "ground_block:stone",
+                    CompletionCriteria.fromMined(100, Material.STONE), Rarity.COMMON))
+            .add(new TrailSelection("cobblestone", BaseTrail.GROUND_TRAIL, "ground_block:cobblestone",
+                    CompletionCriteria.fromMined(100, Material.COBBLESTONE), Rarity.COMMON))
+            .add(new TrailSelection("sand", BaseTrail.GROUND_TRAIL, "ground_block:sand",
+                    CompletionCriteria.fromMined(125, Material.SAND), Rarity.COMMON))
+            .add(new TrailSelection("gravel", BaseTrail.GROUND_TRAIL, "ground_block:gravel",
+                    CompletionCriteria.fromCrafted(50, Material.ARROW), Rarity.COMMON))
+            .add(new TrailSelection("hay_bale", BaseTrail.GROUND_TRAIL, "ground_block:hay_block",
+                    CompletionCriteria.fromCrafted(60, Material.BREAD), Rarity.COMMON))
+
             .add(new TrailSelection("poppy", BaseTrail.GROUND_TRAIL, StarMaterial.POPPY.find(),
                     CompletionCriteria.fromMined(120, StarMaterial.POPPY.find()), Rarity.OCCASIONAL))
+            .add(new TrailSelection("glass", BaseTrail.GROUND_TRAIL, "ground_block:glass",
+                    CompletionCriteria.fromMined(340, Material.SAND), Rarity.OCCASIONAL))
+            .add(new TrailSelection("coal_ore", BaseTrail.GROUND_TRAIL, "ground_block:coal_ore",
+                    CompletionCriteria.fromMined(80, Material.COAL_ORE), Rarity.OCCASIONAL))
+
+            .add(new TrailSelection("torch", BaseTrail.GROUND_TRAIL, Material.TORCH,
+                    CompletionCriteria.fromMined(110, Material.COAL_ORE), Rarity.UNCOMMON))
     
             .add(new TrailSelection("lava", BaseTrail.GROUND_TRAIL, Particle.LAVA,
                     CompletionCriteria.fromKilled(525, EntityType.BLAZE), Rarity.RARE))
             .add(new TrailSelection("water", BaseTrail.GROUND_TRAIL, Particle.WATER_SPLASH,
                     CompletionCriteria.fromKilled(625, EntityType.SQUID), Rarity.RARE))
+            .add(new TrailSelection("iron_ore", BaseTrail.GROUND_TRAIL, "ground_block:iron_ore",
+                    CompletionCriteria.fromMined(250, Material.IRON_ORE), Rarity.RARE))
+            .add(new TrailSelection("sponge", BaseTrail.GROUND_TRAIL, "ground_block:sponge",
+                    CompletionCriteria.fromKilled(100, EntityType.GUARDIAN), Rarity.RARE))
+            .add(new TrailSelection("anvil", BaseTrail.GROUND_TRAIL, Material.ANVIL,
+                    CompletionCriteria.fromCrafted(50, Material.IRON_BLOCK), Rarity.RARE))
+
+            .add(new TrailSelection("gold_ore", BaseTrail.GROUND_TRAIL, "ground_block:gold_ore",
+                    CompletionCriteria.fromMined(320, Material.GOLD_ORE), Rarity.EPIC))
+
+            .add(new TrailSelection("diamond_ore", BaseTrail.GROUND_TRAIL, "ground_block:diamond_ore",
+                    CompletionCriteria.fromMined(475, Material.DIAMOND_ORE), Rarity.LEGENDARY))
+
+            .add(new TrailSelection("emerald_ore", BaseTrail.GROUND_TRAIL, "ground_block:emerald_ore",
+                    CompletionCriteria.fromMined(325, Material.EMERALD_ORE), Rarity.MYTHICAL))
+
+            .add(new TrailSelection("bedrock", BaseTrail.GROUND_TRAIL, "ground_block:bedrock",
+                    CompletionCriteria.fromMined(2000000, Material.OBSIDIAN), Rarity.ULTRA))
             
             .build();
 

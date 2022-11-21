@@ -54,8 +54,25 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
     // Gound Trails
 
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("crimson_nylium", BaseTrail.GROUND_TRAIL, "ground_block:crimson_nylium",
+                    CompletionCriteria.fromMined(130, Material.CRIMSON_STEM), Rarity.OCCASIONAL))
+            .add(new TrailSelection("warped_nylium", BaseTrail.GROUND_TRAIL, "ground_block:warped_nylium",
+                    CompletionCriteria.fromMined(130, Material.WARPED_STEM), Rarity.OCCASIONAL))
+
+            .add(new TrailSelection("blackstone", BaseTrail.GROUND_TRAIL, "ground_block:blackstone",
+                    CompletionCriteria.fromMined(200, Material.BLACKSTONE), Rarity.UNCOMMON))
+            .add(new TrailSelection("polished_basalt", BaseTrail.GROUND_TRAIL, "ground_block:polished_basalt",
+                    CompletionCriteria.fromMined(230, Material.BASALT), Rarity.UNCOMMON))
+
             .add(new TrailSelection("soul_flame", BaseTrail.GROUND_TRAIL, Particle.SOUL_FIRE_FLAME,
                     CompletionCriteria.fromMined(800, Material.SOUL_SAND, Material.SOUL_SOIL), Rarity.RARE))
+
+            .add(new TrailSelection("crying_obsidian", BaseTrail.GROUND_TRAIL, "ground_block:crying_obsidian",
+                    CompletionCriteria.fromKilled(50, EntityType.GHAST), Rarity.EPIC))
+
+            .add(new TrailSelection("netherite_block", BaseTrail.GROUND_TRAIL, "ground_block:netherite_block",
+                    CompletionCriteria.fromMined(230, Material.ANCIENT_DEBRIS), Rarity.MYTHICAL))
+
             .build();
 
     // Sound Trails

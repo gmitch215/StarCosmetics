@@ -12,6 +12,7 @@ import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Statistic;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,13 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
                     CompletionCriteria.fromCrafted(80, Material.BEEHIVE), Rarity.UNCOMMON))
             .build();
 
+    // Ground Trails
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+
+            .add(new TrailSelection("honeycomb_block", BaseTrail.GROUND_TRAIL, "ground_block:honeycomb_block",
+                    CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 1000), Rarity.EPIC))
+            .build();
+
     // Shapes
 
     // Small Rings
@@ -50,7 +58,7 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_14"))
-            .put(BaseTrail.GROUND_TRAIL, getForVersion(BaseTrail.GROUND_TRAIL, "1_14"))
+            .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_14"))
             .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_14"))
 
             .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_14"))

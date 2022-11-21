@@ -34,11 +34,18 @@ public class CosmeticSelections1_10 implements CosmeticSelections {
             
             .build();
 
+    // Ground Trails
+
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("magma_block", BaseTrail.GROUND_TRAIL, StarMaterial.MAGMA_BLOCK.find(),
+                    CompletionCriteria.fromMined(205, StarMaterial.MAGMA_BLOCK.find()), Rarity.COMMON))
+            .build();
+
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_9"))
-            .put(BaseTrail.GROUND_TRAIL, getForVersion(BaseTrail.GROUND_TRAIL, "1_9"))
+            .put(BaseTrail.GROUND_TRAIL,join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_9"))
             .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_9"))
 
             .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_9"))

@@ -83,6 +83,19 @@ public class CosmeticSelections1_13 implements CosmeticSelections {
 
             .build();
 
+    // Ground Trails
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("bubble_coral", BaseTrail.GROUND_TRAIL, "ground_block:bubble_coral_block",
+                    CompletionCriteria.fromKilled(25, EntityType.SALMON), Rarity.COMMON))
+
+            .add(new TrailSelection("sea_pickle", BaseTrail.GROUND_TRAIL, Material.SEA_PICKLE,
+                    CompletionCriteria.fromKilled(70, EntityType.COD), Rarity.OCCASIONAL))
+
+            .add(new TrailSelection("heart_of_the_sea", BaseTrail.GROUND_TRAIL, Material.HEART_OF_THE_SEA,
+                    CompletionCriteria.fromKilled(85, EntityType.ELDER_GUARDIAN), Rarity.LEGENDARY))
+
+            .build();
+
     // Sound Trails
 
     private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
@@ -106,8 +119,8 @@ public class CosmeticSelections1_13 implements CosmeticSelections {
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_12"))
+            .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_12"))
             .put(BaseTrail.SOUND_TRAIL, join(SOUND_TRAILS, BaseTrail.SOUND_TRAIL, "1_12"))
-            .put(BaseTrail.GROUND_TRAIL, getForVersion(BaseTrail.GROUND_TRAIL, "1_12"))
 
             .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_12"))
             .put(BaseShape.SMALL_DETAILED_RING, join(SMALL_DETAILED_RINGS, BaseShape.SMALL_DETAILED_RING, "1_12"))

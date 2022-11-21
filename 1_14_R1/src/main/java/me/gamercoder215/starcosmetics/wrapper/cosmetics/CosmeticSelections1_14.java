@@ -44,16 +44,23 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
             // Particles
             .add(new TrailSelection("smoke", BaseTrail.PROJECTILE_TRAIL, Particle.CAMPFIRE_COSY_SMOKE,
                     CompletionCriteria.fromCrafted(50, Material.TORCH), Rarity.COMMON))
+            
+            .build();
 
-            
-            
+    // Ground Trails
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("bamboo", BaseTrail.GROUND_TRAIL, Material.BAMBOO,
+                    CompletionCriteria.fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
+
+            .add(new TrailSelection("campfire", BaseTrail.GROUND_TRAIL, Material.CAMPFIRE,
+                    CompletionCriteria.fromCrafted(70, Material.CAMPFIRE), Rarity.OCCASIONAL))
             .build();
 
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_13"))
-            .put(BaseTrail.GROUND_TRAIL, getForVersion(BaseTrail.GROUND_TRAIL, "1_13"))
+            .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_13"))
             .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_13"))
 
             .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_13"))

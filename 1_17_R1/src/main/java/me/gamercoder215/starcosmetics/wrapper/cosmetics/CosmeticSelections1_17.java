@@ -50,6 +50,26 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
             
             .build();
 
+    // Ground Trails
+
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("copper_ore", BaseTrail.GROUND_TRAIL, "ground_block:copper_ore",
+                    CompletionCriteria.fromMined(250, Material.COPPER_ORE), Rarity.UNCOMMON))
+            .add(new TrailSelection("tinted_glass", BaseTrail.GROUND_TRAIL, "ground_block:tinted_glass",
+                    CompletionCriteria.fromMined(140, Material.AMETHYST_BLOCK), Rarity.UNCOMMON))
+            .add(new TrailSelection("glow_berries", BaseTrail.GROUND_TRAIL, Material.GLOW_BERRIES,
+                    CompletionCriteria.fromMined(200, Material.GLOW_LICHEN), Rarity.UNCOMMON))
+
+            .add(new TrailSelection("raw_iron", BaseTrail.GROUND_TRAIL, "ground_block:raw_iron",
+                    CompletionCriteria.fromMined(100, Material.DEEPSLATE_IRON_ORE), Rarity.RARE))
+
+            .add(new TrailSelection("amethyst", BaseTrail.GROUND_TRAIL, Material.AMETHYST_SHARD,
+                    CompletionCriteria.fromMined(600, Material.AMETHYST_BLOCK), Rarity.EPIC))
+            .add(new TrailSelection("raw_gold", BaseTrail.GROUND_TRAIL, "ground_block:raw_gold",
+                    CompletionCriteria.fromMined(100, Material.DEEPSLATE_GOLD_ORE), Rarity.EPIC))
+
+            .build();
+
     // Shapes
 
     // Small Rings
@@ -63,7 +83,7 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_16"))
-            .put(BaseTrail.GROUND_TRAIL, getForVersion(BaseTrail.GROUND_TRAIL, "1_16"))
+            .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_16"))
             .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_16"))
 
             .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_16"))
