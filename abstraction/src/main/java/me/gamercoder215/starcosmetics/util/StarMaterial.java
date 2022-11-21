@@ -113,6 +113,15 @@ public enum StarMaterial {
         this(null, 0, true, allnames);
     }
 
+    @Override
+    public String toString() {
+        return find().name();
+    }
+
+    public String toString(@NotNull String prefix) {
+        return prefix + ":" + find().name();
+    }
+
     @NotNull
     public Material find() {
         for (String s : names) {
