@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
@@ -13,7 +14,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Constructor;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +102,24 @@ public interface Wrapper {
     void stopSound(Player p);
 
     // Other Utilities
+
+    @NotNull
+    static <T extends Pet> T createPet(@NotNull Class<T> petClass, Player owner, Location loc) {
+        try {
+            Class<? extends T> clazz = Class.forName("me.gamercoder215.starcosmetics.wrapper.pets." + petClass.getSimpleName() + getServerVersion())
+                    .asSubclass(petClass);
+
+            Constructor<? extends T> c = clazz.getConstructor(Player.class, Location.class);
+            return c.newInstance(owner, loc);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName());
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
+
+        throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName());
+
+    }
 
     static <T extends Enum<T> & Cosmetic> List<CosmeticSelection<?>> allFor(Class<T> clazz) {
         List<CosmeticSelection<?>> selections = new ArrayList<>();
