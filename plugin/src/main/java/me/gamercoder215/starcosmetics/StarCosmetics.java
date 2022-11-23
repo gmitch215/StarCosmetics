@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableList;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
@@ -151,6 +151,11 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     @Override
     public String getMessage(String key) {
         return get("plugin.prefix") + get(key);
+    }
+
+    @Override
+    public void updatePluginCache() {
+        STAR_PLAYER_CACHE.clear();
     }
 
     // Other Utilities

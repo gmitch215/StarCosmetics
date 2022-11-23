@@ -2,7 +2,7 @@ package me.gamercoder215.starcosmetics.api;
 
 import org.jetbrains.annotations.NotNull;
 
-class TestStarConfig implements StarConfig {
+final class TestStarConfig implements StarConfig {
 
     @Override
     public @NotNull String getLanguage() {
@@ -18,4 +18,7 @@ class TestStarConfig implements StarConfig {
     public @NotNull String getMessage(String key) {
         return "";
     }
+
+    @Override
+    public void updatePluginCache() {}
 }

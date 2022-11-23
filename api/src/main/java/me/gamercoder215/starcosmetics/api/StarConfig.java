@@ -1,6 +1,6 @@
 package me.gamercoder215.starcosmetics.api;
 
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -26,6 +26,14 @@ public interface StarConfig {
             return Bukkit.getPluginManager().getPlugin("StarCosmetics");
         } catch (NullPointerException ignored) {}
         return null;
+    }
+
+    /**
+     * Updates the Plugin's Cache.
+     * @see #updatePluginCache()
+     */
+    static void updateCache() {
+        getConfig().updatePluginCache();
     }
 
     /**
@@ -218,4 +226,9 @@ public interface StarConfig {
         if (getMessage(key).equalsIgnoreCase("Unknown Value")) return def;
         else return getMessage(key);
     }
+
+    /**
+     * Updates the plugin's cached data.
+     */
+    void updatePluginCache();
 }
