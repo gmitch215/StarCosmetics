@@ -92,6 +92,15 @@ public enum Rarity {
     }
 
     /**
+     * Fetches the Rarity's prefix, to mimic the Rarity Color.
+     * @return Rarity Prefix
+     */
+    @NotNull
+    public String getPrefix() {
+        return prefix;
+    }
+
+    /**
      * Whether this rarity has a visible Completion Requirement.
      * @return true if requirement is visible, false otherwise
      */
