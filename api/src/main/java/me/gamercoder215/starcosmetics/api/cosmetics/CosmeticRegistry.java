@@ -1,6 +1,5 @@
-package me.gamercoder215.starcosmetics.api.cosmetics.registry;
+package me.gamercoder215.starcosmetics.api.cosmetics;
 
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

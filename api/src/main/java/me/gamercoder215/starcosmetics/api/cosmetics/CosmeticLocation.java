@@ -1,9 +1,8 @@
-package me.gamercoder215.starcosmetics.api.cosmetics.registry;
+package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
