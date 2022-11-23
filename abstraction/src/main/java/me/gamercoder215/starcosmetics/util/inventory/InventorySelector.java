@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Generator;
@@ -344,6 +345,7 @@ public final class InventorySelector {
                                 .build();
 
                         sp.addSelection(sel);
+                        StarConfig.updateCache();
                         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
 
                         p.openInventory(Generator.createSelectionInventory(p));
