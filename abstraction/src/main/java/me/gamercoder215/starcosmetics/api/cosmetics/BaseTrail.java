@@ -1,7 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.Constants;

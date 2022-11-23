@@ -1,6 +1,6 @@
 package me.gamercoder215.starcosmetics.wrapper.nbt;
 
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;

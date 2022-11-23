@@ -2,7 +2,7 @@ package me.gamercoder215.starcosmetics.util.selection;
 
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 
 import java.util.Objects;
 

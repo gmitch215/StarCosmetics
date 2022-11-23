@@ -2,7 +2,7 @@ package me.gamercoder215.starcosmetics.events;
 
 import me.gamercoder215.starcosmetics.StarCosmetics;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;

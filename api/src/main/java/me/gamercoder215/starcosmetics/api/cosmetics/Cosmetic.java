@@ -5,8 +5,6 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
-
 /**
  * Parent Interface for Base Cosmetics, ready for material, particle, or entity implementations.
 

@@ -1,7 +1,7 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.trail;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;

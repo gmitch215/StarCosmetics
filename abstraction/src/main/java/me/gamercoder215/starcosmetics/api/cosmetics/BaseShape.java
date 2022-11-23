@@ -3,7 +3,6 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleSize;
-import me.gamercoder215.starcosmetics.api.cosmetics.registry.CosmeticLocation;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import org.bukkit.Location;
