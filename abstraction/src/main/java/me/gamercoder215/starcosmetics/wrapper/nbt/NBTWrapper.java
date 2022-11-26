@@ -1,8 +1,11 @@
 package me.gamercoder215.starcosmetics.wrapper.nbt;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
-import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
+import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -91,7 +94,19 @@ public abstract class NBTWrapper {
         return CosmeticLocation.getByFullKey(getString(key));
     }
 
-    public final void set(String key, CosmeticLocation<?> value) {
+    public final void set(String key, @NotNull CosmeticLocation<?> value) {
         set(key, value.getFullKey());
+    }
+
+    public final StructureInfo getStructureInfo(String key) {
+        return StarConfig.getRegistry().getAvailableStructures()
+                .stream()
+                .filter(info -> info.getUniqueId().equals(getUUID(key)))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public final void set(String key, @NotNull StructureInfo value) {
+        set(key, value.getUniqueId());
     }
 }

@@ -1,7 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.nbt;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
+import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import net.minecraft.server.v1_13_R2.ItemStack;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import org.bukkit.Bukkit;
