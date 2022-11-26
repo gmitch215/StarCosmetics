@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.cosmetics.pet;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
+import me.gamercoder215.starcosmetics.util.Constants;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -13,7 +14,7 @@ import java.security.SecureRandom;
 
 public class PathfinderPet1_19_R1 extends Goal {
 
-    private static final SecureRandom r = new SecureRandom();
+    private static final SecureRandom r = Constants.r;
 
     private final Pet pet;
     private final Player owner;
@@ -40,7 +41,7 @@ public class PathfinderPet1_19_R1 extends Goal {
 
         if (owner.getLocation().distanceSquared(pet.getEntity().getLocation()) > 100) pet.getEntity().teleport(owner);
 
-        if (r.nextInt(100) < 5)
+        if (r.nextInt(10000) < 25) // Every ~20 seconds
             nmsEntity.move(MoverType.SELF, new Vec3(owner.getLocation().getX() - pet.getEntity().getLocation().getX(),
                     owner.getLocation().getY() - pet.getEntity().getLocation().getY(),
                     owner.getLocation().getZ() - pet.getEntity().getLocation().getZ()));
