@@ -7,11 +7,17 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
+import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
+import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
-import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
+import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
 import me.gamercoder215.starcosmetics.util.Generator;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
@@ -24,6 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -32,9 +39,11 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -43,7 +52,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static me.gamercoder215.starcosmetics.StarCosmetics.cw;
+import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.util.Generator.genGUI;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
@@ -174,7 +183,7 @@ public final class ClickEvents implements Listener {
 
                 if (!c.getCriteria().test(p)) {
                     StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
-                    p.sendMessage(c.getDisplayMessage());
+                    p.sendMessage(get("plugin.prefix") + ChatColor.RED + c.getDisplayMessage());
                     return;
                 }
 
@@ -218,8 +227,10 @@ public final class ClickEvents implements Listener {
                 ItemStack item = e.getCurrentItem();
                 NBTWrapper nbt = of(item);
 
-                List<CosmeticSelection<?>> selections = inv.getAttribute("collections:custom", List.class);
-                List<StarInventory> invs = Generator.createSelectionInventory(p, selections, get(inv.getAttribute("items_display", String.class)));
+                String customId = nbt.getString("custom_id");
+
+                List<CosmeticSelection<?>> selections = inv.getAttribute("collections:custom:" + customId, List.class);
+                List<StarInventory> invs = Generator.createSelectionInventory(p, selections, get(inv.getAttribute("items_display:" + customId, String.class)));
 
                 for (StarInventory sel : invs)
                     if (inv.hasAttribute("selection_back"))
@@ -296,7 +307,7 @@ public final class ClickEvents implements Listener {
                             StarPlayer sp = new StarPlayer(p);
                             sp.removeSelection(selection);
 
-                            p.sendMessage(prefix() + ChatColor.GREEN + getWithArgs("success.cosmetics.remove_selection", selection.getEvent().getSimpleName()));
+                            sp.sendNotification(prefix() + ChatColor.GREEN + getWithArgs("success.cosmetics.remove_selection", selection.getEvent().getSimpleName()));
                             StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
 
                             p.openInventory(Generator.createSelectionInventory(p));
@@ -318,6 +329,91 @@ public final class ClickEvents implements Listener {
             .put("stop_sound", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
                 w.stopSound(p);
+            })
+            .put("spawn:structure", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+
+                StructureInfo info = nbt.getStructureInfo("info");
+                if (info == null) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                p.closeInventory();
+
+                if (sp.getSetting(PlayerSetting.STRUCTURE_VELOCITY)) {
+                    p.setMetadata("immune_fall", new FixedMetadataValue(plugin, true));
+                    p.setVelocity(p.getLocation().getDirection().multiply(-2.5));
+                }
+
+                info.getStructure().placeAndRemove(p.getLocation().add(p.getLocation().getDirection()), 200);
+
+                StarRunnable.syncLater(() -> {
+                    if (p.getVelocity().getY() < 0.1) p.removeMetadata("immune_fall", plugin);
+                }, 5);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("toggle:setting:boolean", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+
+                PlayerSetting<Boolean> setting = (PlayerSetting<Boolean>) PlayerSetting.byId(nbt.getString("setting"));
+                if (setting == null) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                boolean value = !sp.getSetting(setting);
+                sp.setSetting(setting, value);
+
+                ItemStack newItem = value ? StarMaterial.LIME_TERRACOTTA.findStack() : StarMaterial.RED_TERRACOTTA.findStack();
+                ItemMeta meta = newItem.getItemMeta();
+
+                meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + (value ? ChatColor.GREEN + get("constants.on") : ChatColor.RED + get("constants.off")));
+                if (value) {
+                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                }
+                newItem.setItemMeta(meta);
+
+                NBTWrapper newNBT = of(newItem);
+                newNBT.setID("toggle:setting:boolean");
+                newNBT.set("setting", setting.getId());
+                newItem = newNBT.getItem();
+
+                inv.setItem(e.getSlot(), newItem);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 3F, value ? 2F : 0F);
+            })
+            .put("choose:pet", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                if (sp.getSpawnedPet() != null) {
+                    p.sendMessage(ChatColor.RED + get("error.cosmetics.pet_spawned"));
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+
+                PetType type = PetType.valueOf(nbt.getString("pet").toUpperCase());
+                if (type == null) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                StarPlayerUtil.spawnPet(p, type);
+                p.sendMessage(ChatColor.GREEN + getWithArgs("success.cosmetics.pet_spawned", type.getInfo().getName()));
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             })
 
             .build();
