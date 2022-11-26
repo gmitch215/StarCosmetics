@@ -361,6 +361,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             .build();
 
     private static ItemStack petIcon(Material m, String key, String displayKey) {
+        if (Bukkit.getServer() == null) return null;
         return ItemBuilder.of(m)
                 .name(ChatColor.GOLD + Wrapper.get(displayKey))
                 .id("choose:pet")
@@ -369,6 +370,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     }
 
     private static ItemStack petIcon(String headKey, String key, String displayKey) {
+        if (Bukkit.getServer() == null) return null;
         return ItemBuilder.of(StarInventoryUtil.getHead(headKey))
                 .name(ChatColor.GOLD + Wrapper.get(displayKey))
                 .id("choose:pet")

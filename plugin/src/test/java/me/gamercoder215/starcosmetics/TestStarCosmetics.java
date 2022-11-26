@@ -10,8 +10,10 @@ public class TestStarCosmetics {
     @Test
     @DisplayName("Test Registry Checks")
     public void testRegistry() {
-        for (PetType type : PetType.values())
+        for (PetType type : PetType.values()) {
+            if (type == PetType.HEAD) continue;
             if (StarCosmetics.PET_MAP.get(type) == null) Assertions.fail("Missing PetType: " + type.name());
+        }
     }
 
 

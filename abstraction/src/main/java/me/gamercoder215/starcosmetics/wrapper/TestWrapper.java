@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import me.gamercoder215.starcosmetics.wrapper.nbt.TestNBTWrapper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -24,7 +25,7 @@ public final class TestWrapper implements Wrapper {
 
     @Override
     public NBTWrapper getNBTWrapper(ItemStack item) {
-        return null;
+        return new TestNBTWrapper(item);
     }
 
     @Override
