@@ -8,9 +8,11 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -21,24 +23,30 @@ public final class CompletionCriteria {
     /**
      * Represents a CompletionCriteria that requires nothing.
      */
-    public static final CompletionCriteria NONE = new CompletionCriteria(p -> true, "");
+    public static final CompletionCriteria NONE = new CompletionCriteria(p -> true, p -> 100, "");
 
     private final Predicate<Player> criteria;
+    private final Function<Player, Number> progressFunc;
     private final String displayKey;
 
     private final Object[] displayArguments;
 
-    private CompletionCriteria(Predicate<Player> criteria, String displayKey, Object... displayArguments) {
+    private CompletionCriteria(Predicate<Player> criteria, Function<Player, Number> progress, String displayKey, Object... displayArguments) {
         if (criteria == null) throw new IllegalArgumentException("Criteria cannot be null!");
         if (displayKey == null) throw new IllegalArgumentException("Display Key cannot be null!");
 
         this.criteria = p -> p.hasPermission("starcosmetics.admin.bypasscheck") || criteria.test(p);
         this.displayKey = displayKey;
         this.displayArguments = displayArguments;
+        this.progressFunc = p -> {
+            if (p.hasPermission("starcosmetics.admin.bypasscheck")) return 100;
+            double prog = progress.apply(p).doubleValue();
+            return Math.min(100, Math.max(0, prog));
+        };
     }
 
-    private CompletionCriteria(Predicate<Player> criteria, String displayKey, Object firstArg, Object[] displayArguments) {
-        this(criteria, displayKey, ImmutableList.builder().add(firstArg).add(displayArguments).build().toArray());
+    private CompletionCriteria(Predicate<Player> criteria, Function<Player, Number> progress, String displayKey, Object firstArg, Object[] displayArguments) {
+        this(criteria, progress, displayKey, ImmutableList.builder().add(firstArg).add(displayArguments).build().toArray());
     }
 
     private static String comma(int i) {
@@ -55,12 +63,31 @@ public final class CompletionCriteria {
     }
 
     /**
+     * Whether this Player meets the criteria.
+     * @param p Player to check
+     * @return true if meets criteria, else false
+     */
+    public boolean isUnlocked(@Nullable Player p) {
+        if (p == null) return false;
+        return criteria.test(p);
+    }
+
+    /**
      * Fetches the display message of this criteria.
      * @return Display Message
      */
     @NotNull
     public String getDisplayMessage() {
         return String.format(StarConfig.getConfig().get(displayKey), displayArguments);
+    }
+
+    /**
+     * Fetches the progress of a Player for this CompletionCriteria.
+     * @param p Player to fetch progress for
+     * @return Progress Percentage
+     */
+    public double getProgressPercentage(@NotNull Player p) {
+        return progressFunc.apply(p).doubleValue();
     }
 
     // Static Generators
@@ -73,8 +100,11 @@ public final class CompletionCriteria {
      */
     @NotNull
     public static CompletionCriteria fromCompletion(@NotNull Completion completion) throws IllegalArgumentException {
+        Predicate<Player> completed = p -> new StarPlayer(p).hasCompleted(completion);
+
         return new CompletionCriteria(
-                p -> new StarPlayer(p).hasCompleted(completion),
+                completed,
+                p -> completed.test(p) ? 100 : 0,
                 "criteria.completion." + completion.getKey()
         );
     }
@@ -88,6 +118,7 @@ public final class CompletionCriteria {
     public static CompletionCriteria fromMined(int amount, Material m) {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.MINE_BLOCK, m) >= amount,
+                p -> ((double) p.getStatistic(Statistic.MINE_BLOCK, m) / amount) * 100,
                 "criteria.amount.mined", comma(amount), WordUtils.capitalizeFully(m.name().replace("_", " ")));
     }
 
@@ -102,6 +133,10 @@ public final class CompletionCriteria {
             int count = 0;
             for (Material m : materials) count += p.getStatistic(Statistic.MINE_BLOCK, m);
             return count >= amount;
+        }, p -> {
+           int count = 0;
+           for (Material m : materials) count += p.getStatistic(Statistic.MINE_BLOCK, m);
+           return ((double) count / amount) * 100;
         }, "criteria.amount.mined.list." + materials.size(), comma(amount), materials.stream()
                 .map(m -> WordUtils.capitalizeFully(m.name().replace("_", " "))).toArray());
     }
@@ -125,6 +160,7 @@ public final class CompletionCriteria {
     public static CompletionCriteria fromKilled(int amount, EntityType type) {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.KILL_ENTITY, type) >= amount,
+                p -> ((double) p.getStatistic(Statistic.KILL_ENTITY, type) / amount) * 100,
                 "criteria.amount.killed", comma(amount), WordUtils.capitalizeFully(type.name().replace("_", " ")));
     }
 
@@ -137,7 +173,9 @@ public final class CompletionCriteria {
      */
     public static CompletionCriteria fromStatistic(Statistic stat, int amount) {
         return new CompletionCriteria(
-                p -> p.getStatistic(stat) >= amount, "criteria.amount." + stat.name().toLowerCase(), comma(amount));
+                p -> p.getStatistic(stat) >= amount,
+                p -> ((double) p.getStatistic(stat) / amount) * 100,
+                "criteria.amount." + stat.name().toLowerCase(), comma(amount));
     }
 
     /**
@@ -150,6 +188,10 @@ public final class CompletionCriteria {
             int count = 0;
             for (Material m : Material.values()) if (m.isBlock()) count += p.getStatistic(Statistic.MINE_BLOCK, m);
             return count >= amount;
+        }, p -> {
+           int count = 0;
+           for (Material m : Material.values()) if (m.isBlock()) count += p.getStatistic(Statistic.MINE_BLOCK, m);
+           return ((double) count / amount) * 100;
         }, "criteria.amount.mined.all", comma(amount));
     }
 
@@ -162,6 +204,7 @@ public final class CompletionCriteria {
     public static CompletionCriteria fromCrafted(int amount, Material m) {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.CRAFT_ITEM, m) >= amount,
+                p -> ((double) p.getStatistic(Statistic.CRAFT_ITEM, m) / amount) * 100,
                 "criteria.amount.crafted", comma(amount), WordUtils.capitalizeFully(m.name().replace("_", " ")));
     }
 
@@ -186,7 +229,11 @@ public final class CompletionCriteria {
             int count = 0;
             for (Material m : materials) count += p.getStatistic(Statistic.CRAFT_ITEM, m);
             return count >= amount;
-        },"criteria.amount.crafted.list." + materials.size(), comma(amount), materials.stream()
+        }, p -> {
+           int count = 0;
+           for (Material m : materials) count += p.getStatistic(Statistic.CRAFT_ITEM, m);
+           return ((double) count / amount) * 100;
+        }, "criteria.amount.crafted.list." + materials.size(), comma(amount), materials.stream()
                 .map(m -> WordUtils.capitalizeFully(m.name().replace("_", " "))).toArray());
     }
 
@@ -210,7 +257,7 @@ public final class CompletionCriteria {
         return new CompletionCriteria(p -> {
             long time = p.getStatistic(stat);
             return time >= ticks;
-        }, "criteria.amount.playtime", formatTime(ticks));
+        }, p -> ((double) p.getStatistic(stat) / ticks) * 100, "criteria.amount.playtime", formatTime(ticks));
     }
 
     /**
