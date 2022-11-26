@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.Constants;
 import org.bukkit.Material;
@@ -29,43 +30,44 @@ public final class LegacyStructureReader implements StructureReader {
 
             String minVersion = null;
             String displayKey = null;
+            String key = null;
+            Rarity rarity = Rarity.COMMON;
 
             Map<StructurePoint, Material> points = new HashMap<>();
             for (String line; (line = reader.readLine()) != null;) {
                 int i = index.get();
 
-                if (i == 0) {
-                    minVersion = line;
-                    continue;
+                switch (i) {
+                    case 0: minVersion = line; index.incrementAndGet(); continue;
+                    case 1: key = line.substring(line.indexOf(":") + 1, line.lastIndexOf(":")); index.incrementAndGet(); continue;
+                    case 2: displayKey = line; index.incrementAndGet(); continue;
+                    case 3: rarity = Rarity.valueOf(line.toUpperCase()); index.incrementAndGet(); continue;
                 }
 
-                if (i == 1) {
-                    displayKey = line;
-                    continue;
-                }
-
-                if (i == 3 && !line.equalsIgnoreCase("---")) throw new RuntimeException("Malformed Strucutre File: Expected '---' but got '" + line + "'");
+                if (i == 4 && !line.equalsIgnoreCase("---")) throw new MalformedStructureException("Malformed Strucutre File: Expected '---' but got '" + line + "'");
                 
-                if (i > 3) {
+                if (i > 4) {
+
                     String material = line.split(":")[0];
                     if (material.startsWith("{") && material.endsWith("}")) {
                         Map<Material, Integer> chances = new HashMap<>();
 
                         int amount = 0;
                         String[] entries = material.split(",");
+
                         for (String entry : entries) {
                             String[] split = entry.split("=");
 
-                            int chance = Integer.parseInt(split[0].replace("%", ""));
+                            int chance = Integer.parseInt(split[0].replaceAll("[%{}]", ""));
                             amount += chance;
 
                             if (Material.matchMaterial(split[1]) == null)
-                                throw new RuntimeException("Unknown Material '" + split[1] + "'");
+                                throw new MalformedStructureException("Unknown Material '" + split[1] + "'");
 
                             chances.put(Material.matchMaterial(split[1]), chance);
                         }
 
-                        if (amount != 100) throw new RuntimeException("Malformed Strucutre File: Chance total is not 100%");
+                        if (amount != 100) throw new MalformedStructureException("Malformed Strucutre File: Chance total is not 100% (Found " + amount + "%)");
 
                         Map<Integer, Material> chanceMap = new HashMap<>();
                         int current = 0;
@@ -80,7 +82,7 @@ public final class LegacyStructureReader implements StructureReader {
                             points.put(p, chanceMap.get(r.nextInt(100)));
                     } else {
                         if (Material.matchMaterial(material) == null)
-                            throw new RuntimeException("Unknown Material '" + material + "'");
+                            throw new MalformedStructureException("Unknown Material '" + material + "'");
                         Material m = Material.matchMaterial(material);
 
                         String coords = line.split(":")[1];
@@ -92,7 +94,7 @@ public final class LegacyStructureReader implements StructureReader {
             }
 
             close();
-            return new LegacyStructure(minVersion, displayKey, points);
+            return new LegacyStructure(key, minVersion, displayKey, points, rarity);
         } catch (IOException e) {
             StarConfig.print(e);
         }

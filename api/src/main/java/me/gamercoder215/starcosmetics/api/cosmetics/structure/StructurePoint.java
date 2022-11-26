@@ -28,6 +28,24 @@ public final class StructurePoint implements Comparable<StructurePoint> {
     }
 
     /**
+     * Constructs a StructurePoint from a Vector.
+     * @param v Vector
+     */
+    public StructurePoint(@NotNull Vector v) {
+        this(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+    }
+
+    /**
+     * Creates a new StructurePoint.
+     * @param x Relative X to the Center
+     * @param y Relative Y to the Center
+     * @param z Relative Z to the Center
+     */
+    public StructurePoint(double x, double y, double z) {
+        this(Math.max((int) x, 0), Math.max((int) y, 0), Math.max((int) z, 0));
+    }
+
+    /**
      * Fetches the relative X distance to the Center.
      * @return Relative X Distance
      */

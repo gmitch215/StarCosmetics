@@ -1,20 +1,19 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
+import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
  * Represents a StarCosmetics Structure
  */
-public abstract class Structure {
+public abstract class Structure implements Cloneable {
     
     /**
      * Represents the default removal time, in ticks, of a Structure (30 seconds).
@@ -22,13 +21,15 @@ public abstract class Structure {
     public static final long DEFAULT_REMOVAL_TIME = 600;
 
     final String minVersion;
-    boolean isPlacing;
+
+    final String key;
 
     private final String displayKey;
 
-    Structure(String minVersion, String displayKey) {
+    Structure(String minVersion, String displayKey, String key) {
         this.minVersion = minVersion;
         this.displayKey = displayKey;
+        this.key = key;
     }
 
     /**
@@ -39,48 +40,36 @@ public abstract class Structure {
     public abstract Map<StructurePoint, Material> getMaterials();
 
     /**
+     * Fetches the Structure's Structure Info.
+     * @return Structure Info
+     */
+    @NotNull
+    public final StructureInfo getInfo() {
+        return new StructureInfo(this);
+    }
+
+    /**
      * Places this Structure WITHOUT automatically removing it.
      * @param center Center of Structure
      * @throws IllegalArgumentException if center is null
-     * @throws IllegalStateException if structure is currently being placed
+     * @throws IllegalStateException if this instance has already been placed
      */
     public abstract void place(@NotNull Location center) throws IllegalArgumentException, IllegalStateException;
 
     /**
-     * Whether this Structure Instance is currently being placed.
-     * @return true if structure is being placed, else false
+     * Fetches the rarity of this Structure.
+     * @return Structure Rarity
      */
-    public final boolean isBeingPlaced() {
-        return isPlacing;
-    }
+    public abstract Rarity getRarity();
     
     /**
      * Places this Structure.
      * @param center Center of Structure
      * @param delay Delay, in ticks, to remove this Structure
      * @throws IllegalArgumentException if delay is negative or center is null
+     * @throws IllegalStateException if this instance has already been placed and not removed
      */
-    public final void placeAndRemove(@NotNull Location center, long delay) throws IllegalArgumentException {
-        if (delay < 0) throw new IllegalArgumentException("Delay must be greater than 0");
-        place(center);
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Iterator<StructurePoint> it = getPointsPlaced().iterator();
-                while (it.hasNext()) {
-                    StructurePoint p = it.next();
-
-                    Location l = new Location(center.getWorld(),
-                    p.getX() + center.getBlockX(), p.getY() + center.getBlockY(), p.getZ() + center.getBlockZ());
-
-                    l.getBlock().setType(Material.AIR);
-
-                    it.remove();
-                }
-            }
-        }.runTaskLater(StarConfig.getPlugin(), delay);
-    }
+    public abstract void placeAndRemove(@NotNull Location center, long delay) throws IllegalArgumentException, IllegalStateException;
 
     /**
      * <p>Fetches all of the points of this Structure that have been placed.</p>
@@ -91,19 +80,6 @@ public abstract class Structure {
     public abstract Set<StructurePoint> getPointsPlaced();
 
     /**
-     * Whether this Structure is compatible with this version of Minecraft.
-     * @return true if this Structure is compatible with this version of Minecraft, false otherwise.
-     */
-    public boolean isCompatible() {
-        if (minVersion.equalsIgnoreCase("ALL")) return true;
-        String currentV = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
-
-        int current = Integer.parseInt(currentV.split("_")[1]);
-        int required = Integer.parseInt(minVersion.split("\\.")[1]);
-        return current >= required;
-    }
-
-    /**
      * Fetches the localized name of this Structure.
      * @return Localized Name
      */
@@ -112,4 +88,36 @@ public abstract class Structure {
         return StarConfig.getConfig().get(displayKey);
     }
 
+    @Override
+    public Structure clone() {
+        try {
+            Structure clone = (Structure) super.clone();
+            clone.getPointsPlaced().clear();
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Structure structure = (Structure) o;
+        return minVersion.equals(structure.minVersion) && key.equals(structure.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(minVersion, key);
+    }
+
+    @Override
+    public String toString() {
+        return "Structure{" +
+                "minVersion='" + minVersion + '\'' +
+                ", key='" + key + '\'' +
+                '}';
+    }
 }
