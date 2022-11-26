@@ -38,7 +38,7 @@ public interface Pet {
      */
     @NotNull
     default PetInfo getInfo() {
-        return StarConfig.getRegistry().getPetInfo(getType());
+        return StarConfig.getRegistry().getPetInfo(getPetType());
     }
 
     /**
@@ -64,7 +64,7 @@ public interface Pet {
      * @return Pet Type
      */
     @NotNull
-    default PetType getType() {
+    default PetType getPetType() {
         return PetType.fromPetClass(this.getClass());
     }
 

@@ -42,7 +42,7 @@ public final class StarHeadPet implements HeadPet {
 
     @Override
     @NotNull
-    public PetType getType() {
+    public PetType getPetType() {
         return type;
     }
 
