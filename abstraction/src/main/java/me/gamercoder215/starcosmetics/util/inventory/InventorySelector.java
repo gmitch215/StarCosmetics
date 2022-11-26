@@ -1,8 +1,8 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
-import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;

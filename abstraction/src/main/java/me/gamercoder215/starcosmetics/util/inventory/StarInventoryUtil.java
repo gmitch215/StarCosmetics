@@ -2,12 +2,15 @@ package me.gamercoder215.starcosmetics.util.inventory;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
-import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
@@ -121,6 +124,29 @@ public final class StarInventoryUtil {
     }
 
     @NotNull
+    public static ItemStack toItemStack(@NotNull StructureInfo info) {
+        ItemStack item = new ItemStack(info.getPrimaryMaterial());
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GOLD + info.getLocalizedName());
+
+        List<String> lore = new ArrayList<>();
+        lore.add(info.getRarity().toString());
+        lore.add(" ");
+        lore.add(ChatColor.YELLOW + info.getCriteria().getDisplayMessage());
+
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.values());
+        item.setItemMeta(meta);
+
+        NBTWrapper nbt = of(item);
+        nbt.setID("spawn:structure");
+        nbt.set("info", info);
+        item = nbt.getItem();
+
+        return item;
+    }
+
+    @NotNull
     public static Material toMaterial(@NotNull Sound s) {
         String n = s.name();
 
@@ -200,6 +226,14 @@ public final class StarInventoryUtil {
         inv.setAttribute("row_count", 0);
         int size = inv.getSize();
 
+        int upM;
+        int downM;
+
+        switch (size) {
+            case 54: upM = 26; downM = 35; break;
+            default: upM = 17; downM = 26; break;
+        }
+
         ItemStack up = getHead("arrow_up");
         ItemMeta uMeta = up.getItemMeta();
         uMeta.setDisplayName(ChatColor.GREEN + get("constants.up"));
@@ -207,7 +241,7 @@ public final class StarInventoryUtil {
         NBTWrapper uNBT = NBTWrapper.of(up);
         uNBT.setID("scroll_up");
         up = uNBT.getItem();
-        inv.setItem(26 - (54 - size), up);
+        inv.setItem(upM, up);
 
         ItemStack down = getHead("arrow_down");
         ItemMeta dMeta = down.getItemMeta();
@@ -216,7 +250,7 @@ public final class StarInventoryUtil {
         NBTWrapper dNBT = NBTWrapper.of(down);
         dNBT.setID("scroll_down");
         down = dNBT.getItem();
-        inv.setItem(35 - (54 - size), down);
+        inv.setItem(downM, down);
     }
 
     public static ItemStack getHead(String key) {
@@ -352,17 +386,13 @@ public final class StarInventoryUtil {
 
         if (!loc.getRarity().isSecret() || loc.isUnlocked(p)) {
             lore.add(" ");
+            CompletionCriteria criteria = loc.getCompletionCriteria();
+
             lore.addAll(Arrays.stream(
-                    ChatPaginator.wordWrap(loc.getCompletionCriteria().getDisplayMessage(), 30)
+                    ChatPaginator.wordWrap(criteria.getDisplayMessage(), 30)
             ).map(s -> c + s).collect(Collectors.toList()));
+            lore.add(ChatColor.DARK_GREEN + getWithArgs("constants.completed", String.format("%,.2f", criteria.getProgressPercentage(p)) + "%"));
         }
-
-
-        if (Trail.class.isAssignableFrom(loc.getParentClass())) {
-            if (sp.getSelectedTrail( ((Trail<?>) loc.getParent()).getType() ) == loc)
-                lore.add(ChatColor.GREEN + "" + ChatColor.BOLD + get("constants.selected"));
-        } else if (loc.equals(sp.getSelectedCosmetic(loc.getParentClass())))
-            lore.add(ChatColor.GREEN + "" + ChatColor.BOLD + get("constants.selected"));
 
         meta.setLore(lore);
         item.setItemMeta(meta);
@@ -598,4 +628,28 @@ public final class StarInventoryUtil {
 
         return placements;
     }
+
+    public static ItemStack toItemStack(@NotNull Player p, @NotNull PetInfo info) {
+        StarPlayer sp = new StarPlayer(p);
+        CompletionCriteria criteria = info.getCriteria();
+
+        ItemStack item = info.getIcon().clone();
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(ChatColor.GOLD + info.getName());
+        List<String> lore = new ArrayList<>();
+        ChatColor c = criteria.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
+
+        lore.add(info.getRarity().toString());
+        lore.add(" ");
+        lore.addAll(Arrays.stream(
+                ChatPaginator.wordWrap(criteria.getDisplayMessage(), 30)
+        ).map(s -> c + s).collect(Collectors.toList()));
+        lore.add(ChatColor.DARK_GREEN + getWithArgs("constants.completed", String.format("%,.2f", criteria.getProgressPercentage(p)) + "%"));
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
 }
