@@ -11,12 +11,21 @@ public interface StructureReader extends Closeable {
 
     Structure read();
 
+    static String trimLine(String point) {
+        String trimmed = point.trim();
+        if (point.contains(";")) trimmed = trimmed.substring(0, trimmed.indexOf(";"));
+
+        return trimmed;
+    }
+
     static List<StructurePoint> readPoints(String input) {
         List<StructurePoint> points = new ArrayList<>();
 
         String[] inputs = input.split("\\*");
 
-        for (String s : inputs)
+        for (String rawS : inputs) {
+            String s = trimLine(rawS);
+
             if (s.startsWith("(") && s.endsWith("]")) {
                 String[] coords = s.split("\\^")[1].replaceAll("[\\[\\]\\s]", "").split(",");
                 String[] split = s.split("\\^")[0].replaceAll("[()\\s]", "").split(",");
@@ -38,12 +47,15 @@ public interface StructureReader extends Closeable {
                             points.add(new StructurePoint(x + cx, y + cy, z + cz));
 
             } else points.add(readRawPoint(s));
+        }
 
         return points;
     }
 
-    static StructurePoint readRawPoint(String input) {
-        if (!input.startsWith("[") || !input.endsWith("]")) throw new RuntimeException("Malformed Raw Point: " + input);
+    static StructurePoint readRawPoint(String rawInput) {
+        String input = trimLine(rawInput);
+
+        if (!input.startsWith("[") || !input.endsWith("]")) throw new MalformedStructureException("Malformed Raw Point: " + input);
 
         String[] split = input.replaceAll("[\\[\\]\\s]", "").split(",");
         int x = Integer.parseInt(split[0]);
@@ -68,12 +80,12 @@ public interface StructureReader extends Closeable {
     static StructureReader getStructureReader(Reader r) {
         try {
             if (Wrapper.getWrapper().isLegacy())
-                return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.LegacyStructureReader")
+                return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.LegacyStructureReader")
                         .asSubclass(StructureReader.class)
                         .getConstructor(Reader.class)
                         .newInstance(r);
             else
-                return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.ModernStructureReader")
+                return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.ModernStructureReader")
                         .asSubclass(StructureReader.class)
                         .getConstructor(Reader.class)
                         .newInstance(r);
