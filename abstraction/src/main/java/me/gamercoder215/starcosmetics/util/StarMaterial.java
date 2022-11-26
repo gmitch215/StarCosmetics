@@ -81,6 +81,12 @@ public enum StarMaterial {
     CARVED_PUMPKIN("pumpkin"),
 
     IRON_SHOVEL(Material.IRON_PICKAXE),
+
+    LIME_TERRACOTTA(5, "stained_clay"),
+
+    RED_TERRACOTTA(14, "stained_clay"),
+
+    LIGHT_BLUE_TERRACATTA(3, "stained_clay"),
     ;
 
     private final Material defaultV;
