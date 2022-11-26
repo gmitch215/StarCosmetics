@@ -24,10 +24,26 @@ public interface Completion {
     String getKey();
 
     /**
+     * Fetches the namespace of this Completion.
+     * @return Completion Namespace
+     */
+    @NotNull
+    String getNamespace();
+
+    /**
      * Fetches the Rarity of this Completion.
      * @return Completion Rarity
      */
     @NotNull
     Rarity getRarity();
+
+    /**
+     * Constructs the Completion's full key.
+     * @return Full Key
+     */
+    @NotNull
+    default String getFullKey() {
+        return getNamespace() + ":" + getKey();
+    }
 
 }

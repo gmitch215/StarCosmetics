@@ -37,6 +37,11 @@ public enum PlayerCompletion implements Completion {
     }
 
     @Override
+    public @NotNull String getNamespace() {
+        return "player";
+    }
+
+    @Override
     public @NotNull Rarity getRarity() {
         return rarity;
     }
