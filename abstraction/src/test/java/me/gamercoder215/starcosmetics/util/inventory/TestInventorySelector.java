@@ -1,6 +1,6 @@
 package me.gamercoder215.starcosmetics.util.inventory;
 
-import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
+import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.Constants;
 import org.bukkit.Sound;
 import org.junit.jupiter.api.Assertions;
