@@ -29,7 +29,7 @@ public interface StarConfig {
     }
 
     /**
-     * Updates the Plugin's Cache.
+     * Updates the Plugin's Cache, removing any old data.
      * @see #updatePluginCache()
      */
     static void updateCache() {
@@ -52,10 +52,18 @@ public interface StarConfig {
      * @param t Throwable to print.
      */
     static void print(@NotNull Throwable t) {
-        getLogger().severe(t.getCause() == null ? t.getClass().getSimpleName() : t.getClass().getSimpleName() + " : " + t.getCause().getClass().getSimpleName());
-        getLogger().severe("--------------------------");
-        getLogger().severe(t.getMessage());
-        for (StackTraceElement s : t.getStackTrace()) getLogger().severe(s.toString());
+        if (t.getCause() == null) {
+            getLogger().severe(t.getClass().getSimpleName());
+            getLogger().severe("--------------------------");
+            getLogger().severe(t.getMessage());
+            for (StackTraceElement s : t.getStackTrace()) getLogger().severe(s.toString());
+        } else {
+            Throwable cause = t.getCause();
+            getLogger().severe(t.getClass().getSimpleName() + " : " + cause.getClass().getSimpleName());
+            getLogger().severe("--------------------------");
+            getLogger().severe(cause.getMessage());
+            for (StackTraceElement s : cause.getStackTrace()) getLogger().severe(s.toString());
+        }
     }
 
     /**
@@ -228,7 +236,7 @@ public interface StarConfig {
     }
 
     /**
-     * Updates the plugin's cached data.
+     * Updates the plugin's cached data, removing any old states.
      */
     void updatePluginCache();
 }

@@ -1,34 +1,45 @@
 package me.gamercoder215.starcosmetics;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
+import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
-import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
 import me.gamercoder215.starcosmetics.events.CompletionEvents;
 import me.gamercoder215.starcosmetics.events.CosmeticEvents;
 import me.gamercoder215.starcosmetics.placeholders.StarPlaceholders;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
+import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
+import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,14 +52,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
+import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getCosmeticSelections;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
 
 public final class StarCosmetics extends JavaPlugin implements StarConfig, CosmeticRegistry {
 
     private static final Wrapper w = getWrapper();
-
-    public static CommandWrapper cw;
 
     private boolean checkCompatible() {
         if (!Wrapper.isCompatible()) {
@@ -88,9 +99,11 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         getLogger().info("Loaded Files...");
 
         registerEvents();
+        getAvailableStructures(); // Load Structure Cache
         cw = getCommandWrapper();
         SERIALIZABLE.forEach(ConfigurationSerialization::registerClass);
         loadConstructors();
+
         getLogger().info("Loaded Classes...");
 
         ASYNC_TICK_RUNNABLE.runTaskTimerAsynchronously(this, 0, 1);
@@ -108,9 +121,6 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         for (World w : Bukkit.getWorlds())
             for (Firework f : w.getEntitiesByClass(Firework.class))
                 if (f.hasMetadata("cosmetic")) f.remove();
-
-        SERIALIZABLE.forEach(ConfigurationSerialization::unregisterClass);
-        getLogger().info("Unregistered Classes...");
 
         try { ASYNC_TICK_RUNNABLE.cancel(); } catch (IllegalStateException ignored) {}
         getLogger().info("Cancelled Tasks...");
@@ -287,26 +297,121 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                 .orElse(null);
     }
 
+    private static final String[] STRUCTURE_FILES = {
+            "ores",
+            "reinforced_portal",
+            "tree",
+    };
+
+    public static final Set<StructureInfo> STRUCTURE_CACHE = new HashSet<>();
+
+    @Override
+    public @NotNull Set<StructureInfo> getAvailableStructures() {
+        if (!STRUCTURE_CACHE.isEmpty()) return ImmutableSet.copyOf(STRUCTURE_CACHE);
+
+        Set<Structure> set = new HashSet<>();
+
+        for (String structF : STRUCTURE_FILES) {
+            InputStream struct = StarCosmetics.class.getResourceAsStream("/structures/" + structF + ".scs");
+            StructureReader reader = StructureReader.getStructureReader(struct);
+            set.add(reader.read());
+
+            try { reader.close(); } catch (IOException e) { StarConfig.print(e); }
+        }
+
+        STRUCTURE_CACHE.addAll(set.stream()
+                .map(Structure::getInfo)
+                .filter(StructureInfo::isCompatible)
+                .collect(Collectors.toSet()));
+
+        return ImmutableSet.copyOf(STRUCTURE_CACHE);
+    }
+
+    @Override
+    public void addStructure(@NotNull InputStream stream) {
+        StructureReader reader = StructureReader.getStructureReader(stream);
+
+        Structure struct = reader.read();
+        STRUCTURE_CACHE.add(struct.getInfo());
+
+        try {
+            reader.close();
+        } catch (IOException e) {
+            StarConfig.print(e);
+        }
+    }
+
+    static final Map<PetType, PetInfo> PET_MAP = ImmutableMap.<PetType, PetInfo>builder()
+            .put(PetType.PIG, of(
+                    Rarity.COMMON, CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 100),
+                    petIcon(Material.PORK, "pig", "constants.pet.pig"), "Pig")
+            )
+            .put(PetType.GOLEM, of(
+                    Rarity.RARE, CompletionCriteria.fromMined(1200, Material.IRON_ORE),
+                    petIcon(Material.IRON_BLOCK, "golem", "constants.pet.golem"), "Iron Golem")
+            )
+
+            // Head Pets
+
+            .put(PetType.BEE, of(
+                    "bee_pet", "Bee", Rarity.OCCASIONAL,
+                    petIcon("bee_pet", "bee", "constants.pet.bee"), CompletionCriteria.fromPlaytime(1728000)
+            ))
+
+            .build();
+
+    private static ItemStack petIcon(Material m, String key, String displayKey) {
+        return ItemBuilder.of(m)
+                .name(ChatColor.GOLD + Wrapper.get(displayKey))
+                .id("choose:pet")
+                .nbt(nbt -> nbt.set("pet", key))
+                .build();
+    }
+
+    private static ItemStack petIcon(String headKey, String key, String displayKey) {
+        return ItemBuilder.of(StarInventoryUtil.getHead(headKey))
+                .name(ChatColor.GOLD + Wrapper.get(displayKey))
+                .id("choose:pet")
+                .nbt(nbt -> nbt.set("pet", key))
+                .build();
+    }
+
+
+    @Override
+    public @NotNull Map<PetType, PetInfo> getAllPets() {
+        return PET_MAP;
+    }
+
     private static final class InternalEvents implements Listener {
 
-        // private final StarCosmetics plugin;
+        private final StarCosmetics plugin;
 
         public InternalEvents(StarCosmetics plugin) {
-            // this.plugin = plugin;
+            this.plugin = plugin;
             Bukkit.getPluginManager().registerEvents(this, plugin);
         }
 
         @EventHandler
         public void onStatistic(PlayerStatisticIncrementEvent e) {
             Player p = e.getPlayer();
-            StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
+            StarConfig.updateCache();
         }
 
         @EventHandler
         public void onLeave(PlayerQuitEvent e) {
             Player p = e.getPlayer();
             StarPlayer sp = new StarPlayer(p);
-            sp.getSelectionLimit();
+            sp.getSelectionLimit(); // Updates Config Limit
+        }
+
+        @EventHandler
+        public void onDamage(EntityDamageEvent e) {
+            Entity en = e.getEntity();
+
+            if (en.hasMetadata("immune_fall") && e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                e.setCancelled(true);
+                en.removeMetadata("immune_fall", plugin);
+            }
         }
 
     }
