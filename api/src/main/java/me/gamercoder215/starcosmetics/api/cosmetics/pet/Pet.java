@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.pet;
 
 import me.gamercoder215.starcosmetics.api.Rarity;
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,18 @@ public interface Pet {
      * @return Pet Rarity
      */
     @NotNull
-    Rarity getRarity();
+    default Rarity getRarity() {
+        return getInfo().getRarity();
+    }
+
+    /**
+     * Fetches the Pet's Information.
+     * @return Pet Info
+     */
+    @NotNull
+    default PetInfo getInfo() {
+        return StarConfig.getRegistry().getPetInfo(getType());
+    }
 
     /**
      * Fetches the Pet's Owner.
@@ -37,10 +49,23 @@ public interface Pet {
     Player getOwner();
 
     /**
-     * Fetches the Pet's Display Name.
-     * @return Pet Display Name
+     * Fetches the Pet's Display Name based on {@link #getOwner()}.
+     * @return Pet Display Name with Owner
      */
     @NotNull
-    String getPetName();
+    default String getPetName() {
+        return getRarity().getPrefix() +
+                (getOwner().getDisplayName() != null ? getOwner().getDisplayName() : getOwner().getName()) + "'s " +
+                getRarity().getPrefix() + " " + getInfo().getName();
+    }
+
+    /**
+     * Fetches this Pet's {@link PetType}.
+     * @return Pet Type
+     */
+    @NotNull
+    default PetType getType() {
+        return PetType.fromPetClass(this.getClass());
+    }
 
 }
