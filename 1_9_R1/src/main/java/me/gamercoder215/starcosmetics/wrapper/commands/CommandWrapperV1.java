@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.*;
@@ -12,6 +13,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
 
@@ -51,6 +53,16 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
                 about(p);
                 break;
             }
+            case "starstructures": {
+                if (!(sender instanceof Player)) return false;
+                Player p = (Player) sender;
+
+                StringBuilder structure = new StringBuilder();
+                for (String arg : args) structure.append(arg).append(" ");
+
+                structures(p, structure.toString());
+                break;
+            }
         }
 
         return true;
@@ -61,7 +73,14 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
         List<String> suggestions = new ArrayList<>();
 
         switch (cmd.getName()) {
+            case "starstructures": {
+                if (args.length == 1) suggestions.addAll(StarConfig.getRegistry().getAvailableStructures()
+                        .stream()
+                        .map(StructureInfo::getLocalizedName)
+                        .collect(Collectors.toList()));
 
+                return suggestions;
+            }
         }
 
         return suggestions;
