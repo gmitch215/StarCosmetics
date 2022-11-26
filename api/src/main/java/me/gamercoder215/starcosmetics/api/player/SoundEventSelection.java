@@ -1,4 +1,4 @@
-package me.gamercoder215.starcosmetics.api.player.cosmetics;
+package me.gamercoder215.starcosmetics.api.player;
 
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
