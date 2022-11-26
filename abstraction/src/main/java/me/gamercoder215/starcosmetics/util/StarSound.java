@@ -1,8 +1,11 @@
 package me.gamercoder215.starcosmetics.util;
 
+import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -58,6 +61,20 @@ public enum StarSound {
 
     public void playFailure(@NotNull Entity en) {
         play(en, 3F, 0F);
+    }
+
+    public void playSuccess(@NotNull Player p) {
+        StarPlayer sp = new StarPlayer(p);
+        if (!sp.getSetting(PlayerSetting.SOUND_NOTIFICATIONS)) return;
+
+        playSuccess((Entity) p);
+    }
+
+    public void playFailure(@NotNull Player p) {
+        StarPlayer sp = new StarPlayer(p);
+        if (!sp.getSetting(PlayerSetting.SOUND_NOTIFICATIONS)) return;
+
+        playFailure((Entity) p);
     }
 
 }
