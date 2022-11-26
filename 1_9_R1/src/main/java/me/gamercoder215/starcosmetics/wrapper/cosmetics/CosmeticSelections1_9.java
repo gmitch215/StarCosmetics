@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
-import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseGadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
@@ -13,16 +11,13 @@ import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
-import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
-import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -264,37 +259,6 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     CompletionCriteria.fromStatistic(Statistic.ITEM_ENCHANTED, 385), Rarity.EPIC))
             .build();
 
-    // Gadgets
-
-    // Click Gadgets
-
-    private static final List<CosmeticSelection<?>> CLICK_GADGETS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(GadgetSelection.builder(PlayerInteractEvent.class)
-                    .info("firework", CompletionCriteria.fromKilled(60, EntityType.CREEPER), Rarity.COMMON)
-                    .item(StarMaterial.FIREWORK_ROCKET.find())
-                    .action(e -> {
-                        Player p = e.getPlayer();
-
-                        Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
-                        FireworkMeta meta = fw.getFireworkMeta();
-                        meta.setPower(6);
-
-                        DyeColor chosen = DyeColor.values()[r.nextInt(DyeColor.values().length)];
-                        FireworkEffect effect = FireworkEffect.builder()
-                                .withColor(chosen.getFireworkColor())
-                                .withFade(chosen.getColor())
-                                .with(FireworkEffect.Type.BALL)
-                                .trail(true)
-                                .build();
-
-                        meta.addEffect(effect);
-
-                        fw.setFireworkMeta(meta);
-                        fw.setMetadata("cosmetic", new FixedMetadataValue(StarConfig.getPlugin(), true));
-                    })
-                    .build())
-            .build();
-
     // Selection Map
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
@@ -306,8 +270,6 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .put(BaseShape.SMALL_DETAILED_RING, SMALL_DETAILED_RINGS)
             .put(BaseShape.LARGE_RING, LARGE_RINGS)
             .put(BaseShape.LARGE_DETAILED_RING, LARGE_DETAILED_RINGS)
-
-            .put(BaseGadget.CLICK_GADGET, CLICK_GADGETS)
             .build();
 
     @Override
