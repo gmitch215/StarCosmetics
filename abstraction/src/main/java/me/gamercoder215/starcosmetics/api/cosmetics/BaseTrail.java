@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,7 +28,7 @@ import static me.gamercoder215.starcosmetics.util.Constants.r;
 import static me.gamercoder215.starcosmetics.util.entity.StarSelector.isStopped;
 import static org.bukkit.Material.*;
 
-@SuppressWarnings({"unchecked", "deprecation"})
+@SuppressWarnings("unchecked")
 public final class BaseTrail<T> implements Trail<T> {
 
     public static final Wrapper w = Wrapper.getWrapper();
@@ -258,11 +259,11 @@ public final class BaseTrail<T> implements Trail<T> {
                     area.forEach(l -> {
                         if (onGround && l.getBlock().getType().isSolid()) {
                             Material original = l.getBlock().getType();
-                            byte data = l.getBlock().getData();
+                            BlockState state = l.getBlock().getState();
 
-                            p.sendBlockChange(l, m, (byte) 0);
+                            w.sendBlockChange(p, loc, m);
 
-                            StarRunnable.syncLater(() -> p.sendBlockChange(l, original, data), 60);
+                            StarRunnable.syncLater(() -> w.sendBlockChange(p, loc, original, state), 60);
                         }
                     });
 
