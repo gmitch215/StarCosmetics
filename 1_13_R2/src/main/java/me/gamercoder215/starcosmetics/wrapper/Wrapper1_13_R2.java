@@ -14,9 +14,11 @@ import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
@@ -174,6 +176,22 @@ public final class Wrapper1_13_R2 implements Wrapper {
         nmsEntity.setHeadRotation(yaw);
     }
 
+    @Override
+    public void sendBlockChange(Player p, Location loc, org.bukkit.Material m, BlockState data) {
+        EntityPlayer sp = ((CraftPlayer) p).getHandle();
+        BlockPosition pos = new BlockPosition(loc.getX(), loc.getY(), loc.getZ());
+
+        if (data == null) {
+            p.sendBlockChange(loc, m.createBlockData());
+            return;
+        }
+
+        IBlockData nmsState = ((CraftBlockState) data).getHandle();
+        PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(((CraftWorld) loc.getWorld()).getHandle(), pos);
+        packet.block = nmsState;
+
+        sp.playerConnection.sendPacket(packet);
+    }
 
     @Override
     public StarInventory createInventory(String key, int size, String title) {

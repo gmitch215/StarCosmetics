@@ -11,6 +11,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_12_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
@@ -20,6 +21,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+@SuppressWarnings("deprecation")
 public final class Wrapper1_12_R1 implements Wrapper {
 
     @Override
@@ -90,10 +92,14 @@ public final class Wrapper1_12_R1 implements Wrapper {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean isItem(org.bukkit.Material m) {
         if (m == org.bukkit.Material.AIR) return false;
         return Item.getById(m.getId()) != null;
+    }
+
+    @Override
+    public void sendBlockChange(Player p, Location loc, org.bukkit.Material m, BlockState data) {
+        p.sendBlockChange(loc, m, data == null ? (byte) 0 : data.getRawData());
     }
 
     @Override

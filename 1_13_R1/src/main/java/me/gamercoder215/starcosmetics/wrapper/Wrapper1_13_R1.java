@@ -14,9 +14,11 @@ import net.minecraft.server.v1_13_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R1.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
@@ -171,6 +173,23 @@ public final class Wrapper1_13_R1 implements Wrapper {
     public boolean isItem(org.bukkit.Material m) {
         if (m == org.bukkit.Material.AIR) return false;
         return m.isItem();
+    }
+
+    @Override
+    public void sendBlockChange(Player p, Location loc, org.bukkit.Material m, BlockState data) {
+        EntityPlayer sp = ((CraftPlayer) p).getHandle();
+        BlockPosition pos = new BlockPosition(loc.getX(), loc.getY(), loc.getZ());
+
+        if (data == null) {
+            p.sendBlockChange(loc, m.createBlockData());
+            return;
+        }
+
+        IBlockData nmsState = ((CraftBlockState) data).getHandle();
+        PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(((CraftWorld) loc.getWorld()).getHandle(), pos);
+        packet.block = nmsState;
+
+        sp.playerConnection.sendPacket(packet);
     }
 
     @Override

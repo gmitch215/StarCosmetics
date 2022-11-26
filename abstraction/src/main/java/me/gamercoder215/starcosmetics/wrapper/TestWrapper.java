@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -53,6 +54,9 @@ public final class TestWrapper implements Wrapper {
 
     @Override
     public void stopSound(Player p) {}
+
+    @Override
+    public void sendBlockChange(Player p, Location loc, Material m, BlockState data) {}
 
 
 }

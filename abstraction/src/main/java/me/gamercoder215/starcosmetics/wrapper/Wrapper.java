@@ -2,13 +2,18 @@ package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.StarHeadPet;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.custom.HeadPet;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.*;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -101,15 +106,26 @@ public interface Wrapper {
 
     void stopSound(Player p);
 
+    void sendBlockChange(Player p, Location loc, Material m, BlockState data);
+
+    default void sendBlockChange(Player p, Location loc, Material m) {
+        sendBlockChange(p, loc, m, null);
+    }
+
     // Other Utilities
 
     @NotNull
-    static <T extends Pet> T createPet(@NotNull Class<T> petClass, Player owner, Location loc) {
+    static Pet createPet(@NotNull PetType type, Player owner, Location loc) {
+        Class<? extends Pet> petClass = type.getPetClass();
+
+        if (HeadPet.class.isAssignableFrom(petClass))
+            return new StarHeadPet(owner, loc, type, (HeadInfo) StarConfig.getRegistry().getPetInfo(type));
+
         try {
-            Class<? extends T> clazz = Class.forName("me.gamercoder215.starcosmetics.wrapper.pets." + petClass.getSimpleName() + getServerVersion())
+            Class<? extends Pet> clazz = Class.forName("me.gamercoder215.starcosmetics.wrapper.pets." + petClass.getSimpleName() + getServerVersion())
                     .asSubclass(petClass);
 
-            Constructor<? extends T> c = clazz.getConstructor(Player.class, Location.class);
+            Constructor<? extends Pet> c = clazz.getConstructor(Player.class, Location.class);
             return c.newInstance(owner, loc);
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName());
@@ -118,7 +134,6 @@ public interface Wrapper {
         }
 
         throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName());
-
     }
 
     static <T extends Enum<T> & Cosmetic> List<CosmeticSelection<?>> allFor(Class<T> clazz) {
@@ -152,16 +167,8 @@ public interface Wrapper {
         sender.sendMessage(get(key));
     }
 
-    static void sendMessage(CommandSender sender, String key) {
-        sendMessage(sender, key, "");
-    }
-
-    static void sendMessage(CommandSender sender, String key, Object prefix) {
-        sender.sendMessage(prefix.toString() + getMessage(key));
-    }
-
     static void sendError(CommandSender sender, String key) {
-        sendMessage(sender, key, ChatColor.RED);
+        sender.sendMessage(ChatColor.RED + getMessage(key));
     }
 
     static void sendWithArgs(CommandSender sender, String key, Object... args) {

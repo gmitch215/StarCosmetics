@@ -9,6 +9,7 @@ import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper1_17_R1;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.protocol.EnumProtocolDirection;
 import net.minecraft.network.protocol.game.*;
@@ -21,11 +22,15 @@ import net.minecraft.server.network.PlayerConnection;
 import net.minecraft.sounds.SoundCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.EntityItem;
+import net.minecraft.world.level.block.state.IBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
@@ -184,6 +189,21 @@ public final class Wrapper1_17_R1 implements Wrapper {
     public void stopSound(Player p) {
         PacketPlayOutStopSound packet = new PacketPlayOutStopSound(null, SoundCategory.a);
         ((CraftPlayer) p).getHandle().b.sendPacket(packet);
+    }
+
+    @Override
+    public void sendBlockChange(Player p, Location loc, Material m, BlockState data) {
+        EntityPlayer sp = ((CraftPlayer) p).getHandle();
+        BlockPosition pos = new BlockPosition(loc.getX(), loc.getY(), loc.getZ());
+
+        if (data == null) {
+            p.sendBlockChange(loc, m.createBlockData());
+            return;
+        }
+
+        IBlockData nmsState = ((CraftBlockState) data).getHandle();
+        PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(pos, nmsState);
+        sp.b.sendPacket(packet);
     }
 
     @Override
