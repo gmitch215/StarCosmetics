@@ -5,11 +5,10 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
-import me.gamercoder215.starcosmetics.api.cosmetics.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
-import me.gamercoder215.starcosmetics.api.player.cosmetics.SoundEventSelection;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -22,16 +21,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents a player used by StarCosmetics to manage their configuration.
 */
 @SuppressWarnings("unchecked")
 public final class StarPlayer {
+
+    static final Map<UUID, Pet> SPAWNED_PETS = new HashMap<>();
 
     private final OfflinePlayer player;
     private final File folder;
@@ -42,6 +40,9 @@ public final class StarPlayer {
 
     private final File soundF;
     private final FileConfiguration sounds;
+
+    private final File completionsF;
+    private final FileConfiguration completions;
 
     /**
      * Constructs a new StarPlayer.
@@ -60,6 +61,10 @@ public final class StarPlayer {
         this.soundF = new File(folder, "sounds.yml");
         if (!soundF.exists()) try { soundF.createNewFile(); } catch (IOException e) { StarConfig.print(e); }
         this.sounds = YamlConfiguration.loadConfiguration(soundF);
+
+        this.completionsF = new File(folder, "completions.yml");
+        if (!completionsF.exists()) try { completionsF.createNewFile(); } catch (IOException e) { StarConfig.print(e); }
+        this.completions = YamlConfiguration.loadConfiguration(completionsF);
     }
 
     /**
@@ -128,7 +133,7 @@ public final class StarPlayer {
      */
     public boolean hasCompleted(@NotNull Completion c) {
         if (c == null) return false;
-        return config.getBoolean("completions." + c.getKey(), false);
+        return completions.getBoolean(c.getNamespace() + "." + c.getKey(), false);
     }
 
     /**
@@ -139,8 +144,8 @@ public final class StarPlayer {
     public void setCompleted(@NotNull Completion c, boolean b) {
         if (c == null) return;
 
-        config.set("completions." + c.getKey(), b);
-        try { config.save(folder); } catch (IOException e) { StarConfig.print(e); }
+        completions.set(c.getNamespace() + "." + c.getKey(), b);
+        save();
     }
 
     /**
@@ -150,7 +155,6 @@ public final class StarPlayer {
     public void sendNotification(@Nullable String message) {
         if (message == null) return;
         if (!getSetting(PlayerSetting.NOTIFICATIONS)) return;
-        if (!player.isOnline()) return;
         if (!player.isOnline()) return;
 
         player.getPlayer().sendMessage(message);
@@ -170,12 +174,12 @@ public final class StarPlayer {
      * Fetches the setting's value.
      * @param s The setting to check.
      * @param <T> The type of the setting.
-     * @return Setting Value
+     * @return Setting Value, or default value if not found
      */
     @Nullable
     public <T> T getSetting(@NotNull PlayerSetting<T> s) {
         if (s == null) return null;
-        return getSetting(s, null);
+        return getSetting(s, s.getDefaultValue());
     }
 
     /**
@@ -225,7 +229,6 @@ public final class StarPlayer {
     private static String toString(Class<? extends Cosmetic> clazz) {
         if (Trail.class.isAssignableFrom(clazz)) return "trails";
         if (ParticleShape.class.isAssignableFrom(clazz)) return "particle_shape";
-        if (Gadget.class.isAssignableFrom(clazz)) return "gadget";
 
         return clazz.getSimpleName().toLowerCase();
     }
@@ -450,6 +453,17 @@ public final class StarPlayer {
     }
 
     /**
+     * Fetches the Pet this player has active.
+     * @return Pet Spawned, or null if not spawned
+     */
+    @Nullable
+    public Pet getSpawnedPet() {
+        if (!player.isOnline()) return null;
+
+        return SPAWNED_PETS.get(player.getUniqueId());
+    }
+
+    /**
      * <p>Saves all of this StarPlayer's configuration.</p>
      * <p>Methods that edit the configuration automatically save the configuration, so an additional call is not necessary.</p>
      */
@@ -457,6 +471,7 @@ public final class StarPlayer {
         try {
             config.save(configF);
             sounds.save(soundF);
+            completions.save(completionsF);
         } catch (IOException e) {
             StarConfig.print(e);
         }
