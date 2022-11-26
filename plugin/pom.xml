@@ -18,7 +18,6 @@
                 <includes>
                     <include>**/*.yml</include>
                     <include>**/*.properties</include>
-                    <include>**/*.scs</include>
                 </includes>
             </resource>
         </resources>

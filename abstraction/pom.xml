@@ -18,6 +18,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>**/*.properties</include>
+                    <include>**/*.scs</include>
                 </includes>
             </resource>
         </resources>
