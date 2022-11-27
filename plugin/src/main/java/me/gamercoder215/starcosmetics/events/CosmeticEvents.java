@@ -3,12 +3,16 @@ package me.gamercoder215.starcosmetics.events;
 import me.gamercoder215.starcosmetics.StarCosmetics;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
+import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.*;
@@ -20,8 +24,12 @@ import org.bukkit.plugin.RegisteredListener;
 
 import java.lang.reflect.Method;
 
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+
 public final class CosmeticEvents implements Listener {
-    
+
+    private static final Wrapper w = getWrapper();
+
     private final StarCosmetics plugin;
 
     public CosmeticEvents(StarCosmetics plugin) {
@@ -97,13 +105,23 @@ public final class CosmeticEvents implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
-        if (pitchChanged(e.getFrom(), e.getTo())) return;
-
         Player p = e.getPlayer();
         StarPlayer sp = StarCosmetics.getCached(p);
 
-        CosmeticLocation<?> ground = sp.getSelectedTrail(TrailType.GROUND);
-        if (ground != null) ((Trail<?>) ground.getParent()).run(p, ground);
+        if (sp.getSpawnedPet() != null) {
+            Pet spawned = sp.getSpawnedPet();
+            if (spawned.getEntity() instanceof ArmorStand) {
+                ArmorStand as = (ArmorStand) spawned.getEntity();
+
+                as.teleport(StarPlayerUtil.createPetLocation(p));
+                w.setRotation(as, p.getLocation().getYaw(), p.getLocation().getPitch());
+            }
+        }
+
+        if (!pitchChanged(e.getFrom(), e.getTo())) {
+            CosmeticLocation<?> ground = sp.getSelectedTrail(TrailType.GROUND);
+            if (ground != null) ((Trail<?>) ground.getParent()).run(p, ground);
+        }
     }
 
 }
