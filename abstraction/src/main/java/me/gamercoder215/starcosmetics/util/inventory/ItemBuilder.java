@@ -18,20 +18,32 @@ public final class ItemBuilder {
 
     private ItemStack item;
 
-    public static final ItemStack GUI_BACKGROUND = ItemBuilder.of(StarMaterial.BLACK_STAINED_GLASS_PANE)
-            .id("gui_background")
-            .name(" ")
-            .build();
+    private static boolean loaded = false;
 
-    public static final ItemStack SAVE = ItemBuilder.of(StarMaterial.LIME_WOOL)
-            .name(ChatColor.GREEN + get("constants.save"))
-            .nbt(nbt -> nbt.set("item", "save"))
-            .build();
+    public static void loadItems() {
+        if (loaded) throw new IllegalArgumentException("Items already loaded!");
 
-    public static final ItemStack STOP_SOUND = ItemBuilder.of(Material.BARRIER)
-            .name(ChatColor.RED + get("constants.stop_sound"))
-            .id("stop_sound")
-            .build();
+        STOP_SOUND = ItemBuilder.of(Material.BARRIER)
+                .name(ChatColor.RED + get("constants.stop_sound"))
+                .id("stop_sound")
+                .build();
+
+        SAVE = ItemBuilder.of(StarMaterial.LIME_WOOL)
+                .name(ChatColor.GREEN + get("constants.save"))
+                .nbt(nbt -> nbt.set("item", "save"))
+                .build();
+
+        GUI_BACKGROUND = ItemBuilder.of(StarMaterial.BLACK_STAINED_GLASS_PANE)
+                .id("gui_background")
+                .name(" ")
+                .build();
+
+        loaded = true;
+    }
+
+    public static ItemStack GUI_BACKGROUND;
+    public static ItemStack SAVE;
+    public static ItemStack STOP_SOUND;
 
 
     private ItemBuilder(ItemStack item) {

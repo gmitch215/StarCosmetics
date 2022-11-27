@@ -16,11 +16,13 @@ import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
+import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
 import me.gamercoder215.starcosmetics.events.ClickEvents;
 import me.gamercoder215.starcosmetics.events.CompletionEvents;
 import me.gamercoder215.starcosmetics.events.CosmeticEvents;
 import me.gamercoder215.starcosmetics.placeholders.StarPlaceholders;
 import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
@@ -88,6 +90,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     private void loadConstructors() {
         InventorySelector.loadInventories();
+        ItemBuilder.loadItems();
+        loadPetIcons();
     }
 
     @Override
@@ -124,6 +128,11 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         try { ASYNC_TICK_RUNNABLE.cancel(); } catch (IllegalStateException ignored) {}
         getLogger().info("Cancelled Tasks...");
+
+        StarConfig.updateCache();
+        StarPlayerUtil.clearPets();
+
+        getLogger().info("Removed Data...");
 
         getLogger().info("Done!");
     }
@@ -341,38 +350,42 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         }
     }
 
-    static final Map<PetType, PetInfo> PET_MAP = ImmutableMap.<PetType, PetInfo>builder()
-            .put(PetType.PIG, of(
-                    Rarity.COMMON, CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 100),
-                    petIcon(Material.PORK, "pig", "constants.pet.pig"), "Pig")
-            )
-            .put(PetType.GOLEM, of(
-                    Rarity.RARE, CompletionCriteria.fromMined(1200, Material.IRON_ORE),
-                    petIcon(Material.IRON_BLOCK, "golem", "constants.pet.golem"), "Iron Golem")
-            )
+    static Map<PetType, PetInfo> PET_MAP;
 
-            // Head Pets
-
-            .put(PetType.BEE, of(
-                    "bee_pet", "Bee", Rarity.OCCASIONAL,
-                    petIcon("bee_pet", "bee", "constants.pet.bee"), CompletionCriteria.fromPlaytime(1728000)
-            ))
-
-            .build();
-
-    private static ItemStack petIcon(Material m, String key, String displayKey) {
+    private static ItemStack petIcon(Material m, String key, String name) {
         if (Bukkit.getServer() == null) return null;
         return ItemBuilder.of(m)
-                .name(ChatColor.GOLD + Wrapper.get(displayKey))
+                .name(ChatColor.GOLD + name)
                 .id("choose:pet")
                 .nbt(nbt -> nbt.set("pet", key))
                 .build();
     }
 
-    private static ItemStack petIcon(String headKey, String key, String displayKey) {
+    private static void loadPetIcons() {
+        PET_MAP = ImmutableMap.<PetType, PetInfo>builder()
+                .put(PetType.PIG, of(
+                        Rarity.COMMON, CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 100),
+                        petIcon(StarMaterial.PORKCHOP.find(), "pig", "Pig"), "Pig")
+                )
+                .put(PetType.GOLEM, of(
+                        Rarity.RARE, CompletionCriteria.fromMined(1200, Material.IRON_ORE),
+                        petIcon(Material.IRON_BLOCK, "golem", "Golem"), "Iron Golem")
+                )
+
+                // Head Pets
+
+                .put(PetType.BEE, of(
+                        "bee_pet", "Bee", Rarity.OCCASIONAL,
+                        petIcon("bee_pet", "bee", "Bee"), CompletionCriteria.fromPlaytime(1728000)
+                ))
+
+                .build();
+    }
+
+    private static ItemStack petIcon(String headKey, String key, String name) {
         if (Bukkit.getServer() == null) return null;
         return ItemBuilder.of(StarInventoryUtil.getHead(headKey))
-                .name(ChatColor.GOLD + Wrapper.get(displayKey))
+                .name(ChatColor.GOLD + name)
                 .id("choose:pet")
                 .nbt(nbt -> nbt.set("pet", key))
                 .build();
@@ -404,6 +417,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             Player p = e.getPlayer();
             StarPlayer sp = new StarPlayer(p);
             sp.getSelectionLimit(); // Updates Config Limit
+
+            StarPlayerUtil.removePet(p);
         }
 
         @EventHandler
