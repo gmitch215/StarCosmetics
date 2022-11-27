@@ -25,7 +25,7 @@ public final class StarHeadPet implements HeadPet {
         entity.setVisible(false);
         entity.setMarker(true);
 
-        entity.getEquipment().setItemInMainHand(getInfo().getIcon());
+        entity.getEquipment().setHelmet(getInfo().getIcon());
         if (info.getAction() != null ) info.getAction().accept(entity);
     }
 
