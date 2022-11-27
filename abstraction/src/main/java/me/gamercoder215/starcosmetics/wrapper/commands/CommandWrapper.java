@@ -11,6 +11,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
+import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
 import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
@@ -50,6 +51,7 @@ public interface CommandWrapper {
             .put("starcosmetics", Arrays.asList("scosmetics", "sc", "cosmetics", "cs"))
             .put("starabout", Arrays.asList("sabout", "sa", "stara"))
             .put("starstructures", Arrays.asList("sstructures", "sstr"))
+            .put("starpets", Arrays.asList("starp", "sp", "spets", "pets"))
             .build();
 
     Map<String, String> COMMAND_PERMISSION = ImmutableMap.<String, String>builder()
@@ -57,6 +59,7 @@ public interface CommandWrapper {
             .put("starreload", "starcosmetics.admin.reloadconfig")
             .put("starcosmetics", "starcosmetics.user.cosmetics")
             .put("starstructures", "starcosmetics.user.cosmetics")
+            .put("starpets", "starcosmetics.user.cosmetics")
             .build();
 
     Map<String, String> COMMAND_DESCRIPTION = ImmutableMap.<String, String>builder()
@@ -65,6 +68,7 @@ public interface CommandWrapper {
             .put("starcosmetics", "Opens the StarCosmetics menu.")
             .put("starabout", "Displays information about StarCosmetics.")
             .put("starstructures", "Opens the StarCosmetics structures menu.")
+            .put("starpets", "Opens the StarCosmetics pets menu.")
             .build();
 
     Map<String, String> COMMAND_USAGE = ImmutableMap.<String, String>builder()
@@ -73,6 +77,7 @@ public interface CommandWrapper {
             .put("starcosmetics", "/starcosmetics")
             .put("starabout", "/starabout")
             .put("starstructures", "/starstructures [structure]")
+            .put("starpets", "/starpets [remove|spawn]")
             .build();
 
     // Command Methods
@@ -242,6 +247,28 @@ public interface CommandWrapper {
             if (p.getVelocity().getY() < 0.1) p.removeMetadata("immune_fall", StarConfig.getPlugin());
         }, 5);
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+    }
+
+    default void pets(Player p, String arg0) {
+        if (arg0 == null) {
+            p.openInventory(Generator.createPetInventory(p));
+            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            return;
+        }
+
+        StarPlayer sp = new StarPlayer(p);
+        switch (arg0.toLowerCase()) {
+            case "remove": {
+                if (sp.getSpawnedPet() == null) {
+                    sendError(p, "error.cosmetics.no_pet");
+                    return;
+                }
+
+                StarPlayerUtil.removePet(p);
+                p.sendMessage(ChatColor.GREEN + get("success.cosmetics.pet_removed"));
+                break;
+            }
+        }
     }
 
     // Utilities

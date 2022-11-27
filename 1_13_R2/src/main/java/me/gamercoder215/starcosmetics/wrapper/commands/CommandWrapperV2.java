@@ -74,9 +74,14 @@ public class CommandWrapperV2 implements CommandWrapper {
     @Description("Opens the StarCosmetics Structures menu.")
     @Usage("/starstructures")
     @CommandPermission("starcosmetics.user.cosmetics")
-    @AutoComplete("@structures")
+    @AutoComplete("@structures *")
     public void structures(Player p, @Optional String structure) {
         CommandWrapper.super.structures(p, structure);
     }
+
+    @Override
+    @Command({"starpets", "starp", "sp", "spets", "pets"})
+    @AutoComplete("remove")
+    public void pets(Player p, @Optional String arg0) { CommandWrapper.super.pets(p, arg0); }
 
 }

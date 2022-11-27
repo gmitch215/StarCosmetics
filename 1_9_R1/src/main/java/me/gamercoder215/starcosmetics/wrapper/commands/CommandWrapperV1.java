@@ -63,6 +63,13 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
                 structures(p, structure.toString());
                 break;
             }
+            case "starpets": {
+                if (!(sender instanceof Player)) return false;
+                Player p = (Player) sender;
+
+                pets(p, args.length > 0 ? args[0] : null);
+                break;
+            }
         }
 
         return true;
