@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.api.player;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,10 +14,22 @@ public final class StarPlayerUtil {
 
     private static final Wrapper w = getWrapper();
 
-    public static Pet spawnPet(@NotNull Player p, PetType type) {
-        Location spawnLocation = p.getLocation().add(1, 1, 0);
+    public static void clearPets() {
+        for (Player p : Bukkit.getOnlinePlayers()) removePet(p);
+    }
 
-        Pet pet = Wrapper.createPet(type, p, spawnLocation);
+    @NotNull
+    public static Location createPetLocation(@NotNull Player p) {
+        if (p == null) return null;
+        Location loc = p.getEyeLocation();
+
+        loc.subtract(loc.getDirection().setY(0).multiply(1.2));
+
+        return loc;
+    }
+
+    public static Pet spawnPet(@NotNull Player p, PetType type) {
+        Pet pet = Wrapper.createPet(type, p, createPetLocation(p));
         StarPlayer.SPAWNED_PETS.put(p.getUniqueId(), pet);
 
         return pet;
