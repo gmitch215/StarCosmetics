@@ -20,7 +20,7 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
-💽 v1.0.0 Beta - Nov 26
+💽 v1.0.0 - Nov 26
 **Not Released Yet**
 
 ---
