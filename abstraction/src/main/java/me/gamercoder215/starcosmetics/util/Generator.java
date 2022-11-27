@@ -318,14 +318,16 @@ public final class Generator {
         Map<Rarity, List<ItemStack>> itemsMap = new HashMap<>();
 
         for (PetType type : PetType.values()) {
+            if (type == PetType.HEAD) continue;
+
             List<ItemStack> items = itemsMap.get(type.getRarity());
             StarInventory page = rarityPages.get(type.getRarity());
 
             if (page == null) {
                 page = genGUI(54, get("menu.cosmetics.choose.pet") + " | " + type.getRarity());
                 page.setAttribute("rarity", type.getRarity());
-                items = new ArrayList<>();
 
+                items = new ArrayList<>();
                 rarityPages.put(type.getRarity(), page);
                 itemsMap.put(type.getRarity(), items);
             }
