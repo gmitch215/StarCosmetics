@@ -63,6 +63,8 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
                     CompletionCriteria.fromMined(200, Material.BLACKSTONE), Rarity.UNCOMMON))
             .add(new TrailSelection("polished_basalt", BaseTrail.GROUND_TRAIL, "ground_block:polished_basalt",
                     CompletionCriteria.fromMined(230, Material.BASALT), Rarity.UNCOMMON))
+            .add(new TrailSelection("basalt", BaseTrail.GROUND_TRAIL, "crack:basalt",
+                    CompletionCriteria.fromMined(210, Material.MAGMA_BLOCK), Rarity.UNCOMMON))
 
             .add(new TrailSelection("soul_flame", BaseTrail.GROUND_TRAIL, Particle.SOUL_FIRE_FLAME,
                     CompletionCriteria.fromMined(800, Material.SOUL_SAND, Material.SOUL_SOIL), Rarity.RARE))

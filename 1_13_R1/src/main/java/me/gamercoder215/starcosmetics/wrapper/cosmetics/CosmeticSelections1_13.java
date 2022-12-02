@@ -85,11 +85,37 @@ public class CosmeticSelections1_13 implements CosmeticSelections {
 
     // Ground Trails
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("oak_planks", BaseTrail.GROUND_TRAIL, "ground_block:oak_planks",
+                    CompletionCriteria.fromMined(50, Material.OAK_LEAVES), Rarity.COMMON))
+            .add(new TrailSelection("birch_planks", BaseTrail.GROUND_TRAIL, "ground_block:birch_planks",
+                    CompletionCriteria.fromMined(50, Material.BIRCH_LEAVES), Rarity.COMMON))
+            .add(new TrailSelection("spruce_planks", BaseTrail.GROUND_TRAIL, "ground_block:spruce_planks",
+                    CompletionCriteria.fromCrafted(50, Material.SPRUCE_PLANKS), Rarity.COMMON))
+            .add(new TrailSelection("jungle_planks", BaseTrail.GROUND_TRAIL, "ground_block:jungle_planks",
+                    CompletionCriteria.fromCrafted(50, Material.JUNGLE_PLANKS), Rarity.COMMON))
+            .add(new TrailSelection("acacia_planks", BaseTrail.GROUND_TRAIL, "ground_block:acacia_planks",
+                    CompletionCriteria.fromCrafted(50, Material.DARK_OAK_PLANKS), Rarity.COMMON))
+            .add(new TrailSelection("dark_oak_planks", BaseTrail.GROUND_TRAIL, "ground_block:dark_oak_planks",
+                    CompletionCriteria.fromCrafted(50, Material.DARK_OAK_PLANKS), Rarity.COMMON))
             .add(new TrailSelection("bubble_coral", BaseTrail.GROUND_TRAIL, "ground_block:bubble_coral_block",
-                    CompletionCriteria.fromKilled(25, EntityType.SALMON), Rarity.COMMON))
+                    CompletionCriteria.fromKilled(35, EntityType.SALMON), Rarity.COMMON))
 
             .add(new TrailSelection("sea_pickle", BaseTrail.GROUND_TRAIL, Material.SEA_PICKLE,
                     CompletionCriteria.fromKilled(70, EntityType.COD), Rarity.OCCASIONAL))
+
+            .add(new TrailSelection("oak_sapling", BaseTrail.GROUND_TRAIL, Material.OAK_SAPLING,
+                    CompletionCriteria.fromMined(75, Material.OAK_LEAVES), Rarity.UNCOMMON))
+            .add(new TrailSelection("birch_sapling", BaseTrail.GROUND_TRAIL, Material.BIRCH_SAPLING,
+                    CompletionCriteria.fromMined(75, Material.BIRCH_LEAVES), Rarity.UNCOMMON))
+            .add(new TrailSelection("acacia_sapling", BaseTrail.GROUND_TRAIL, Material.ACACIA_SAPLING,  
+                    CompletionCriteria.fromMined(75, Material.ACACIA_LEAVES), Rarity.UNCOMMON))
+            
+            .add(new TrailSelection("spruce_sapling", BaseTrail.GROUND_TRAIL, Material.SPRUCE_SAPLING,
+                    CompletionCriteria.fromMined(75, Material.SPRUCE_LEAVES), Rarity.UNCOMMON))
+            .add(new TrailSelection("jungle_sapling", BaseTrail.GROUND_TRAIL, Material.JUNGLE_SAPLING,
+                    CompletionCriteria.fromMined(75, Material.JUNGLE_LEAVES), Rarity.RARE))
+            .add(new TrailSelection("dark_oak_sapling", BaseTrail.GROUND_TRAIL, Material.DARK_OAK_SAPLING,
+                    CompletionCriteria.fromMined(75, Material.DARK_OAK_LEAVES), Rarity.RARE))
 
             .add(new TrailSelection("heart_of_the_sea", BaseTrail.GROUND_TRAIL, Material.HEART_OF_THE_SEA,
                     CompletionCriteria.fromKilled(85, EntityType.ELDER_GUARDIAN), Rarity.LEGENDARY))

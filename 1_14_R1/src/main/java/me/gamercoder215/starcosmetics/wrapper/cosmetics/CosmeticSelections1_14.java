@@ -54,6 +54,10 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
 
             .add(new TrailSelection("campfire", BaseTrail.GROUND_TRAIL, Material.CAMPFIRE,
                     CompletionCriteria.fromCrafted(70, Material.CAMPFIRE), Rarity.OCCASIONAL))
+            
+            .add(new TrailSelection("lantern", BaseTrail.GROUND_TRAIL, Material.LANTERN,
+                    CompletionCriteria.fromCrafted(500, Material.TORCH), Rarity.RARE))
+            
             .build();
 
     // Selections

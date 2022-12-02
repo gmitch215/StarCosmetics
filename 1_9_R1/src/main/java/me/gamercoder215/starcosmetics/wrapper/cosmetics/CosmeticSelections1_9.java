@@ -181,7 +181,9 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new TrailSelection("torch", BaseTrail.GROUND_TRAIL, Material.TORCH,
                     CompletionCriteria.fromMined(110, Material.COAL_ORE), Rarity.UNCOMMON))
-    
+            .add(new TrailSelection("blaze_rod", BaseTrail.GROUND_TRAIL, Material.BLAZE_ROD,
+                    CompletionCriteria.fromKilled(65, EntityType.BLAZE), Rarity.UNCOMMON))
+            
             .add(new TrailSelection("lava", BaseTrail.GROUND_TRAIL, Particle.LAVA,
                     CompletionCriteria.fromKilled(525, EntityType.BLAZE), Rarity.RARE))
             .add(new TrailSelection("water", BaseTrail.GROUND_TRAIL, Particle.WATER_SPLASH,

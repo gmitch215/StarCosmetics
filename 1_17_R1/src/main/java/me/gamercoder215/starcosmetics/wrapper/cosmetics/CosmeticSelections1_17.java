@@ -53,6 +53,9 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
     // Ground Trails
 
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("deepslate", BaseTrail.GROUND_TRAIL, "ground_block:deepslate",
+                    CompletionCriteria.fromMined(75, Material.DEEPSLATE), Rarity.OCCASIONAL))
+
             .add(new TrailSelection("copper_ore", BaseTrail.GROUND_TRAIL, "ground_block:copper_ore",
                     CompletionCriteria.fromMined(250, Material.COPPER_ORE), Rarity.UNCOMMON))
             .add(new TrailSelection("tinted_glass", BaseTrail.GROUND_TRAIL, "ground_block:tinted_glass",
@@ -62,6 +65,8 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
 
             .add(new TrailSelection("raw_iron", BaseTrail.GROUND_TRAIL, "ground_block:raw_iron",
                     CompletionCriteria.fromMined(100, Material.DEEPSLATE_IRON_ORE), Rarity.RARE))
+            .add(new TrailSelection("calcite", BaseTrail.GROUND_TRAIL, "crack:calcite",
+                    CompletionCriteria.fromMined(125, Material.CALCITE), Rarity.RARE))
 
             .add(new TrailSelection("amethyst", BaseTrail.GROUND_TRAIL, Material.AMETHYST_SHARD,
                     CompletionCriteria.fromMined(600, Material.AMETHYST_BLOCK), Rarity.EPIC))
