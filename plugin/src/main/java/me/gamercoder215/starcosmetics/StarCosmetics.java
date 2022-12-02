@@ -409,7 +409,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         @EventHandler
         public void onStatistic(PlayerStatisticIncrementEvent e) {
             Player p = e.getPlayer();
-            StarConfig.updateCache();
+            StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
         }
 
         @EventHandler
