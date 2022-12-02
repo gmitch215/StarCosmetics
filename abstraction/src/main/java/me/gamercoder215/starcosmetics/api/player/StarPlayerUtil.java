@@ -8,11 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
-
 public final class StarPlayerUtil {
-
-    private static final Wrapper w = getWrapper();
 
     public static void clearPets() {
         for (Player p : Bukkit.getOnlinePlayers()) removePet(p);
