@@ -236,7 +236,6 @@ public final class StarPlayer {
     /**
      * Ticks this StarPlayer, running any necessary tasks (i.e. particle shapes) every tick. Ran asynchronously and is thread safe.
      */
-    @SuppressWarnings("unchecked")
     public void tick() {
         if (!player.isOnline()) return;
         Player p = player.getPlayer();
