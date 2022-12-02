@@ -289,6 +289,8 @@ public final class Generator {
             }
             // TODO Add Implementation for Non-Boolean Settings
 
+            if (item == null) throw new AssertionError("Unexpected Setting: " + setting);
+
             ItemMeta meta = item.getItemMeta();
             List<String> lore = new ArrayList<>();
             lore.add(" ");

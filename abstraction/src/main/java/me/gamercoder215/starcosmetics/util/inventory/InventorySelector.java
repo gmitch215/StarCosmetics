@@ -52,7 +52,6 @@ public final class InventorySelector {
                 categoryItems.put(category, new ArrayList<>());
             }
 
-            StarInventory inv = categories.get(category);
             List<ItemStack> items = categoryItems.get(category);
 
             Material m = StarInventoryUtil.toMaterial(s);

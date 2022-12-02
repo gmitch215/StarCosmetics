@@ -10,7 +10,6 @@ import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
-import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
@@ -335,7 +334,19 @@ public final class StarInventoryUtil {
 
         if (input instanceof String) {
             String s = input.toString();
-            if (s.contains(":")) return WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
+            if (s.contains(":")) {
+                String prefix = s.split(":")[0];
+                String value = WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
+                
+                switch (prefix) {
+                    case "crack": return getWithArgs("constants.cosmetics.crack", value); // TODO Crack & Dust Translations
+                    case "dust": return getWithArgs("constants.cosmetics.dust", value);
+                }
+                
+
+
+                return value;
+            }
 
             return WordUtils.capitalizeFully(s);
         }
@@ -372,7 +383,6 @@ public final class StarInventoryUtil {
     public static ItemStack toItemStack(@NotNull Player p, @NotNull CosmeticLocation<?> loc) {
         Object input = loc.getInput();
         Material type = toInputMaterial(input);
-        StarPlayer sp = new StarPlayer(p);
 
         ItemStack item = new ItemStack(type);
         ItemMeta meta = item.getItemMeta();
@@ -630,7 +640,6 @@ public final class StarInventoryUtil {
     }
 
     public static ItemStack toItemStack(@NotNull Player p, @NotNull PetInfo info) {
-        StarPlayer sp = new StarPlayer(p);
         CompletionCriteria criteria = info.getCriteria();
 
         ItemStack item = info.getIcon().clone();
