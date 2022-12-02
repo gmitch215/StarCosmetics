@@ -41,6 +41,24 @@ public interface Wrapper {
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
     }
 
+    static DataWrapper getDataWrapper() {
+        try {
+            if (getWrapper().isLegacy())
+                return Class.forName("me.gamercoder215.starcosmetics.wrapper.LegacyDataWrapper")
+                    .asSubclass(DataWrapper.class)
+                    .getConstructor()
+                    .newInstance();
+            else
+                return Class.forName("me.gamercoder215.starcosmetics.wrapper.ModernDataWrapper")
+                    .asSubclass(DataWrapper.class)
+                    .getConstructor()
+                    .newInstance();
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+            return null;
+        }
+    }
+
     static Wrapper getWrapper() {
         try {
             return Class.forName("me.gamercoder215.starcosmetics.wrapper.Wrapper" + getServerVersion())
