@@ -14,10 +14,6 @@ import org.jetbrains.annotations.NotNull;
 public class GolemPet1_19_R1 extends IronGolem implements GolemPet {
 
     private final Player owner;
-    private final double walkSpeed = 0.5F;
-
-    protected boolean hasRider = false;
-    protected boolean isFlying = false;
 
     public GolemPet1_19_R1(Player owner, Location loc) {
         super(EntityType.IRON_GOLEM, ((CraftWorld) loc.getWorld()).getHandle());
