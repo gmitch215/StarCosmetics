@@ -4,10 +4,15 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
+import me.gamercoder215.starcosmetics.wrapper.DataWrapper;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
+
+import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -15,6 +20,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -32,6 +38,7 @@ import static org.bukkit.Material.*;
 public final class BaseTrail<T> implements Trail<T> {
 
     public static final Wrapper w = Wrapper.getWrapper();
+    public static final DataWrapper dw = Wrapper.getDataWrapper();
 
     private static final double DEFAULT_OFFSET = 0.2;
 
@@ -115,6 +122,36 @@ public final class BaseTrail<T> implements Trail<T> {
                     }
                 }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
             }
+        }
+
+        if (o instanceof Effect) {
+            Effect effect = (Effect) o;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (isStopped(p)) {
+                        cancel();
+                        return;
+                    }
+
+                    p.getWorld().playEffect(p.getLocation(), effect, null);
+                }
+            }.runTaskTimer(StarConfig.getPlugin(), 2, 1);
+        }
+
+        if (o instanceof EntityEffect) {
+            EntityEffect effect = (EntityEffect) o;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (isStopped(p)) {
+                        cancel();
+                        return;
+                    }
+
+                    p.playEffect(effect);
+                }
+            }.runTaskTimer(StarConfig.getPlugin(), 2, 1);
         }
 
         // Custom Trails
@@ -217,6 +254,36 @@ public final class BaseTrail<T> implements Trail<T> {
                         }.runTaskTimer(StarConfig.getPlugin(), 5, 1);
                         break;
                     }
+                    case "crack": {
+                        Material m = matchMaterial(input);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (isStopped(p)) {
+                                    cancel();
+                                    return;
+                                }
+            
+                                dw.blockDataParticle(Particle.BLOCK_CRACK, p.getLocation(), 2, m);
+                            }
+                        }.runTaskTimer(StarConfig.getPlugin(), 2, 1);
+                        break;
+                    }
+                    case "dust": {
+                        Material m = matchMaterial(input);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (isStopped(p)) {
+                                    cancel();
+                                    return;
+                                }
+            
+                                dw.blockDataParticle(Particle.BLOCK_DUST, p.getLocation(), 2, m);
+                            }
+                        }.runTaskTimer(StarConfig.getPlugin(), 2, 1);
+                        break;
+                    }
                 }
             }
         }
@@ -233,8 +300,36 @@ public final class BaseTrail<T> implements Trail<T> {
             e.getWorld().spawnParticle(part, loc, r.nextInt(2), 0, 0, 0, 0);
         }
 
+        if (o instanceof Effect) {
+            Effect effect = (Effect) o;
+            p.getWorld().playEffect(p.getLocation(), effect, null);
+        }
+
+        if (o instanceof EntityEffect) {
+            EntityEffect effect = (EntityEffect) o;
+            p.playEffect(effect);
+        }
+
         if (o instanceof String) {
             String s = o.toString();
+            
+            if (!s.contains(":")) {
+
+                switch (s) {
+                    case "head": {
+                        ItemStack item = StarMaterial.PLAYER_HEAD.findStack();
+                        SkullMeta meta = (SkullMeta) item.getItemMeta();
+                        meta.setOwner(p.getName());
+                        item.setItemMeta(meta);
+
+                        w.spawnFakeItem(item, loc, 10);
+                        break;
+                    }
+                }
+
+                return;
+            }
+
             String prefix = s.split(":")[0];
             String input = s.split(":")[1];
 
@@ -267,6 +362,16 @@ public final class BaseTrail<T> implements Trail<T> {
                         }
                     });
 
+                    break;
+                }
+                case "crack": {
+                    Material m = matchMaterial(input);
+                    dw.blockDataParticle(Particle.BLOCK_CRACK, loc, 2, m);
+                    break;
+                }
+                case "dust": {
+                    Material m = matchMaterial(input);
+                    dw.blockDataParticle(Particle.BLOCK_DUST, loc, 2, m);
                     break;
                 }
             }
