@@ -77,6 +77,8 @@ public final class Generator {
         for (StarInventory inv : pages) {
             Rarity current = inv.getAttribute("rarity", Rarity.class);
 
+            StarInventoryUtil.setReset(inv);
+
             Map<Integer, List<ItemStack>> rows = generateRows(it
                     .stream()
                     .filter(c -> c.getRarity() == current)
@@ -135,7 +137,9 @@ public final class Generator {
             if (page == null) {
                 page = genGUI(54, display + " | " + loc.getRarity());
                 rarityPages.put(loc.getRarity(), page);
+
                 page.setAttribute("rarity", loc.getRarity());
+                page.setAttribute("parent", loc.getParent());
             }
 
             page.addItem(StarInventoryUtil.toItemStack(p, loc));
@@ -260,49 +264,12 @@ public final class Generator {
 
     @NotNull
     public static StarInventory createSettingsInventory(@NotNull Player p) {
-        StarPlayer sp = new StarPlayer(p);
         StarInventory inv = genGUI(36, get("menu.settings"));
         inv.setCancelled();
 
         List<ItemStack> items = new ArrayList<>();
 
-        for (PlayerSetting<?> setting : PlayerSetting.values()) {
-            ItemStack item = null;
-
-            if (Boolean.class.isAssignableFrom(setting.getType())) {
-                boolean on = sp.getSetting((PlayerSetting<Boolean>) setting);
-
-                item = on ? StarMaterial.LIME_TERRACOTTA.findStack() : StarMaterial.RED_TERRACOTTA.findStack();
-                ItemMeta meta = item.getItemMeta();
-
-                meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + (on ? ChatColor.GREEN + get("constants.on") : ChatColor.RED + get("constants.off")));
-                if (on) {
-                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                }
-                item.setItemMeta(meta);
-
-                NBTWrapper nbt = of(item);
-                nbt.setID("toggle:setting:boolean");
-                nbt.set("setting", setting.getId());
-                item = nbt.getItem();
-            }
-            // TODO Add Implementation for Non-Boolean Settings
-
-            if (item == null) throw new AssertionError("Unexpected Setting: " + setting);
-
-            ItemMeta meta = item.getItemMeta();
-            List<String> lore = new ArrayList<>();
-            lore.add(" ");
-            lore.addAll(Arrays.stream(
-                            ChatPaginator.wordWrap(setting.getDescription(), 30)
-                    ).map(s -> ChatColor.GRAY + s).collect(Collectors.toList()));
-
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-
-            items.add(item);
-        }
+        for (PlayerSetting<?> setting : PlayerSetting.values()) items.add(generateSetting(p, setting));
 
         Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
         inv.setAttribute("rows", rows);
@@ -312,6 +279,71 @@ public final class Generator {
         return inv;
     }
 
+    public static ItemStack generateSetting(@NotNull Player p, @NotNull PlayerSetting<?> setting) {
+        StarPlayer sp = new StarPlayer(p);
+        ItemStack item;
+
+        if (Boolean.class.isAssignableFrom(setting.getType())) {
+            boolean on = sp.getSetting((PlayerSetting<Boolean>) setting);
+
+            item = on ? StarMaterial.LIME_TERRACOTTA.findStack() : StarMaterial.RED_TERRACOTTA.findStack();
+            ItemMeta meta = item.getItemMeta();
+
+            meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + (on ? ChatColor.GREEN + get("constants.on") : ChatColor.RED + get("constants.off")));
+            if (on) {
+                meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            }
+            item.setItemMeta(meta);
+
+            NBTWrapper nbt = of(item);
+            nbt.setID("toggle:setting:boolean");
+            nbt.set("setting", setting.getId());
+            item = nbt.getItem();
+        } else if (Enum.class.isAssignableFrom(setting.getType())) {
+            Enum<?> value = sp.getSetting((PlayerSetting<Enum<?>>) setting);
+
+            item = StarMaterial.LIGHT_BLUE_TERRACOTTA.findStack();
+            ItemMeta meta = item.getItemMeta();
+            meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + ChatColor.AQUA + value.name());
+            item.setItemMeta(meta);
+
+            NBTWrapper nbt = of(item);
+            nbt.setID("toggle:setting:enum");
+            nbt.set("setting", setting.getId());
+            item = nbt.getItem();
+        } else {
+            Object value = sp.getSetting(setting);
+
+            item = StarMaterial.LIGHT_BLUE_TERRACOTTA.findStack();
+            ItemMeta meta = item.getItemMeta();
+            meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + ChatColor.YELLOW + value);
+            item.setItemMeta(meta);
+
+            NBTWrapper nbt = of(item);
+            nbt.setID("toggle:setting");
+            nbt.set("setting", setting.getId());
+            item = nbt.getItem();
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        String desc = setting.getDescription() == null ? null : StarConfig.getConfig().get(setting.getDescription());
+        if (desc != null && !desc.equalsIgnoreCase("Unknown Value")) {
+            List<String> lore = new ArrayList<>();
+
+            lore.add(" ");
+            lore.addAll(Arrays.stream(
+                    ChatPaginator.wordWrap(desc, 30)
+            ).map(s -> ChatColor.GRAY + s).collect(Collectors.toList()));
+
+            meta.setLore(lore);
+        }
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
     @NotNull
     public static StarInventory createPetInventory(@NotNull Player p) {
         List<StarInventory> pages = new ArrayList<>();
@@ -319,9 +351,7 @@ public final class Generator {
         Map<Rarity, StarInventory> rarityPages = new HashMap<>();
         Map<Rarity, List<ItemStack>> itemsMap = new HashMap<>();
 
-        for (PetType type : PetType.values()) {
-            if (type == PetType.HEAD) continue;
-
+        for (PetType type : StarConfig.getRegistry().getAllPets().keySet()) {
             List<ItemStack> items = itemsMap.get(type.getRarity());
             StarInventory page = rarityPages.get(type.getRarity());
 
@@ -343,6 +373,7 @@ public final class Generator {
             inv.setAttribute("rows", rows);
             StarInventoryUtil.setRows(inv, rows);
             StarInventoryUtil.setScrolls(inv);
+            StarInventoryUtil.setBack(inv, cw::cosmetics);
 
             pages.add(inv);
         });
