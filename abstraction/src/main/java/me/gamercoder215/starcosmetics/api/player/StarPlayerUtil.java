@@ -8,20 +8,28 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.UUID;
+
 public final class StarPlayerUtil {
 
     public static void clearPets() {
         for (Player p : Bukkit.getOnlinePlayers()) removePet(p);
     }
 
+    public static Map<UUID, Pet> getPets() {
+        return StarPlayer.SPAWNED_PETS;
+    }
+
     @NotNull
     public static Location createPetLocation(@NotNull Player p) {
         if (p == null) return null;
+
         Location loc = p.getEyeLocation();
 
-        loc.subtract(loc.getDirection().setY(0).multiply(1.2));
-
-        return loc;
+        return loc
+                .subtract(loc.getDirection().setY(0).multiply(2))
+                .subtract(0, 0.9, 0);
     }
 
     public static Pet spawnPet(@NotNull Player p, PetType type) {

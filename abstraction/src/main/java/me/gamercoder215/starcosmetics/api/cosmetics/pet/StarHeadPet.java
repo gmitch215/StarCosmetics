@@ -21,9 +21,12 @@ public final class StarHeadPet implements HeadPet {
         this.info = info;
         entity.setGravity(false);
         entity.setInvulnerable(true);
-        entity.setMarker(true);
         entity.setVisible(false);
-        entity.setMarker(true);
+        entity.setBasePlate(false);
+        entity.setSmall(true);
+
+        entity.setCustomName(getPetName());
+        entity.setCustomNameVisible(true);
 
         entity.getEquipment().setHelmet(getInfo().getIcon());
         if (info.getAction() != null ) info.getAction().accept(entity);
@@ -36,7 +39,7 @@ public final class StarHeadPet implements HeadPet {
     }
 
     @Override
-    public @NotNull PetInfo getInfo() {
+    public @NotNull HeadInfo getInfo() {
         return info;
     }
 

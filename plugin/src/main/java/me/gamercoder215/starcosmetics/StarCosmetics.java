@@ -3,7 +3,6 @@ package me.gamercoder215.starcosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
@@ -25,15 +24,16 @@ import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
-import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
+import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,10 +54,13 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.circle;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getCosmeticSelections;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.head;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.petIcon;
 
 public final class StarCosmetics extends JavaPlugin implements StarConfig, CosmeticRegistry {
 
@@ -66,6 +69,12 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     private boolean checkCompatible() {
         if (!Wrapper.isCompatible()) {
             getLogger().severe("StarCosmetics is not compatible with: " + Bukkit.getBukkitVersion() + " (Expected Wrapper" + Wrapper.getServerVersion() + ")");
+            if (Wrapper.isOutdatedSubversion()) {
+                getLogger().severe("-----------------------");
+                String ver = Bukkit.getBukkitVersion().split("-")[0];
+                getLogger().severe("You are using an outdated subversion of MC (" + ver + ").");
+                getLogger().severe("Please update to the latest version of Minecraft.");
+            }
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
@@ -165,11 +174,6 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             new StarPlaceholders(this);
             getLogger().info("Hooked into Placeholder API!");
         }
-    }
-
-    @Override
-    public String getMessage(String key) {
-        return get("plugin.prefix") + get(key);
     }
 
     @Override
@@ -350,51 +354,114 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         }
     }
 
-    static Map<PetType, PetInfo> PET_MAP;
-
-    private static ItemStack petIcon(Material m, String key, String name) {
-        if (Bukkit.getServer() == null) return null;
-        return ItemBuilder.of(m)
-                .name(ChatColor.GOLD + name)
-                .id("choose:pet")
-                .nbt(nbt -> nbt.set("pet", key))
-                .build();
-    }
-
     private static void loadPetIcons() {
-        PET_MAP = ImmutableMap.<PetType, PetInfo>builder()
+        Map<PetType, PetInfo> pets = ImmutableMap.<PetType, PetInfo>builder()
                 .put(PetType.PIG, of(
-                        Rarity.COMMON, CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 100),
-                        petIcon(StarMaterial.PORKCHOP.find(), "pig", "Pig"), "Pig")
+                        Rarity.COMMON, fromStatistic(Statistic.ANIMALS_BRED, 100),
+                        petIcon(StarMaterial.PORKCHOP.find(), "Pig"), "Pig")
                 )
                 .put(PetType.GOLEM, of(
-                        Rarity.RARE, CompletionCriteria.fromMined(1200, Material.IRON_ORE),
-                        petIcon(Material.IRON_BLOCK, "golem", "Golem"), "Iron Golem")
+                        Rarity.RARE, fromMined(1200, Material.IRON_ORE),
+                        petIcon(Material.IRON_BLOCK, "Golem"), "Iron Golem")
                 )
 
                 // Head Pets
 
+                .put(PetType.ELEPHANT, of(
+                        "Elephant", Rarity.COMMON,
+                        petIcon("elephant_pet", "Elephant"), fromDistance(Statistic.WALK_ONE_CM, 100 * 1000)
+                ))
+
                 .put(PetType.BEE, of(
-                        "bee_pet", "Bee", Rarity.OCCASIONAL,
-                        petIcon("bee_pet", "bee", "Bee"), CompletionCriteria.fromPlaytime(1728000)
+                        "Bee", Rarity.OCCASIONAL,
+                        petIcon("bee_pet", "Bee"), fromPlaytime(1728000), stand ->
+                                w.spawnFakeItem(StarMaterial.POPPY.findStack(), head(stand), 20)
+                ))
+                .put(PetType.MOUSE, of(
+                        "Mouse", Rarity.OCCASIONAL,
+                        petIcon("mouse_pet", "Mouse"), fromKilled(50, EntityType.SILVERFISH)
+                ))
+
+                .put(PetType.GIRAFFE, of(
+                        "Giraffe", Rarity.UNCOMMON,
+                        petIcon("giraffe_pet", "Giraffe"), fromMined(2000, Material.SAND), stand ->
+                                w.spawnFakeItem(r.nextBoolean() ? new ItemStack(Material.SAND) : StarMaterial.RED_SAND.findStack(), head(stand), 20)
+                ))
+                .put(PetType.LLAMA, of(
+                        "Llama", Rarity.UNCOMMON,
+                        petIcon("llama_pet", "Llama"), fromDistance(Statistic.WALK_ONE_CM, 100 * 1000 * 20), stand ->
+                                circle(head(stand), Particle.FLAME, 5, 0.75)
+                ))
+
+                .put(PetType.DOLPHIN, of(
+                        "Dolphin", Rarity.RARE,
+                        petIcon("dolphin_pet", "Dolphin"), fromKilled(100, EntityType.GUARDIAN), stand ->
+                                stand.getWorld().spawnParticle(Particle.DRIP_WATER, head(stand), 1, 0, 0, 0, 0)
+                ))
+                .put(PetType.SLIME, of(
+                        "Slime", Rarity.RARE,
+                        petIcon("slime_pet", "Slime"), fromCrafted(400, Material.SLIME_BLOCK), stand ->
+                                circle(head(stand), Particle.SLIME, 5, 0.5)
+                ))
+
+                .put(PetType.RABBIT, of(
+                        "Rabbit", Rarity.EPIC,
+                        petIcon("rabbit_pet", "Rabbit"), fromStatistic(Statistic.ANIMALS_BRED, 600), stand ->
+                                circle(head(stand), Particle.CRIT_MAGIC, 10, 0.75)
+                ))
+                .put(PetType.PANDA, of(
+                        "Panda", Rarity.EPIC,
+                        petIcon("panda_pet", "Panda"), fromStatistic(Statistic.TRADED_WITH_VILLAGER, 150), stand ->
+                                circle(head(stand), Particle.HEART, 8, 0.75)
+                ))
+                .put(PetType.HUMMINGBIRD, of(
+                        "Hummingbird", Rarity.EPIC,
+                        petIcon("hummingbird_pet", "Hummingbird"), fromStatistic(Statistic.FISH_CAUGHT, 100), stand ->
+                                stand.getWorld().spawnParticle(Particle.END_ROD, head(stand), 1, 0, 0, 0, 0)
+                ))
+                .put(PetType.BLAZE, of(
+                        "Blaze", Rarity.EPIC,
+                        petIcon("blaze_pet", "Blaze"), fromKilled(700, EntityType.BLAZE), stand ->
+                                stand.getWorld().spawnParticle(Particle.FLAME, head(stand), 1, 0, 0, 0, 0)
+                ))
+
+                .put(PetType.POLAR_BEAR, of(
+                        "Polar Bear", Rarity.LEGENDARY,
+                        petIcon("polar_bear_pet", "Polar Bear"), fromMined(50000, Material.SNOW_BLOCK), stand -> {
+                            circle(head(stand), Particle.SNOW_SHOVEL, 15, 0.75);
+                            w.spawnFakeItem(new ItemStack(Material.ICE), head(stand), 20);
+                        }
+                ))
+                .put(PetType.TARDIGRADE, of(
+                        "Tardigrade", Rarity.LEGENDARY,
+                        petIcon("tardigrade_pet", "Tardigrade"), fromStatistic(Statistic.ANIMALS_BRED, 10000), stand ->
+                            stand.getWorld().spawnParticle(Particle.DRAGON_BREATH, head(stand), 1, 0, 0, 0, 0)
+                ))
+                .put(PetType.TIGER, of(
+                        "Tiger", Rarity.LEGENDARY,
+                        petIcon("tiger_pet", "Tiger"), fromKilled(5000, EntityType.SKELETON), stand ->
+                                w.spawnFakeItem(new ItemStack(Material.BONE), head(stand), 5)
+                ))
+
+                .put(PetType.CAPYBARA, of(
+                        "Capybara", Rarity.MYTHICAL,
+                        petIcon("capybara_pet", "Capybara"), fromMined(1000000, StarMaterial.OAK_LOG.find()), stand -> {
+                            circle(head(stand), new ItemStack(Material.GOLDEN_CARROT), 10, 0.5);
+                            w.spawnFakeItem(new ItemStack(Material.APPLE), head(stand), 10);
+                        }
                 ))
 
                 .build();
-    }
 
-    private static ItemStack petIcon(String headKey, String key, String name) {
-        if (Bukkit.getServer() == null) return null;
-        return ItemBuilder.of(StarInventoryUtil.getHead(headKey))
-                .name(ChatColor.GOLD + name)
-                .id("choose:pet")
-                .nbt(nbt -> nbt.set("pet", key))
-                .build();
+        CosmeticSelections.PET_MAP.putAll(pets);
+
+        Wrapper.getCosmeticSelections().loadPets();
     }
 
 
     @Override
     public @NotNull Map<PetType, PetInfo> getAllPets() {
-        return PET_MAP;
+        return CosmeticSelections.PET_MAP;
     }
 
     private static final class InternalEvents implements Listener {

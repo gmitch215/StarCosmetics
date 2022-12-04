@@ -56,7 +56,7 @@ public interface Pet {
     default String getPetName() {
         return getRarity().getPrefix() +
                 (getOwner().getDisplayName() != null ? getOwner().getDisplayName() : getOwner().getName()) + "'s " +
-                getRarity().getPrefix() + " " + getInfo().getName();
+                getRarity().getPrefix() + getInfo().getName();
     }
 
     /**

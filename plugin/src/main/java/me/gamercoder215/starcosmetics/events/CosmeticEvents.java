@@ -4,6 +4,7 @@ import me.gamercoder215.starcosmetics.StarCosmetics;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.StarHeadPet;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
@@ -115,6 +116,13 @@ public final class CosmeticEvents implements Listener {
 
                 as.teleport(StarPlayerUtil.createPetLocation(p));
                 w.setRotation(as, p.getLocation().getYaw(), p.getLocation().getPitch());
+
+                if (pitchChanged(e.getFrom(), e.getTo())) return;
+
+                if (spawned instanceof StarHeadPet) {
+                    StarHeadPet shp = (StarHeadPet) spawned;
+                    shp.getInfo().tick(as);
+                }
             }
         }
 

@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
@@ -9,7 +10,6 @@ import me.gamercoder215.starcosmetics.api.cosmetics.pet.StarHeadPet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.custom.HeadPet;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
-import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.*;
@@ -22,8 +22,11 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public interface Wrapper {
@@ -31,7 +34,19 @@ public interface Wrapper {
     SecureRandom r = Constants.r;
 
     static boolean isCompatible() {
-        return getWrapper() != null;
+        return getWrapper() != null && !isOutdatedSubversion();
+    }
+
+    // Only includes Sub-Versions that won't compile
+    List<String> OUTDATED_SUBVERSIONS = Arrays.asList(
+            "1.17",
+            "1.19",
+            "1.19.1"
+    );
+
+    static boolean isOutdatedSubversion() {
+        String ver = Bukkit.getBukkitVersion().split("-")[0];
+        return OUTDATED_SUBVERSIONS.contains(ver);
     }
 
     default void registerEvents() {}
@@ -136,28 +151,43 @@ public interface Wrapper {
     static Pet createPet(@NotNull PetType type, Player owner, Location loc) {
         Class<? extends Pet> petClass = type.getPetClass();
 
-        if (HeadPet.class.isAssignableFrom(petClass))
+        if (HeadPet.class.isAssignableFrom(petClass)) {
+            if (!StarConfig.getRegistry().getAllPets().containsKey(type)) throw new IllegalStateException("Using Unsupported Verison for HeadPet " + type);
+
             return new StarHeadPet(owner, loc, type, (HeadInfo) StarConfig.getRegistry().getPetInfo(type));
+        }
 
         try {
-            Class<? extends Pet> clazz = Class.forName("me.gamercoder215.starcosmetics.wrapper.pets." + petClass.getSimpleName() + getServerVersion())
+            Class<? extends Pet> clazz = Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.pet." + petClass.getSimpleName() + getServerVersion())
                     .asSubclass(petClass);
 
             Constructor<? extends Pet> c = clazz.getConstructor(Player.class, Location.class);
             return c.newInstance(owner, loc);
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName());
+            throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName() + " (Could Not Find: " + petClass.getSimpleName() + getServerVersion() + ")");
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
         }
 
-        throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName());
+        throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName() + " (Could Not Spawn)");
     }
 
-    static <T extends Enum<T> & Cosmetic> List<CosmeticSelection<?>> allFor(Class<T> clazz) {
-        List<CosmeticSelection<?>> selections = new ArrayList<>();
-        for (T cosmetic : clazz.getEnumConstants()) selections.addAll(getCosmeticSelections().getSelections(cosmetic));
+    static <T extends Cosmetic> List<CosmeticLocation<?>> allFor(Class<T> clazz) {
+        List<CosmeticLocation<?>> selections = new ArrayList<>();
+        try {
+            for (Field f : clazz.getDeclaredFields()) {
+                if (!Modifier.isStatic(f.getModifiers())) continue;
+                if (!Modifier.isFinal(f.getModifiers())) continue;
+                if (!Modifier.isPublic(f.getModifiers())) continue;
 
+                if (!clazz.isAssignableFrom(f.getType())) continue;
+
+                Cosmetic c = (Cosmetic) f.get(null);
+                selections.addAll(StarConfig.getRegistry().getAllFor(c));
+            }
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
         return selections;
     }
 
@@ -177,8 +207,8 @@ public interface Wrapper {
         return get("plugin.prefix");
     }
 
-    static String getMessage(String key) {
-        return StarConfig.getConfig().getMessage(key);
+    static String getMessage(String key, Object prefix) {
+        return prefix() + prefix + get(key);
     }
 
     static void send(CommandSender sender, String key) {
@@ -186,7 +216,7 @@ public interface Wrapper {
     }
 
     static void sendError(CommandSender sender, String key) {
-        sender.sendMessage(ChatColor.RED + getMessage(key));
+        sender.sendMessage(getMessage(key, ChatColor.RED));
     }
 
     static void sendWithArgs(CommandSender sender, String key, Object... args) {
