@@ -53,6 +53,13 @@ public enum StarSound {
 
     public void play(@NotNull Entity en, float volume, float pitch) { play(en.getLocation(), volume, pitch); }
 
+    public void play(@NotNull Player p, float volume, float pitch) {
+        StarPlayer sp = new StarPlayer(p);
+        if (!sp.getSetting(PlayerSetting.SOUND_NOTIFICATIONS)) return;
+
+        play(p.getLocation(), volume, pitch);
+    }
+
     public void play(@NotNull Entity en) { play(en.getLocation()); }
 
     public void playSuccess(@NotNull Entity en) {
