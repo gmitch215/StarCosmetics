@@ -23,7 +23,7 @@ public final class HeadInfo extends PetInfo {
     }
 
     @NotNull
-    public static HeadInfo of(String headKey, String name, Rarity rarity, ItemStack icon, CompletionCriteria crtieria) {
+    public static HeadInfo of(String name, Rarity rarity, ItemStack icon, CompletionCriteria crtieria) {
         return of(name, rarity, icon, crtieria, null);
     }
 
@@ -34,5 +34,9 @@ public final class HeadInfo extends PetInfo {
 
     public Consumer<ArmorStand> getAction() {
         return actions;
+    }
+
+    public void tick(ArmorStand entity) {
+        actions.accept(entity);
     }
 }
