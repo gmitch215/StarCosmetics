@@ -10,13 +10,7 @@ import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import me.gamercoder215.starcosmetics.wrapper.DataWrapper;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
-
-import org.bukkit.Effect;
-import org.bukkit.EntityEffect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -79,9 +73,9 @@ public final class BaseTrail<T> implements Trail<T> {
                         return;
                     }
                     
-                    w.spawnFakeItem(item, p.getLocation(), 5);
+                    w.spawnFakeItem(item, p.getLocation(), 10);
                 }
-            }.runTaskTimer(StarConfig.getPlugin(), 5, 2);
+            }.runTaskTimer(StarConfig.getPlugin(), 3, 1);
         }
 
         if (o instanceof EntityType) {
@@ -95,7 +89,14 @@ public final class BaseTrail<T> implements Trail<T> {
                         return;
                     }
 
-                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeEntity(pl, type, p.getLocation(), 10);
+                    Location loc = p.getLocation();
+                    float yaw = (float) (Math.atan2(loc.getZ(), loc.getX()) * 180 / Math.PI);
+                    float pitch = (float) (Math.atan2(loc.getY(), loc.getX()) * 180 / Math.PI);
+
+                    loc.setYaw(yaw);
+                    loc.setPitch(pitch);
+
+                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeEntity(pl, type, p.getLocation(), 15);
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 6, 2);
         }
@@ -120,7 +121,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         ItemStack item = items.get(r.nextInt(items.size()));
                         w.spawnFakeItem(item, p.getLocation(), 10);
                     }
-                }.runTaskTimer(StarConfig.getPlugin(), 5, 5);
+                }.runTaskTimer(StarConfig.getPlugin(), 3, 1);
             }
         }
 
@@ -196,9 +197,9 @@ public final class BaseTrail<T> implements Trail<T> {
                                 Location l = p.getLocation();
 
                                 EulerAngle angle = new EulerAngle(
-                                        normalize(l.getPitch() + 170.0F),
-                                        0,
-                                        normalize(-l.getYaw())
+                                        r.nextDouble() * 2 * Math.PI,
+                                        r.nextDouble() * 2 * Math.PI,
+                                        r.nextDouble() * 2 * Math.PI
                                 );
 
                                 as.setRightArmPose(angle);
@@ -238,10 +239,10 @@ public final class BaseTrail<T> implements Trail<T> {
                                 Location l = p.getLocation();
 
                                 as.setHeadPose(new EulerAngle(
-                                    Math.toRadians(l.getYaw()) - 180.0F,
-                                    Math.toRadians(l.getPitch()) - 180.0F,
-                                    0
-                                ));
+                                        -Math.atan2(l.getY(), Math.hypot(l.getX(), l.getZ())),
+                                        -Math.atan2(l.getX(), l.getZ()),
+                                        0));
+
                                 as.getEquipment().setHelmet(item);
 
                                 new BukkitRunnable() {
@@ -356,11 +357,30 @@ public final class BaseTrail<T> implements Trail<T> {
                             Material original = l.getBlock().getType();
                             BlockState state = l.getBlock().getState();
 
-                            w.sendBlockChange(p, loc, m);
+                            w.sendBlockChange(p, l, m);
 
-                            StarRunnable.syncLater(() -> w.sendBlockChange(p, loc, original, state), 60);
+                            StarRunnable.syncLater(() -> w.sendBlockChange(p, l, original, state), 60);
                         }
                     });
+
+                    break;
+                }
+                case "side_block": {
+                    Material m = matchMaterial(input);
+
+                    Location l = p.getLocation();
+                    Location under = p.getLocation().subtract(0, 1, 0);
+
+                    boolean inSolid = under.getBlock().getType().isSolid() && !p.isFlying() && !l.getBlock().isLiquid();
+
+                    if (inSolid) {
+                        Material original = l.getBlock().getType();
+                        BlockState state = l.getBlock().getState();
+
+                        w.sendBlockChange(p, l, m);
+
+                        StarRunnable.syncLater(() -> w.sendBlockChange(p, l, original, state), 60);
+                    }
 
                     break;
                 }
@@ -400,11 +420,9 @@ public final class BaseTrail<T> implements Trail<T> {
                     return;
                 }
 
-                p.getWorld().playSound(p.getLocation(), sound, r.nextInt(2) + 3, 1);
+                p.getWorld().playSound(p.getLocation(), sound, 1.05F, 1);
             }
-        }.runTaskTimer(StarConfig.getPlugin(), 2, 2);
-
-        e.getWorld().playSound(e.getLocation(), sound, 1, 1);
+        }.runTaskTimer(StarConfig.getPlugin(), 2, 3);
     });
 
     private final Material icon;
