@@ -2,22 +2,25 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Map;
 
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
 public class CosmeticSelections1_14 implements CosmeticSelections {
 
@@ -27,36 +30,36 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + Fancy Items
             .add(new TrailSelection("lantern", BaseTrail.PROJECTILE_TRAIL, Material.LANTERN,
-                    CompletionCriteria.fromCrafted(30, Material.TORCH), Rarity.COMMON))
+                    fromCrafted(30, Material.TORCH), Rarity.COMMON))
 
             .add(new TrailSelection("bamboo", BaseTrail.PROJECTILE_TRAIL, Material.BAMBOO,
-                    CompletionCriteria.fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
+                    fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
 
             .add(new TrailSelection("crossbow", BaseTrail.PROJECTILE_TRAIL, "fancy_item:crossbow",
-                    CompletionCriteria.fromKilled(550, EntityType.PILLAGER), Rarity.EPIC))
+                    fromKilled(550, EntityType.PILLAGER), Rarity.EPIC))
             
             .add(new TrailSelection("wither_rose", BaseTrail.PROJECTILE_TRAIL, Material.WITHER_ROSE,
-                    CompletionCriteria.fromKilled(1000, EntityType.WITHER), Rarity.MYTHICAL))
+                    fromKilled(1000, EntityType.WITHER), Rarity.MYTHICAL))
             
             .add(new TrailSelection("jigsaw", BaseTrail.PROJECTILE_TRAIL, "fancy_block:jigsaw",
-                    CompletionCriteria.fromBlocksMined(1000000), Rarity.SPECIAL))
+                    fromBlocksMined(1000000), Rarity.SPECIAL))
             
             // Particles
             .add(new TrailSelection("smoke", BaseTrail.PROJECTILE_TRAIL, Particle.CAMPFIRE_COSY_SMOKE,
-                    CompletionCriteria.fromCrafted(50, Material.TORCH), Rarity.COMMON))
+                    fromCrafted(50, Material.TORCH), Rarity.COMMON))
             
             .build();
 
     // Ground Trails
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("bamboo", BaseTrail.GROUND_TRAIL, Material.BAMBOO,
-                    CompletionCriteria.fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
+                    fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
 
             .add(new TrailSelection("campfire", BaseTrail.GROUND_TRAIL, Material.CAMPFIRE,
-                    CompletionCriteria.fromCrafted(70, Material.CAMPFIRE), Rarity.OCCASIONAL))
+                    fromCrafted(70, Material.CAMPFIRE), Rarity.OCCASIONAL))
             
             .add(new TrailSelection("lantern", BaseTrail.GROUND_TRAIL, Material.LANTERN,
-                    CompletionCriteria.fromCrafted(500, Material.TORCH), Rarity.RARE))
+                    fromCrafted(500, Material.TORCH), Rarity.RARE))
             
             .build();
 
@@ -76,6 +79,28 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
     @Override
     public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
+    }
+
+    @Override
+    public void loadPets() {
+        PET_MAP.putAll(
+                ImmutableMap.<PetType, PetInfo>builder()
+                        .put(PetType.GORILLA, of(
+                                "Gorilla", Rarity.RARE,
+                                petIcon("gorilla_pet", "Gorilla"), fromKilled(640, EntityType.COW), stand ->
+                                        w.spawnFakeItem(new ItemStack(Material.BAMBOO), head(stand), 20)
+                        ))
+                        .put(PetType.FOX, of(
+                                "Fox", Rarity.RARE,
+                                petIcon("fox_pet", "Fox"), fromKilled(150, EntityType.PILLAGER), stand ->
+                                    stand.getWorld().spawnParticle(Particle.CRIT, head(stand), 1, 0, 0, 0, 0)
+
+                        ))
+
+                        .build()
+        );
+
+        loadExternalPets("1_13");
     }
 
 }

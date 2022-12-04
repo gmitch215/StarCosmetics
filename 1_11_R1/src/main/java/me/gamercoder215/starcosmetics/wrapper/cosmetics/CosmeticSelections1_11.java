@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
@@ -18,8 +17,9 @@ import org.bukkit.entity.EntityType;
 import java.util.List;
 import java.util.Map;
 
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromKilled;
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromMined;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
 public class CosmeticSelections1_11 implements CosmeticSelections {
 
@@ -27,25 +27,29 @@ public class CosmeticSelections1_11 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
-            // Items + Fancy Items
             .add(new TrailSelection("totems", BaseTrail.PROJECTILE_TRAIL, StarMaterial.TOTEM_OF_UNDYING.find(),
-                    CompletionCriteria.fromKilled(350, EntityType.EVOKER), Rarity.EPIC))
+                    fromKilled(350, EntityType.EVOKER), Rarity.EPIC))
             .add(new TrailSelection("shulker_shell", BaseTrail.PROJECTILE_TRAIL, Material.SHULKER_SHELL,
-                    CompletionCriteria.fromKilled(390, EntityType.SHULKER), Rarity.EPIC))
+                    fromKilled(390, EntityType.SHULKER), Rarity.EPIC))
+
+            .add(new TrailSelection("totem_particle", BaseTrail.PROJECTILE_TRAIL, Particle.TOTEM,
+                    fromKilled(350, EntityType.VINDICATOR), Rarity.EPIC))
+
+            .add(new TrailSelection("vex", BaseTrail.PROJECTILE_TRAIL, EntityType.VEX,
+                    fromKilled(350, EntityType.VEX), Rarity.EPIC))
             
             .add(new TrailSelection("observer", BaseTrail.PROJECTILE_TRAIL, StarMaterial.OBSERVER,
-                    CompletionCriteria.fromMined(14000, Material.REDSTONE_ORE), Rarity.LEGENDARY))
+                    fromMined(14000, Material.REDSTONE_ORE), Rarity.LEGENDARY))
             
-            
-            
-            // Particles
-            .add(new TrailSelection("totem_particle", BaseTrail.PROJECTILE_TRAIL, Particle.TOTEM,
-                    CompletionCriteria.fromKilled(350, EntityType.VINDICATOR), Rarity.EPIC))
-            
-            // Entities
-            .add(new TrailSelection("vex", BaseTrail.PROJECTILE_TRAIL, EntityType.VEX,
-                    CompletionCriteria.fromKilled(350, EntityType.VEX), Rarity.EPIC))
-            
+            .build();
+
+    // Ground Trails
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("shulker_shell", BaseTrail.GROUND_TRAIL, Material.SHULKER_SHELL,
+                    fromKilled(390, EntityType.SHULKER), Rarity.EPIC))
+            .add(new TrailSelection("totem_particle", BaseTrail.GROUND_TRAIL, Particle.TOTEM,
+                    fromKilled(350, EntityType.VINDICATOR), Rarity.EPIC))
+
             .build();
 
     // Shapes
@@ -54,7 +58,7 @@ public class CosmeticSelections1_11 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("totem", BaseShape.SMALL_RING, Particle.TOTEM,
-                    CompletionCriteria.fromKilled(350, EntityType.EVOKER), Rarity.EPIC))
+                    fromKilled(350, EntityType.EVOKER), Rarity.EPIC))
             .build();
 
     // Selections
@@ -73,6 +77,11 @@ public class CosmeticSelections1_11 implements CosmeticSelections {
     @Override
     public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
+    }
+
+    @Override
+    public void loadPets() {
+        loadExternalPets("1_10");
     }
 
 }

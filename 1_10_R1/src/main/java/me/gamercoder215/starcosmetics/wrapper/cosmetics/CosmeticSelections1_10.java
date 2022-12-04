@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
@@ -15,8 +14,8 @@ import org.bukkit.Material;
 import java.util.List;
 import java.util.Map;
 
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromMined;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
 public class CosmeticSelections1_10 implements CosmeticSelections {
 
@@ -26,10 +25,10 @@ public class CosmeticSelections1_10 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + Fancy Items
             .add(new TrailSelection("magma_block", BaseTrail.PROJECTILE_TRAIL, StarMaterial.MAGMA_BLOCK.find(),
-                    CompletionCriteria.fromMined(175, StarMaterial.MAGMA_BLOCK.find()), Rarity.COMMON))
+                    fromMined(175, StarMaterial.MAGMA_BLOCK.find()), Rarity.COMMON))
 
             .add(new TrailSelection("structure_void", BaseTrail.PROJECTILE_TRAIL, "fancy_item:structure_void",
-                    CompletionCriteria.fromMined(12000, Material.OBSIDIAN), Rarity.MYTHICAL))
+                    fromMined(12000, Material.OBSIDIAN), Rarity.MYTHICAL))
             
             .build();
 
@@ -37,7 +36,11 @@ public class CosmeticSelections1_10 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("magma_block", BaseTrail.GROUND_TRAIL, StarMaterial.MAGMA_BLOCK.find(),
-                    CompletionCriteria.fromMined(205, StarMaterial.MAGMA_BLOCK.find()), Rarity.COMMON))
+                    fromMined(205, StarMaterial.MAGMA_BLOCK.find()), Rarity.COMMON))
+
+            .add(new TrailSelection("structure_void", BaseTrail.GROUND_TRAIL, Material.STRUCTURE_VOID,
+                    fromMined(12500, Material.OBSIDIAN), Rarity.MYTHICAL))
+
             .build();
 
     // Selections
@@ -56,6 +59,11 @@ public class CosmeticSelections1_10 implements CosmeticSelections {
     @Override
     public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
+    }
+
+    @Override
+    public void loadPets() {
+        loadExternalPets("1_9");
     }
 
 }

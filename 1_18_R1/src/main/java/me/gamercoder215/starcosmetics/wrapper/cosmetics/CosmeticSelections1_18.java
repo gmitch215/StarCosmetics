@@ -44,4 +44,9 @@ public class CosmeticSelections1_18 implements CosmeticSelections {
     public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
+
+    @Override
+    public void loadPets() {
+        CosmeticSelections.loadExternalPets("1_17");
+    }
 }

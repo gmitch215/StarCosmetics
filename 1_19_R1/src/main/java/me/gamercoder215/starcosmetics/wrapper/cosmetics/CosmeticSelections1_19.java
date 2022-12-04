@@ -58,31 +58,39 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
             
             .build();
 
+    // Ground Trails
+
+    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("mangrove_planks", BaseTrail.GROUND_TRAIL, Material.MANGROVE_PLANKS,
+                    CompletionCriteria.fromCrafted(50, Material.MANGROVE_PLANKS), Rarity.COMMON))
+
+            .add(new TrailSelection("mangrove_saplings", BaseTrail.GROUND_TRAIL, Material.MANGROVE_PROPAGULE,
+                    CompletionCriteria.fromMined(75, Material.MANGROVE_LEAVES), Rarity.RARE))
+            .add(new TrailSelection("sculk", BaseTrail.GROUND_TRAIL, "ground_block:sculk",
+                    CompletionCriteria.fromMined(500, Material.SCULK), Rarity.RARE))
+            .add(new TrailSelection("sculk_sensor", BaseTrail.GROUND_TRAIL, "side_block:sculk_sensor",
+                    CompletionCriteria.fromMined(200, Material.SCULK_SENSOR), Rarity.RARE))
+
+            .add(new TrailSelection("echo_shard", BaseTrail.GROUND_TRAIL, Material.ECHO_SHARD,
+                    CompletionCriteria.fromCompletion(PlayerCompletion.SONIC_BOOM_DEATH), Rarity.LEGENDARY))
+
+            .add(new TrailSelection("five", BaseTrail.GROUND_TRAIL, Material.MUSIC_DISC_5,
+                    CompletionCriteria.fromKilled(10, EntityType.WARDEN), Rarity.MYTHICAL))
+
+            .build();
+
     // Sound Trails
 
     private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("mud_break", BaseTrail.SOUND_TRAIL, Sound.BLOCK_MUD_BREAK,
                     CompletionCriteria.fromMined(30, Material.MUD), Rarity.COMMON))
 
+            .add(new TrailSelection("candle_break", BaseTrail.SOUND_TRAIL, Sound.BLOCK_CANDLE_BREAK,
+                    CompletionCriteria.fromCrafted(25, Material.CANDLE), Rarity.OCCASIONAL))
+
             .add(new TrailSelection("shrieker_shriek", BaseTrail.SOUND_TRAIL, Sound.BLOCK_SCULK_SHRIEKER_SHRIEK,
                     CompletionCriteria.fromKilled(3, EntityType.WARDEN), Rarity.EPIC))
 
-            .build();
-
-    // Ground Trails
-
-    private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new TrailSelection("mangrove_planks", BaseTrail.GROUND_TRAIL, Material.MANGROVE_PLANKS,
-                    CompletionCriteria.fromCrafted(50, Material.MANGROVE_PLANKS), Rarity.COMMON))
-    
-            .add(new TrailSelection("mangrove_saplings", BaseTrail.GROUND_TRAIL, Material.MANGROVE_PROPAGULE,
-                    CompletionCriteria.fromMined(75, Material.MANGROVE_LEAVES), Rarity.RARE))
-            .add(new TrailSelection("sculk", BaseTrail.GROUND_TRAIL, "ground_block:sculk",
-                    CompletionCriteria.fromMined(500, Material.SCULK), Rarity.RARE))
-            
-            .add(new TrailSelection("echo_shard", BaseTrail.GROUND_TRAIL, Material.ECHO_SHARD,
-                    CompletionCriteria.fromCompletion(PlayerCompletion.SONIC_BOOM_DEATH), Rarity.LEGENDARY))
-            
             .build();
 
     // Shapes
@@ -92,6 +100,15 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("sculk_soul", BaseShape.SMALL_RING, Particle.SCULK_SOUL,
                     CompletionCriteria.fromMined(400, Material.SCULK), Rarity.EPIC))
+
+            .build();
+
+    // Small Detailed Rings
+
+    private static final List<CosmeticSelection<?>> SMALL_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new ParticleSelection("mud", BaseShape.SMALL_DETAILED_RING, Material.MUD,
+                    CompletionCriteria.fromMined(60, Material.DIRT), Rarity.COMMON))
+
             .build();
 
     // Selections
@@ -102,7 +119,7 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
             .put(BaseTrail.SOUND_TRAIL, join(SOUND_TRAILS, BaseTrail.SOUND_TRAIL, "1_18"))
 
             .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_18"))
-            .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_18"))
+            .put(BaseShape.SMALL_DETAILED_RING, join(SMALL_DETAILED_RINGS, BaseShape.SMALL_DETAILED_RING, "1_18"))
             .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_18"))
             .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_18"))
             .build();
@@ -110,5 +127,10 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
     @Override
     public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
+    }
+
+    @Override
+    public void loadPets() {
+        CosmeticSelections.loadExternalPets("1_18");
     }
 }

@@ -72,4 +72,9 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
         return SELECTIONS;
     }
 
+    @Override
+    public void loadPets() {
+        CosmeticSelections.loadExternalPets("1_14");
+    }
+
 }
