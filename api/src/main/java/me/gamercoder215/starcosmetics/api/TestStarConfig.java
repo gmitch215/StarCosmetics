@@ -15,10 +15,5 @@ final class TestStarConfig implements StarConfig {
     }
 
     @Override
-    public @NotNull String getMessage(String key) {
-        return "";
-    }
-
-    @Override
     public void updatePluginCache() {}
 }

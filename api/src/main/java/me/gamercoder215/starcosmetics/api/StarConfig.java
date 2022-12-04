@@ -217,25 +217,6 @@ public interface StarConfig {
     }
 
     /**
-     * Fetches a String from the Language File with the plugin prefix in front.
-     * @param key Key to fetch.
-     * @return Message from the Language File according to the current Language
-     */
-    @NotNull
-    String getMessage(String key);
-
-    /**
-     * Fetches a String from the Language File with the plugin prefix in front.
-     * @param key Key to fetch.
-     * @param def Default String to return if the key is not found.
-     * @return Message from the Language File according to the current Language
-     */
-    default String getMessage(String key, String def) {
-        if (getMessage(key).equalsIgnoreCase("Unknown Value")) return def;
-        else return getMessage(key);
-    }
-
-    /**
      * Updates the plugin's cached data, removing any old states.
      */
     void updatePluginCache();
