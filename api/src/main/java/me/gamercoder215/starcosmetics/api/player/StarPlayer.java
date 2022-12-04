@@ -193,7 +193,7 @@ public final class StarPlayer {
     public <T> T getSetting(@NotNull PlayerSetting<T> setting, T def) {
         if (setting == null) return null;
 
-        return (T) config.get("settings." + setting.getId().toLowerCase(), def);
+        return readSetting(setting, def);
     }
 
     /**
@@ -205,10 +205,39 @@ public final class StarPlayer {
      */
     @Nullable
     public <T> T setSetting(@NotNull PlayerSetting<T> setting, @Nullable T value) {
-        config.set("settings." + setting.getId().toLowerCase(), value);
+        writeSetting(setting, value);
         save();
 
         return value;
+    }
+
+    private <T> void writeSetting(PlayerSetting<T> setting, T value) {
+        String path = "settings." + setting.getId().toLowerCase();
+
+        if (value instanceof Enum<?>) {
+            config.set(path + ".value", ((Enum<?>) value).name());
+            config.set(path + ".clazz", value.getClass().getName());
+            return;
+        }
+
+        config.set(path, value);
+    }
+
+    private <T> T readSetting(PlayerSetting<T> setting, T def) {
+        String path = "settings." + setting.getId().toLowerCase();
+
+        if (config.contains(path + ".clazz")) try {
+            Object value = config.get(path + ".value", def);
+            Class<?> clazz = Class.forName(config.getString(path + ".clazz"));
+
+            if (clazz.isEnum())
+                return (T) Enum.valueOf(clazz.asSubclass(Enum.class), value.toString()); // Will not compile without Cast on Java 8
+
+        } catch (ClassNotFoundException e) {
+            StarConfig.print(e);
+        }
+
+        return (T) config.get(path, def);
     }
 
     /**

@@ -17,6 +17,7 @@ import java.util.List;
  * Represents a setting available to players.
  * @param <T> Setting Type
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class PlayerSetting<T> {
 
     /**
@@ -34,11 +35,50 @@ public final class PlayerSetting<T> {
             ofBoolean("sound_notifications", "settings.notifications.sound", true);
 
     /**
-     * Whether the player should be launched when spawning a structure, to "avoid" suffocation.
+     * How much the player should be launched when spawning a structure, to "avoid" suffocation.
      */
     @SettingDescription("settings.structure_velocity.desc")
-    public static final PlayerSetting<Boolean> STRUCTURE_VELOCITY =
-            ofBoolean("structure_velocity", "settings.structure_velocity", true);
+    public static final PlayerSetting<VelocityPower> STRUCTURE_VELOCITY =
+            ofEnum("structure_velocity", "settings.structure_velocity", VelocityPower.MEDIUM);
+
+    // Setting Enums
+
+    /**
+     * Enum used to determine the Velocity Power of {@link PlayerSetting#STRUCTURE_VELOCITY}.
+     */
+    public enum VelocityPower {
+        /**
+         * The player will not be launched.
+         */
+        NONE(0),
+        /**
+         * The player will be launched a little bit.
+         */
+        WEAK(0.75),
+        /**
+         * The player will be launched a medium amount.
+         */
+        MEDIUM(2.5),
+        /**
+         * The player will be launched a lot.
+         */
+        STRONG(4)
+        ;
+
+        private final double launchPower;
+
+        VelocityPower(double launchPower) {
+            this.launchPower = launchPower;
+        }
+
+        /**
+         * Fetches the launch power for this VelocityPower.
+         * @return Launch Power
+         */
+        public double getLaunchPower() {
+            return launchPower;
+        }
+    }
 
     private final T def;
     private final Class<T> type;
@@ -67,6 +107,10 @@ public final class PlayerSetting<T> {
 
     private static PlayerSetting<Boolean> ofBoolean(String id, String displayKey, boolean def) {
         return new PlayerSetting<>(id, displayKey, Boolean.class, def, true, false);
+    }
+
+    private static <T extends Enum<T>> PlayerSetting<T> ofEnum(String id, String displayKey, T def) {
+        return new PlayerSetting<T>(id, displayKey, (Class<T>) def.getClass(), def, (T[]) def.getClass().getEnumConstants());
     }
 
     /**
@@ -148,7 +192,7 @@ public final class PlayerSetting<T> {
             StarConfig.print(e);
         }
 
-        return "";
+        return null;
     }
 
     /**
