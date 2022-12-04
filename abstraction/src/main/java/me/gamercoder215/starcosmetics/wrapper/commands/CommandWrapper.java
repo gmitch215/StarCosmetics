@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
@@ -12,19 +15,13 @@ import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
-import me.gamercoder215.starcosmetics.util.Generator;
-import me.gamercoder215.starcosmetics.util.StarMaterial;
-import me.gamercoder215.starcosmetics.util.StarRunnable;
-import me.gamercoder215.starcosmetics.util.StarSound;
+import me.gamercoder215.starcosmetics.util.*;
+import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
-import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -99,6 +96,8 @@ public interface CommandWrapper {
         plugin.reloadConfig();
         StarConfig.updateCache();
 
+        Bukkit.getOnlinePlayers().forEach(StarPlayer::new);
+
         sender.sendMessage(ChatColor.YELLOW + get("command.reload.reloaded"));
         if (sender instanceof Player) StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess((Player) sender);
     }
@@ -119,6 +118,14 @@ public interface CommandWrapper {
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.YELLOW + getWithArgs("menu.about.projectile_trail_count", comma(getCosmeticCount(TrailType.PROJECTILE)) ));
+        lore.add(ChatColor.DARK_GREEN + getWithArgs("menu.about.ground_trail_count", comma(getCosmeticCount(TrailType.GROUND)) ));
+        lore.add(ChatColor.AQUA + getWithArgs("menu.about.sound_trail_count", comma(getCosmeticCount(TrailType.PROJECTILE_SOUND)) ));
+
+        lore.add(" ");
+        lore.add(ChatColor.DARK_PURPLE + getWithArgs("menu.about.particle_shape_count", comma(getCosmeticCount(ParticleShape.class)) ));
+
+        lore.add(" ");
+        lore.add(ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length - 1)));
 
         lore.add(" ");
         lore.add(ChatColor.RED + getWithArgs("menu.about.total_cosmetic_count", comma(getCosmeticCount()) ));
@@ -147,7 +154,7 @@ public interface CommandWrapper {
             inv.setItem(parent.getPlace(), item);
         }
 
-        List<CosmeticSelection<?>> sel = Wrapper.allFor(BaseShape.class);
+        List<CosmeticLocation<?>> sel = Wrapper.allFor(BaseShape.class);
         inv.setAttribute("collections:custom:particle", sel);
         inv.setAttribute("items_display:particle", "menu.cosmetics.shape");
 
@@ -191,6 +198,7 @@ public interface CommandWrapper {
             NBTWrapper stnbt = of(structures);
             stnbt.setID("cosmetic:selection:custom_inventory");
             stnbt.set("inventory_key", "structures");
+            stnbt.set("cooldown", "structures");
             structures = stnbt.getItem();
             inv.setItem(30, structures);
             inv.setAttribute("structures", structureInv);
@@ -209,7 +217,6 @@ public interface CommandWrapper {
         inv.setAttribute("pets", Generator.createPetInventory(p));
 
         p.openInventory(inv);
-        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
     default void structures(Player p, @Nullable String structure) {
@@ -224,6 +231,8 @@ public interface CommandWrapper {
             return;
         }
 
+        if (StarCooldowns.checkCooldown("structure", p)) return;
+
         StarPlayer sp = new StarPlayer(p);
 
         StructureInfo info = StarConfig.getRegistry().getAvailableStructures()
@@ -236,12 +245,15 @@ public interface CommandWrapper {
             return;
         }
 
-        if (sp.getSetting(PlayerSetting.STRUCTURE_VELOCITY)) {
+        if (sp.getSetting(PlayerSetting.STRUCTURE_VELOCITY) != PlayerSetting.VelocityPower.NONE) {
+            PlayerSetting.VelocityPower power = sp.getSetting(PlayerSetting.STRUCTURE_VELOCITY);
+
             p.setMetadata("immune_fall", new FixedMetadataValue(StarConfig.getPlugin(), true));
-            p.setVelocity(p.getLocation().getDirection().multiply(-2.5));
+            p.setVelocity(p.getLocation().getDirection().multiply(-power.getLaunchPower()));
         }
 
         info.getStructure().placeAndRemove(p.getLocation().add(p.getLocation().getDirection()), 200);
+        StarCooldowns.set("structure", p, 100);
 
         StarRunnable.syncLater(() -> {
             if (p.getVelocity().getY() < 0.1) p.removeMetadata("immune_fall", StarConfig.getPlugin());
@@ -249,15 +261,15 @@ public interface CommandWrapper {
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
-    default void pets(Player p, String arg0) {
-        if (arg0 == null) {
+    default void pets(Player p, String... args) {
+        if (args.length < 1) {
             p.openInventory(Generator.createPetInventory(p));
             StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             return;
         }
 
         StarPlayer sp = new StarPlayer(p);
-        switch (arg0.toLowerCase()) {
+        switch (args[0].toLowerCase()) {
             case "remove": {
                 if (sp.getSpawnedPet() == null) {
                     sendError(p, "error.cosmetics.no_pet");
@@ -268,7 +280,33 @@ public interface CommandWrapper {
                 p.sendMessage(ChatColor.GREEN + get("success.cosmetics.pet_removed"));
                 break;
             }
+            default: {
+                sendError(p, "error.argument");
+                break;
+            }
         }
+    }
+
+    default void soundSelection(Player p, String... args) {
+        if (args.length < 1) {
+            p.openInventory(Generator.createSelectionInventory(p));
+            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            return;
+        }
+
+        StarPlayer sp = new StarPlayer(p);
+        switch (args[0].toLowerCase()) {
+            case "add": {
+                InventorySelector.createSelection(p);
+                break;
+            }
+            default: {
+                sendError(p, "error.argument");
+                break;
+            }
+        }
+
+        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
     // Utilities
@@ -301,6 +339,7 @@ public interface CommandWrapper {
                 .sum();
 
         count += SoundEventSelection.AVAILABLE_EVENTS.size();
+        count += PetType.values().length - 1;
 
         return count;
     }

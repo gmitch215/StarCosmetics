@@ -27,7 +27,11 @@ public class CommandWrapperV2 implements CommandWrapper {
                     .map(StructureInfo::getLocalizedName)
                     .collect(Collectors.toList())));
 
-        handler.register(this);
+        handler.register(
+                this,
+                new CosmeticCommands(this)
+        );
+
         handler.registerBrigadier();
         handler.setLocale(StarConfig.getConfig().getLocale());
 
@@ -60,13 +64,41 @@ public class CommandWrapperV2 implements CommandWrapper {
 
     // Cosmetic Commands
 
-    @Override
     @Command({"starcosmetics", "scosmetics", "sc", "cosmetics", "cs"})
     @Description("Opens the StarCosmetics Cosmetics menu.")
     @Usage("/starcosmetics")
     @CommandPermission("starcosmetics.user.cosmetics")
-    public void cosmetics(Player p) {
-        CommandWrapper.super.cosmetics(p);
+    public static final class CosmeticCommands {
+
+        private final CommandWrapperV2 wrapper;
+
+        CosmeticCommands(CommandWrapperV2 wrapper) {
+            this.wrapper = wrapper;
+        }
+
+        @Default
+        public void cosmetics(Player p) {
+            wrapper.cosmetics(p);
+        }
+
+        @Subcommand({"pets", "pet"})
+        @AutoComplete("remove")
+        public void pets(Player p, @Default("") String args) {
+            wrapper.pets(p, args);
+        }
+
+        @Subcommand({"structures", "structure"})
+        @AutoComplete("@structures *")
+        public void structures(Player p, @Default("") String structure) {
+            wrapper.structures(p, structure);
+        }
+
+        @Subcommand({"customsounds", "sounds"})
+        @AutoComplete("add")
+        public void soundSelection(Player p, @Default("") String args) {
+            wrapper.soundSelection(p, args.split("\\s"));
+        }
+
     }
 
     @Override
@@ -79,9 +111,11 @@ public class CommandWrapperV2 implements CommandWrapper {
         CommandWrapper.super.structures(p, structure);
     }
 
-    @Override
     @Command({"starpets", "starp", "sp", "spets", "pets"})
+    @Description("Opens the StarCosmetics Pets menu.")
+    @Usage("/starpets")
+    @CommandPermission("starcosmetics.user.cosmetics")
     @AutoComplete("remove")
-    public void pets(Player p, @Optional String arg0) { CommandWrapper.super.pets(p, arg0); }
+    public void pets(Player p, @Default("") String args) { CommandWrapper.super.pets(p, args.split("\\s")); }
 
 }

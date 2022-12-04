@@ -1,7 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
+import me.gamercoder215.starcosmetics.util.StarSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.*;
@@ -10,12 +10,12 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.sendError;
+
+public final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
 
     private final Plugin plugin;
 
@@ -43,7 +43,37 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
                 if (!(sender instanceof Player)) return false;
                 Player p = (Player) sender;
 
-                cosmetics(p);
+                if (args.length < 1) {
+                    cosmetics(p);
+                    StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                    return true;
+                }
+
+                switch (args[0].toLowerCase()) {
+                    case "pet":
+                    case "pets": {
+                        pets(p, args);
+                        break;
+                    }
+                    case "structures":
+                    case "structure": {
+                        StringBuilder structure = new StringBuilder();
+                        for (String arg : args) structure.append(arg).append(" ");
+
+                        structures(p, structure.toString());
+                        break;
+                    }
+                    case "customsounds":
+                    case "sounds": {
+                        soundSelection(p, args);
+                        break;
+                    }
+                    default: {
+                        sendError(p, "error.argument");
+                        break;
+                    }
+                }
+
                 break;
             }
             case "starrabout": {
@@ -67,30 +97,12 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
                 if (!(sender instanceof Player)) return false;
                 Player p = (Player) sender;
 
-                pets(p, args.length > 0 ? args[0] : null);
+                pets(p, args);
                 break;
             }
         }
 
         return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-        List<String> suggestions = new ArrayList<>();
-
-        switch (cmd.getName()) {
-            case "starstructures": {
-                if (args.length == 1) suggestions.addAll(StarConfig.getRegistry().getAvailableStructures()
-                        .stream()
-                        .map(StructureInfo::getLocalizedName)
-                        .collect(Collectors.toList()));
-
-                return suggestions;
-            }
-        }
-
-        return suggestions;
     }
 
     private PluginCommand createCommand(String name, String... aliases) {
@@ -135,7 +147,6 @@ public final class CommandWrapperV1 implements CommandWrapper, TabExecutor {
 
             pcmd.setExecutor(this);
             pcmd.setUsage(usage);
-            pcmd.setTabCompleter(this);
             pcmd.setDescription(desc);
             if (COMMAND_PERMISSION.get(cmd) != null) pcmd.setPermission(COMMAND_PERMISSION.get(cmd));
 
