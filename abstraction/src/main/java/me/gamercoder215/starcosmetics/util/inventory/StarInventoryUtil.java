@@ -9,6 +9,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
@@ -339,11 +340,9 @@ public final class StarInventoryUtil {
                 String value = WordUtils.capitalizeFully(s.split(":")[1].replace("_", " "));
                 
                 switch (prefix) {
-                    case "crack": return getWithArgs("constants.cosmetics.crack", value); // TODO Crack & Dust Translations
+                    case "crack": return getWithArgs("constants.cosmetics.crack", value);
                     case "dust": return getWithArgs("constants.cosmetics.dust", value);
                 }
-                
-
 
                 return value;
             }
@@ -369,7 +368,12 @@ public final class StarInventoryUtil {
 
         if (input instanceof String) {
             String s = input.toString();
-            if (s.contains(":")) return matchMaterial(s.split(":")[1]);
+            if (s.contains(":")) {
+                String value = s.split(":")[1];
+                try {
+                    return StarMaterial.valueOf(value.toUpperCase()).find();
+                } catch (IllegalArgumentException e) { return matchMaterial(value); }
+            }
 
             switch (s.toLowerCase()) {
                 case "riptide": return matchMaterial("TRIDENT");
@@ -497,7 +501,7 @@ public final class StarInventoryUtil {
             case "block_marker": return STONE;
             case "bubble_column_up":
             case "bubble_pop": return matchMaterial("SEAGRASS");
-            case "campire_cosy_smoke":
+            case "campfire_cosy_smoke":
             case "campfire_signal_smoke": return matchMaterial("CAMPFIRE");
             case "cloud": return StarMaterial.WHITE_WOOL.find();
             case "composter": return matchMaterial("COMPOSTER");
@@ -559,7 +563,7 @@ public final class StarInventoryUtil {
             case "smoke_large":
             case "smoke_normal": return FURNACE;
             case "sneeze": return PAPER;
-            case "snow_shovel": return IRON_HOE;
+            case "snow_shovel": return StarMaterial.IRON_SHOVEL.find();
             case "snowflake":
             case "snowball": return SNOW_BALL;
             case "sonic_boom": return matchMaterial("SCULK");
@@ -639,6 +643,7 @@ public final class StarInventoryUtil {
         return placements;
     }
 
+    @NotNull
     public static ItemStack toItemStack(@NotNull Player p, @NotNull PetInfo info) {
         CompletionCriteria criteria = info.getCriteria();
 
@@ -660,5 +665,35 @@ public final class StarInventoryUtil {
         item.setItemMeta(meta);
         return item;
     }
+
+    public static void setReset(@NotNull StarInventory inv) {
+        Cosmetic parent = inv.getAttribute("parent", Cosmetic.class);
+
+        ItemStack reset = new ItemStack(Material.BARRIER);
+        ItemMeta meta = reset.getItemMeta();
+
+        if (Trail.class.isAssignableFrom(parent.getClass())) {
+            TrailType type = ((Trail<?>) parent).getType();
+
+            meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset.trail"));
+            reset.setItemMeta(meta);
+
+            NBTWrapper nbt = of(reset);
+            nbt.setID("cancel:cosmetic:trail");
+            nbt.set("trail", type.name());
+            reset = nbt.getItem();
+        } else {
+            meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset"));
+            reset.setItemMeta(meta);
+
+            NBTWrapper nbt = of(reset);
+            nbt.setID("cancel:cosmetic");
+            nbt.set("cosmetic", parent.getClass());
+            reset = nbt.getItem();
+        }
+
+        inv.setItem(18, reset);
+    }
+
 
 }
