@@ -8,11 +8,11 @@
     </parent>
 
     <artifactId>starcosmetics-1_19_R1</artifactId>
-    <name>StarCosmetics-1.19</name>
+    <name>StarCosmetics-1.19.2</name>
     <description>Contemporary (1.13.2+) StarCosmetics MC Wrapper</description>
 
     <properties>
-        <minecraft.version>1.19-R0.1-SNAPSHOT</minecraft.version>
+        <minecraft.version>1.19.2-R0.1-SNAPSHOT</minecraft.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
