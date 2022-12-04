@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,6 +37,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
@@ -154,10 +156,19 @@ public final class Wrapper1_18_R1 implements Wrapper {
                     return;
                 }
 
-                Location l = en.getLocation();
+                Location l = en.getLocation().clone();
 
-                sp.absMoveTo(l.getX(), l.getY(), l.getZ(), normalize(en.getLocation().getYaw() - 180.0F), normalize(en.getLocation().getPitch() - 180.0F));
-                sp.setYHeadRot(normalize(en.getLocation().getYaw() - 180.0F));
+                Vec3 pos = sp.position();
+                Vector dir = l.toVector().subtract(new Location(en.getWorld(), pos.x, pos.y, pos.z).toVector()).normalize().multiply(-1);
+
+                if (Double.isNaN(dir.getX())) dir.setX(0);
+                if (Double.isNaN(dir.getY())) dir.setY(0);
+                if (Double.isNaN(dir.getZ())) dir.setZ(0);
+
+                l.setDirection(dir);
+
+                sp.absMoveTo(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+                sp.setYHeadRot(l.getYaw());
                 for (Player p : en.getWorld().getPlayers()) {
                     ServerPlayer sph = ((CraftPlayer) p).getHandle();
                     sph.connection.send(new ClientboundTeleportEntityPacket(sp));

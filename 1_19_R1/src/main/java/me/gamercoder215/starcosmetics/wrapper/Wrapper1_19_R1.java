@@ -24,6 +24,7 @@ import net.minecraft.util.SignatureValidator;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.ProfilePublicKey;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,9 +39,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.security.KeyPairGenerator;
 import java.security.PublicKey;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -98,12 +101,14 @@ public final class Wrapper1_19_R1 implements Wrapper {
             keyGen.initialize(2048);
             PublicKey pub = keyGen.generateKeyPair().getPublic();
 
+            UUID uid = UUID.randomUUID();
             byte[] bytes = new byte[1024];
             r.nextBytes(bytes);
-            ProfilePublicKey.Data data = new ProfilePublicKey.Data(Instant.now(), pub, bytes);
-            ProfilePublicKey key = ProfilePublicKey.createValidated(SignatureValidator.NO_VALIDATION, data);
 
-            UUID uid = UUID.randomUUID();
+            // Expires in 7 Days
+            ProfilePublicKey.Data data = new ProfilePublicKey.Data(Instant.now().plus(Duration.ofDays(7)), pub, bytes);
+            ProfilePublicKey key = ProfilePublicKey.createValidated(SignatureValidator.NO_VALIDATION, uid, data, Duration.ofDays(7));
+
             ServerPlayer sp = new ServerPlayer(srv, sw, new GameProfile(uid, uid.toString().substring(0, 16)), key);
             sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.SERVERBOUND), sp);
             sp.setPos(loc.getX(), loc.getY(), loc.getZ());
@@ -121,13 +126,6 @@ public final class Wrapper1_19_R1 implements Wrapper {
             StarConfig.print(e);
             return null;
         }
-    }
-
-    private static float normalize(float rot) {
-        float v = rot;
-        while (v < -180.0F) v += 360.0F;
-        while (v >= 180.0F) v -= 360.0F;
-        return v;
     }
 
     @Override
@@ -161,10 +159,20 @@ public final class Wrapper1_19_R1 implements Wrapper {
                     return;
                 }
 
-                Location l = en.getLocation();
+                Location l = en.getLocation().clone();
 
-                sp.absMoveTo(l.getX(), l.getY(), l.getZ(), normalize(en.getLocation().getYaw() - 180.0F), normalize(en.getLocation().getPitch() - 180.0F));
-                sp.setYHeadRot(normalize(en.getLocation().getYaw() - 180.0F));
+                Vec3 pos = sp.position();
+                Vector dir = l.toVector().subtract(new Location(en.getWorld(), pos.x, pos.y, pos.z).toVector()).normalize().multiply(-1);
+
+                if (Double.isNaN(dir.getX())) dir.setX(0);
+                if (Double.isNaN(dir.getY())) dir.setY(0);
+                if (Double.isNaN(dir.getZ())) dir.setZ(0);
+
+                l.setDirection(dir);
+
+                sp.absMoveTo(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+                sp.setYHeadRot(l.getYaw());
+
                 for (Player p : en.getWorld().getPlayers()) {
                     ServerPlayer sph = ((CraftPlayer) p).getHandle();
                     sph.connection.send(new ClientboundTeleportEntityPacket(sp));

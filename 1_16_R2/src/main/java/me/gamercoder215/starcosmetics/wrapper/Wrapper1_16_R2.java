@@ -25,6 +25,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
@@ -148,10 +149,19 @@ public final class Wrapper1_16_R2 implements Wrapper {
                     return;
                 }
 
-                Location l = en.getLocation();
+                Location l = en.getLocation().clone();
 
-                sp.setLocation(l.getX(), l.getY(), l.getZ(), normalize(en.getLocation().getYaw() - 180.0F), normalize(en.getLocation().getPitch() - 180.0F));
-                sp.setHeadRotation(normalize(en.getLocation().getYaw() - 180.0F));
+                Vec3D pos = sp.getPositionVector();
+                Vector dir = l.toVector().subtract(new Location(en.getWorld(), pos.getX(), pos.getY(), pos.getZ()).toVector()).normalize().multiply(-1);
+
+                if (Double.isNaN(dir.getX())) dir.setX(0);
+                if (Double.isNaN(dir.getY())) dir.setY(0);
+                if (Double.isNaN(dir.getZ())) dir.setZ(0);
+
+                l.setDirection(dir);
+
+                sp.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+                sp.setHeadRotation(l.getYaw());
                 for (Player p : en.getWorld().getPlayers()) {
                     EntityPlayer sph = ((CraftPlayer) p).getHandle();
                     sph.playerConnection.sendPacket(new PacketPlayOutEntityTeleport(sp));
