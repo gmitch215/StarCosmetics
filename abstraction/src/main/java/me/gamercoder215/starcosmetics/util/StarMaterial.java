@@ -86,9 +86,11 @@ public enum StarMaterial {
 
     RED_TERRACOTTA(14, "stained_clay"),
 
-    LIGHT_BLUE_TERRACATTA(3, "stained_clay"),
+    LIGHT_BLUE_TERRACOTTA(3, "stained_clay"),
 
-    PORKCHOP("pork")
+    PORKCHOP("pork"),
+
+    RED_SAND(1, "sand")
     ;
 
     private final Material defaultV;
