@@ -49,8 +49,8 @@ public final class CompletionCriteria {
         this(criteria, progress, displayKey, ImmutableList.builder().add(firstArg).add(displayArguments).build().toArray());
     }
 
-    private static String comma(int i) {
-        return String.format("%,.0f", (double) i);
+    private static String comma(double i) {
+        return String.format("%,.0f", i);
     }
 
     /**
@@ -78,7 +78,41 @@ public final class CompletionCriteria {
      */
     @NotNull
     public String getDisplayMessage() {
-        return String.format(StarConfig.getConfig().get(displayKey), displayArguments);
+        Object[] displayArgs = displayArguments.clone();
+
+        if (displayArgs.length > 1) try {
+            int num = Integer.parseInt(displayArgs[0].toString());
+            if (num != 1) for (int i = 1; i < displayArgs.length; i++) {
+                Object value = displayArgs[i];
+                if (value instanceof String) displayArgs[i] = toPlural(value.toString());
+            }
+        } catch (NumberFormatException ignored) {}
+
+        return String.format(StarConfig.getConfig().get(displayKey), displayArgs);
+    }
+
+    private static String toPlural(String base) {
+        String ending = base.split(" ")[base.split(" ").length - 1].toLowerCase();
+        switch (ending) {
+            case "ore":
+            case "stone":
+            case "deepslate":
+            case "ice":
+            case "prismarine": return base;
+        }
+
+        String trimmed = base.substring(0, base.length() - 1);
+
+        if (base.endsWith("l") || base.endsWith("s") || base.endsWith("p")) return base;
+        if (base.endsWith("oo")) return base + "s";
+
+        if (base.endsWith("on")) return base.substring(0, base.length() - 2) + "en";
+        if (base.endsWith("man")) return base.substring(0, base.length() - 3) + "men";
+
+        if (base.endsWith("h") || base.endsWith("o")) return base + "es";
+        if (base.endsWith("y")) return trimmed + "ies";
+
+        return base + "s";
     }
 
     /**
@@ -120,6 +154,26 @@ public final class CompletionCriteria {
                 p -> p.getStatistic(Statistic.MINE_BLOCK, m) >= amount,
                 p -> ((double) p.getStatistic(Statistic.MINE_BLOCK, m) / amount) * 100,
                 "criteria.amount.mined", comma(amount), WordUtils.capitalizeFully(m.name().replace("_", " ")));
+    }
+
+    /**
+     * Generates a CompletionCRiteria from a distance statistic (e.g. {@link Statistic#WALK_ONE_CM}).
+     * @param stat Statistic to check
+     * @param cm The amount of centimeters to check for
+     * @return CompletionCriteria with the given criteria
+     */
+    public static CompletionCriteria fromDistance(Statistic stat, double cm) {
+        String formattedDistance;
+
+        if (cm < 100) formattedDistance = comma(cm) + "cm";
+        else if (cm > 100 && cm < 100000) formattedDistance = comma(cm / 100) + "m";
+        else
+            formattedDistance = comma(cm / 100000) + "km";
+
+        return new CompletionCriteria(
+                p -> p.getStatistic(stat) >= cm,
+                p -> ((double) p.getStatistic(stat) / cm) * 100,
+                "criteria.amount.distance." + stat.name().toLowerCase(), formattedDistance);
     }
 
     /**
