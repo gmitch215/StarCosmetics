@@ -16,7 +16,7 @@ import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
 import me.gamercoder215.starcosmetics.util.Generator;
-import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.StarCooldowns;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
@@ -30,7 +30,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -39,7 +38,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -154,6 +152,9 @@ public final class ClickEvents implements Listener {
                 NBTWrapper iNBT = of(item);
                 CosmeticParent parent = CosmeticParent.valueOf(iNBT.getString("parent"));
 
+                String cooldown = iNBT.getString("cooldown");
+                if (StarCooldowns.checkCooldown(cooldown, p)) return;
+
                 int size = parent.getChildren().size() > 7 ? 45 : 27;
 
                 StarInventory parentInv = genGUI("cosmetics_menu:" + parent.name(), size, get("menu.cosmetics." + parent.name().toLowerCase()));
@@ -166,12 +167,46 @@ public final class ClickEvents implements Listener {
                     parentInv.setItem(place, cItem);
                 }
 
+                ItemStack resetAll = new ItemStack(Material.BARRIER);
+                ItemMeta resetMeta = resetAll.getItemMeta();
+                resetMeta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all_" + parent.name().toLowerCase()));
+                resetAll.setItemMeta(resetMeta);
+
+                NBTWrapper resetNBT = of(resetAll);
+                resetNBT.setID("cancel:cosmetic:all");
+                resetNBT.set("parent", parent.name());
+                resetAll = resetNBT.getItem();
+
+                parentInv.setItem(size - 1, resetAll);
+
                 StarInventoryUtil.setBack(parentInv, cw::cosmetics);
                 inv.setAttribute("selection_back", (Consumer<Player>) pl -> pl.openInventory(parentInv));
-                inv.setAttribute("back_inventory_sound", false);
 
                 p.openInventory(parentInv);
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("cancel:cosmetic:all", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                ItemStack item = e.getCurrentItem();
+
+                NBTWrapper nbt = of(item);
+                CosmeticParent parent = CosmeticParent.valueOf(nbt.getString("parent"));
+
+                InventorySelector.confirm(p, () -> {
+                    StarPlayer sp = new StarPlayer(p);
+                    switch (parent) {
+                        case TRAILS: {
+                            for (TrailType t : TrailType.values()) sp.setSelectedTrail(t, null);
+                            break;
+                        }
+                    }
+
+                    StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+                    cw.cosmetics(p);
+                }, () -> {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    inv.getAttribute("selection_back", Consumer.class).accept(p);
+                });
             })
             .put("choose:cosmetic", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
@@ -202,6 +237,10 @@ public final class ClickEvents implements Listener {
                 Player p = (Player) e.getWhoClicked();
                 ItemStack item = e.getCurrentItem();
                 NBTWrapper nbt = of(item);
+
+                String cooldown = nbt.getString("cooldown");
+                if (StarCooldowns.checkCooldown(cooldown, p)) return;
+
                 Cosmetic c = plugin.getByNamespace(nbt.getString("cosmetic"));
                 String display = nbt.getString("display");
 
@@ -211,10 +250,7 @@ public final class ClickEvents implements Listener {
                 for (StarInventory sel : invs) {
                     if (inv.hasAttribute("selection_back"))
                         StarInventoryUtil.setBack(sel, inv.getAttribute("selection_back", Consumer.class));
-                    else {
-                        StarInventoryUtil.setBack(sel, cw::cosmetics);
-                        sel.setAttribute("back_inventory_sound", false);
-                    }
+                    else StarInventoryUtil.setBack(sel, cw::cosmetics);
 
                     if (nbt.hasString("trail_type")) sel.setAttribute("trail_type", nbt.getString("trail_type"));
                 }
@@ -227,6 +263,9 @@ public final class ClickEvents implements Listener {
                 ItemStack item = e.getCurrentItem();
                 NBTWrapper nbt = of(item);
 
+                String cooldown = nbt.getString("cooldown");
+                if (StarCooldowns.checkCooldown(cooldown, p)) return;
+
                 String customId = nbt.getString("custom_id");
 
                 List<CosmeticSelection<?>> selections = inv.getAttribute("collections:custom:" + customId, List.class);
@@ -235,10 +274,7 @@ public final class ClickEvents implements Listener {
                 for (StarInventory sel : invs)
                     if (inv.hasAttribute("selection_back"))
                         StarInventoryUtil.setBack(sel, inv.getAttribute("selection_back", Consumer.class));
-                    else {
-                        StarInventoryUtil.setBack(sel, cw::cosmetics);
-                        sel.setAttribute("back_inventory_sound", false);
-                    }
+                    else StarInventoryUtil.setBack(sel, cw::cosmetics);
 
                 switch (nbt.getString("type")) {
                     case "particle": {
@@ -266,7 +302,31 @@ public final class ClickEvents implements Listener {
                 StarPlayer sp = new StarPlayer(p);
 
                 sp.setSelectedCosmetic(ParticleShape.class, null);
-                StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+                updateCache(p);
+            })
+            .put("cancel:cosmetic", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+                Class<? extends Cosmetic> clazz = nbt.getClass("cosmetic", Cosmetic.class);
+
+                sp.setSelectedCosmetic(clazz, null);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+                updateCache(p);
+            })
+            .put("cancel:cosmetic:trail", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+                TrailType type = TrailType.valueOf(nbt.getString("trail"));
+
+                sp.setSelectedTrail(type, null);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
                 updateCache(p);
             })
             .put("cosmetic:selection:custom_inventory", (inv, e) -> {
@@ -346,9 +406,11 @@ public final class ClickEvents implements Listener {
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
                 p.closeInventory();
 
-                if (sp.getSetting(PlayerSetting.STRUCTURE_VELOCITY)) {
+                if (sp.getSetting(PlayerSetting.STRUCTURE_VELOCITY) != PlayerSetting.VelocityPower.NONE) {
+                    PlayerSetting.VelocityPower power = sp.getSetting(PlayerSetting.STRUCTURE_VELOCITY);
+
                     p.setMetadata("immune_fall", new FixedMetadataValue(plugin, true));
-                    p.setVelocity(p.getLocation().getDirection().multiply(-2.5));
+                    p.setVelocity(p.getLocation().getDirection().multiply(-power.getLaunchPower()));
                 }
 
                 info.getStructure().placeAndRemove(p.getLocation().add(p.getLocation().getDirection()), 200);
@@ -374,21 +436,7 @@ public final class ClickEvents implements Listener {
                 boolean value = !sp.getSetting(setting);
                 sp.setSetting(setting, value);
 
-                ItemStack newItem = value ? StarMaterial.LIME_TERRACOTTA.findStack() : StarMaterial.RED_TERRACOTTA.findStack();
-                ItemMeta meta = newItem.getItemMeta();
-
-                meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + (value ? ChatColor.GREEN + get("constants.on") : ChatColor.RED + get("constants.off")));
-                if (value) {
-                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                }
-                newItem.setItemMeta(meta);
-
-                NBTWrapper newNBT = of(newItem);
-                newNBT.setID("toggle:setting:boolean");
-                newNBT.set("setting", setting.getId());
-                newItem = newNBT.getItem();
-
+                ItemStack newItem = Generator.generateSetting(p, setting);
                 inv.setItem(e.getSlot(), newItem);
                 StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 3F, value ? 2F : 0F);
             })
@@ -414,6 +462,58 @@ public final class ClickEvents implements Listener {
                 StarPlayerUtil.spawnPet(p, type);
                 p.sendMessage(ChatColor.GREEN + getWithArgs("success.cosmetics.pet_spawned", type.getInfo().getName()));
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("toggle:setting:enum", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+
+                PlayerSetting<Enum<?>> setting = (PlayerSetting<Enum<?>>) PlayerSetting.byId(nbt.getString("setting"));
+                Class<Enum<?>> clazz = setting.getType();
+                Enum<?> value = sp.getSetting(setting);
+
+                if (setting == null) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                Enum<?>[] values = clazz.getEnumConstants();
+                int index = Arrays.asList(values).indexOf(value);
+
+                Enum<?> next = values[(index + 1) % values.length];
+                sp.setSetting(setting, next);
+
+                ItemStack newItem = Generator.generateSetting(p, setting);
+                inv.setItem(e.getSlot(), newItem);
+
+                float pitch = 2F * (next.ordinal() / (values.length - 1F));
+                StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 3F, pitch);
+            })
+            .put("toggle:setting", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+
+                @SuppressWarnings({"rawtypes"})
+                PlayerSetting setting = PlayerSetting.byId(nbt.getString("setting"));
+                if (setting == null) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                Object value = sp.getSetting(setting);
+                int index = setting.getPossibleValues().indexOf(value);
+                Object next = setting.getPossibleValues().get((index + 1) % setting.getPossibleValues().size());
+
+                sp.setSetting(setting, next);
+
+                ItemStack newItem = Generator.generateSetting(p, setting);
+                inv.setItem(e.getSlot(), newItem);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
             })
 
             .build();
