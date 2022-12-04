@@ -8,7 +8,7 @@ public final class ModernDataWrapper implements DataWrapper {
 
     @Override
     public void blockDataParticle(Particle p, Location loc, int count, Material m) {
-        loc.getWorld().spawnParticle(p, loc, 1, m.createBlockData());
+        loc.getWorld().spawnParticle(p, loc, count, 0, 0, 0, 0, m.createBlockData());
     }
     
 }

@@ -9,7 +9,7 @@ public final class LegacyDataWrapper implements DataWrapper {
 
     @Override
     public void blockDataParticle(Particle p, Location loc, int count, Material m) {
-        loc.getWorld().spawnParticle(p, loc, count, new MaterialData(m));
+        loc.getWorld().spawnParticle(p, loc, count, 0, 0, 0, 0, new MaterialData(m));
     }
     
 }
