@@ -7,21 +7,19 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
-import org.bukkit.Particle;
 import org.jetbrains.annotations.NotNull;
 
-public class ParticleSelection extends CosmeticSelection<Particle> {
+public final class ParticleSelection extends CosmeticSelection<Object> {
 
     private final ParticleShape parent;
     private final String name;
 
-    public ParticleSelection(String name, ParticleShape parent, Particle object, CompletionCriteria criteria, Rarity rarity) {
+    public ParticleSelection(String name, ParticleShape parent, Object object, CompletionCriteria criteria, Rarity rarity) {
         super(object, criteria, rarity);
 
         this.name = name;
         this.parent = parent;
     }
-
 
     @Override
     public String getKey() {
@@ -45,7 +43,7 @@ public class ParticleSelection extends CosmeticSelection<Particle> {
 
     @Override
     @NotNull
-    public Class<Particle> getInputType() {
-        return Particle.class;
+    public Class<?> getInputType() {
+        return getInput().getClass();
     }
 }
