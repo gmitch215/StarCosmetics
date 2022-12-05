@@ -60,7 +60,7 @@ public interface CosmeticSelections {
         return ItemBuilder.of(StarInventoryUtil.getHead(headKey))
                 .name(ChatColor.GOLD + name)
                 .id("choose:pet")
-                .nbt(nbt -> nbt.set("pet", key))
+                .nbt(nbt -> nbt.set("pet", key.replace(' ', '_')))
                 .build();
     }
 
