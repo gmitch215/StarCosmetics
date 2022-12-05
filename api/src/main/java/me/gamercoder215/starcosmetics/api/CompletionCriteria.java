@@ -92,16 +92,10 @@ public final class CompletionCriteria {
     }
 
     private static String toPlural(String base) {
-        String ending = base.split(" ")[base.split(" ").length - 1].toLowerCase();
-        switch (ending) {
-            case "ore":
-            case "stone":
-            case "deepslate":
-            case "ice":
-            case "prismarine": return base;
-        }
-
+        String lower = base.toLowerCase();
         String trimmed = base.substring(0, base.length() - 1);
+
+        if (lower.endsWith("ore") || lower.endsWith("prismarine") || lower.endsWith("ice")) return base;
 
         if (base.endsWith("l") || base.endsWith("s") || base.endsWith("p")) return base;
         if (base.endsWith("oo")) return base + "s";
