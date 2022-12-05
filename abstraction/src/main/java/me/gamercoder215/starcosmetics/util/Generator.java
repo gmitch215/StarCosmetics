@@ -4,7 +4,6 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
-import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureCompletion;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
@@ -346,42 +345,33 @@ public final class Generator {
 
     @NotNull
     public static StarInventory createPetInventory(@NotNull Player p) {
-        List<StarInventory> pages = new ArrayList<>();
+        StarInventory inv = genGUI(54, get("menu.cosmetics.choose.pet"));
 
-        Map<Rarity, StarInventory> rarityPages = new HashMap<>();
         Map<Rarity, List<ItemStack>> itemsMap = new HashMap<>();
-
-        for (PetType type : StarConfig.getRegistry().getAllPets().keySet()) {
-            List<ItemStack> items = itemsMap.get(type.getRarity());
-            StarInventory page = rarityPages.get(type.getRarity());
-
-            if (page == null) {
-                page = genGUI(54, get("menu.cosmetics.choose.pet") + " | " + type.getRarity());
-                page.setAttribute("rarity", type.getRarity());
-
-                items = new ArrayList<>();
-                rarityPages.put(type.getRarity(), page);
-                itemsMap.put(type.getRarity(), items);
-            }
-
-            ItemStack item = StarInventoryUtil.toItemStack(p, type.getInfo());
-            items.add(item);
-        }
-
-        rarityPages.forEach((r, inv) -> {
-            Map<Integer, List<ItemStack>> rows = Generator.generateRows(itemsMap.get(r));
-            inv.setAttribute("rows", rows);
-            StarInventoryUtil.setRows(inv, rows);
-            StarInventoryUtil.setScrolls(inv);
-            StarInventoryUtil.setBack(inv, cw::cosmetics);
-
-            pages.add(inv);
+        StarConfig.getRegistry().getAllPets().keySet().forEach(type -> {
+            Rarity r = type.getRarity();
+            List<ItemStack> items = itemsMap.containsKey(r) ? itemsMap.get(r) : new ArrayList<>();
+            items.add(StarInventoryUtil.toItemStack(p, type.getInfo()));
+            itemsMap.put(r, items);
         });
 
-        pages.sort(Comparator.comparing(inv -> inv.getAttribute("rarity", Rarity.class)));
-        StarInventoryUtil.setPages(pages);
+        itemsMap.values().forEach(l -> l.sort(Comparator.comparing(i ->
+                i.hasItemMeta() ? (i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : "") : "")
+        ));
 
-        return pages.get(0);
+        List<ItemStack> items = new ArrayList<>();
+
+        // Rarities are ordered from lowest to highest
+        for (Rarity r : Rarity.values()) if (itemsMap.containsKey(r)) items.addAll(itemsMap.get(r));
+
+        Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
+        inv.setAttribute("rows", rows);
+        StarInventoryUtil.setRows(inv, rows);
+
+        StarInventoryUtil.setScrolls(inv);
+        StarInventoryUtil.setBack(inv, cw::cosmetics);
+
+        return inv;
     }
 
 }
