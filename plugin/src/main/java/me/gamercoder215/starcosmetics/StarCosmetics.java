@@ -8,6 +8,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
@@ -32,10 +33,7 @@ import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -120,6 +118,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         getLogger().info("Loaded Classes...");
 
         ASYNC_TICK_RUNNABLE.runTaskTimerAsynchronously(this, 0, 1);
+        SYNC_TICK_RUNNABLE.runTaskTimer(this, 0, 1);
         getLogger().info("Loaded Tasks...");
 
         loadPlaceholders();
@@ -135,7 +134,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             for (Firework f : w.getEntitiesByClass(Firework.class))
                 if (f.hasMetadata("cosmetic")) f.remove();
 
-        try { ASYNC_TICK_RUNNABLE.cancel(); } catch (IllegalStateException ignored) {}
+        try {
+            ASYNC_TICK_RUNNABLE.cancel();
+            SYNC_TICK_RUNNABLE.cancel();
+        } catch (IllegalStateException ignored) {}
         getLogger().info("Cancelled Tasks...");
 
         StarConfig.updateCache();
@@ -253,6 +255,27 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         @Override
         public void run() {
             ASYNC_TICK_TASK.run();
+        }
+    };
+
+    public static final Runnable SYNC_TICK_TASK = () -> {
+        for (Map.Entry<UUID, Pet> entry : StarPlayerUtil.getPets().entrySet()) {
+            Player p = Bukkit.getPlayer(entry.getKey());
+            if (p == null) continue;
+
+            Pet pet = entry.getValue();
+            PetType type = pet.getPetType();
+
+            LivingEntity petEntity = pet.getEntity();
+            if (r.nextInt(600) == 1 && type.getAmbientSound() != null)
+                p.getWorld().playSound(petEntity.getLocation(), type.getAmbientSound(), 3F, type.getAmbientPitch());
+        }
+    };
+
+    public static final BukkitRunnable SYNC_TICK_RUNNABLE = new BukkitRunnable() {
+        @Override
+        public void run() {
+            SYNC_TICK_TASK.run();
         }
     };
 
@@ -374,8 +397,9 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
                 .put(PetType.BEE, of(
                         "Bee", Rarity.OCCASIONAL,
-                        petIcon("bee_pet", "Bee"), fromPlaytime(1728000), stand ->
-                                w.spawnFakeItem(StarMaterial.POPPY.findStack(), head(stand), 20)
+                        petIcon("bee_pet", "Bee"), fromPlaytime(1728000), stand -> {
+                            if (r.nextInt(100) < 10) w.spawnFakeItem(StarMaterial.POPPY.findStack(), head(stand), 20);
+                        }
                 ))
                 .put(PetType.MOUSE, of(
                         "Mouse", Rarity.OCCASIONAL,
@@ -384,70 +408,74 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
                 .put(PetType.GIRAFFE, of(
                         "Giraffe", Rarity.UNCOMMON,
-                        petIcon("giraffe_pet", "Giraffe"), fromMined(2000, Material.SAND), stand ->
-                                w.spawnFakeItem(r.nextBoolean() ? new ItemStack(Material.SAND) : StarMaterial.RED_SAND.findStack(), head(stand), 20)
+                        petIcon("giraffe_pet", "Giraffe"), fromMined(2000, Material.SAND), stand -> {
+                            if (r.nextInt(100) < 10) w.spawnFakeItem(r.nextBoolean() ? new ItemStack(Material.SAND) : StarMaterial.RED_SAND.findStack(), head(stand), 20);
+                        }
                 ))
                 .put(PetType.LLAMA, of(
                         "Llama", Rarity.UNCOMMON,
-                        petIcon("llama_pet", "Llama"), fromDistance(Statistic.WALK_ONE_CM, 100 * 1000 * 20), stand ->
-                                circle(head(stand), Particle.FLAME, 5, 0.75)
+                        petIcon("llama_pet", "Llama"), fromDistance(Statistic.WALK_ONE_CM, 100 * 1000 * 20), stand -> {
+                            if (r.nextInt(100) < 5) circle(head(stand), Particle.FLAME, 4, 0.25);
+                        }
                 ))
 
                 .put(PetType.DOLPHIN, of(
                         "Dolphin", Rarity.RARE,
-                        petIcon("dolphin_pet", "Dolphin"), fromKilled(100, EntityType.GUARDIAN), stand ->
-                                stand.getWorld().spawnParticle(Particle.DRIP_WATER, head(stand), 1, 0, 0, 0, 0)
+                        petIcon("dolphin_pet", "Dolphin"), fromKilled(100, EntityType.GUARDIAN), stand -> {
+                            if (r.nextBoolean()) stand.getWorld().spawnParticle(Particle.DRIP_WATER, head(stand), 1, 0, 0, 0, 0);
+                        }
                 ))
                 .put(PetType.SLIME, of(
                         "Slime", Rarity.RARE,
-                        petIcon("slime_pet", "Slime"), fromCrafted(400, Material.SLIME_BLOCK), stand ->
-                                circle(head(stand), Particle.SLIME, 5, 0.5)
+                        petIcon("slime_pet", "Slime"), fromCrafted(400, Material.SLIME_BLOCK), stand -> {
+                            if (r.nextInt(100) < 10) circle(head(stand), Particle.SLIME, 3, 0.5);
+                        }
                 ))
 
                 .put(PetType.RABBIT, of(
                         "Rabbit", Rarity.EPIC,
-                        petIcon("rabbit_pet", "Rabbit"), fromStatistic(Statistic.ANIMALS_BRED, 600), stand ->
-                                circle(head(stand), Particle.CRIT_MAGIC, 10, 0.75)
+                        petIcon("rabbit_pet", "Rabbit"), fromStatistic(Statistic.ANIMALS_BRED, 600), stand -> {
+                            if (r.nextInt(100) < 5) circle(head(stand), Particle.CRIT_MAGIC, 4, 0.75);
+                        }
                 ))
                 .put(PetType.PANDA, of(
                         "Panda", Rarity.EPIC,
-                        petIcon("panda_pet", "Panda"), fromStatistic(Statistic.TRADED_WITH_VILLAGER, 150), stand ->
-                                circle(head(stand), Particle.HEART, 8, 0.75)
-                ))
-                .put(PetType.HUMMINGBIRD, of(
-                        "Hummingbird", Rarity.EPIC,
-                        petIcon("hummingbird_pet", "Hummingbird"), fromStatistic(Statistic.FISH_CAUGHT, 100), stand ->
-                                stand.getWorld().spawnParticle(Particle.END_ROD, head(stand), 1, 0, 0, 0, 0)
+                        petIcon("panda_pet", "Panda"), fromStatistic(Statistic.TRADED_WITH_VILLAGER, 150), stand -> {
+                            if (r.nextInt(100) < 10) circle(head(stand), Particle.HEART, 3, 0.25);
+                        }
                 ))
                 .put(PetType.BLAZE, of(
                         "Blaze", Rarity.EPIC,
-                        petIcon("blaze_pet", "Blaze"), fromKilled(700, EntityType.BLAZE), stand ->
-                                stand.getWorld().spawnParticle(Particle.FLAME, head(stand), 1, 0, 0, 0, 0)
+                        petIcon("blaze_pet", "Blaze"), fromKilled(700, EntityType.BLAZE), stand -> {
+                            if (r.nextInt(100) < 25) stand.getWorld().spawnParticle(Particle.FLAME, head(stand), 1, 0, 0, 0, 0);
+                        }
                 ))
 
                 .put(PetType.POLAR_BEAR, of(
                         "Polar Bear", Rarity.LEGENDARY,
                         petIcon("polar_bear_pet", "Polar Bear"), fromMined(50000, Material.SNOW_BLOCK), stand -> {
-                            circle(head(stand), Particle.SNOW_SHOVEL, 15, 0.75);
-                            w.spawnFakeItem(new ItemStack(Material.ICE), head(stand), 20);
+                            if (r.nextInt(100) < 10) circle(head(stand), Particle.SNOW_SHOVEL, 3, 0.75);
+                            if (r.nextInt(100) < 5) w.spawnFakeItem(new ItemStack(Material.ICE), head(stand), 20);
                         }
                 ))
                 .put(PetType.TARDIGRADE, of(
                         "Tardigrade", Rarity.LEGENDARY,
-                        petIcon("tardigrade_pet", "Tardigrade"), fromStatistic(Statistic.ANIMALS_BRED, 10000), stand ->
-                            stand.getWorld().spawnParticle(Particle.DRAGON_BREATH, head(stand), 1, 0, 0, 0, 0)
+                        petIcon("tardigrade_pet", "Tardigrade"), fromStatistic(Statistic.ANIMALS_BRED, 10000), stand -> {
+                            if (r.nextBoolean()) stand.getWorld().spawnParticle(Particle.DRAGON_BREATH, head(stand), 1, 0, 0, 0, 0);
+                        }
                 ))
                 .put(PetType.TIGER, of(
                         "Tiger", Rarity.LEGENDARY,
-                        petIcon("tiger_pet", "Tiger"), fromKilled(5000, EntityType.SKELETON), stand ->
-                                w.spawnFakeItem(new ItemStack(Material.BONE), head(stand), 5)
+                        petIcon("tiger_pet", "Tiger"), fromKilled(5000, EntityType.SKELETON), stand -> {
+                            if (r.nextInt(100) < 5) w.spawnFakeItem(new ItemStack(Material.BONE), head(stand), 5);
+                        }
                 ))
 
                 .put(PetType.CAPYBARA, of(
                         "Capybara", Rarity.MYTHICAL,
                         petIcon("capybara_pet", "Capybara"), fromMined(1000000, StarMaterial.OAK_LOG.find()), stand -> {
-                            circle(head(stand), new ItemStack(Material.GOLDEN_CARROT), 10, 0.5);
-                            w.spawnFakeItem(new ItemStack(Material.APPLE), head(stand), 10);
+                            if (r.nextInt(100) < 5) circle(head(stand), new ItemStack(Material.GOLDEN_CARROT), 3, 0.5);
+                            if (r.nextInt(100) < 10) w.spawnFakeItem(new ItemStack(Material.APPLE), head(stand), 10);
                         }
                 ))
 

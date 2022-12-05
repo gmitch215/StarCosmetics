@@ -134,8 +134,8 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
                         .put(PetType.AXOLOTL, of(
                                 "Axolotl", Rarity.LEGENDARY,
                                 petIcon("axolotl_pet", "Axolotl"), fromMined(10000, Material.AMETHYST_BLOCK), stand -> {
-                                    circle(head(stand), Material.BIG_DRIPLEAF, 15, 0.5);
-                                    w.spawnFakeItem(new ItemStack(Material.AMETHYST_SHARD), head(stand), 5);
+                                    if (r.nextInt(100) < 25) circle(head(stand), Material.BIG_DRIPLEAF, 5, 0.25);
+                                    if (r.nextInt(100) < 5) w.spawnFakeItem(new ItemStack(Material.AMETHYST_SHARD), head(stand), 5);
                                 }
                         ))
 

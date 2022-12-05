@@ -141,9 +141,11 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
                         .put(PetType.STRIDER, of(
                                 "Strider", Rarity.MYTHICAL,
                                 petIcon("strider_pet", "Strider"), fromKilled(10000, EntityType.ZOMBIFIED_PIGLIN), stand -> {
-                                    circle(head(stand), Particle.SOUL_FIRE_FLAME, 10, 0.6);
-                                    circle(head(stand), Particle.FLAME, 5, 0.5);
-                                    w.spawnFakeItem(new ItemStack(Material.STRING), head(stand), 5);
+                                    if (r.nextInt(100) < 5) {
+                                        circle(head(stand), Particle.SOUL_FIRE_FLAME, 10, 0.6);
+                                        circle(head(stand), Particle.FLAME, 5, 0.5);
+                                    }
+                                    if (r.nextInt(100) < 10) w.spawnFakeItem(new ItemStack(Material.STRING), head(stand), 5);
                                 }
                         ))
 

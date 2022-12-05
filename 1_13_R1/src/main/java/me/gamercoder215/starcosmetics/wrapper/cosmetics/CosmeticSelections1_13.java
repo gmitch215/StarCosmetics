@@ -183,23 +183,24 @@ public class CosmeticSelections1_13 implements CosmeticSelections {
                 ImmutableMap.<PetType, PetInfo>builder()
                         .put(PetType.PUFFERFISH, of(
                                 "Pufferfish", Rarity.UNCOMMON,
-                                petIcon("pufferfish_pet", "Pufferfish"), fromKilled(160, EntityType.COD), stand ->
-                                    w.spawnFakeItem(new ItemStack(Material.PUFFERFISH), head(stand), 10)
+                                petIcon("pufferfish_pet", "Pufferfish"), fromKilled(160, EntityType.COD), stand -> {
+                                    if (r.nextInt(100) < 10) w.spawnFakeItem(new ItemStack(Material.PUFFERFISH), head(stand), 10);
+                                }
                         ))
 
                         .put(PetType.WHALE, of(
                                 "Whale", Rarity.EPIC,
                                 petIcon("whale_pet", "Whale"), fromMined(3000, Material.BRAIN_CORAL_BLOCK), stand -> {
-                                    circle(head(stand), Particle.WATER_BUBBLE, 5, 0.5);
-                                    stand.getWorld().spawnParticle(Particle.WATER_SPLASH, head(stand), 3, 0.1, 0.1, 0.1, 0.1);
+                                    if (r.nextBoolean()) circle(head(stand), Particle.WATER_BUBBLE, 5, 0.5);
+                                    if (r.nextInt(100) < 5) stand.getWorld().spawnParticle(Particle.WATER_SPLASH, head(stand), 3, 0.1, 0.1, 0.1, 0.1);
                                 }
                         ))
 
                         .put(PetType.NARWHAL, of(
                                 "Narwhal", Rarity.LEGENDARY,
                                 petIcon("narwhal_pet", "Narwhal"), fromKilled(2000, EntityType.DROWNED), stand -> {
-                                    circle(head(stand), Material.PRISMARINE, 10, 0.5);
-                                    stand.getWorld().spawnParticle(Particle.DRIP_WATER, head(stand), 2, 0, 0, 0, 0.1);
+                                    if (r.nextInt(100) < 10) circle(head(stand), Material.PRISMARINE, 5, 0.5);
+                                    if (r.nextBoolean()) stand.getWorld().spawnParticle(Particle.DRIP_WATER, head(stand), 2, 0, 0, 0, 0.1);
                                 }
                         ))
 

@@ -2,11 +2,12 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
@@ -17,8 +18,9 @@ import org.bukkit.Statistic;
 import java.util.List;
 import java.util.Map;
 
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
 public class CosmeticSelections1_15 implements CosmeticSelections {
 
@@ -28,21 +30,21 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             // Items + Fancy Items
             .add(new TrailSelection("honeycomb", BaseTrail.PROJECTILE_TRAIL, Material.HONEYCOMB,
-                    CompletionCriteria.fromMined(240, Material.OAK_LOG, Material.BIRCH_LOG), Rarity.COMMON))
+                    fromMined(240, Material.OAK_LOG, Material.BIRCH_LOG), Rarity.COMMON))
 
             .add(new TrailSelection("super_honeycomb", BaseTrail.PROJECTILE_TRAIL, Material.HONEYCOMB_BLOCK,
-                    CompletionCriteria.fromMined(1345, Material.OAK_LOG, Material.BIRCH_LOG), Rarity.RARE))
+                    fromMined(1345, Material.OAK_LOG, Material.BIRCH_LOG), Rarity.RARE))
 
             // Particles
             .add(new TrailSelection("honey", BaseTrail.PROJECTILE_TRAIL, Particle.DRIPPING_HONEY,
-                    CompletionCriteria.fromCrafted(80, Material.BEEHIVE), Rarity.UNCOMMON))
+                    fromCrafted(80, Material.BEEHIVE), Rarity.UNCOMMON))
             .build();
 
     // Ground Trails
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
 
             .add(new TrailSelection("honeycomb_block", BaseTrail.GROUND_TRAIL, "ground_block:honeycomb_block",
-                    CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 1000), Rarity.EPIC))
+                    fromStatistic(Statistic.ANIMALS_BRED, 1000), Rarity.EPIC))
             .build();
 
     // Shapes
@@ -51,7 +53,7 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("honey", BaseShape.SMALL_RING, Particle.DRIPPING_HONEY,
-                    CompletionCriteria.fromCrafted(180, Material.BEEHIVE), Rarity.RARE))
+                    fromCrafted(180, Material.BEEHIVE), Rarity.RARE))
             .build();
 
     // Selections
@@ -74,7 +76,17 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
 
     @Override
     public void loadPets() {
-        CosmeticSelections.loadExternalPets("1_14");
+        PET_MAP.putAll(ImmutableMap.<PetType, PetInfo>builder()
+                .put(PetType.HUMMINGBIRD, of(
+                        "Hummingbird", Rarity.EPIC,
+                        petIcon("hummingbird_pet", "Hummingbird"), fromStatistic(Statistic.FISH_CAUGHT, 100), stand -> {
+                            if (r.nextInt(100) < 25) stand.getWorld().spawnParticle(Particle.END_ROD, head(stand), 1, 0, 0, 0, 0);
+                        }
+                ))
+                .build()
+        );
+
+        loadExternalPets("1_14");
     }
 
 }
