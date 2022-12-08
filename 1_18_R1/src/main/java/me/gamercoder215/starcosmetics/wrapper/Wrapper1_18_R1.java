@@ -118,13 +118,6 @@ public final class Wrapper1_18_R1 implements Wrapper {
         }
     }
 
-    private static float normalize(float rot) {
-        float v = rot;
-        while (v < -180.0F) v += 360.0F;
-        while (v >= 180.0F) v -= 360.0F;
-        return v;
-    }
-
     @Override
     public void attachRiptide(org.bukkit.entity.Entity en) {
         ServerPlayer sp = createPlayer(en.getLocation());

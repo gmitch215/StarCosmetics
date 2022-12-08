@@ -35,13 +35,6 @@ public final class BaseTrail<T> implements Trail<T> {
     public static final DataWrapper dw = Wrapper.getDataWrapper();
 
     private static final double DEFAULT_OFFSET = 0.2;
-
-    private static double normalize(float rot) {
-        float v = rot;
-        while (v < -180.0F) v += 360.0F;
-        while (v >= 180.0F) v -= 360.0F;
-        return Math.toRadians(v);
-    }
     
     public static final BaseTrail<Object> PROJECTILE_TRAIL = new BaseTrail<>("projectile", Object.class, TrailType.PROJECTILE, ARROW, (en, cloc) -> {
         if (!(en instanceof Projectile)) return;
@@ -193,8 +186,6 @@ public final class BaseTrail<T> implements Trail<T> {
                                 as.setArms(true);
                                 as.setMarker(true);
                                 w.setRotation(as, 90.0F, 90.0F);
-
-                                Location l = p.getLocation();
 
                                 EulerAngle angle = new EulerAngle(
                                         r.nextDouble() * 2 * Math.PI,

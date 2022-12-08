@@ -294,7 +294,6 @@ public interface CommandWrapper {
             return;
         }
 
-        StarPlayer sp = new StarPlayer(p);
         switch (args[0].toLowerCase()) {
             case "add": {
                 InventorySelector.createSelection(p);
