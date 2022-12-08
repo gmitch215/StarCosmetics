@@ -168,7 +168,7 @@ public class CosmeticSelections1_13 implements CosmeticSelections {
 
             .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_12"))
             .put(BaseShape.SMALL_DETAILED_RING, join(SMALL_DETAILED_RINGS, BaseShape.SMALL_DETAILED_RING, "1_12"))
-            .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_12"))
+            .put(BaseShape.LARGE_RING, join(LARGE_RINGS, BaseShape.LARGE_RING, "1_12"))
             .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_12"))
             .build();
 
