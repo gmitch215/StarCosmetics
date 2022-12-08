@@ -471,13 +471,13 @@ public final class ClickEvents implements Listener {
                 NBTWrapper nbt = of(item);
 
                 PlayerSetting<Enum<?>> setting = (PlayerSetting<Enum<?>>) PlayerSetting.byId(nbt.getString("setting"));
-                Class<Enum<?>> clazz = setting.getType();
-                Enum<?> value = sp.getSetting(setting);
-
                 if (setting == null) {
                     StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
                     return;
                 }
+                
+                Class<Enum<?>> clazz = setting.getType();
+                Enum<?> value = sp.getSetting(setting);
 
                 Enum<?>[] values = clazz.getEnumConstants();
                 int index = Arrays.asList(values).indexOf(value);
