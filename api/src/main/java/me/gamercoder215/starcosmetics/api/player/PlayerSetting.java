@@ -17,7 +17,7 @@ import java.util.List;
  * Represents a setting available to players.
  * @param <T> Setting Type
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings("unchecked")
 public final class PlayerSetting<T> {
 
     /**
@@ -226,6 +226,7 @@ public final class PlayerSetting<T> {
      * @param id Setting ID
      * @return Setting
      */
+    @Nullable
     public static PlayerSetting<?> byId(@Nullable String id) {
         if (id == null) return null;
 
