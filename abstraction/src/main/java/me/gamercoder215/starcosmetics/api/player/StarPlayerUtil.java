@@ -36,7 +36,7 @@ public final class StarPlayerUtil {
 
         return loc
                 .subtract(dir.multiply(2))
-                .subtract(0, 0.9, 0)
+                .subtract(0, 0.6, 0)
                 .add(0.1, r.nextInt(4) * 0.02, 0.1);
     }
 
