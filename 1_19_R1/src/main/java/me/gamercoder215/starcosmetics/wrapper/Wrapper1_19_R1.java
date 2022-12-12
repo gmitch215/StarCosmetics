@@ -110,7 +110,7 @@ public final class Wrapper1_19_R1 implements Wrapper {
             ProfilePublicKey key = ProfilePublicKey.createValidated(SignatureValidator.NO_VALIDATION, uid, data, Duration.ofDays(7));
 
             ServerPlayer sp = new ServerPlayer(srv, sw, new GameProfile(uid, uid.toString().substring(0, 16)), key);
-            sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.SERVERBOUND), sp);
+            sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.CLIENTBOUND), sp);
             sp.setPos(loc.getX(), loc.getY(), loc.getZ());
 
             for (Player p : loc.getWorld().getPlayers()) {

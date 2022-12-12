@@ -94,7 +94,7 @@ public final class Wrapper1_19_R2 implements Wrapper {
             UUID uid = UUID.randomUUID();
 
             ServerPlayer sp = new ServerPlayer(srv, sw, new GameProfile(uid, uid.toString().substring(0, 16)));
-            sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.SERVERBOUND), sp);
+            sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.CLIENTBOUND), sp);
             sp.setPos(loc.getX(), loc.getY(), loc.getZ());
 
             for (Player p : loc.getWorld().getPlayers()) {

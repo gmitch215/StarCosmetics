@@ -89,7 +89,7 @@ public final class Wrapper1_16_R2 implements Wrapper {
 
             UUID uid = UUID.randomUUID();
             EntityPlayer sp = new EntityPlayer(srv, sw, new GameProfile(uid, uid.toString().substring(0, 16)), new PlayerInteractManager(sw));
-            sp.playerConnection = new PlayerConnection(srv, new NetworkManager(EnumProtocolDirection.SERVERBOUND), sp);
+            sp.playerConnection = new PlayerConnection(srv, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), sp);
             sp.setPosition(loc.getX(), loc.getY(), loc.getZ());
 
             for (Player p : loc.getWorld().getPlayers()) {
