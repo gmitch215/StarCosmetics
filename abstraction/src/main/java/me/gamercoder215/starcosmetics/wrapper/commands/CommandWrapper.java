@@ -17,6 +17,7 @@ import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
 import me.gamercoder215.starcosmetics.util.*;
 import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
+import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
@@ -125,7 +126,7 @@ public interface CommandWrapper {
         lore.add(ChatColor.DARK_PURPLE + getWithArgs("menu.about.particle_shape_count", comma(getCosmeticCount(ParticleShape.class)) ));
 
         lore.add(" ");
-        lore.add(ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length - 1)));
+        lore.add(ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length)));
 
         lore.add(" ");
         lore.add(ChatColor.RED + getWithArgs("menu.about.total_cosmetic_count", comma(getCosmeticCount()) ));
@@ -133,6 +134,59 @@ public interface CommandWrapper {
 
         cosmetics.setItemMeta(cMeta);
         inv.setItem(10, cosmetics);
+
+        inv.setItem(12,
+                ItemBuilder.ofHead("github")
+                        .name(ChatColor.DARK_GRAY + "GitHub")
+                        .id("about_link")
+                        .nbt(nbt -> {
+                            nbt.set("link", "https://github.com/GamerCoder215/StarCosmetics");
+                            nbt.set("message_id", "menu.about.message.github");
+                        })
+                        .build());
+
+        inv.setItem(13,
+                ItemBuilder.ofHead("discord")
+                        .name(StarChat.hexMessage("5865F2", "Discord"))
+                        .id("about_link")
+                        .nbt(nbt -> {
+                            nbt.set("link", "https://discord.gg/WVFNWEvuqX");
+                            nbt.set("message_id", "menu.about.message.discord");
+                        })
+                        .build());
+
+        inv.setItem(14,
+                ItemBuilder.ofHead("youtube")
+                        .name(ChatColor.RED + "YouTube")
+                        .id("about_link")
+                        .nbt(nbt -> {
+                            nbt.set("link", "https://www.youtube.com/@GamerCoder215");
+                            nbt.set("message_id", "menu.about.message.youtube");
+                            nbt.set("color", "RED");
+                        })
+                        .build());
+
+        inv.setItem(15,
+                ItemBuilder.ofHead("twitter")
+                        .name(StarChat.hexMessage("1DA1F2", "Twitter"))
+                        .id("about_link")
+                        .nbt(nbt -> {
+                            nbt.set("link", "https://twitter.com/TeamInceptus");
+                            nbt.set("message_id", "menu.about.message.twitter");
+                            nbt.set("color", "BLUE");
+                        })
+                        .build());
+
+        inv.setItem(16,
+                ItemBuilder.ofHead("instagram")
+                        .name(ChatColor.LIGHT_PURPLE + "Instagram")
+                        .id("about_link")
+                        .nbt(nbt -> {
+                            nbt.set("link", "https://www.instagram.com/teaminceptus");
+                            nbt.set("message_id", "menu.about.message.instagram");
+                            nbt.set("color", "LIGHT_PURPLE");
+                        })
+                        .build());
 
         p.openInventory(inv);
     }
@@ -261,8 +315,8 @@ public interface CommandWrapper {
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
-    default void pets(Player p, String... args) {
-        if (args.length < 1) {
+    default void pets(Player p, String[] args) {
+        if (args == null || args.length < 1) {
             p.openInventory(Generator.createPetInventory(p));
             StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             return;
@@ -338,7 +392,7 @@ public interface CommandWrapper {
                 .sum();
 
         count += SoundEventSelection.AVAILABLE_EVENTS.size();
-        count += PetType.values().length - 1;
+        count += PetType.values().length;
 
         return count;
     }

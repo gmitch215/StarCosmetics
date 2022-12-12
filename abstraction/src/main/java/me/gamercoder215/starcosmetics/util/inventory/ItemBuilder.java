@@ -62,6 +62,10 @@ public final class ItemBuilder {
         return of(m, amount, 0);
     }
 
+    public static ItemBuilder ofHead(@NotNull String head) {
+        return of(StarInventoryUtil.getHead(head));
+    }
+
     public static ItemBuilder of(@NotNull Material m, int amount, int data) {
         return new ItemBuilder(new ItemStack(m, amount, (short) data));
     }
