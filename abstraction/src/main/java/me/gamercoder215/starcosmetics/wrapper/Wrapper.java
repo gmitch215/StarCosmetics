@@ -6,8 +6,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
-import me.gamercoder215.starcosmetics.api.cosmetics.pet.StarHeadPet;
-import me.gamercoder215.starcosmetics.api.cosmetics.pet.custom.HeadPet;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.StarPet;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
@@ -21,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.SecureRandom;
@@ -149,27 +147,7 @@ public interface Wrapper {
 
     @NotNull
     static Pet createPet(@NotNull PetType type, Player owner, Location loc) {
-        Class<? extends Pet> petClass = type.getPetClass();
-
-        if (HeadPet.class.isAssignableFrom(petClass)) {
-            if (!StarConfig.getRegistry().getAllPets().containsKey(type)) throw new IllegalStateException("Using Unsupported Verison for HeadPet " + type);
-
-            return new StarHeadPet(owner, loc, type, (HeadInfo) StarConfig.getRegistry().getPetInfo(type));
-        }
-
-        try {
-            Class<? extends Pet> clazz = Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.pet." + petClass.getSimpleName() + getServerVersion())
-                    .asSubclass(petClass);
-
-            Constructor<? extends Pet> c = clazz.getConstructor(Player.class, Location.class);
-            return c.newInstance(owner, loc);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName() + " (Could Not Find: " + petClass.getSimpleName() + getServerVersion() + ")");
-        } catch (ReflectiveOperationException e) {
-            StarConfig.print(e);
-        }
-
-        throw new IllegalArgumentException("Invalid Pet Class: " + petClass.getName() + " (Could Not Spawn)");
+        return new StarPet(owner, loc, type, (HeadInfo) StarConfig.getRegistry().getPetInfo(type));
     }
 
     static <T extends Cosmetic> List<CosmeticLocation<?>> allFor(Class<T> clazz) {
