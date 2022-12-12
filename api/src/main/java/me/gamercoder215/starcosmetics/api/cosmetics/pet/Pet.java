@@ -2,7 +2,7 @@ package me.gamercoder215.starcosmetics.api.cosmetics.pet;
 
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ public interface Pet {
      * @return Entity Type
      */
     @NotNull
-    LivingEntity getEntity();
+    ArmorStand getEntity();
 
     /**
      * Fetches the Pet's Rarity.
@@ -64,8 +64,6 @@ public interface Pet {
      * @return Pet Type
      */
     @NotNull
-    default PetType getPetType() {
-        return PetType.fromPetClass(this.getClass());
-    }
+    PetType getPetType();
 
 }

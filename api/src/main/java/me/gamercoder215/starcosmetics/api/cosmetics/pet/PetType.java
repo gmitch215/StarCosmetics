@@ -2,10 +2,8 @@ package me.gamercoder215.starcosmetics.api.cosmetics.pet;
 
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.pet.custom.HeadPet;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents all of the Pet Types.
@@ -13,139 +11,121 @@ import org.jetbrains.annotations.Nullable;
 public enum PetType {
 
     /**
-     * Represents the {@link GolemPet}.
-     */
-    GOLEM(GolemPet.class),
-
-    /**
-     * Represents the {@link PigPet}.
-     */
-    PIG(PigPet.class, Sound.ENTITY_PIG_AMBIENT),
-
-    // Head Pets
-
-    /**
-     * Represents a base {@link HeadPet}.
-     */
-    HEAD,
-
-    /**
-     * Represents a Bee on a {@link HeadPet}.
+     * Represents a Bee.
      */
     BEE,
 
     /**
-     * Represents a Rabbit on a {@link HeadPet}.
+     * Represents a Rabbit.
      */
     RABBIT,
 
     /**
-     * Represents a Giraffe on a {@link HeadPet}.
+     * Represents a Giraffe.
      */
     GIRAFFE,
 
     /**
-     * Represents a Dolphin on a {@link HeadPet}.
+     * Represents a Dolphin.
      */
     DOLPHIN(Sound.ENTITY_PLAYER_SPLASH),
 
     /**
-     * Represents a Llama on a {@link HeadPet}.
+     * Represents a Llama.
      */
     LLAMA,
 
     /**
-     * Represents a Polar Bear on a {@link HeadPet}.
+     * Represents a Polar Bear.
      */
     POLAR_BEAR,
 
     /**
-     * Represents an Elephant on a {@link HeadPet}.
+     * Represents an Elephant.
      */
     ELEPHANT,
 
     /**
-     * Represents a Panda on a {@link HeadPet}.
+     * Represents a Panda.
      */
     PANDA,
 
     /**
-     * Represents a Fox on a {@link HeadPet}.
+     * Represents a Fox.
      */
     FOX("ENTITY_FOX_AMBIENT"),
 
     /**
-     * Represents a Narwhal on a {@link HeadPet}.
+     * Represents a Narwhal.
      */
     NARWHAL("ENTITY_DROWNED_SWIM", 1.5F),
 
     /**
-     * Represents a Pufferfish on a {@link HeadPet}.
+     * Represents a Pufferfish.
      */
     PUFFERFISH("ENTITY_PUFFER_FISH_FLOP"),
 
     /**
-     * Represents a Gorilla on a {@link HeadPet}.
+     * Represents a Gorilla.
      */
     GORILLA("ENTITY_PANDA_SNEEZE", 0F),
 
     /**
-     * Represents a Strider on a {@link HeadPet}.
+     * Represents a Strider.
      */
     STRIDER("ENTITY_STRIDER_AMBIENT"),
 
     /**
-     * Represents a Tardigrade on a {@link HeadPet}.
+     * Represents a Tardigrade.
      */
     TARDIGRADE,
 
     /**
-     * Represents a Hummingbird on a {@link HeadPet}.
+     * Represents a Hummingbird.
      */
     HUMMINGBIRD("ENTITY_BEE_LOOP", 2F),
 
     /**
-     * Represents an Axolotl on a {@link HeadPet}.
+     * Represents an Axolotl.
      */
     AXOLOTL("ENTITY_AXOLOTL_ATTACK", 2F),
 
     /**
-     * Represents a Capybara on a {@link HeadPet}.
+     * Represents a Capybara.
      */
     CAPYBARA,
 
     /**
-     * Represents a Mouse on a {@link HeadPet}.
+     * Represents a Mouse.
      */
     MOUSE(Sound.ENTITY_SILVERFISH_AMBIENT, 2F),
 
     /**
-     * Represents a Tiger on a {@link HeadPet}.
+     * Represents a Tiger.
      */
     TIGER(Sound.ENTITY_WITHER_AMBIENT, 2F),
 
     /**
-     * Represents a Blaze on a {@link HeadPet}.
+     * Represents a Blaze.
      */
     BLAZE(Sound.ENTITY_BLAZE_AMBIENT),
 
     /**
-     * Represents a Jellyfish on a {@link HeadPet}.
+     * Represents a Jellyfish.
      */
     JELLYFISH(Sound.ENTITY_SLIME_JUMP, 0F),
 
     /**
-     * Represents a Whale on a {@link HeadPet}.
+     * Represents a Whale.
      */
     WHALE(Sound.ENTITY_GHAST_AMBIENT, 0F),
 
     /**
-     * Represents a Slime on a {@link HeadPet}.
+     * Represents a Slime.
      */
     SLIME(Sound.ENTITY_SLIME_JUMP)
     ;
 
-    private final Class<? extends Pet> petClass;
     private final Sound ambientSound;
     private final float ambientPitch;
 
@@ -157,17 +137,10 @@ public enum PetType {
 
     PetType(Sound ambientSound) { this(ambientSound, 1F); }
 
-    PetType(Sound ambientSound, float ambientPitch) { this(HeadPet.class, ambientSound, ambientPitch); }
-
-    PetType(Class<? extends Pet> petClass, Sound ambientSound, float ambientPitch) {
-        this.petClass = petClass;
+    PetType(Sound ambientSound, float ambientPitch) {
         this.ambientSound = ambientSound;
         this.ambientPitch = ambientPitch;
     }
-
-    PetType(Class<? extends Pet> petClass, Sound ambientSound) { this(petClass, ambientSound, 1F); }
-
-    PetType(Class<? extends Pet> petClass) { this(petClass, null); }
 
     private static Sound findSound(String s) {
         try {
@@ -175,15 +148,6 @@ public enum PetType {
         } catch (IllegalArgumentException e) {
             return null;
         }
-    }
-
-    /**
-     * Fetches the Pet Class.
-     * @return Pet Class
-     */
-    @NotNull
-    public Class<? extends Pet> getPetClass() {
-        return petClass;
     }
 
     /**
@@ -219,17 +183,5 @@ public enum PetType {
     @NotNull
     public Rarity getRarity() {
         return getInfo().getRarity();
-    }
-
-    /**
-     * Fetches the Pet Type from a Pet Class.
-     * @param petClass Pet Class
-     * @return Pet Type
-     */
-    @Nullable
-    public static PetType fromPetClass(@Nullable Class<? extends Pet> petClass) {
-        for (PetType t : PetType.values()) if (petClass.isAssignableFrom(t.petClass)) return t;
-
-        return null;
     }
 }

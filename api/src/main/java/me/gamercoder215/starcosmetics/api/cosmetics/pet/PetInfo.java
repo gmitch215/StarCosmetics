@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.api.cosmetics.pet;
 
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
-import me.gamercoder215.starcosmetics.api.cosmetics.pet.custom.HeadPet;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +34,7 @@ public class PetInfo {
     }
 
     /**
-     * Fetches the Pet's Icon. Also used in {@link HeadPet} for the Armor Stand's Head.
+     * Fetches the Pet's Icon.
      * @return Pet Icon
      */
     @NotNull

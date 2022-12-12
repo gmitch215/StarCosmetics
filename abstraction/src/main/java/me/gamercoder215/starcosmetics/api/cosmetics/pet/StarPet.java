@@ -1,12 +1,11 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.pet;
 
-import me.gamercoder215.starcosmetics.api.cosmetics.pet.custom.HeadPet;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public final class StarHeadPet implements HeadPet {
+public final class StarPet implements Pet {
 
     private final Player owner;
     private final ArmorStand entity;
@@ -14,7 +13,7 @@ public final class StarHeadPet implements HeadPet {
 
     private final PetType type;
 
-    public StarHeadPet(@NotNull Player owner, Location loc, PetType type, HeadInfo info) {
+    public StarPet(@NotNull Player owner, Location loc, PetType type, HeadInfo info) {
         this.owner = owner;
         this.type = type;
         this.entity = loc.getWorld().spawn(loc, ArmorStand.class);
