@@ -116,6 +116,6 @@ public class CommandWrapperV2 implements CommandWrapper {
     @Usage("/starpets")
     @CommandPermission("starcosmetics.user.cosmetics")
     @AutoComplete("remove")
-    public void pets(Player p, @Default("") String args) { CommandWrapper.super.pets(p, args.split("\\s")); }
+    public void pets(Player p, @Optional String args) { CommandWrapper.super.pets(p, args == null ? null : args.split("\\s")); }
 
 }

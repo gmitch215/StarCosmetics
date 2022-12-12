@@ -52,7 +52,9 @@ public final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
                 switch (args[0].toLowerCase()) {
                     case "pet":
                     case "pets": {
-                        pets(p, args);
+                        String[] petArgs = Arrays.copyOfRange(args, 1, args.length);
+
+                        pets(p, petArgs);
                         break;
                     }
                     case "structures":
