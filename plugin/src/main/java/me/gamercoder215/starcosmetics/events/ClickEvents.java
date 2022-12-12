@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.events;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.StarCosmetics;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
@@ -26,6 +27,10 @@ import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -514,6 +519,28 @@ public final class ClickEvents implements Listener {
                 ItemStack newItem = Generator.generateSetting(p, setting);
                 inv.setItem(e.getSlot(), newItem);
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+            })
+            .put("about_link", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                p.closeInventory();
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+
+                String messageS = StarConfig.getConfig().get(nbt.getString("message_id"));
+                ChatColor color = nbt.hasString("color") ? ChatColor.valueOf(nbt.getString("color").toUpperCase()) : ChatColor.AQUA;
+                TextComponent message = new TextComponent(prefix() + color + messageS + "\n");
+
+                String linkS = nbt.getString("link");
+                TextComponent link = new TextComponent(prefix() + color + linkS);
+                link.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[] {new TextComponent(ChatColor.AQUA + linkS)}));
+                link.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, linkS));
+
+                try {
+                    p.spigot().sendMessage(message, link);
+                } catch (UnsupportedOperationException ignored) {
+                    p.sendMessage(new String[] {message.getText(), link.getText()});
+                }
             })
 
             .build();
