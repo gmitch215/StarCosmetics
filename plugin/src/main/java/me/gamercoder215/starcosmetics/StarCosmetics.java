@@ -48,6 +48,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -125,6 +127,21 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         getLogger().info("Loaded Addons...");
 
         getLogger().info("Done!");
+
+        postChecks();
+    }
+
+    private void postChecks() {
+        try {
+            Properties props = new Properties();
+            props.load(Files.newInputStream(Paths.get("server.properties")));
+
+            boolean flight = Boolean.parseBoolean(props.getProperty("allow-flight"));
+            if (!flight) getLogger().warning("allow-flight is disabled in server.properties; This may cause issues with some cosmetics. Please enable it.");
+
+        } catch (IOException e) {
+            StarConfig.print(e);
+        }
     }
 
     @Override
@@ -379,17 +396,6 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     private static void loadPetIcons() {
         Map<PetType, PetInfo> pets = ImmutableMap.<PetType, PetInfo>builder()
-                .put(PetType.PIG, of(
-                        Rarity.COMMON, fromStatistic(Statistic.ANIMALS_BRED, 100),
-                        petIcon(StarMaterial.PORKCHOP.find(), "Pig"), "Pig")
-                )
-                .put(PetType.GOLEM, of(
-                        Rarity.RARE, fromMined(1200, Material.IRON_ORE),
-                        petIcon(Material.IRON_BLOCK, "Golem"), "Iron Golem")
-                )
-
-                // Head Pets
-
                 .put(PetType.ELEPHANT, of(
                         "Elephant", Rarity.COMMON,
                         petIcon("elephant_pet", "Elephant"), fromDistance(Statistic.WALK_ONE_CM, 100 * 1000)
