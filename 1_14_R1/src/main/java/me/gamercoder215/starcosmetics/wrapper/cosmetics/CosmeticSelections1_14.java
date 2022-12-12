@@ -28,9 +28,10 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
-            // Items + Fancy Items
             .add(new TrailSelection("lantern", BaseTrail.PROJECTILE_TRAIL, Material.LANTERN,
                     fromCrafted(30, Material.TORCH), Rarity.COMMON))
+            .add(new TrailSelection("smoke", BaseTrail.PROJECTILE_TRAIL, Particle.CAMPFIRE_COSY_SMOKE,
+                    fromCrafted(50, Material.TORCH), Rarity.COMMON))
 
             .add(new TrailSelection("bamboo", BaseTrail.PROJECTILE_TRAIL, Material.BAMBOO,
                     fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
@@ -43,10 +44,6 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
             
             .add(new TrailSelection("jigsaw", BaseTrail.PROJECTILE_TRAIL, "fancy_block:jigsaw",
                     fromBlocksMined(1000000), Rarity.SPECIAL))
-            
-            // Particles
-            .add(new TrailSelection("smoke", BaseTrail.PROJECTILE_TRAIL, Particle.CAMPFIRE_COSY_SMOKE,
-                    fromCrafted(50, Material.TORCH), Rarity.COMMON))
             
             .build();
 

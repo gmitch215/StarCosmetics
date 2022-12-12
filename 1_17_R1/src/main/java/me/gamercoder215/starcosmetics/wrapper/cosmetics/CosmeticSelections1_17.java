@@ -74,11 +74,16 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
                     fromMined(100, Material.DEEPSLATE_IRON_ORE), Rarity.RARE))
             .add(new TrailSelection("calcite", BaseTrail.GROUND_TRAIL, "crack:calcite",
                     fromMined(125, Material.CALCITE), Rarity.RARE))
+            .add(new TrailSelection("oxidized_copper", BaseTrail.GROUND_TRAIL, "ground_block:oxidized_copper",
+                    fromMined(235, Material.COPPER_ORE), Rarity.RARE))
 
             .add(new TrailSelection("amethyst", BaseTrail.GROUND_TRAIL, Material.AMETHYST_SHARD,
                     fromMined(600, Material.AMETHYST_BLOCK), Rarity.EPIC))
             .add(new TrailSelection("raw_gold", BaseTrail.GROUND_TRAIL, "ground_block:raw_gold",
                     fromMined(100, Material.DEEPSLATE_GOLD_ORE), Rarity.EPIC))
+
+            .add(new TrailSelection("chiseled_deepslate", BaseTrail.GROUND_TRAIL, "ground_block:chiseled_deepslate",
+                    fromMined(85000, Material.DEEPSLATE), Rarity.LEGENDARY))
 
             .build();
 
@@ -88,8 +93,12 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
             .add(new TrailSelection("dripleaf_place", BaseTrail.SOUND_TRAIL, Sound.BLOCK_BIG_DRIPLEAF_PLACE,
                     fromMined(60, Material.BIG_DRIPLEAF), Rarity.OCCASIONAL))
 
+            .add(new TrailSelection("amethyst_step", BaseTrail.SOUND_TRAIL, Sound.BLOCK_AMETHYST_BLOCK_STEP,
+                    fromMined(15, Material.AMETHYST_BLOCK), Rarity.UNCOMMON))
+
             .add(new TrailSelection("amethyst_cluster_place", BaseTrail.SOUND_TRAIL, Sound.BLOCK_AMETHYST_CLUSTER_PLACE,
                     fromMined(900, Material.AMETHYST_BLOCK), Rarity.EPIC))
+
             .build();
 
     // Shapes

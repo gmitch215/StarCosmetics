@@ -57,13 +57,17 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
 
             .build();
 
-    // Gound Trails
+    // Ground Trails
 
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("crimson_nylium", BaseTrail.GROUND_TRAIL, "ground_block:crimson_nylium",
                     fromMined(130, Material.CRIMSON_STEM), Rarity.OCCASIONAL))
             .add(new TrailSelection("warped_nylium", BaseTrail.GROUND_TRAIL, "ground_block:warped_nylium",
                     fromMined(130, Material.WARPED_STEM), Rarity.OCCASIONAL))
+            .add(new TrailSelection("crimson_planks", BaseTrail.GROUND_TRAIL, "ground_block:crimson_planks",
+                    fromMined(80, Material.CRIMSON_ROOTS), Rarity.OCCASIONAL))
+            .add(new TrailSelection("warped_planks", BaseTrail.GROUND_TRAIL, "ground_block:warped_planks",
+                    fromMined(80, Material.WARPED_ROOTS), Rarity.OCCASIONAL))
 
             .add(new TrailSelection("blackstone", BaseTrail.GROUND_TRAIL, "ground_block:blackstone",
                     fromMined(200, Material.BLACKSTONE), Rarity.UNCOMMON))
@@ -71,6 +75,10 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
                     fromMined(230, Material.BASALT), Rarity.UNCOMMON))
             .add(new TrailSelection("basalt", BaseTrail.GROUND_TRAIL, "crack:basalt",
                     fromMined(210, Material.MAGMA_BLOCK), Rarity.UNCOMMON))
+            .add(new TrailSelection("crimson_slab", BaseTrail.GROUND_TRAIL, "ground_block:crimson_slab",
+                    fromCrafted(185, Material.CRIMSON_PLANKS), Rarity.UNCOMMON))
+            .add(new TrailSelection("warped_slab", BaseTrail.GROUND_TRAIL, "ground_block:warped_slab",
+                    fromCrafted(185, Material.WARPED_PLANKS), Rarity.UNCOMMON))
 
             .add(new TrailSelection("soul_flame", BaseTrail.GROUND_TRAIL, Particle.SOUL_FIRE_FLAME,
                     fromMined(800, Material.SOUL_SAND, Material.SOUL_SOIL), Rarity.RARE))
@@ -78,7 +86,10 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
                     fromMined(650, Material.BLACKSTONE), Rarity.RARE))
 
             .add(new TrailSelection("crying_obsidian", BaseTrail.GROUND_TRAIL, "ground_block:crying_obsidian",
-                    fromKilled(50, EntityType.GHAST), Rarity.EPIC))
+                    fromKilled(85, EntityType.GHAST), Rarity.EPIC))
+
+            .add(new TrailSelection("ancient_debris", BaseTrail.GROUND_TRAIL, "ground_block:ancient_debris",
+                    fromKilled(10000, EntityType.WITHER_SKELETON), Rarity.LEGENDARY))
 
             .add(new TrailSelection("netherite_block", BaseTrail.GROUND_TRAIL, "ground_block:netherite_block",
                     fromMined(230, Material.ANCIENT_DEBRIS), Rarity.MYTHICAL))

@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
@@ -20,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
@@ -29,32 +29,24 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
 
     // Trails
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
-            // Items + Fancy Items
             .add(new TrailSelection("mud", BaseTrail.PROJECTILE_TRAIL, Material.MUD,
-                    CompletionCriteria.fromCrafted(30, Material.TORCH), Rarity.COMMON))
+                    fromCrafted(30, Material.TORCH), Rarity.COMMON))
 
             .add(new TrailSelection("horns", BaseTrail.PROJECTILE_TRAIL, Material.GOAT_HORN,
-                    CompletionCriteria.fromMined(100, Material.GOAT_HORN), Rarity.RARE))
+                    fromMined(100, Material.GOAT_HORN), Rarity.RARE))
+            .add(new TrailSelection("allay", BaseTrail.PROJECTILE_TRAIL, EntityType.ALLAY,
+                    fromKilled(450, EntityType.PILLAGER), Rarity.RARE))
+            .add(new TrailSelection("sonic_boom", BaseTrail.PROJECTILE_TRAIL, Particle.SONIC_BOOM,
+                    fromMined(500, Material.SCULK), Rarity.RARE))
 
             .add(new TrailSelection("froglight", BaseTrail.PROJECTILE_TRAIL,
                     Arrays.asList(Material.OCHRE_FROGLIGHT, Material.PEARLESCENT_FROGLIGHT, Material.VERDANT_FROGLIGHT),
-                    CompletionCriteria.fromKilled(780, EntityType.MAGMA_CUBE), Rarity.EPIC))
+                    fromKilled(780, EntityType.MAGMA_CUBE), Rarity.EPIC))
+            .add(new TrailSelection("sculk_soul", BaseTrail.PROJECTILE_TRAIL, Particle.SCULK_CHARGE,
+                    fromKilled(5, EntityType.WARDEN), Rarity.EPIC))
 
             .add(new TrailSelection("echo_shard", BaseTrail.PROJECTILE_TRAIL, Material.ECHO_SHARD,
-                    CompletionCriteria.fromCompletion(PlayerCompletion.SONIC_BOOM_DEATH), Rarity.LEGENDARY))
-
-            // Particles
-            .add(new TrailSelection("sonic_boom", BaseTrail.PROJECTILE_TRAIL, Particle.SONIC_BOOM,
-                    CompletionCriteria.fromMined(500, Material.SCULK), Rarity.RARE))
-
-            .add(new TrailSelection("sculk_soul", BaseTrail.PROJECTILE_TRAIL, Particle.SCULK_CHARGE,
-                    CompletionCriteria.fromKilled(5, EntityType.WARDEN), Rarity.EPIC))
-
-            // Entities
-            .add(new TrailSelection("allay", BaseTrail.PROJECTILE_TRAIL, EntityType.ALLAY,
-                    CompletionCriteria.fromKilled(450, EntityType.PILLAGER), Rarity.RARE))
-
-
+                    fromCompletion(PlayerCompletion.SONIC_BOOM_DEATH), Rarity.LEGENDARY))
             
             .build();
 
@@ -62,20 +54,23 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("mangrove_planks", BaseTrail.GROUND_TRAIL, Material.MANGROVE_PLANKS,
-                    CompletionCriteria.fromCrafted(50, Material.MANGROVE_PLANKS), Rarity.COMMON))
+                    fromCrafted(50, Material.MANGROVE_PLANKS), Rarity.COMMON))
+
+            .add(new TrailSelection("packed_mud", BaseTrail.GROUND_TRAIL, "ground_block:packed_mud",
+                    fromMined(115, Material.MUD), Rarity.OCCASIONAL))
 
             .add(new TrailSelection("mangrove_saplings", BaseTrail.GROUND_TRAIL, Material.MANGROVE_PROPAGULE,
-                    CompletionCriteria.fromMined(75, Material.MANGROVE_LEAVES), Rarity.RARE))
+                    fromMined(75, Material.MANGROVE_LEAVES), Rarity.RARE))
             .add(new TrailSelection("sculk", BaseTrail.GROUND_TRAIL, "ground_block:sculk",
-                    CompletionCriteria.fromMined(500, Material.SCULK), Rarity.RARE))
+                    fromMined(500, Material.SCULK), Rarity.RARE))
             .add(new TrailSelection("sculk_sensor", BaseTrail.GROUND_TRAIL, "side_block:sculk_sensor",
-                    CompletionCriteria.fromMined(200, Material.SCULK_SENSOR), Rarity.RARE))
+                    fromMined(200, Material.SCULK_SENSOR), Rarity.RARE))
 
             .add(new TrailSelection("echo_shard", BaseTrail.GROUND_TRAIL, Material.ECHO_SHARD,
-                    CompletionCriteria.fromCompletion(PlayerCompletion.SONIC_BOOM_DEATH), Rarity.LEGENDARY))
+                    fromCompletion(PlayerCompletion.SONIC_BOOM_DEATH), Rarity.LEGENDARY))
 
             .add(new TrailSelection("five", BaseTrail.GROUND_TRAIL, Material.MUSIC_DISC_5,
-                    CompletionCriteria.fromKilled(10, EntityType.WARDEN), Rarity.MYTHICAL))
+                    fromKilled(10, EntityType.WARDEN), Rarity.MYTHICAL))
 
             .build();
 
@@ -83,13 +78,13 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("mud_break", BaseTrail.SOUND_TRAIL, Sound.BLOCK_MUD_BREAK,
-                    CompletionCriteria.fromMined(30, Material.MUD), Rarity.COMMON))
+                    fromMined(30, Material.MUD), Rarity.COMMON))
 
             .add(new TrailSelection("candle_break", BaseTrail.SOUND_TRAIL, Sound.BLOCK_CANDLE_BREAK,
-                    CompletionCriteria.fromCrafted(25, Material.CANDLE), Rarity.OCCASIONAL))
+                    fromCrafted(25, Material.CANDLE), Rarity.OCCASIONAL))
 
             .add(new TrailSelection("shrieker_shriek", BaseTrail.SOUND_TRAIL, Sound.BLOCK_SCULK_SHRIEKER_SHRIEK,
-                    CompletionCriteria.fromKilled(3, EntityType.WARDEN), Rarity.EPIC))
+                    fromKilled(3, EntityType.WARDEN), Rarity.EPIC))
 
             .build();
 
@@ -99,7 +94,7 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("sculk_soul", BaseShape.SMALL_RING, Particle.SCULK_SOUL,
-                    CompletionCriteria.fromMined(400, Material.SCULK), Rarity.EPIC))
+                    fromMined(400, Material.SCULK), Rarity.EPIC))
 
             .build();
 
@@ -107,7 +102,7 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> SMALL_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("mud", BaseShape.SMALL_DETAILED_RING, Material.MUD,
-                    CompletionCriteria.fromMined(60, Material.DIRT), Rarity.COMMON))
+                    fromMined(60, Material.DIRT), Rarity.COMMON))
 
             .build();
 

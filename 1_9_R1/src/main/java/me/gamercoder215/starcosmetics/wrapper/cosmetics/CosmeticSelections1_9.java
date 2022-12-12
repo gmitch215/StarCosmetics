@@ -224,6 +224,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new TrailSelection("bat_death", BaseTrail.SOUND_TRAIL, Sound.ENTITY_BAT_DEATH,
                     fromKilled(40, EntityType.BAT), Rarity.RARE))
+            .add(new TrailSelection("blaze_shoot", BaseTrail.SOUND_TRAIL, Sound.ENTITY_BLAZE_SHOOT,
+                    fromKilled(85, EntityType.BLAZE), Rarity.RARE))
 
             .add(new TrailSelection("tnt_prime", BaseTrail.SOUND_TRAIL, Sound.ENTITY_TNT_PRIMED,
                     fromKilled(550, EntityType.CREEPER), Rarity.EPIC))
