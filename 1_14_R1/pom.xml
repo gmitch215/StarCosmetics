@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>starcosmetics-1_14_R1</artifactId>
-    <name>StarCosmetics-1.14</name>
+    <name>StarCosmetics-1.14.4</name>
     <description>Contemporary (1.13.2+) StarCosmetics MC Wrapper</description>
 
     <dependencies>
