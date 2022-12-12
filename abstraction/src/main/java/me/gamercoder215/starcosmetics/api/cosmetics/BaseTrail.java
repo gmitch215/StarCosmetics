@@ -348,9 +348,10 @@ public final class BaseTrail<T> implements Trail<T> {
                             Material original = l.getBlock().getType();
                             BlockState state = l.getBlock().getState();
 
-                            w.sendBlockChange(p, l, m);
-
-                            StarRunnable.syncLater(() -> w.sendBlockChange(p, l, original, state), 60);
+                            for (Player pl : p.getWorld().getPlayers()) {
+                                w.sendBlockChange(pl, l, m);
+                                StarRunnable.syncLater(() -> w.sendBlockChange(pl, l, original, state), 60);
+                            }
                         }
                     });
 
@@ -368,9 +369,10 @@ public final class BaseTrail<T> implements Trail<T> {
                         Material original = l.getBlock().getType();
                         BlockState state = l.getBlock().getState();
 
-                        w.sendBlockChange(p, l, m);
-
-                        StarRunnable.syncLater(() -> w.sendBlockChange(p, l, original, state), 60);
+                        for (Player pl : p.getWorld().getPlayers()) {
+                            w.sendBlockChange(pl, l, m);
+                            StarRunnable.syncLater(() -> w.sendBlockChange(pl, l, original, state), 60);
+                        }
                     }
 
                     break;
