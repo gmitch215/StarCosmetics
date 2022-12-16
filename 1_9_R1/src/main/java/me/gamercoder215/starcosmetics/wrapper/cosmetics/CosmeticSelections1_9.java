@@ -48,7 +48,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromMined(100, Material.SAND), Rarity.COMMON))
             .add(new TrailSelection("stone_bricks", BaseTrail.PROJECTILE_TRAIL, "fancy_block:stone_bricks",
                     fromMined(150, Material.STONE), Rarity.COMMON))
-            
+            .add(new TrailSelection("heart", BaseTrail.PROJECTILE_TRAIL, Particle.HEART,
+                    fromStatistic(Statistic.ANIMALS_BRED, 15), Rarity.COMMON))
             
             .add(new TrailSelection("iron", BaseTrail.PROJECTILE_TRAIL, Material.IRON_INGOT,
                     fromMined(185, Material.IRON_ORE), Rarity.OCCASIONAL))
@@ -58,6 +59,12 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromMined(115, Material.GOLD_ORE), Rarity.OCCASIONAL))
             .add(new TrailSelection("ice",  BaseTrail.PROJECTILE_TRAIL, Material.ICE,
                     fromMined(135, Material.ICE), Rarity.OCCASIONAL))
+            .add(new TrailSelection("flame", BaseTrail.PROJECTILE_TRAIL, Particle.FLAME,
+                    fromKilled(65, EntityType.BLAZE), Rarity.OCCASIONAL))
+            .add(new TrailSelection("chickens", BaseTrail.PROJECTILE_TRAIL, EntityType.CHICKEN,
+                    fromKilled(200, EntityType.CHICKEN), Rarity.OCCASIONAL))
+            .add(new TrailSelection("pigs", BaseTrail.PROJECTILE_TRAIL, EntityType.PIG,
+                    fromKilled(200, EntityType.PIG), Rarity.OCCASIONAL))
 
             .add(new TrailSelection("diamond", BaseTrail.PROJECTILE_TRAIL, Material.DIAMOND,
                     fromMined(110, Material.DIAMOND_ORE), Rarity.UNCOMMON))
@@ -74,6 +81,10 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new TrailSelection("prismarine", BaseTrail.PROJECTILE_TRAIL,
                     Arrays.asList(Material.PRISMARINE_CRYSTALS, Material.PRISMARINE_SHARD),
                     fromMined(100, Material.PRISMARINE), Rarity.UNCOMMON))
+            .add(new TrailSelection("lava", BaseTrail.PROJECTILE_TRAIL, Particle.LAVA,
+                    fromMined(400, Material.NETHERRACK), Rarity.UNCOMMON))
+            .add(new TrailSelection("notes", BaseTrail.PROJECTILE_TRAIL, Particle.NOTE,
+                    fromCrafted(85, Material.NOTE_BLOCK, Material.JUKEBOX), Rarity.UNCOMMON))
             
             .add(new TrailSelection("super_diamond", BaseTrail.PROJECTILE_TRAIL, Material.DIAMOND_BLOCK,
                     fromMined(285, Material.DIAMOND_ORE), Rarity.RARE))
@@ -98,6 +109,18 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromKilled(900, EntityType.ENDERMAN), Rarity.EPIC))
             .add(new TrailSelection("enchanted_book", BaseTrail.PROJECTILE_TRAIL, Material.ENCHANTED_BOOK,
                     fromKilled(600, EntityType.WITCH), Rarity.EPIC))
+            .add(new TrailSelection("spider", BaseTrail.PROJECTILE_TRAIL, EntityType.SPIDER,
+                    fromKilled(500, EntityType.SPIDER), Rarity.EPIC))
+            .add(new TrailSelection("guardian", BaseTrail.PROJECTILE_TRAIL, EntityType.GUARDIAN,
+                    fromKilled(300, EntityType.GUARDIAN), Rarity.EPIC))
+            .add(new TrailSelection("dragon_breath", BaseTrail.PROJECTILE_TRAIL, Particle.DRAGON_BREATH,
+                    fromKilled(10, EntityType.ENDER_DRAGON), Rarity.EPIC))
+            .add(new TrailSelection("enchantment", BaseTrail.PROJECTILE_TRAIL, Particle.ENCHANTMENT_TABLE,
+                    fromStatistic(Statistic.ITEM_ENCHANTED, 125), Rarity.RARE))
+            .add(new TrailSelection("anger", BaseTrail.PROJECTILE_TRAIL, Particle.VILLAGER_ANGRY, 
+                    fromKilled(65, EntityType.IRON_GOLEM), Rarity.RARE))
+            .add(new TrailSelection("endermite", BaseTrail.PROJECTILE_TRAIL, EntityType.ENDERMITE,
+                    fromKilled(150, EntityType.ENDERMITE), Rarity.RARE))
             
             .add(new TrailSelection("diamond_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:diamond_sword",
                     fromKilled(75, EntityType.WITHER), Rarity.LEGENDARY))
@@ -105,11 +128,15 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromKilled(100, EntityType.WITHER), Rarity.LEGENDARY))
             .add(new TrailSelection("cookie", BaseTrail.PROJECTILE_TRAIL, Material.COOKIE,
                     fromCrafted(2500, Material.COOKIE), Rarity.LEGENDARY))
+            .add(new TrailSelection("shulker", BaseTrail.PROJECTILE_TRAIL, EntityType.SHULKER,
+                    fromMined(15000, StarMaterial.END_STONE.find()), Rarity.LEGENDARY))
 
             .add(new TrailSelection("ender_crystals", BaseTrail.PROJECTILE_TRAIL, Material.END_CRYSTAL,
                     fromKilled(120, EntityType.ENDER_DRAGON), Rarity.MYTHICAL))
             .add(new TrailSelection("beacon", BaseTrail.PROJECTILE_TRAIL, "fancy_item:beacon",
                     fromKilled(130, EntityType.WITHER), Rarity.MYTHICAL))
+            .add(new TrailSelection("spawner", BaseTrail.PROJECTILE_TRAIL, "fancy_block:spawner",
+                    fromStatistic(Statistic.MOB_KILLS, 1000000), Rarity.MYTHICAL))
             
             .add(new TrailSelection("dragon_egg", BaseTrail.PROJECTILE_TRAIL, "fancy_block:dragon_egg",
                     fromMined(165800, StarMaterial.END_STONE.find()), Rarity.ULTRA))
@@ -119,47 +146,6 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new TrailSelection("command_blocks", BaseTrail.PROJECTILE_TRAIL,
                     Arrays.asList(StarMaterial.COMMAND_BLOCK.find(), StarMaterial.CHAIN_COMMAND_BLOCK.find(), StarMaterial.REPEATING_COMMAND_BLOCK.find()),
                     fromCompletion(PlayerCompletion.NETHER_ROOF), Rarity.SPECIAL))
-
-            // Particles
-            .add(new TrailSelection("heart", BaseTrail.PROJECTILE_TRAIL, Particle.HEART,
-                    fromStatistic(Statistic.ANIMALS_BRED, 15), Rarity.COMMON))
-
-            .add(new TrailSelection("flame", BaseTrail.PROJECTILE_TRAIL, Particle.FLAME,
-                    fromKilled(65, EntityType.BLAZE), Rarity.OCCASIONAL))
-
-            .add(new TrailSelection("lava", BaseTrail.PROJECTILE_TRAIL, Particle.LAVA,
-                    fromMined(400, Material.NETHERRACK), Rarity.UNCOMMON))
-            .add(new TrailSelection("notes", BaseTrail.PROJECTILE_TRAIL, Particle.NOTE,
-                    fromCrafted(85, Material.NOTE_BLOCK, Material.JUKEBOX), Rarity.UNCOMMON))
-            
-            .add(new TrailSelection("enchantment", BaseTrail.PROJECTILE_TRAIL, Particle.ENCHANTMENT_TABLE,
-                    fromStatistic(Statistic.ITEM_ENCHANTED, 125), Rarity.RARE))
-            .add(new TrailSelection("anger", BaseTrail.PROJECTILE_TRAIL, Particle.VILLAGER_ANGRY, 
-                    fromKilled(65, EntityType.IRON_GOLEM), Rarity.RARE))
-            
-            .add(new TrailSelection("dragon_breath", BaseTrail.PROJECTILE_TRAIL, Particle.DRAGON_BREATH,
-                    fromKilled(10, EntityType.ENDER_DRAGON), Rarity.EPIC))
-
-            // Entities
-            .add(new TrailSelection("chickens", BaseTrail.PROJECTILE_TRAIL, EntityType.CHICKEN,
-                    fromKilled(200, EntityType.CHICKEN), Rarity.OCCASIONAL))
-            .add(new TrailSelection("pigs", BaseTrail.PROJECTILE_TRAIL, EntityType.PIG,
-                    fromKilled(200, EntityType.PIG), Rarity.OCCASIONAL))
-
-            .add(new TrailSelection("endermite", BaseTrail.PROJECTILE_TRAIL, EntityType.ENDERMITE,
-                    fromKilled(150, EntityType.ENDERMITE), Rarity.RARE))
-
-            .add(new TrailSelection("spider", BaseTrail.PROJECTILE_TRAIL, EntityType.SPIDER,
-                    fromKilled(500, EntityType.SPIDER), Rarity.EPIC))
-            .add(new TrailSelection("guardian", BaseTrail.PROJECTILE_TRAIL, EntityType.GUARDIAN,
-                    fromKilled(300, EntityType.GUARDIAN), Rarity.EPIC))
-
-            .add(new TrailSelection("shulker", BaseTrail.PROJECTILE_TRAIL, EntityType.SHULKER,
-                    fromMined(15000, StarMaterial.END_STONE.find()), Rarity.LEGENDARY))
-
-            .add(new TrailSelection("spawner", BaseTrail.PROJECTILE_TRAIL, "fancy_block:spawner",
-                    fromStatistic(Statistic.MOB_KILLS, 1000000), Rarity.MYTHICAL))
-
 
             .build();
     
