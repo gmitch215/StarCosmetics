@@ -3,7 +3,7 @@
 > Adanved, Flexible & Customizable Cosmetics Plugin, developed for Minecraft 1.9 and above.
 
 ## ⭐ Express Yourself.
-StarCosmetics is an innovative, advanced, feature-packed and customizable cosmetics plugin, created by GamerCoder215.
+StarCosmetics is an innovative, advanced, feature-packed and customizable cosmetics plugin, created by GamerCoder.
 
 Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets, Sound Effects, and more, StarCosmetics is the best cosmetics plugin for your server.
 

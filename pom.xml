@@ -6,7 +6,7 @@
     <version>1.0.0</version>
 
     <name>StarCosmetics-Parent</name>
-    <url>https://github.com/GamerCoder215/StarCosmetics</url>
+    <url>https://github.com/GamerCoder/StarCosmetics</url>
     <description>Advanced and Open-Source Cosmetics Plugin for Spigot 1.9+</description>
     <packaging>pom</packaging>
 
@@ -57,7 +57,7 @@
 
     <developers>
         <developer>
-            <name>GamerCoder215</name>
+            <name>GamerCoder</name>
             <roles>
                 <role>Owner</role>
             </roles>
