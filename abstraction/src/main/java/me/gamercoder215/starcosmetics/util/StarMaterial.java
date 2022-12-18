@@ -90,7 +90,13 @@ public enum StarMaterial {
 
     PORKCHOP("pork"),
 
-    RED_SAND(1, "sand")
+    RED_SAND(1, "sand"),
+
+    NETHER_QUARTZ_ORE("quartz_ore"),
+
+    OAK_LEAVES("leaves"),
+
+    OAK_BUTTON("wooden_button")
     ;
 
     private final Material defaultV;
