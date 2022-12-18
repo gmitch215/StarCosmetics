@@ -58,8 +58,8 @@ First Release of StarCosmetics
 
     <repositories>
         <repository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+            <id>codemc-releases</id>
+            <url>https://repo.codemc.io/repository/maven-releases/</url>
         </repository>
     </repositories>
     
@@ -80,7 +80,7 @@ First Release of StarCosmetics
 
 ```gradle
 repositories {
-    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+    maven { url 'https://repo.codemc.io/repository/maven-releases/' }
 }
 
 dependencies {
@@ -94,7 +94,7 @@ dependencies {
 
 ```kotlin
 repositories {
-    maven(url = "https://repo.codemc.io/repository/maven-snapshots/")
+    maven(url = "https://repo.codemc.io/repository/maven-releases/")
 }
 
 dependencies {
