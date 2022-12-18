@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.Constants;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
 import org.bukkit.Material;
 
 import java.io.BufferedReader;
@@ -53,7 +54,7 @@ public final class ModernStructureReader implements StructureReader {
                 if (i == 4 && !line.equalsIgnoreCase("---")) throw new MalformedStructureException("Malformed Strucutre File: Expected '---' but got '" + line + "'");
 
                 if (i > 4) {
-                    String material = line.split(":")[0];
+                    String material = line.split(":")[0].toUpperCase();
                     if (material.startsWith("{") && material.endsWith("}")) {
                         Map<Material, Integer> chances = new HashMap<>();
                         Map<Material, String> blockDataChances = new HashMap<>();
@@ -71,14 +72,36 @@ public final class ModernStructureReader implements StructureReader {
                                 String mat = split[1].split("\\[")[0];
                                 String data = "[" + split[1].split("\\[")[1];
 
-                                if (Material.matchMaterial(mat) == null) throw new MalformedStructureException("Malformed Strucutre File: Unknown Material '" + mat + "'");
-                                chances.put(Material.matchMaterial(mat), chance);
-                                blockDataChances.put(Material.matchMaterial(mat), data);
-                            } else {
-                                if (Material.matchMaterial(split[1]) == null)
-                                    throw new MalformedStructureException("Unknown Material '" + split[1] + "'");
+                                Material m;
 
-                                chances.put(Material.matchMaterial(split[1]), chance);
+                                try {
+                                    m = StarMaterial.valueOf(mat.toUpperCase()).find();
+                                } catch (IllegalArgumentException e) {
+                                    try {
+                                        m = Material.valueOf(mat.toUpperCase());
+                                    } catch (IllegalArgumentException e2) {
+                                        throw new MalformedStructureException("Unknown Material '" + mat + "'");
+                                    }
+                                }
+
+                                chances.put(m, chance);
+                                blockDataChances.put(m, data);
+                            } else {
+                                String mat = split[1].replace("}", "").toUpperCase();
+
+                                Material m;
+
+                                try {
+                                    m = StarMaterial.valueOf(mat).find();
+                                } catch (IllegalArgumentException e) {
+                                    try {
+                                        m = Material.valueOf(mat);
+                                    } catch (IllegalArgumentException e2) {
+                                        throw new MalformedStructureException("Unknown Material '" + mat + "'");
+                                    }
+                                }
+
+                                chances.put(m, chance);
                             }
                         }
 
@@ -102,15 +125,21 @@ public final class ModernStructureReader implements StructureReader {
                         String mat = material;
                         String data = null;
                         if (material.contains("[") && material.endsWith("]")) {
-                            mat = material.split("\\[")[0];
+                            mat = material.split("\\[")[0].toUpperCase();
                             data = "[" + material.split("\\[")[1];
-
-                            if (Material.matchMaterial(mat) == null) throw new MalformedStructureException("Malformed Strucutre File: Unknown Material '" + mat + "'");
                         }
 
-                        if (Material.matchMaterial(mat) == null)
-                            throw new MalformedStructureException("Malformed Structure File: Unknown Material '" + mat + "'");
-                        Material m = Material.matchMaterial(mat);
+                        Material m;
+
+                        try {
+                            m = StarMaterial.valueOf(mat).find();
+                        } catch (IllegalArgumentException e) {
+                            try {
+                                m = Material.valueOf(mat);
+                            } catch (IllegalArgumentException e2) {
+                                throw new MalformedStructureException("Unknown Material '" + material + "'");
+                            }
+                        }
 
                         String coords = line.split(":")[1];
                         for (StructurePoint p : StructureReader.readPoints(coords)) {

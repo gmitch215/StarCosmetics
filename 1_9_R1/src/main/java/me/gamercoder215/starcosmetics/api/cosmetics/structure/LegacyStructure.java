@@ -45,6 +45,7 @@ public final class LegacyStructure extends Structure {
         points.forEach((p, m) -> {
             Location l = p.toLocation(center);
             if (!l.getBlock().isEmpty()) return;
+            if (!m.isSolid() && !l.clone().subtract(0, 1, 0).getBlock().getType().isSolid()) return;
 
             StarRunnable.async(() -> { for (Player pl : Bukkit.getOnlinePlayers()) w.sendBlockChange(pl, l, m); });
 

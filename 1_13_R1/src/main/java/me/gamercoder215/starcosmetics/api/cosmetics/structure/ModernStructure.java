@@ -53,6 +53,7 @@ public final class ModernStructure extends Structure {
         points.forEach((p, m) -> {
             Location l = p.toLocation(center);
             if (!l.getBlock().isEmpty()) return;
+            if (!m.isSolid() && !l.clone().subtract(0, 1, 0).getBlock().getType().isSolid()) return;
 
             BlockData d = pointData.get(p);
             StarRunnable.async(() -> { for (Player pl : Bukkit.getOnlinePlayers()) pl.sendBlockChange(l, d == null ? m.createBlockData() : d ); });
