@@ -31,7 +31,7 @@ public final class CompletionCriteria {
 
     private final Object[] displayArguments;
 
-    private CompletionCriteria(Predicate<Player> criteria, Function<Player, Number> progress, String displayKey, Object... displayArguments) {
+    CompletionCriteria(Predicate<Player> criteria, Function<Player, Number> progress, String displayKey, Object... displayArguments) {
         if (criteria == null) throw new IllegalArgumentException("Criteria cannot be null!");
         if (displayKey == null) throw new IllegalArgumentException("Display Key cannot be null!");
 
@@ -45,7 +45,7 @@ public final class CompletionCriteria {
         };
     }
 
-    private CompletionCriteria(Predicate<Player> criteria, Function<Player, Number> progress, String displayKey, Object firstArg, Object[] displayArguments) {
+    CompletionCriteria(Predicate<Player> criteria, Function<Player, Number> progress, String displayKey, Object firstArg, Object[] displayArguments) {
         this(criteria, progress, displayKey, ImmutableList.builder().add(firstArg).add(displayArguments).build().toArray());
     }
 
@@ -78,6 +78,8 @@ public final class CompletionCriteria {
      */
     @NotNull
     public String getDisplayMessage() {
+        if (displayKey.startsWith("literal:")) return displayKey.substring(8);
+
         Object[] displayArgs = displayArguments.clone();
 
         if (displayArgs.length > 1) try {
