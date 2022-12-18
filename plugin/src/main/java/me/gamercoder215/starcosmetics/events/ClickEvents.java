@@ -16,10 +16,7 @@ import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
-import me.gamercoder215.starcosmetics.util.Generator;
-import me.gamercoder215.starcosmetics.util.StarCooldowns;
-import me.gamercoder215.starcosmetics.util.StarRunnable;
-import me.gamercoder215.starcosmetics.util.StarSound;
+import me.gamercoder215.starcosmetics.util.*;
 import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
@@ -56,7 +53,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
-import static me.gamercoder215.starcosmetics.util.Generator.genGUI;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
@@ -160,33 +156,7 @@ public final class ClickEvents implements Listener {
                 String cooldown = iNBT.getString("cooldown");
                 if (StarCooldowns.checkCooldown(cooldown, p)) return;
 
-                int size = parent.getChildren().size() > 7 ? 45 : 27;
-
-                StarInventory parentInv = genGUI("cosmetics_menu:" + parent.name(), size, get("menu.cosmetics." + parent.name().toLowerCase()));
-                List<Integer> places = StarInventoryUtil.getGUIPlacements(size, parent.getChildren().size());
-
-                for (int i = 0; i < parent.getChildren().size(); i++) {
-                    Cosmetic c = parent.getChildren().get(i);
-                    int place = places.get(i);
-                    ItemStack cItem = StarInventoryUtil.toItemStack(c);
-                    parentInv.setItem(place, cItem);
-                }
-
-                ItemStack resetAll = new ItemStack(Material.BARRIER);
-                ItemMeta resetMeta = resetAll.getItemMeta();
-                resetMeta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all_" + parent.name().toLowerCase()));
-                resetAll.setItemMeta(resetMeta);
-
-                NBTWrapper resetNBT = of(resetAll);
-                resetNBT.setID("cancel:cosmetic:all");
-                resetNBT.set("parent", parent.name());
-                resetAll = resetNBT.getItem();
-
-                parentInv.setItem(size - 1, resetAll);
-
-                StarInventoryUtil.setBack(parentInv, cw::cosmetics);
-                inv.setAttribute("selection_back", (Consumer<Player>) pl -> pl.openInventory(parentInv));
-
+                StarInventory parentInv = Generator.createParentInventory(parent);
                 p.openInventory(parentInv);
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             })
@@ -221,7 +191,7 @@ public final class ClickEvents implements Listener {
 
                 CompletionCriteria c = loc.getCompletionCriteria();
 
-                if (!c.getCriteria().test(p)) {
+                if (!c.isUnlocked(p)) {
                     StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
                     p.sendMessage(get("plugin.prefix") + ChatColor.RED + c.getDisplayMessage());
                     return;
@@ -299,7 +269,6 @@ public final class ClickEvents implements Listener {
                 }
 
                 p.openInventory(invs.get(0));
-
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             })
             .put("cancel:particle", (inv, e) -> {
@@ -464,6 +433,13 @@ public final class ClickEvents implements Listener {
                     return;
                 }
 
+                CompletionCriteria c = type.getInfo().getCriteria();
+                if (!c.isUnlocked(p)) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    p.sendMessage(get("plugin.prefix") + ChatColor.RED + c.getDisplayMessage());
+                    return;
+                }
+
                 StarPlayerUtil.spawnPet(p, type);
                 p.sendMessage(ChatColor.GREEN + getWithArgs("success.cosmetics.pet_spawned", type.getInfo().getName()));
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
@@ -527,12 +503,12 @@ public final class ClickEvents implements Listener {
                 ItemStack item = e.getCurrentItem();
                 NBTWrapper nbt = of(item);
 
+                String color = nbt.getString("color");
                 String messageS = StarConfig.getConfig().get(nbt.getString("message_id"));
-                ChatColor color = nbt.hasString("color") ? ChatColor.valueOf(nbt.getString("color").toUpperCase()) : ChatColor.AQUA;
-                TextComponent message = new TextComponent(prefix() + color + messageS + "\n");
+                TextComponent message = new TextComponent(prefix() + StarChat.hexMessage(color, messageS) + "\n");
 
                 String linkS = nbt.getString("link");
-                TextComponent link = new TextComponent(prefix() + color + linkS);
+                TextComponent link = new TextComponent(prefix() + StarChat.hexMessage(color, linkS.substring(8)));
                 link.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[] {new TextComponent(ChatColor.AQUA + linkS)}));
                 link.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, linkS));
 
@@ -541,6 +517,36 @@ public final class ClickEvents implements Listener {
                 } catch (UnsupportedOperationException ignored) {
                     p.sendMessage(new String[] {message.getText(), link.getText()});
                 }
+            })
+            .put("cancel:pet", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                if (sp.getSpawnedPet() == null) {
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
+                StarPlayerUtil.removePet(p);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+                sp.sendNotification(ChatColor.GREEN + get("success.cosmetics.pet_removed"));
+            })
+            .put("player_settings", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+
+                StarInventory settings = Generator.createSettingsInventory(p);
+                switch (nbt.getString("back")) {
+                    case "cosmetics": {
+                        StarInventoryUtil.setBack(settings, cw::cosmetics);
+                        break;
+                    }
+                }
+
+                p.openInventory(settings);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             })
 
             .build();

@@ -98,8 +98,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             .build();
 
     private void loadConstructors() {
-        InventorySelector.loadInventories();
         ItemBuilder.loadItems();
+        InventorySelector.loadInventories();
         loadPetIcons();
     }
 
@@ -354,6 +354,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             "ores",
             "reinforced_portal",
             "tree",
+            "flowers"
     };
 
     public static final Set<StructureInfo> STRUCTURE_CACHE = new HashSet<>();
