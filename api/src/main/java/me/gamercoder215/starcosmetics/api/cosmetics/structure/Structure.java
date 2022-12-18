@@ -85,6 +85,7 @@ public abstract class Structure implements Cloneable {
      */
     @NotNull
     public String getLocalizedName() {
+        if (displayKey.startsWith("\"") && displayKey.endsWith("\"")) return displayKey.substring(1, displayKey.length() - 1);
         return StarConfig.getConfig().get(displayKey);
     }
 
