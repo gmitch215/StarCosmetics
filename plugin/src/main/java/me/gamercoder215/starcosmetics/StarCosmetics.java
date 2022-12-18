@@ -3,6 +3,8 @@ package me.gamercoder215.starcosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.jeff_media.updatechecker.UpdateCheckSource;
+import com.jeff_media.updatechecker.UpdateChecker;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
@@ -29,6 +31,7 @@ import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -103,6 +106,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         loadPetIcons();
     }
 
+    private static final int BSTATS_ID = 17108;
+
     @Override
     public void onEnable() {
         if (!checkCompatible()) return;
@@ -122,6 +127,23 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         ASYNC_TICK_RUNNABLE.runTaskTimerAsynchronously(this, 0, 1);
         SYNC_TICK_RUNNABLE.runTaskTimer(this, 0, 1);
         getLogger().info("Loaded Tasks...");
+
+        // Update Checker
+        new UpdateChecker(this, UpdateCheckSource.GITHUB_RELEASE_TAG, "GamerCoder215/StarCosmetics")
+                .setDownloadLink("https://github.com/GamerCoder215/StarCosmetics/releases/latest")
+                .setNotifyOpsOnJoin(true)
+                .setChangelogLink("https://github.com/GamerCoder215/StarCosmetics/releases/latest")
+                .setUserAgent("Java 8 StarCosmetics User Agent")
+                .setColoredConsoleOutput(true)
+                .setDonationLink("https://www.patreon.com/teaminceptus")
+                .setNotifyRequesters(true)
+                .checkEveryXHours(1)
+                .checkNow();
+
+        // bStats
+        Metrics metrics = new Metrics(this, BSTATS_ID);
+
+        getLogger().info("Loaded Dependencies...");
 
         loadPlaceholders();
         getLogger().info("Loaded Addons...");
