@@ -20,11 +20,20 @@ body:
     validations:
       required: true
 
+  - type: input
+    attributes:
+      label: Minecraft Version
+      description: What version of Minecraft are you using?
+      placeholder: |
+        Ex: 1.19
+    validations:
+      required: true
+
   - type: textarea
     attributes:
       label: Description
       placeholder: |
-        Ex: "Pathfinder is not being added"
+        Ex: "Cosmetic not displaying correctly."
     validations:
       required: true
 
@@ -33,19 +42,24 @@ body:
       label: Expected Behavior
       description: What you expect the plugin to do.
       placeholder: |
-        Ex: "Pathfinder should be added"
+        Ex: "Green cosmetic should be displayed."
     validations:
       required: true
+
   - type: textarea
     attributes:
       label: Actual Behavior
       description: What does the plugin do? What are the error messages shown?
       placeholder: |
-        Ex: "AI is adding the wrong Pathfinder"
+        Ex: "Blue is shown instead of green."
     validations:
       required: true
-  - type: markdown
+
+  - type: textarea
     attributes:
-      value: |
-        In the box below, you can attach any relevant info or files that may help us solve the bug.
-        If you think this issue is relevant to any other issues, please mention it here.
+      label: Other Information
+      description: Attach any other relevant info or files that may help us solve the bug, as well as any other information.
+      placeholder: |
+        Ex: "Console errors, screenshots, etc."
+    validations:
+      required: false

@@ -1,0 +1,33 @@
+name: Cosmetic Request
+description: Request a cosmetic-focused feature.
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for recommending a cosmetic-focused feature. Please take time to fill out the information below.
+  - type: dropdown
+    attributes:
+      label: Addition Type
+      description: What are you adding?
+      multiple: false
+      options:
+        - Addition to an Existing Cosmetic
+        - New Cosmetic Type
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Description
+      placeholder: |
+        Ex: "A new cosmetic type that allows players to change their skin."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional Information
+      description: References, Concept Art, or any other types of media that would help describe your concept. Not Required.
+    validations:
+      required: false

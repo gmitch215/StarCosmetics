@@ -1,0 +1,37 @@
+name: Feature Request
+description: Request any feature.
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for recommending a feature. Please take time to fill out the information below.
+        **For Cosmetic Requests, please create a separate cosmetic request.**
+
+  - type: dropdown
+    attributes:
+      label: Addition Type
+      description: What are we adding?
+      multiple: false
+      options:
+        - Language Support/Change
+        - GUI Support/Change
+        - New Version Support
+        - Other Feature
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Description
+      placeholder: |
+        Ex: "Support for Minecraft 1.xx.x"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional Information
+      description: Any media that would help describe your idea. Not Required.
+    validations:
+      required: false
