@@ -3,7 +3,9 @@ package me.gamercoder215.starcosmetics.util;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureCompletion;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
@@ -28,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
@@ -212,6 +215,8 @@ public final class Generator {
             inv.setItem(18, limit);
         }
 
+        StarInventoryUtil.setBack(inv, 45, cw::cosmetics);
+
         return inv;
     }
 
@@ -371,7 +376,44 @@ public final class Generator {
         StarInventoryUtil.setScrolls(inv);
         StarInventoryUtil.setBack(inv, cw::cosmetics);
 
+        inv.setItem(18, ItemBuilder.of(Material.BARRIER)
+                .id("cancel:pet")
+                .name(ChatColor.RED + get("menu.cosmetics.choose.pet.disable"))
+                .build());
+
         return inv;
+    }
+
+    @NotNull
+    public static StarInventory createParentInventory(@NotNull CosmeticParent parent) {
+        int size = parent.getChildren().size() > 7 ? 45 : 27;
+
+        StarInventory parentInv = genGUI("cosmetics_menu:" + parent.name(), size, get("menu.cosmetics." + parent.name().toLowerCase()));
+        List<Integer> places = StarInventoryUtil.getGUIPlacements(size, parent.getChildren().size());
+
+        for (int i = 0; i < parent.getChildren().size(); i++) {
+            Cosmetic c = parent.getChildren().get(i);
+            int place = places.get(i);
+            ItemStack cItem = StarInventoryUtil.toItemStack(c);
+            parentInv.setItem(place, cItem);
+        }
+
+        ItemStack resetAll = new ItemStack(Material.BARRIER);
+        ItemMeta resetMeta = resetAll.getItemMeta();
+        resetMeta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all_" + parent.name().toLowerCase()));
+        resetAll.setItemMeta(resetMeta);
+
+        NBTWrapper resetNBT = of(resetAll);
+        resetNBT.setID("cancel:cosmetic:all");
+        resetNBT.set("parent", parent.name());
+        resetAll = resetNBT.getItem();
+
+        parentInv.setItem(size - 1, resetAll);
+
+        StarInventoryUtil.setBack(parentInv, cw::cosmetics);
+        parentInv.setAttribute("selection_back", (Consumer<Player>) pl -> pl.openInventory(parentInv));
+
+        return parentInv;
     }
 
 }

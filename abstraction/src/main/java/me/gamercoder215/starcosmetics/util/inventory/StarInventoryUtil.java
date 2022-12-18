@@ -13,6 +13,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
+import me.gamercoder215.starcosmetics.util.StarUtil;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.apache.commons.lang3.text.WordUtils;
@@ -43,6 +44,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static me.gamercoder215.starcosmetics.util.StarMaterial.*;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 import static org.bukkit.Material.*;
@@ -60,26 +62,26 @@ public final class StarInventoryUtil {
 
         if (n.contains("player")) chosen = IRON_SWORD;
         if (chosen == null && n.contains("block")) chosen = DIRT;
-        if (chosen == null && n.contains("server")) chosen = StarMaterial.OBSERVER.find();
-        if (chosen == null && n.contains("inventory")) chosen = StarMaterial.CRAFTING_TABLE.find();
+        if (chosen == null && n.contains("server")) chosen = OBSERVER.find();
+        if (chosen == null && n.contains("inventory")) chosen = CRAFTING_TABLE.find();
         if (chosen == null && n.contains("weather")) chosen = BUCKET;
         if (chosen == null && n.contains("vehicle")) chosen = MINECART;
 
         switch (n) {
             case "playerjoinevent": 
-            case "playergamemodechangeevent": return StarMaterial.GRASS_BLOCK.find();
+            case "playergamemodechangeevent": return GRASS_BLOCK.find();
             
             case "playerfishevent": return FISHING_ROD;
             case "playerrespawnevent": return BEACON;
-            case "signchangeevent": return StarMaterial.OAK_SIGN.find();
+            case "signchangeevent": return OAK_SIGN.find();
             case "playerriptideevent": return matchMaterial("TRIDENT");
-            case "playerdeathevent": return StarMaterial.WITHER_SKELETON_SKULL.find();
+            case "playerdeathevent": return WITHER_SKELETON_SKULL.find();
             case "furnaceextractevent": return FURNACE;
-            case "playerbedenterevent": return StarMaterial.RED_BED.find();
-            case "playerexpchangeevent": return StarMaterial.EXPERIENCE_BOTTLE.find();
+            case "playerbedenterevent": return RED_BED.find();
+            case "playerexpchangeevent": return EXPERIENCE_BOTTLE.find();
             case "playereggthrowevent": return EGG;
             case "blockbreakevent": return IRON_PICKAXE;
-            case "sheepdyewoolevent": return StarMaterial.WHITE_WOOL.find();
+            case "sheepdyewoolevent": return WHITE_WOOL.find();
             case "playeritembreakevent": return DIAMOND_PICKAXE;
             case "playeritemconsumeevent": return BREAD;    
         }
@@ -146,6 +148,8 @@ public final class StarInventoryUtil {
         return item;
     }
 
+    private static final List<Material> ITEMS = Arrays.stream(Material.values()).filter(w::isItem).collect(Collectors.toList());
+
     @NotNull
     public static Material toMaterial(@NotNull Sound s) {
         String n = s.name();
@@ -157,8 +161,19 @@ public final class StarInventoryUtil {
 
         if (n.startsWith("item.crossbow")) return matchMaterial("CROSSBOW");
 
-        for (Material m : Arrays.stream(Material.values()).filter(w::isItem).collect(Collectors.toList()))
-            if (n.equals(m.name()) || n.contains(m.name())) return m; // Takes Absolute Priority
+        List<Material> possible = new ArrayList<>();
+
+        // Takes Absolute Priority
+        for (Material m : ITEMS) {
+            if (n.equals(m.name())) return m;
+            if (n.contains(m.name()) || m.name().contains(n)) possible.add(m);
+        }
+
+        if (!possible.isEmpty()) {
+            possible.sort(Comparator.comparingDouble(m ->
+                    (StarUtil.levenshteinDistance(n, m.name()) + StarUtil.levenshteinDistance(m.name(), n)) / 2.0D));
+            return possible.get(0);
+        }
 
         if (n.startsWith("ENTITY")) {
             String entity = n.split("_")[1].toLowerCase();
@@ -171,12 +186,12 @@ public final class StarInventoryUtil {
                 case "fishing_bobber": return FISHING_ROD;
                 case "hostile": return ROTTEN_FLESH;
                 case "item": return CHEST;
-                case "leash_knot": return StarMaterial.LEAD.find();
+                case "leash_knot": return LEAD.find();
                 case "mooshroom": return toMaterial(EntityType.MUSHROOM_COW);
                 case "puffer_fish": return matchMaterial("PUFFERFISH");
             }
 
-            return StarMaterial.POPPY.find();
+            return POPPY.find();
         }
 
         if (n.startsWith("ITEM")) {
@@ -186,23 +201,49 @@ public final class StarInventoryUtil {
             switch (mat) {
                 case "axe": return IRON_AXE;
                 case "hoe": return IRON_HOE;
-                case "shovel": return StarMaterial.IRON_SHOVEL.find();
+                case "shovel": return IRON_SHOVEL.find();
                 case "pickaxe": return IRON_PICKAXE;
                 case "bottle": return GLASS_BOTTLE;
                 case "armor": return IRON_CHESTPLATE;
-                case "dye": return StarMaterial.POPPY.find();
-                case "firecharge": return StarMaterial.FIRE_CHARGE.find();
-                case "totem": StarMaterial.TOTEM_OF_UNDYING.find();
+                case "dye": return POPPY.find();
+                case "firecharge": return FIRE_CHARGE.find();
+                case "totem": TOTEM_OF_UNDYING.find();
+                case "lodestone_compass": return COMPASS;
             }
 
             return APPLE;
+        }
+
+        if (n.startsWith("BLOCK")) {
+            String mat = n.split("_")[1].toLowerCase();
+            if (matchMaterial(mat) != null) return matchMaterial(mat);
+
+            switch (mat) {
+                case "wool": return WHITE_WOOL.find();
+                case "wood": return OAK_LOG.find();
+                case "wooden_button": return OAK_BUTTON.find();
+                case "tripwire": return TRIPWIRE_HOOK;
+            }
+
+            List<Material> blockPossible = new ArrayList<>();
+
+            for (Material m : ITEMS) {
+                if (mat.equals(m.name())) return m;
+                if (mat.contains(m.name()) || m.name().contains(mat)) blockPossible.add(m);
+            }
+
+            if (!blockPossible.isEmpty()) {
+                blockPossible.sort(Comparator.comparingDouble(m ->
+                        (StarUtil.levenshteinDistance(n, m.name()) + StarUtil.levenshteinDistance(m.name(), n)) / 2.0D));
+                return blockPossible.get(0);
+            }
         }
 
         if (n.contains("GENERIC")) return LEATHER_CHESTPLATE;
         if (n.contains("VILLAGER")) return EMERALD;
 
         if (n.startsWith("MUSIC"))
-            if (n.contains("OVERWORLD")) return StarMaterial.GRASS_BLOCK.find();
+            if (n.contains("OVERWORLD")) return GRASS_BLOCK.find();
             else if (n.contains("NETHER")) return NETHERRACK;
             else return NOTE_BLOCK;
 
@@ -398,7 +439,7 @@ public final class StarInventoryUtil {
 
         ChatColor c = loc.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
 
-        if (!loc.getRarity().isSecret() || loc.isUnlocked(p)) {
+        if (!loc.getRarity().hasVisibleRequirements() || loc.isUnlocked(p)) {
             lore.add(" ");
             CompletionCriteria criteria = loc.getCompletionCriteria();
 
@@ -414,7 +455,6 @@ public final class StarInventoryUtil {
         NBTWrapper nbt = NBTWrapper.of(item);
         nbt.setID("choose:cosmetic");
         nbt.set("location", loc);
-        if (loc.isUnlocked(p)) nbt.set("selected", true);
 
         item = nbt.getItem();
 
@@ -423,21 +463,21 @@ public final class StarInventoryUtil {
 
     @NotNull
     public static Material toMaterial(@NotNull EntityType type) {
-        for (Material mat : values()) {
+        for (Material mat : Material.values()) {
             if (mat.name().equalsIgnoreCase(type.name())) return mat;
             if (mat.name().equalsIgnoreCase(type.name() + "_SPAWN_EGG")) return mat;
         }
 
         switch (type.name()) {
-            case "WITHER": return StarMaterial.WITHER_SKELETON_SKULL.find();
+            case "WITHER": return WITHER_SKELETON_SKULL.find();
             case "ENDER_DRAGON": return DRAGON_EGG;
-            case "EXPERIENCE_ORB": return StarMaterial.EXPERIENCE_BOTTLE.find();
-            case "BOAT": return StarMaterial.OAK_BOAT.find();
-            case "DRAGON_FIREBALL": return StarMaterial.FIRE_CHARGE.find();
-            case "IRON_GOLEM": return StarMaterial.CARVED_PUMPKIN.find();
-            case "PLAYER": return StarMaterial.PLAYER_HEAD.find();
+            case "EXPERIENCE_ORB": return EXPERIENCE_BOTTLE.find();
+            case "BOAT": return OAK_BOAT.find();
+            case "DRAGON_FIREBALL": return FIRE_CHARGE.find();
+            case "IRON_GOLEM": return CARVED_PUMPKIN.find();
+            case "PLAYER": return PLAYER_HEAD.find();
             case "SHULKER_BULLET": return PURPUR_BLOCK;
-            case "EVOKER_FANGS": return StarMaterial.TOTEM_OF_UNDYING.find();
+            case "EVOKER_FANGS": return TOTEM_OF_UNDYING.find();
         }
 
         return APPLE;
@@ -491,7 +531,7 @@ public final class StarInventoryUtil {
 
     @NotNull
     public static Material toMaterial(@NotNull Particle particle) {
-        for (Material m : values()) if (particle.name().equalsIgnoreCase(m.name())) return m;
+        for (Material m : Material.values()) if (particle.name().equalsIgnoreCase(m.name())) return m;
 
         switch (particle.name().toLowerCase()) {
             case "white_ash":
@@ -503,7 +543,7 @@ public final class StarInventoryUtil {
             case "bubble_pop": return matchMaterial("SEAGRASS");
             case "campfire_cosy_smoke":
             case "campfire_signal_smoke": return matchMaterial("CAMPFIRE");
-            case "cloud": return StarMaterial.WHITE_WOOL.find();
+            case "cloud": return WHITE_WOOL.find();
             case "composter": return matchMaterial("COMPOSTER");
             case "crimson_spore": return matchMaterial("CRIMSON_NYLIUM");
             case "crit": return DIAMOND_SWORD;
@@ -518,7 +558,7 @@ public final class StarInventoryUtil {
             case "landing_lava":
             case "lava":
             case "drip_lava": return LAVA_BUCKET;
-            case "enchantment_table": return StarMaterial.ENCHANTING_TABLE.find();
+            case "enchantment_table": return ENCHANTING_TABLE.find();
             case "dripping_dripstone_water":
             case "falling_dripstone_water":
             case "falling_water":
@@ -563,7 +603,7 @@ public final class StarInventoryUtil {
             case "smoke_large":
             case "smoke_normal": return FURNACE;
             case "sneeze": return PAPER;
-            case "snow_shovel": return StarMaterial.IRON_SHOVEL.find();
+            case "snow_shovel": return IRON_SHOVEL.find();
             case "snowflake":
             case "snowball": return SNOW_BALL;
             case "sonic_boom": return matchMaterial("SCULK");
@@ -573,19 +613,19 @@ public final class StarInventoryUtil {
             case "spell_witch":
             case "spell_mob_ambient":
             case "spell": return ENCHANTMENT_TABLE;
-            case "spit": return StarMaterial.LEAD.find();
+            case "spit": return LEAD.find();
             case "squid_ink": return INK_SACK;
             case "suspended_depth":
             case "suspended": return STRING;
             case "sweep_attack": return GOLD_SWORD;
-            case "totem": return StarMaterial.TOTEM_OF_UNDYING.find();
+            case "totem": return TOTEM_OF_UNDYING.find();
             case "villager_angry":
             case "villager_happy":
             case "town_aura": return EMERALD;
             case "warped_spore": return matchMaterial("WARPED_NYLIUM");
             case "water_drop":
             case "water_wake":
-            case "water_bubble": return StarMaterial.LILY_PAD.find();
+            case "water_bubble": return LILY_PAD.find();
         }
 
         return CLAY_BALL;

@@ -38,12 +38,17 @@ public final class ItemBuilder {
                 .name(" ")
                 .build();
 
+        LOCKED = ItemBuilder.of(Material.BEDROCK)
+                .name(ChatColor.DARK_PURPLE + get("constants.locked"))
+                .build();
+
         loaded = true;
     }
 
     public static ItemStack GUI_BACKGROUND;
     public static ItemStack SAVE;
     public static ItemStack STOP_SOUND;
+    public static ItemStack LOCKED;
 
 
     private ItemBuilder(ItemStack item) {
