@@ -1,4 +1,5 @@
 # Contributor Covenant Code of Conduct
+Official StarCosmetics Code of Conduct
 
 ## Our Pledge
 

@@ -20,15 +20,17 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
-💽 v1.0.0 - Nov 26
-**Not Released Yet**
+💽 v1.0.0 - Dec 17, 2022
+
+First Release of StarCosmetics
 
 ---
 
 ## 🔮 Future Features
 
-#### v1.1.0 Beta
+#### v1.1.0
 - [ ] Custom Player Soundtracks
+- [ ] Custom Structures using StarCosmetics Structure Files (.scs)
 
 ---
 
