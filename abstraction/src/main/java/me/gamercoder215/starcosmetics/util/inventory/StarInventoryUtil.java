@@ -183,7 +183,8 @@ public final class StarInventoryUtil {
 
             switch (entity) {
                 case "generic": return LEATHER_CHESTPLATE;
-                case "fishing_bobber": return FISHING_ROD;
+                case "fishing_bobber":
+                case "bobber": return FISHING_ROD;
                 case "hostile": return ROTTEN_FLESH;
                 case "item": return CHEST;
                 case "leash_knot": return LEAD.find();
