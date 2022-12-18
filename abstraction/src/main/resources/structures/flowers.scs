@@ -1,0 +1,6 @@
+1.13
+:flowers:
+constants.cosmetics.structures.flowers
+occasional
+---
+{10%=poppy,10%=dandelion,10%=allium,10%=red_tulip,10%=white_tulip,10%=orange_tulip,10%=oxeye_daisy,10%=azure_bluet,10%=pink_tulip,10%=blue_orchid}:(3,3,0,0,3,3)^[0,1,0]
