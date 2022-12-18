@@ -22,7 +22,7 @@ import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public class CosmeticSelections1_14 implements CosmeticSelections {
+public final class CosmeticSelections1_14 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -34,10 +34,14 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
                     fromCrafted(50, Material.TORCH), Rarity.COMMON))
 
             .add(new TrailSelection("bamboo", BaseTrail.PROJECTILE_TRAIL, Material.BAMBOO,
-                    fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))
+                    fromMined(225, Material.BAMBOO), Rarity.UNCOMMON))
+            .add(new TrailSelection("fletching_table", BaseTrail.PROJECTILE_TRAIL, "fancy_block:fletching_table",
+                    fromCrafted(15, Material.FLETCHING_TABLE), Rarity.UNCOMMON))
 
             .add(new TrailSelection("crossbow", BaseTrail.PROJECTILE_TRAIL, "fancy_item:crossbow",
                     fromKilled(550, EntityType.PILLAGER), Rarity.EPIC))
+            .add(new TrailSelection("loom", BaseTrail.PROJECTILE_TRAIL, "fancy_block:loom",
+                    fromCrafted(25, Material.LOOM), Rarity.EPIC))
             
             .add(new TrailSelection("wither_rose", BaseTrail.PROJECTILE_TRAIL, Material.WITHER_ROSE,
                     fromKilled(1000, EntityType.WITHER), Rarity.MYTHICAL))
@@ -48,6 +52,7 @@ public class CosmeticSelections1_14 implements CosmeticSelections {
             .build();
 
     // Ground Trails
+
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("bamboo", BaseTrail.GROUND_TRAIL, Material.BAMBOO,
                     fromMined(240, Material.BAMBOO), Rarity.UNCOMMON))

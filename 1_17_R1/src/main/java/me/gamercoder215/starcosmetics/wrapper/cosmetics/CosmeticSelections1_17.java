@@ -27,7 +27,7 @@ import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.circle;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public class CosmeticSelections1_17 implements CosmeticSelections {
+public final class CosmeticSelections1_17 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -47,6 +47,8 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
             .add(new TrailSelection("raw_ores", BaseTrail.PROJECTILE_TRAIL,
                     Arrays.asList(Material.RAW_IRON, Material.RAW_GOLD, Material.RAW_COPPER),
                     fromMined(500, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE), Rarity.RARE))
+            .add(new TrailSelection("candle", BaseTrail.PROJECTILE_TRAIL, Material.CANDLE,
+                    fromCrafted(135, Material.CANDLE), Rarity.RARE))
             
             .add(new TrailSelection("amethyst", BaseTrail.PROJECTILE_TRAIL, Material.AMETHYST_SHARD,
                     fromMined(2000, Material.AMETHYST_BLOCK), Rarity.EPIC))
@@ -76,6 +78,10 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
                     fromMined(125, Material.CALCITE), Rarity.RARE))
             .add(new TrailSelection("oxidized_copper", BaseTrail.GROUND_TRAIL, "ground_block:oxidized_copper",
                     fromMined(235, Material.COPPER_ORE), Rarity.RARE))
+            .add(new TrailSelection("deepslate_brick_slab", BaseTrail.GROUND_TRAIL, "side_block:deepslate_brick_slab",
+                    fromMined(265, Material.DEEPSLATE), Rarity.RARE))
+            .add(new TrailSelection("candle", BaseTrail.GROUND_TRAIL, Material.CANDLE,
+                    fromCrafted(115, Material.CANDLE), Rarity.RARE))
 
             .add(new TrailSelection("amethyst", BaseTrail.GROUND_TRAIL, Material.AMETHYST_SHARD,
                     fromMined(600, Material.AMETHYST_BLOCK), Rarity.EPIC))
@@ -92,6 +98,8 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("dripleaf_place", BaseTrail.SOUND_TRAIL, Sound.BLOCK_BIG_DRIPLEAF_PLACE,
                     fromMined(60, Material.BIG_DRIPLEAF), Rarity.OCCASIONAL))
+            .add(new TrailSelection("candle_place", BaseTrail.SOUND_TRAIL, Sound.BLOCK_CANDLE_PLACE,
+                    fromCrafted(30, Material.CANDLE), Rarity.OCCASIONAL))
 
             .add(new TrailSelection("amethyst_step", BaseTrail.SOUND_TRAIL, Sound.BLOCK_AMETHYST_BLOCK_STEP,
                     fromMined(15, Material.AMETHYST_BLOCK), Rarity.UNCOMMON))
@@ -118,6 +126,13 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
 
             .build();
 
+    // Large Rings
+
+    private static final List<CosmeticSelection<?>> LARGE_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new ParticleSelection("deepslate", BaseShape.LARGE_RING, Material.DEEPSLATE,
+                    fromMined(145, Material.DEEPSLATE), Rarity.UNCOMMON))
+            .build();
+
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
@@ -127,7 +142,7 @@ public class CosmeticSelections1_17 implements CosmeticSelections {
 
             .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_16"))
             .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_16"))
-            .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_16"))
+            .put(BaseShape.LARGE_RING, join(LARGE_RINGS, BaseShape.LARGE_RING, "1_16"))
             .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_16"))
             .build();
 

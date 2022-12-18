@@ -23,7 +23,7 @@ import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
-public class CosmeticSelections1_19 implements CosmeticSelections {
+public final class CosmeticSelections1_19 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -70,7 +70,7 @@ public class CosmeticSelections1_19 implements CosmeticSelections {
                     fromCompletion(PlayerCompletion.SONIC_BOOM_DEATH), Rarity.LEGENDARY))
 
             .add(new TrailSelection("five", BaseTrail.GROUND_TRAIL, Material.MUSIC_DISC_5,
-                    fromKilled(10, EntityType.WARDEN), Rarity.MYTHICAL))
+                    fromKilled(12, EntityType.WARDEN), Rarity.MYTHICAL))
 
             .build();
 

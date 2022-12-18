@@ -17,7 +17,7 @@ import java.util.Map;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
-public class CosmeticSelections1_18 implements CosmeticSelections {
+public final class CosmeticSelections1_18 implements CosmeticSelections {
 
     // Cosmetic Maps
 

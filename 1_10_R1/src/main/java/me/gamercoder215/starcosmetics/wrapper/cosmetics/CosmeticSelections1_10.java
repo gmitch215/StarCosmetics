@@ -17,7 +17,7 @@ import java.util.Map;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromMined;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public class CosmeticSelections1_10 implements CosmeticSelections {
+public final class CosmeticSelections1_10 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -47,7 +47,7 @@ public class CosmeticSelections1_10 implements CosmeticSelections {
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_9"))
-            .put(BaseTrail.GROUND_TRAIL,join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_9"))
+            .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_9"))
             .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_9"))
 
             .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_9"))

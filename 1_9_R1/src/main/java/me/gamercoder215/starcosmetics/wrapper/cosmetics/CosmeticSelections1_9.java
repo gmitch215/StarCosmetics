@@ -100,6 +100,14 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromMined(260, Material.PACKED_ICE), Rarity.RARE))
             .add(new TrailSelection("experience_bottle", BaseTrail.PROJECTILE_TRAIL, StarMaterial.EXPERIENCE_BOTTLE.find(),
                     fromStatistic(Statistic.ITEM_ENCHANTED, 450), Rarity.RARE))
+            .add(new TrailSelection("enchantment", BaseTrail.PROJECTILE_TRAIL, Particle.ENCHANTMENT_TABLE,
+                    fromStatistic(Statistic.ITEM_ENCHANTED, 125), Rarity.RARE))
+            .add(new TrailSelection("anger", BaseTrail.PROJECTILE_TRAIL, Particle.VILLAGER_ANGRY,
+                    fromKilled(65, EntityType.IRON_GOLEM), Rarity.RARE))
+            .add(new TrailSelection("endermite", BaseTrail.PROJECTILE_TRAIL, EntityType.ENDERMITE,
+                    fromKilled(150, EntityType.ENDERMITE), Rarity.RARE))
+            .add(new TrailSelection("quartz_block", BaseTrail.GROUND_TRAIL, "fancy_block:quartz_block",
+                    fromMined(220, StarMaterial.NETHER_QUARTZ_ORE.find()), Rarity.RARE))
 
             .add(new TrailSelection("chorus_fruit", BaseTrail.PROJECTILE_TRAIL, Material.CHORUS_FRUIT,
                     fromMined(1000, StarMaterial.END_STONE.find()), Rarity.EPIC))
@@ -115,12 +123,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromKilled(300, EntityType.GUARDIAN), Rarity.EPIC))
             .add(new TrailSelection("dragon_breath", BaseTrail.PROJECTILE_TRAIL, Particle.DRAGON_BREATH,
                     fromKilled(10, EntityType.ENDER_DRAGON), Rarity.EPIC))
-            .add(new TrailSelection("enchantment", BaseTrail.PROJECTILE_TRAIL, Particle.ENCHANTMENT_TABLE,
-                    fromStatistic(Statistic.ITEM_ENCHANTED, 125), Rarity.RARE))
-            .add(new TrailSelection("anger", BaseTrail.PROJECTILE_TRAIL, Particle.VILLAGER_ANGRY, 
-                    fromKilled(65, EntityType.IRON_GOLEM), Rarity.RARE))
-            .add(new TrailSelection("endermite", BaseTrail.PROJECTILE_TRAIL, EntityType.ENDERMITE,
-                    fromKilled(150, EntityType.ENDERMITE), Rarity.RARE))
+            .add(new TrailSelection("boat", BaseTrail.PROJECTILE_TRAIL, EntityType.BOAT,
+                    fromCrafted(270, StarMaterial.OAK_BOAT.find()), Rarity.EPIC))
             
             .add(new TrailSelection("diamond_sword", BaseTrail.PROJECTILE_TRAIL, "fancy_item:diamond_sword",
                     fromKilled(75, EntityType.WITHER), Rarity.LEGENDARY))
@@ -169,11 +173,17 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromMined(340, Material.SAND), Rarity.OCCASIONAL))
             .add(new TrailSelection("coal_ore", BaseTrail.GROUND_TRAIL, "ground_block:coal_ore",
                     fromMined(80, Material.COAL_ORE), Rarity.OCCASIONAL))
+            .add(new TrailSelection("clay", BaseTrail.GROUND_TRAIL, "ground_block:clay",
+                    fromMined(75, Material.CLAY), Rarity.OCCASIONAL))
 
             .add(new TrailSelection("torch", BaseTrail.GROUND_TRAIL, Material.TORCH,
                     fromMined(110, Material.COAL_ORE), Rarity.UNCOMMON))
             .add(new TrailSelection("blaze_rod", BaseTrail.GROUND_TRAIL, Material.BLAZE_ROD,
                     fromKilled(65, EntityType.BLAZE), Rarity.UNCOMMON))
+            .add(new TrailSelection("purpur_slab", BaseTrail.GROUND_TRAIL, "side_block:purpur_slab",
+                    fromMined(155, Material.PURPUR_BLOCK), Rarity.UNCOMMON))
+            .add(new TrailSelection("nether_quartz", BaseTrail.GROUND_TRAIL, Material.QUARTZ,
+                    fromMined(100, StarMaterial.NETHER_QUARTZ_ORE.find()), Rarity.UNCOMMON))
             
             .add(new TrailSelection("lava", BaseTrail.GROUND_TRAIL, Particle.LAVA,
                     fromKilled(525, EntityType.BLAZE), Rarity.RARE))
@@ -197,16 +207,27 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new TrailSelection("bedrock", BaseTrail.GROUND_TRAIL, "ground_block:bedrock",
                     fromMined(2000000, Material.OBSIDIAN), Rarity.ULTRA))
+
+            .add(new TrailSelection("barrier", BaseTrail.GROUND_TRAIL, "ground_block:barrier",
+                    fromBlocksMined(9000000), Rarity.SPECIAL))
             
             .build();
 
     // Sound Trails
 
     private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("log_place", BaseTrail.SOUND_TRAIL, Sound.BLOCK_WOOD_PLACE,
+                    fromMined(30, StarMaterial.OAK_LOG.find()), Rarity.COMMON))
+            .add(new TrailSelection("stone_place", BaseTrail.SOUND_TRAIL, Sound.BLOCK_STONE_PLACE,
+                    fromMined(35, Material.STONE), Rarity.COMMON))
+
             .add(new TrailSelection("slime_place", BaseTrail.SOUND_TRAIL, StarSound.BLOCK_SLIME_PLACE.find(),
                     fromKilled(100, EntityType.SLIME), Rarity.OCCASIONAL))
             .add(new TrailSelection("anvil_place", BaseTrail.SOUND_TRAIL, Sound.BLOCK_ANVIL_PLACE,
                     fromKilled(30, EntityType.IRON_GOLEM), Rarity.OCCASIONAL))
+
+            .add(new TrailSelection("attack", BaseTrail.SOUND_TRAIL, Sound.ENTITY_PLAYER_ATTACK_SWEEP,
+                    fromKilled(70, EntityType.ZOMBIE), Rarity.UNCOMMON))
 
             .add(new TrailSelection("bat_death", BaseTrail.SOUND_TRAIL, Sound.ENTITY_BAT_DEATH,
                     fromKilled(40, EntityType.BAT), Rarity.RARE))
@@ -225,6 +246,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("heart", BaseShape.SMALL_RING, Particle.HEART,
                     fromStatistic(Statistic.ANIMALS_BRED, 15), Rarity.COMMON))
+            .add(new ParticleSelection("apple", BaseShape.SMALL_RING, Material.APPLE,
+                    fromMined(50, StarMaterial.OAK_LOG.find()), Rarity.COMMON))
 
             .add(new ParticleSelection("flame", BaseShape.SMALL_RING, Particle.FLAME,
                     fromKilled(80, EntityType.BLAZE), Rarity.OCCASIONAL))
@@ -233,6 +256,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new ParticleSelection("iron", BaseShape.SMALL_RING, Material.IRON_INGOT,
                     fromCrafted(30, Material.IRON_BLOCK), Rarity.UNCOMMON))
+            .add(new ParticleSelection("cactus", BaseShape.SMALL_RING, Material.CACTUS,
+                    fromMined(90, Material.CACTUS), Rarity.UNCOMMON))
 
             .add(new ParticleSelection("gold", BaseShape.SMALL_RING, Material.GOLD_INGOT,
                     fromCrafted(30, Material.GOLD_BLOCK), Rarity.RARE))
@@ -276,6 +301,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> LARGE_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("soul_sand", BaseShape.LARGE_DETAILED_RING, Material.SOUL_SAND,
                     fromMined(90, Material.SOUL_SAND), Rarity.OCCASIONAL))
+            .add(new ParticleSelection("end_stone", BaseShape.LARGE_DETAILED_RING, StarMaterial.END_STONE.find(),
+                    fromMined(110, StarMaterial.END_STONE.find()), Rarity.OCCASIONAL))
 
             .add(new ParticleSelection("enchantment", BaseShape.LARGE_DETAILED_RING, Particle.ENCHANTMENT_TABLE,
                     fromStatistic(Statistic.ITEM_ENCHANTED, 385), Rarity.EPIC))

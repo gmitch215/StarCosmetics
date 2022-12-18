@@ -6,6 +6,7 @@ import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.util.StarAdvancement;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
@@ -17,9 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria1_12_R1.fromAdvancement;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public class CosmeticSelections1_12 implements CosmeticSelections {
+public final class CosmeticSelections1_12 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -47,6 +49,8 @@ public class CosmeticSelections1_12 implements CosmeticSelections {
                 Material.GREEN_GLAZED_TERRACOTTA, Material.CYAN_GLAZED_TERRACOTTA, Material.BLUE_GLAZED_TERRACOTTA,
                 Material.MAGENTA_GLAZED_TERRACOTTA, Material.PURPLE_GLAZED_TERRACOTTA, Material.PINK_GLAZED_TERRACOTTA
             ), fromStatistic(Statistic.ANIMALS_BRED, 850), Rarity.EPIC))
+            .add(new TrailSelection("grass_block", BaseTrail.GROUND_TRAIL, StarMaterial.GRASS_BLOCK.find(),
+                    fromAdvancement(StarAdvancement.ADVENTURING_TIME), Rarity.EPIC))
 
             .build();
 

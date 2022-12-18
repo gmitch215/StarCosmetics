@@ -13,6 +13,7 @@ import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.Statistic;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public class CosmeticSelections1_15 implements CosmeticSelections {
+public final class CosmeticSelections1_15 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -42,9 +43,14 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
 
     // Ground Trails
     private static final List<CosmeticSelection<?>> GROUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
-
             .add(new TrailSelection("honeycomb_block", BaseTrail.GROUND_TRAIL, "ground_block:honeycomb_block",
                     fromStatistic(Statistic.ANIMALS_BRED, 1000), Rarity.EPIC))
+            .build();
+
+    // Sound Trails
+    private static final List<CosmeticSelection<?>> SOUND_TRAILS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("bee_pollinate", BaseTrail.SOUND_TRAIL, Sound.ENTITY_BEE_POLLINATE,
+                    fromStatistic(Statistic.ANIMALS_BRED, 900), Rarity.EPIC))
             .build();
 
     // Shapes
@@ -61,7 +67,7 @@ public class CosmeticSelections1_15 implements CosmeticSelections {
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
             .put(BaseTrail.PROJECTILE_TRAIL, join(PROJECTILE_TRAILS, BaseTrail.PROJECTILE_TRAIL, "1_14"))
             .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_14"))
-            .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_14"))
+            .put(BaseTrail.SOUND_TRAIL, join(SOUND_TRAILS, BaseTrail.SOUND_TRAIL, "1_14"))
 
             .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_14"))
             .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_14"))

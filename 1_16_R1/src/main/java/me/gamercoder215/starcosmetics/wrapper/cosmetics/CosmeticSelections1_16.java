@@ -25,7 +25,7 @@ import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.circle;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public class CosmeticSelections1_16 implements CosmeticSelections {
+public final class CosmeticSelections1_16 implements CosmeticSelections {
 
 
     // Cosmetic Maps
@@ -87,6 +87,8 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
 
             .add(new TrailSelection("crying_obsidian", BaseTrail.GROUND_TRAIL, "ground_block:crying_obsidian",
                     fromKilled(85, EntityType.GHAST), Rarity.EPIC))
+            .add(new TrailSelection("lodestone", BaseTrail.GROUND_TRAIL, "ground_block:lodestone",
+                    fromMined(50000, Material.NETHERRACK), Rarity.EPIC))
 
             .add(new TrailSelection("ancient_debris", BaseTrail.GROUND_TRAIL, "ground_block:ancient_debris",
                     fromKilled(10000, EntityType.WITHER_SKELETON), Rarity.LEGENDARY))
@@ -107,7 +109,8 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
 
             .add(new TrailSelection("netherite_break", BaseTrail.SOUND_TRAIL, Sound.BLOCK_NETHERITE_BLOCK_BREAK,
                     fromKilled(490, EntityType.PIGLIN), Rarity.EPIC))
-
+            .add(new TrailSelection("bone_block_place", BaseTrail.SOUND_TRAIL, Sound.BLOCK_BONE_BLOCK_PLACE,
+                    fromMined(80, Material.BONE_BLOCK), Rarity.EPIC))
             .build();
 
 
@@ -118,6 +121,15 @@ public class CosmeticSelections1_16 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("soul_flame", BaseShape.SMALL_RING, Particle.SOUL_FIRE_FLAME,
                     fromKilled(500, EntityType.WITHER_SKELETON), Rarity.RARE))
+            .build();
+
+    // Small Detailed Rings
+
+    private static final List<CosmeticSelection<?>> SMALL_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new ParticleSelection("blackstone", BaseShape.SMALL_DETAILED_RING, Material.BLACKSTONE,
+                    fromMined(230, Material.BLACKSTONE), Rarity.RARE))
+            .add(new ParticleSelection("warped_block", BaseShape.SMALL_DETAILED_RING, Material.WARPED_WART_BLOCK,
+                    fromMined(145, Material.WARPED_NYLIUM), Rarity.RARE))
             .build();
 
     // Large Rings

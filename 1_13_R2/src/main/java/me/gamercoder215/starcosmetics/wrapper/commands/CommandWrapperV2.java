@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
+import me.gamercoder215.starcosmetics.util.StarSound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -29,7 +30,7 @@ public class CommandWrapperV2 implements CommandWrapper {
 
         handler.register(
                 this,
-                new CosmeticCommands(this)
+                new CosmeticCommands()
         );
 
         handler.registerBrigadier();
@@ -46,6 +47,12 @@ public class CommandWrapperV2 implements CommandWrapper {
     public void settings(Player p) {
         CommandWrapper.super.settings(p);
     }
+
+    @Override
+    @Command({"starhelp", "shelp"})
+    @Description("Displays help for StarCosmetics.")
+    @Usage("/starhelp")
+    public void help(CommandSender sender) { CommandWrapper.super.help(sender); }
 
     @Override
     @Command({"starreload", "sreload", "sr"})
@@ -68,36 +75,34 @@ public class CommandWrapperV2 implements CommandWrapper {
     @Description("Opens the StarCosmetics Cosmetics menu.")
     @Usage("/starcosmetics")
     @CommandPermission("starcosmetics.user.cosmetics")
-    public static final class CosmeticCommands {
+    public final class CosmeticCommands {
 
         private final CommandWrapperV2 wrapper;
 
-        CosmeticCommands(CommandWrapperV2 wrapper) {
-            this.wrapper = wrapper;
+        CosmeticCommands() {
+            this.wrapper = CommandWrapperV2.this;
         }
 
         @Default
-        public void cosmetics(Player p) {
-            wrapper.cosmetics(p);
-        }
+        public void cosmetics(Player p) { wrapper.cosmetics(p); StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p); }
 
         @Subcommand({"pets", "pet"})
         @AutoComplete("remove")
-        public void pets(Player p, @Default("") String args) {
-            wrapper.pets(p, args);
-        }
+        public void pets(Player p, @Optional String args) { wrapper.pets(p, args); }
 
         @Subcommand({"structures", "structure"})
         @AutoComplete("@structures *")
-        public void structures(Player p, @Default("") String structure) {
-            wrapper.structures(p, structure);
-        }
+        public void structures(Player p, @Optional String structure) { wrapper.structures(p, structure); }
+
+        @Subcommand("trails")
+        public void trails(Player p) { wrapper.trails(p); }
+
+        @Subcommand({"shapes", "particleshapes", "particles"})
+        public void shapes(Player p) { wrapper.shapes(p); }
 
         @Subcommand({"customsounds", "sounds"})
         @AutoComplete("add")
-        public void soundSelection(Player p, @Default("") String args) {
-            wrapper.soundSelection(p, args.split("\\s"));
-        }
+        public void soundSelection(Player p, @Optional String args) { wrapper.soundSelection(p, args == null ? null : args.split("\\s")); }
 
     }
 
