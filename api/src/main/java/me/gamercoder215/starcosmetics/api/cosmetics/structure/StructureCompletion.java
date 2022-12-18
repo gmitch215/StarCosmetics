@@ -55,11 +55,6 @@ public enum StructureCompletion implements Completion {
      * Represents the completion for unlocking {@link Rarity#SPECIAL} structures.
      */
     SPECIAL,
-
-    /**
-     * Represents the completion for unlocking {@link Rarity#SECRET} structures.
-     */
-    SECRET,
     ;
 
     private final CompletionCriteria criteria;

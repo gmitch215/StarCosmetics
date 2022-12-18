@@ -43,26 +43,19 @@ public enum Rarity {
      */
     ULTRA(ChatColor.AQUA),
 
-    // Special / Secret with no visible requirements
+    // Special with no visible requirements
     /**
-     * <p>Represents the special rarity.</p>
-     * <p>This rarity is one of two rarities that have no visible requirements in their description.</p>
+     * Represents the special rarity. This rarity is the only one with no visible requirements.
      */
     SPECIAL(ChatColor.RED, true),
-
-    /**
-     * <p>Represents the secret rarity.</p>
-     * <p>This rarity is one of two rarities that have no visible requirements in their description.</p>
-     */
-    SECRET(ChatColor.DARK_RED, true),
     ;
 
     private final String prefix;
-    private final boolean secret;
+    private final boolean visibleRequirements;
 
-    Rarity(String prefix, boolean secret) {
+    Rarity(String prefix, boolean visible) {
         this.prefix = prefix;
-        this.secret = secret;
+        this.visibleRequirements = visible;
     }
 
     Rarity(String prefix) {
@@ -104,7 +97,7 @@ public enum Rarity {
      * Whether this rarity has a visible Completion Requirement.
      * @return true if requirement is visible, false otherwise
      */
-    public boolean isSecret() {
-        return secret;
+    public boolean hasVisibleRequirements() {
+        return visibleRequirements;
     }
 }
