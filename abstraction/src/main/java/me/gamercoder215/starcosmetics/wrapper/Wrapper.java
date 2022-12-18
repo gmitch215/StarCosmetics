@@ -143,6 +143,8 @@ public interface Wrapper {
         sendBlockChange(p, loc, m, null);
     }
 
+    String getAdvancementDescription(String s);
+
     // Other Utilities
 
     @NotNull

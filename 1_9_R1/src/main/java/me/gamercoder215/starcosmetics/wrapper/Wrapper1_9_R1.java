@@ -108,6 +108,11 @@ public final class Wrapper1_9_R1 implements Wrapper {
     }
 
     @Override
+    public String getAdvancementDescription(String s) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_9_R1(key, size, title);
     }

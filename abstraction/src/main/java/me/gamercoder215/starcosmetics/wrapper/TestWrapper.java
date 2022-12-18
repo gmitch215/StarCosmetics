@@ -59,5 +59,10 @@ public final class TestWrapper implements Wrapper {
     @Override
     public void sendBlockChange(Player p, Location loc, Material m, BlockState data) {}
 
+    @Override
+    public String getAdvancementDescription(String s) {
+        return s;
+    }
+
 
 }

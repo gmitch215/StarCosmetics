@@ -13,11 +13,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_14_R1.advancement.CraftAdvancement;
 import org.bukkit.craftbukkit.v1_14_R1.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
@@ -205,6 +207,14 @@ public final class Wrapper1_14_R1 implements Wrapper {
     @Override
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_14_R1(key, size, title);
+    }
+
+    @Override
+    public String getAdvancementDescription(String s) {
+        CraftAdvancement ca = (CraftAdvancement) Bukkit.getAdvancement(NamespacedKey.minecraft(s));
+        AdvancementDisplay display = ca.getHandle().c();
+
+        return display.b().getString();
     }
 
 }
