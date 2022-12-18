@@ -57,6 +57,16 @@ public final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
                         pets(p, petArgs);
                         break;
                     }
+                    case "trails": {
+                        trails(p);
+                        break;
+                    }
+                    case "particleshapes":
+                    case "particles":
+                    case "shapes": {
+                        shapes(p);
+                        break;
+                    }
                     case "structures":
                     case "structure": {
                         StringBuilder structure = new StringBuilder();

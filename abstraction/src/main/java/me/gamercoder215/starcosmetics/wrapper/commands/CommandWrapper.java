@@ -24,6 +24,7 @@ import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -33,11 +34,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
@@ -50,6 +49,7 @@ public interface CommandWrapper {
             .put("starabout", Arrays.asList("sabout", "sa", "stara"))
             .put("starstructures", Arrays.asList("sstructures", "sstr"))
             .put("starpets", Arrays.asList("starp", "sp", "spets", "pets"))
+            .put("starhelp", Collections.singletonList("shelp"))
             .build();
 
     Map<String, String> COMMAND_PERMISSION = ImmutableMap.<String, String>builder()
@@ -67,6 +67,7 @@ public interface CommandWrapper {
             .put("starabout", "Displays information about StarCosmetics.")
             .put("starstructures", "Opens the StarCosmetics structures menu.")
             .put("starpets", "Opens the StarCosmetics pets menu.")
+            .put("starhelp", "Displays help for StarCosmetics.")
             .build();
 
     Map<String, String> COMMAND_USAGE = ImmutableMap.<String, String>builder()
@@ -76,6 +77,7 @@ public interface CommandWrapper {
             .put("starabout", "/starabout")
             .put("starstructures", "/starstructures [structure]")
             .put("starpets", "/starpets [remove|spawn]")
+            .put("starhelp", "/starhelp")
             .build();
 
     // Command Methods
@@ -123,12 +125,13 @@ public interface CommandWrapper {
         lore.add(ChatColor.AQUA + getWithArgs("menu.about.sound_trail_count", comma(getCosmeticCount(TrailType.PROJECTILE_SOUND)) ));
 
         lore.add(" ");
-        lore.add(ChatColor.DARK_PURPLE + getWithArgs("menu.about.particle_shape_count", comma(getCosmeticCount(ParticleShape.class)) ));
 
-        lore.add(" ");
+        lore.add(ChatColor.DARK_PURPLE + getWithArgs("menu.about.particle_shape_count", comma(getCosmeticCount(ParticleShape.class)) ));
+        lore.add(ChatColor.DARK_AQUA + getWithArgs("menu.about.structure_count", comma(StarConfig.getRegistry().getAvailableStructures().size()) ));
         lore.add(ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length)));
 
         lore.add(" ");
+
         lore.add(ChatColor.RED + getWithArgs("menu.about.total_cosmetic_count", comma(getCosmeticCount()) ));
         cMeta.setLore(lore);
 
@@ -142,6 +145,7 @@ public interface CommandWrapper {
                         .nbt(nbt -> {
                             nbt.set("link", "https://github.com/GamerCoder215/StarCosmetics");
                             nbt.set("message_id", "menu.about.message.github");
+                            nbt.set("color", "555555");
                         })
                         .build());
 
@@ -152,6 +156,7 @@ public interface CommandWrapper {
                         .nbt(nbt -> {
                             nbt.set("link", "https://discord.gg/WVFNWEvuqX");
                             nbt.set("message_id", "menu.about.message.discord");
+                            nbt.set("color", "5865F2");
                         })
                         .build());
 
@@ -162,7 +167,7 @@ public interface CommandWrapper {
                         .nbt(nbt -> {
                             nbt.set("link", "https://www.youtube.com/@GamerCoder215");
                             nbt.set("message_id", "menu.about.message.youtube");
-                            nbt.set("color", "RED");
+                            nbt.set("color", "FF5555");
                         })
                         .build());
 
@@ -173,7 +178,7 @@ public interface CommandWrapper {
                         .nbt(nbt -> {
                             nbt.set("link", "https://twitter.com/TeamInceptus");
                             nbt.set("message_id", "menu.about.message.twitter");
-                            nbt.set("color", "BLUE");
+                            nbt.set("color", "1DA1F2");
                         })
                         .build());
 
@@ -184,7 +189,7 @@ public interface CommandWrapper {
                         .nbt(nbt -> {
                             nbt.set("link", "https://www.instagram.com/teaminceptus");
                             nbt.set("message_id", "menu.about.message.instagram");
-                            nbt.set("color", "LIGHT_PURPLE");
+                            nbt.set("color", "FF55FF");
                         })
                         .build());
 
@@ -193,6 +198,7 @@ public interface CommandWrapper {
 
     default void cosmetics(Player p) {
         StarInventory inv = Generator.genGUI("cosmetics_parent_menu", 54, get("menu.cosmetics"));
+        inv.setCancelled();
 
         for (CosmeticParent parent : CosmeticParent.values()) {
             ItemStack item = new ItemStack(parent.getIcon());
@@ -256,7 +262,9 @@ public interface CommandWrapper {
             structures = stnbt.getItem();
             inv.setItem(30, structures);
             inv.setAttribute("structures", structureInv);
-        } catch (IllegalArgumentException ignored) {}
+        } catch (IllegalArgumentException ignored) {
+            inv.setItem(30, ItemBuilder.LOCKED);
+        }
 
         ItemStack pets = StarInventoryUtil.getHead("rabbit_pet");
         ItemMeta petMeta = pets.getItemMeta();
@@ -270,7 +278,38 @@ public interface CommandWrapper {
         inv.setItem(32, pets);
         inv.setAttribute("pets", Generator.createPetInventory(p));
 
+        ItemStack settings = ItemBuilder.of(Material.NETHER_STAR)
+                .id("player_settings")
+                .name(ChatColor.YELLOW + get("menu.cosmetics.settings"))
+                .nbt(nbt -> nbt.set("back", "cosmetics"))
+                .build();
+
+        inv.setItem(52, settings);
+
         p.openInventory(inv);
+    }
+
+    default void help(CommandSender sender) {
+        List<String> info = new ArrayList<>();
+        for (String name : COMMANDS.keySet()) {
+            PluginCommand cmd = Bukkit.getPluginCommand(name);
+
+            if (!sender.isOp() && COMMAND_PERMISSION.get(name) != null && !(sender.hasPermission(COMMAND_PERMISSION.get(name)))) continue;
+
+            if (sender.isOp())
+                info.add(ChatColor.AQUA + "/" + cmd.getName() + ChatColor.WHITE + " - " + ChatColor.BLUE + COMMAND_DESCRIPTION.get(name) + ChatColor.WHITE + " | " + ChatColor.GOLD + (COMMAND_PERMISSION.get(name) == null ? "No Permissions" : COMMAND_PERMISSION.get(name)));
+            else
+                info.add(ChatColor.AQUA + "/" + cmd.getName() + ChatColor.WHITE + " - " + ChatColor.BLUE + COMMAND_DESCRIPTION.get(name));
+        }
+
+        String msg = ChatColor.DARK_AQUA + "" + ChatColor.UNDERLINE + get("constants.commands") + "\n\n" + String.join("\n", info.toArray(new String[]{}));
+        sender.sendMessage(msg);
+    }
+
+    default void trails(Player p) {
+        StarInventory parentInv = Generator.createParentInventory(CosmeticParent.TRAILS);
+        p.openInventory(parentInv);
+        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
     default void structures(Player p, @Nullable String structure) {
@@ -295,7 +334,7 @@ public interface CommandWrapper {
                 .findFirst().orElse(null);
 
         if (info == null) {
-            sendError(p, "error.structure_not_found");
+            sendError(p, "error.cosmetics.structure_not_found");
             return;
         }
 
@@ -331,7 +370,7 @@ public interface CommandWrapper {
                 }
 
                 StarPlayerUtil.removePet(p);
-                p.sendMessage(ChatColor.GREEN + get("success.cosmetics.pet_removed"));
+                sp.sendNotification(ChatColor.GREEN + get("success.cosmetics.pet_removed"));
                 break;
             }
             default: {
@@ -341,8 +380,29 @@ public interface CommandWrapper {
         }
     }
 
+    default void shapes(Player p) {
+        List<CosmeticLocation<?>> sel = Wrapper.allFor(BaseShape.class);
+        List<StarInventory> invs = Generator.createSelectionInventory(p, sel, get("menu.cosmetics.shape"));
+        invs.forEach(inv -> StarInventoryUtil.setBack(inv, cw::cosmetics));
+
+        ItemStack cancel = new ItemStack(Material.BARRIER);
+        ItemMeta meta = cancel.getItemMeta();
+        meta.setDisplayName(ChatColor.RED + get("menu.cosmetics.particle.reset"));
+        cancel.setItemMeta(meta);
+
+        NBTWrapper n = of(cancel);
+        n.setID("cancel:particle");
+        cancel = n.getItem();
+
+        ItemStack cancelF = cancel;
+        invs.forEach(i -> i.setItem(18, cancelF));
+
+        p.openInventory(invs.get(0));
+        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+    }
+
     default void soundSelection(Player p, String... args) {
-        if (args.length < 1) {
+        if (args == null || args.length < 1) {
             p.openInventory(Generator.createSelectionInventory(p));
             StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
             return;
@@ -393,6 +453,7 @@ public interface CommandWrapper {
 
         count += SoundEventSelection.AVAILABLE_EVENTS.size();
         count += PetType.values().length;
+        count += StarConfig.getRegistry().getAvailableStructures().size();
 
         return count;
     }
