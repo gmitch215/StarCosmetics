@@ -533,7 +533,6 @@ public final class ClickEvents implements Listener {
             })
             .put("player_settings", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
-                StarPlayer sp = new StarPlayer(p);
                 ItemStack item = e.getCurrentItem();
                 NBTWrapper nbt = of(item);
 

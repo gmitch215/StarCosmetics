@@ -141,7 +141,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                 .checkNow();
 
         // bStats
-        Metrics metrics = new Metrics(this, BSTATS_ID);
+        new Metrics(this, BSTATS_ID);
 
         getLogger().info("Loaded Dependencies...");
 
