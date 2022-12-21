@@ -90,8 +90,10 @@ public final class StructureInfo {
 
     /**
      * Whether this Structure is compatible with this version of Minecraft.
+     * @deprecated Structures will not be read properly and will throw errors if they are read on an incompatible version, making this method obselete.
      * @return true if this Structure is compatible with this version of Minecraft, false otherwise.
      */
+    @Deprecated
     public boolean isCompatible() {
         if (minVersion.equalsIgnoreCase("ALL")) return true;
 

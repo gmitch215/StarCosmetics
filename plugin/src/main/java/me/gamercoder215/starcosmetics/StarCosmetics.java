@@ -387,17 +387,24 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         Set<Structure> set = new HashSet<>();
 
-        for (String structF : STRUCTURE_FILES) {
-            InputStream struct = StarCosmetics.class.getResourceAsStream("/structures/" + structF + ".scs");
-            StructureReader reader = StructureReader.getStructureReader(struct);
-            set.add(reader.read());
+        try {
+            for (String structF : STRUCTURE_FILES) {
+                InputStream struct = StarCosmetics.class.getResourceAsStream("/structures/" + structF + ".scs");
+                StructureReader reader = StructureReader.getStructureReader(struct);
 
-            try { reader.close(); } catch (IOException e) { StarConfig.print(e); }
-        }
+                Structure read = reader.read();
+                if (read == null) {
+                    reader.close();
+                    continue;
+                }
+
+                set.add(read);
+                reader.close();
+            }
+        } catch (IOException e) { StarConfig.print(e); }
 
         STRUCTURE_CACHE.addAll(set.stream()
                 .map(Structure::getInfo)
-                .filter(StructureInfo::isCompatible)
                 .collect(Collectors.toSet()));
 
         return ImmutableSet.copyOf(STRUCTURE_CACHE);
