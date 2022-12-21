@@ -4,7 +4,7 @@
     <parent>
         <groupId>me.gamercoder215.starcosmetics</groupId>
         <artifactId>starcosmetics-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>starcosmetics-1_9_R2</artifactId>
