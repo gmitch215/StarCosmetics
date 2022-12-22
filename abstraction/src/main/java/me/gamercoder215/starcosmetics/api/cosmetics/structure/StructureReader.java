@@ -7,9 +7,21 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+
 public interface StructureReader extends Closeable {
 
     Structure read();
+
+    static boolean isCompatible(String minVersion) {
+        if (minVersion.equalsIgnoreCase("ALL")) return true;
+
+        String currentV = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
+
+        int current = Integer.parseInt(currentV.split("_")[1]);
+        int required = Integer.parseInt(minVersion.split("\\.")[1]);
+        return current >= required;
+    }
 
     static String trimLine(String point) {
         String trimmed = point.trim();

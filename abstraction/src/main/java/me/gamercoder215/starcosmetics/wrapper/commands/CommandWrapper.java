@@ -408,8 +408,16 @@ public interface CommandWrapper {
             return;
         }
 
+        StarPlayer sp = new StarPlayer(p);
+
         switch (args[0].toLowerCase()) {
             case "add": {
+                if (sp.getSelectionLimit() <= sp.getSoundSelections().size()) {
+                    sendError(p, "error.cosmetics.selection_limit"); // TODO Translation
+                    StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                    return;
+                }
+
                 InventorySelector.createSelection(p);
                 break;
             }

@@ -51,6 +51,11 @@ public final class ModernStructureReader implements StructureReader {
                     case 3: rarity = Rarity.valueOf(line.toUpperCase()); index.incrementAndGet(); continue;
                 }
 
+                if (!StructureReader.isCompatible(minVersion)) {
+                    close();
+                    return null;
+                }
+
                 if (i == 4 && !line.equalsIgnoreCase("---")) throw new MalformedStructureException("Malformed Strucutre File: Expected '---' but got '" + line + "'");
 
                 if (i > 4) {
