@@ -24,6 +24,10 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+💽 v1.0.1 - Dec 22, 2022
+- Fixed issues with loading on pre-1.19 versions
+- Added more cosmetic content
+
 💽 v1.0.0 - Dec 17, 2022
 
 First Release of StarCosmetics
