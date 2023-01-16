@@ -307,7 +307,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
             LivingEntity petEntity = pet.getEntity();
             if (r.nextInt(600) == 1 && type.getAmbientSound() != null)
-                p.getWorld().playSound(petEntity.getLocation(), type.getAmbientSound(), 3F, type.getAmbientPitch());
+                p.getWorld().playSound(petEntity.getLocation(), type.getAmbientSound(), 1F, type.getAmbientPitch());
         }
     };
 
