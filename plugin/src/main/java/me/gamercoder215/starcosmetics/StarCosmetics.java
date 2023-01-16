@@ -222,6 +222,45 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         STAR_PLAYER_CACHE.clear();
     }
 
+    @Override
+    public long getEntityDisappearTime() {
+        return config.getLong("cosmetics.entity-disappear-time", 15);
+    }
+
+    @Override
+    public void setEntityDisappearTime(long time) throws IllegalArgumentException {
+        if (time <= 0) throw new IllegalArgumentException("Time must be positive!");
+
+        config.set("cosmetics.entity-disappear-time", time);
+        saveConfig();
+    }
+
+    @Override
+    public long getItemDisappearTime() {
+        return config.getLong("cosmetics.item-disappear-time", 10);
+    }
+
+    @Override
+    public void setItemDisappearTime(long time) throws IllegalArgumentException {
+        if (time <= 0) throw new IllegalArgumentException("Time must be positive!");
+
+        config.set("cosmetics.item-disappear-time", time);
+        saveConfig();
+    }
+
+    @Override
+    public long getBlockDisappearTime() {
+        return config.getLong("cosmetics.block-disappear-time", 4);
+    }
+
+    @Override
+    public void setBlockDisappearTime(long time) throws IllegalArgumentException {
+        if (time <= 0) throw new IllegalArgumentException("Time must be positive!");
+
+        config.set("cosmetics.block-disappear-time", time);
+        saveConfig();
+    }
+
     // Other Utilities
 
     public static String getServerVersion() {

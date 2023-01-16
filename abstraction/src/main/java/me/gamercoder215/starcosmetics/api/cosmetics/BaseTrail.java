@@ -66,7 +66,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         return;
                     }
                     
-                    w.spawnFakeItem(item, p.getLocation(), 10);
+                    w.spawnFakeItem(item, p.getLocation(), StarConfig.getConfig().getItemDisappearTime());
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 3, 1);
         }
@@ -89,7 +89,7 @@ public final class BaseTrail<T> implements Trail<T> {
                     loc.setYaw(yaw);
                     loc.setPitch(pitch);
 
-                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeEntity(pl, type, p.getLocation(), 15);
+                    for (Player pl : p.getWorld().getPlayers()) w.spawnFakeEntity(pl, type, p.getLocation(), StarConfig.getConfig().getEntityDisappearTime());
                 }
             }.runTaskTimer(StarConfig.getPlugin(), 6, 2);
         }
@@ -112,7 +112,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         }
 
                         ItemStack item = items.get(r.nextInt(items.size()));
-                        w.spawnFakeItem(item, p.getLocation(), 10);
+                        w.spawnFakeItem(item, p.getLocation(), StarConfig.getConfig().getItemDisappearTime());
                     }
                 }.runTaskTimer(StarConfig.getPlugin(), 3, 1);
             }
@@ -201,7 +201,7 @@ public final class BaseTrail<T> implements Trail<T> {
                                     public void run() {
                                         as.remove();
                                     }
-                                }.runTaskLater(StarConfig.getPlugin(), 4);
+                                }.runTaskLater(StarConfig.getPlugin(), StarConfig.getConfig().getBlockDisappearTime());
                             }
                         }.runTaskTimer(StarConfig.getPlugin(), 5, 1);
                         break;
@@ -241,7 +241,7 @@ public final class BaseTrail<T> implements Trail<T> {
                                     public void run() {
                                         as.remove();
                                     }
-                                }.runTaskLater(StarConfig.getPlugin(), 4);
+                                }.runTaskLater(StarConfig.getPlugin(), StarConfig.getConfig().getBlockDisappearTime());
                             }
                         }.runTaskTimer(StarConfig.getPlugin(), 5, 1);
                         break;
@@ -314,7 +314,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         meta.setOwner(p.getName());
                         item.setItemMeta(meta);
 
-                        w.spawnFakeItem(item, loc, 10);
+                        w.spawnFakeItem(item, loc, StarConfig.getConfig().getItemDisappearTime());
                         break;
                     }
                 }

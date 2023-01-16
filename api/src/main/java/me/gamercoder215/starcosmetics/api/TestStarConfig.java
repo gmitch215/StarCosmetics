@@ -16,4 +16,22 @@ final class TestStarConfig implements StarConfig {
 
     @Override
     public void updatePluginCache() {}
+
+    @Override
+    public long getEntityDisappearTime() { return 4; }
+
+    @Override
+    public void setEntityDisappearTime(long time) throws IllegalArgumentException {}
+
+    @Override
+    public long getItemDisappearTime() { return 10; }
+
+    @Override
+    public void setItemDisappearTime(long time) throws IllegalArgumentException {}
+
+    @Override
+    public long getBlockDisappearTime() { return 15; }
+
+    @Override
+    public void setBlockDisappearTime(long time) throws IllegalArgumentException {}
 }

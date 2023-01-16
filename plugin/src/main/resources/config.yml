@@ -23,3 +23,16 @@ functionality:
   # 1 - Command Version 1 (All Versions)
   # 2 - Command Version 2 (1.13+)
   command-version: auto
+
+# Configuration Section related to Cosmetics
+cosmetics:
+
+  # How long, in ticks, an item cosmetic should last for.
+  # 1 tick = 1/20 of a second
+  item-disappear-time: 10
+
+  # How long, in ticks, a block cosmetic should last for (armor stands).
+  block-disappear-time: 4
+
+  # How long, in ticks, an entity cosmetic should last for.
+  entity-disappear-time: 15
