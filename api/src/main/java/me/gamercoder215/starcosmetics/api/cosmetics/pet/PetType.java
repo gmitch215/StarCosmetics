@@ -123,7 +123,17 @@ public enum PetType {
     /**
      * Represents a Slime.
      */
-    SLIME(Sound.ENTITY_SLIME_JUMP)
+    SLIME(Sound.ENTITY_SLIME_JUMP),
+
+    /**
+     * Represents a Unicorn.
+     */
+    UNICORN(Sound.ENTITY_HORSE_AMBIENT),
+
+    /**
+     * Represents a Demogorgon.
+     */
+    DEMOGORGON(Sound.ENTITY_WOLF_GROWL, 0F),
     ;
 
     private final Sound ambientSound;

@@ -161,6 +161,16 @@ public final class CosmeticSelections1_16 implements CosmeticSelections {
     public void loadPets() {
         PET_MAP.putAll(
                 ImmutableMap.<PetType, PetInfo>builder()
+                        .put(PetType.DEMOGORGON, of(
+                                "Demogorgon", Rarity.LEGENDARY,
+                                petIcon("demogorgon_pet", "Demogorgon"), fromMined(500000, Material.BASALT), stand -> {
+                                    if (r.nextInt(100) < 3) w.spawnFakeItem(new ItemStack(Material.BONE), head(stand), 5);
+                                    if (r.nextInt(100) < 3) w.spawnFakeItem(new ItemStack(Material.BONE_MEAL), head(stand), 5);
+
+                                    if (r.nextInt(100) < 10) stand.getWorld().spawnParticle(Particle.BLOCK_CRACK, head(stand), 5, Material.REDSTONE_BLOCK.createBlockData());
+                                }
+                        ))
+
                         .put(PetType.STRIDER, of(
                                 "Strider", Rarity.MYTHICAL,
                                 petIcon("strider_pet", "Strider"), fromKilled(10000, EntityType.ZOMBIFIED_PIGLIN), stand -> {
