@@ -26,6 +26,8 @@ public class StarPlaceholders extends PlaceholderExpansion {
         put("name", StarPlayer::getName);
         put("uuid", p -> p.getUniqueId().toString());
         put("projectile_trail", p -> p.getSelectedTrail(TrailType.PROJECTILE).getFullKey());
+        put("ground_trail", p -> p.getSelectedTrail(TrailType.GROUND).getFullKey());
+        put("sound_trail", p -> p.getSelectedTrail(TrailType.PROJECTILE_SOUND).getFullKey());
     }};
 
     @Override
@@ -35,7 +37,7 @@ public class StarPlaceholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "team-inceptus";
+        return "gamercoder215";
     }
 
     @Override

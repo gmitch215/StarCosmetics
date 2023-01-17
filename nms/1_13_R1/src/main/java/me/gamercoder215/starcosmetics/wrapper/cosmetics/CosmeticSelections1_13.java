@@ -61,7 +61,7 @@ public final class CosmeticSelections1_13 implements CosmeticSelections {
             .add(new TrailSelection("sea_heart", PROJECTILE_TRAIL, Material.HEART_OF_THE_SEA,
                     fromKilled(400, EntityType.ELDER_GUARDIAN), Rarity.EPIC))
             .add(new TrailSelection("scutes", PROJECTILE_TRAIL, Material.SCUTE,
-                    CompletionCriteria.fromStatistic(Statistic.ANIMALS_BRED, 500), Rarity.EPIC))
+                    fromStatistic(Statistic.ANIMALS_BRED, 500), Rarity.EPIC))
             .add(new TrailSelection("sea_pickle", PROJECTILE_TRAIL, Material.SEA_PICKLE,
                     fromMined(500, Material.CLAY), Rarity.EPIC))
             .add(new TrailSelection("turtle_egg", PROJECTILE_TRAIL, Material.TURTLE_EGG,

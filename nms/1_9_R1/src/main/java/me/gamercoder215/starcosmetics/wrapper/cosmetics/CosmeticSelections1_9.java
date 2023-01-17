@@ -65,6 +65,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromKilled(200, EntityType.CHICKEN), Rarity.OCCASIONAL))
             .add(new TrailSelection("pigs", BaseTrail.PROJECTILE_TRAIL, EntityType.PIG,
                     fromKilled(200, EntityType.PIG), Rarity.OCCASIONAL))
+            .add(new TrailSelection("glowstone_dust", BaseTrail.PROJECTILE_TRAIL, Material.GLOWSTONE_DUST,
+                    fromMined(100, Material.GLOWSTONE), Rarity.OCCASIONAL))
 
             .add(new TrailSelection("diamond", BaseTrail.PROJECTILE_TRAIL, Material.DIAMOND,
                     fromMined(110, Material.DIAMOND_ORE), Rarity.UNCOMMON))
@@ -112,7 +114,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new TrailSelection("chorus_fruit", BaseTrail.PROJECTILE_TRAIL, Material.CHORUS_FRUIT,
                     fromMined(1000, StarMaterial.END_STONE.find()), Rarity.EPIC))
             .add(new TrailSelection("golden_carrot", BaseTrail.PROJECTILE_TRAIL, Material.GOLDEN_CARROT,
-                    fromStatistic(Statistic.ANIMALS_BRED, 1500), Rarity.EPIC))
+                    fromStatistic(Statistic.ANIMALS_BRED, 1100), Rarity.EPIC))
             .add(new TrailSelection("ender_pearl", BaseTrail.PROJECTILE_TRAIL, Material.ENDER_PEARL,
                     fromKilled(900, EntityType.ENDERMAN), Rarity.EPIC))
             .add(new TrailSelection("enchanted_book", BaseTrail.PROJECTILE_TRAIL, Material.ENCHANTED_BOOK,

@@ -551,7 +551,7 @@ public final class ClickEvents implements Listener {
             .build();
 
     private static void updateCache(Player p) {
-        StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
+        STAR_PLAYER_CACHE.remove(p.getUniqueId());
     }
 
     private static final Map<String, BiConsumer<StarInventory, InventoryClickEvent>> CLICK_INVENTORY = ImmutableMap.<String, BiConsumer<StarInventory, InventoryClickEvent>>builder()

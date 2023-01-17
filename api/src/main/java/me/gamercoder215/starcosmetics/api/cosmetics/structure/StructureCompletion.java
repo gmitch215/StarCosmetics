@@ -39,7 +39,7 @@ public enum StructureCompletion implements Completion {
     /**
      * Represents the completion for unlocking {@link Rarity#LEGENDARY} structures.
      */
-    LEGENDARY,
+    LEGENDARY(CompletionCriteria.fromBlocksMined(375000)),
 
     /**
      * Represents the completion for unlocking {@link Rarity#MYTHICAL} structures.
