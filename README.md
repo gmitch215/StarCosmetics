@@ -24,6 +24,12 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+🐄 v1.0.2 - Jan 16, 2023
+- Added 6 new Structures, 2 new pets, and other additions
+- Added Configurability for Entity, Block, and Item Trail Disappear Times
+- Created a Setting to manage placement of the Pet
+- Fixed GUI sounds being heard by other players
+
 💽 v1.0.1 - Dec 22, 2022
 - Fixed issues with loading on pre-1.19 versions
 - Added more cosmetic content
