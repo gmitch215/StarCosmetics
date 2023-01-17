@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.StarPet;
+import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
@@ -23,13 +24,13 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public interface Wrapper {
 
     SecureRandom r = Constants.r;
+
+    Map<UUID, StarPlayer> STAR_PLAYER_CACHE = new HashMap<>();
 
     static boolean isCompatible() {
         return getWrapper() != null && !isOutdatedSubversion();

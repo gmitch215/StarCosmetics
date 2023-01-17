@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.api.player;
 
 import com.google.common.collect.ImmutableList;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetPosition;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +41,13 @@ public final class PlayerSetting<T> {
     @SettingDescription("settings.structure_velocity.desc")
     public static final PlayerSetting<VelocityPower> STRUCTURE_VELOCITY =
             ofEnum("structure_velocity", "settings.structure_velocity", VelocityPower.MEDIUM);
+
+    /**
+     * Where the player's pet should be placed.
+     */
+    @SettingDescription("settings.pet_position.desc")
+    public static final PlayerSetting<PetPosition> PET_POSITION =
+            ofEnum("pet_position", "settings.pet_position", PetPosition.BEHIND);
 
     // Setting Enums
 

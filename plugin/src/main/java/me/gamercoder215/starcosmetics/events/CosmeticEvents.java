@@ -22,6 +22,8 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Method;
 
@@ -111,18 +113,23 @@ public final class CosmeticEvents implements Listener {
 
         if (sp.getSpawnedPet() != null) {
             Pet spawned = sp.getSpawnedPet();
-            if (spawned.getEntity() instanceof ArmorStand) {
-                ArmorStand as = (ArmorStand) spawned.getEntity();
 
-                as.teleport(StarPlayerUtil.createPetLocation(p));
-                w.setRotation(as, p.getLocation().getYaw(), p.getLocation().getPitch());
+            ArmorStand as = spawned.getEntity();
+            Vector d = p.getLocation().getDirection();
 
-                if (pitchChanged(e.getFrom(), e.getTo())) return;
+            as.teleport(StarPlayerUtil.createPetLocation(p));
+            as.setHeadPose(new EulerAngle(
+                    Math.toRadians(d.getX()),
+                    Math.toRadians(d.getY()),
+                    Math.toRadians(d.getZ())
+            ));
+            w.setRotation(as, p.getLocation().getYaw(), p.getLocation().getPitch());
 
-                if (spawned instanceof StarPet) {
-                    StarPet shp = (StarPet) spawned;
-                    shp.getInfo().tick(as);
-                }
+            if (pitchChanged(e.getFrom(), e.getTo())) return;
+
+            if (spawned instanceof StarPet) {
+                StarPet shp = (StarPet) spawned;
+                shp.getInfo().tick(as);
             }
         }
 

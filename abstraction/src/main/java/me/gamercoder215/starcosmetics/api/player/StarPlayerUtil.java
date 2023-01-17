@@ -6,13 +6,12 @@ import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.UUID;
 
-import static me.gamercoder215.starcosmetics.util.Constants.r;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.STAR_PLAYER_CACHE;
 
 public final class StarPlayerUtil {
 
@@ -28,16 +27,12 @@ public final class StarPlayerUtil {
     public static Location createPetLocation(@NotNull Player p) {
         if (p == null) return null;
 
-        Location loc = p.getEyeLocation();
+        if (!STAR_PLAYER_CACHE.containsKey(p.getUniqueId()))
+            STAR_PLAYER_CACHE.put(p.getUniqueId(), new StarPlayer(p));
 
-        Location locClone = loc.clone();
-        locClone.setPitch(0);
-        Vector dir = locClone.getDirection();
+        StarPlayer sp = STAR_PLAYER_CACHE.get(p.getUniqueId());
 
-        return loc
-                .subtract(dir.multiply(2))
-                .subtract(0, 0.6, 0)
-                .add(0.1, r.nextInt(4) * 0.02, 0.1);
+        return sp.getSetting(PlayerSetting.PET_POSITION).apply(p);
     }
 
     public static Pet spawnPet(@NotNull Player p, PetType type) {
