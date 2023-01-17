@@ -231,7 +231,11 @@ public final class StarPlayer {
             Class<?> clazz = Class.forName(config.getString(path + ".clazz"));
 
             if (clazz.isEnum())
-                return (T) Enum.valueOf(clazz.asSubclass(Enum.class), value.toString()); // Will not compile without Cast on Java 8
+                try {
+                    return (T) Enum.valueOf(clazz.asSubclass(Enum.class), value.toString()); // Will not compile without Cast on Java 8
+                } catch (IllegalArgumentException e) {
+                    return def;
+                }
 
         } catch (ClassNotFoundException e) {
             StarConfig.print(e);

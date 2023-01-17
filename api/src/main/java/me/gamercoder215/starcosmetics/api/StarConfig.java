@@ -120,6 +120,13 @@ public interface StarConfig {
 
         if (!config.isString("language")) config.set("language", "en");
 
+        if (!config.isString("functionality.command-version") && !config.isInt("functionality.command-version"))
+            config.set("functionality.command-version", "auto");
+
+        if (!config.isInt("cosmetics.item-disappear-time")) config.set("cosmetics.item-disappear-time", 10);
+        if (!config.isInt("cosmetics.block-disappear-time")) config.set("cosmetics.block-disappear-time", 4);
+        if (!config.isInt("cosmetics.entity-disappear-time")) config.set("cosmetics.entity-disappear-time", 15);
+
         try {
             config.save(getConfigurationFile());
         } catch (IOException e) {
@@ -220,4 +227,44 @@ public interface StarConfig {
      * Updates the plugin's cached data, removing any old states.
      */
     void updatePluginCache();
+
+    /**
+     * How long, in ticks, an entity cosmetic should last for.
+     * @return Entity Cosmetic Duration
+     */
+    long getEntityDisappearTime();
+
+    /**
+     * Sets how long, in ticks, an entity cosmetic should last for.
+     * @param time Entity Cosmetic Duration
+     * @throws IllegalArgumentException if time is not positive
+     */
+    void setEntityDisappearTime(long time) throws IllegalArgumentException;
+
+    /**
+     * How long, in ticks, an item cosmetic should last for.
+     * @return Item Cosmetic Duration
+     */
+    long getItemDisappearTime();
+
+    /**
+     * Sets how long, in ticks, an item cosmetic should last for.
+     * @param time Item Cosmetic Duration
+     * @throws IllegalArgumentException if time is not positive
+     */
+    void setItemDisappearTime(long time) throws IllegalArgumentException;
+
+    /**
+     * How long, in ticks, a block cosmetic should last for.
+     * @return Item Cosmetic Duration
+     */
+    long getBlockDisappearTime();
+
+    /**
+     * Sets how long, in ticks, a block cosmetic should last for.
+     * @param time Item Cosmetic Duration
+     * @throws IllegalArgumentException if time is not positive
+     */
+    void setBlockDisappearTime(long time) throws IllegalArgumentException;
+
 }

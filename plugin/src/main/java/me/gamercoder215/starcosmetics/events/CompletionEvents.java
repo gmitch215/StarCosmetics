@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import static me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureCompletion.MYTHICAL;
 import static me.gamercoder215.starcosmetics.api.player.PlayerCompletion.NETHER_ROOF;
 import static me.gamercoder215.starcosmetics.api.player.PlayerCompletion.SONIC_BOOM_DEATH;
 
@@ -33,12 +34,14 @@ public final class CompletionEvents implements Listener {
             Location to = e.getTo();
             switch (to.getWorld().getEnvironment()) {
                 case NORMAL: {
+                    if (sp.hasCompleted(MYTHICAL)) return;
+                    if (to.getBlockY() >= 1000) sp.setCompleted(MYTHICAL);
 
                     break;
                 }
                 case NETHER: {
                     if (sp.hasCompleted(NETHER_ROOF)) return;
-                    if (to.getBlockY() >= 128) sp.setCompleted(NETHER_ROOF, true);
+                    if (to.getBlockY() >= 128) sp.setCompleted(NETHER_ROOF);
 
                     break;
                 }

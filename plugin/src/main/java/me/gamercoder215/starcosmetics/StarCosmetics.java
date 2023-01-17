@@ -32,6 +32,7 @@ import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -141,7 +142,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                 .checkNow();
 
         // bStats
-        new Metrics(this, BSTATS_ID);
+        Metrics m = new Metrics(this, BSTATS_ID);
+        m.addCustomChart(new SimplePie("language", getLocale()::getDisplayLanguage));
 
         getLogger().info("Loaded Dependencies...");
 
@@ -222,6 +224,45 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         STAR_PLAYER_CACHE.clear();
     }
 
+    @Override
+    public long getEntityDisappearTime() {
+        return config.getLong("cosmetics.entity-disappear-time", 15);
+    }
+
+    @Override
+    public void setEntityDisappearTime(long time) throws IllegalArgumentException {
+        if (time <= 0) throw new IllegalArgumentException("Time must be positive!");
+
+        config.set("cosmetics.entity-disappear-time", time);
+        saveConfig();
+    }
+
+    @Override
+    public long getItemDisappearTime() {
+        return config.getLong("cosmetics.item-disappear-time", 10);
+    }
+
+    @Override
+    public void setItemDisappearTime(long time) throws IllegalArgumentException {
+        if (time <= 0) throw new IllegalArgumentException("Time must be positive!");
+
+        config.set("cosmetics.item-disappear-time", time);
+        saveConfig();
+    }
+
+    @Override
+    public long getBlockDisappearTime() {
+        return config.getLong("cosmetics.block-disappear-time", 4);
+    }
+
+    @Override
+    public void setBlockDisappearTime(long time) throws IllegalArgumentException {
+        if (time <= 0) throw new IllegalArgumentException("Time must be positive!");
+
+        config.set("cosmetics.block-disappear-time", time);
+        saveConfig();
+    }
+
     // Other Utilities
 
     public static String getServerVersion() {
@@ -273,8 +314,6 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         return sp;
     }
 
-    public static final Map<UUID, StarPlayer> STAR_PLAYER_CACHE = new HashMap<>();
-
     public static final Runnable ASYNC_TICK_TASK = () -> {
         for (Player p : Bukkit.getOnlinePlayers())
             if (!STAR_PLAYER_CACHE.containsKey(p.getUniqueId()))
@@ -307,7 +346,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
             LivingEntity petEntity = pet.getEntity();
             if (r.nextInt(600) == 1 && type.getAmbientSound() != null)
-                p.getWorld().playSound(petEntity.getLocation(), type.getAmbientSound(), 3F, type.getAmbientPitch());
+                p.getWorld().playSound(petEntity.getLocation(), type.getAmbientSound(), 1F, type.getAmbientPitch());
         }
     };
 
@@ -376,7 +415,13 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             "ores",
             "reinforced_portal",
             "tree",
-            "flowers"
+            "flowers",
+            "letter_t",
+            "letter_c",
+            "gold",
+            "iron",
+            "diamond",
+            "netherite"
     };
 
     public static final Set<StructureInfo> STRUCTURE_CACHE = new HashSet<>();
@@ -515,6 +560,14 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                         }
                 ))
 
+                .put(PetType.UNICORN, of(
+                        "Unicorn", Rarity.ULTRA,
+                        petIcon("unicorn_pet", "Unicorn"), fromStatistic(Statistic.ANIMALS_BRED, 9000), stand -> {
+                            if (r.nextInt(100) < 5) circle(head(stand), Particle.HEART, 3, 0.5);
+                            if (r.nextInt(100) < 15) stand.getWorld().spawnParticle(Particle.DRAGON_BREATH, head(stand), 1, 0, 0, 0, 0);
+                        }
+                ))
+
                 .build();
 
         CosmeticSelections.PET_MAP.putAll(pets);
@@ -540,7 +593,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         @EventHandler
         public void onStatistic(PlayerStatisticIncrementEvent e) {
             Player p = e.getPlayer();
-            StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
+            STAR_PLAYER_CACHE.remove(p.getUniqueId());
         }
 
         @EventHandler

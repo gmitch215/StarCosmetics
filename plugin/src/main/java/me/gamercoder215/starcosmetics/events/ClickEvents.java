@@ -412,7 +412,7 @@ public final class ClickEvents implements Listener {
 
                 ItemStack newItem = Generator.generateSetting(p, setting);
                 inv.setItem(e.getSlot(), newItem);
-                StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 3F, value ? 2F : 0F);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 1F, value ? 2F : 0F);
             })
             .put("choose:pet", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
@@ -470,7 +470,7 @@ public final class ClickEvents implements Listener {
                 inv.setItem(e.getSlot(), newItem);
 
                 float pitch = 2F * (next.ordinal() / (values.length - 1F));
-                StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 3F, pitch);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 1F, pitch);
             })
             .put("toggle:setting", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
@@ -551,7 +551,7 @@ public final class ClickEvents implements Listener {
             .build();
 
     private static void updateCache(Player p) {
-        StarCosmetics.STAR_PLAYER_CACHE.remove(p.getUniqueId());
+        STAR_PLAYER_CACHE.remove(p.getUniqueId());
     }
 
     private static final Map<String, BiConsumer<StarInventory, InventoryClickEvent>> CLICK_INVENTORY = ImmutableMap.<String, BiConsumer<StarInventory, InventoryClickEvent>>builder()

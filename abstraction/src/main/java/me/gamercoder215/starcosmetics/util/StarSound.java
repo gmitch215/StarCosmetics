@@ -63,11 +63,11 @@ public enum StarSound {
     public void play(@NotNull Entity en) { play(en.getLocation()); }
 
     public void playSuccess(@NotNull Entity en) {
-        play(en, 3F, 2F);
+        play(en, 1F, 2F);
     }
 
     public void playFailure(@NotNull Entity en) {
-        play(en, 3F, 0F);
+        play(en, 1F, 0F);
     }
 
     public void playSuccess(@NotNull Player p) {

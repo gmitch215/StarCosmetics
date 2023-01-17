@@ -153,7 +153,7 @@ public final class CompletionCriteria {
     }
 
     /**
-     * Generates a CompletionCRiteria from a distance statistic (e.g. {@link Statistic#WALK_ONE_CM}).
+     * Generates a CompletionCriteria from a distance statistic (e.g. {@link Statistic#WALK_ONE_CM}).
      * @param stat Statistic to check
      * @param cm The amount of centimeters to check for
      * @return CompletionCriteria with the given criteria
