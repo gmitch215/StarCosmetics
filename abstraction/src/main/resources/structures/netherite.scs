@@ -1,0 +1,6 @@
+1.16
+:netherite:
+constants.cosmetics.structures.netherite
+mythical
+---
+netherite_block:(1,1,1,1,1,1)^[0,0,0]
