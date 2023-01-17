@@ -120,6 +120,13 @@ public interface StarConfig {
 
         if (!config.isString("language")) config.set("language", "en");
 
+        if (!config.isString("functionality.command-version") && !config.isInt("functionality.command-version"))
+            config.set("functionality.command-version", "auto");
+
+        if (!config.isInt("cosmetics.item-disappear-time")) config.set("cosmetics.item-disappear-time", 10);
+        if (!config.isInt("cosmetics.block-disappear-time")) config.set("cosmetics.block-disappear-time", 4);
+        if (!config.isInt("cosmetics.entity-disappear-time")) config.set("cosmetics.entity-disappear-time", 15);
+
         try {
             config.save(getConfigurationFile());
         } catch (IOException e) {
@@ -259,4 +266,5 @@ public interface StarConfig {
      * @throws IllegalArgumentException if time is not positive
      */
     void setBlockDisappearTime(long time) throws IllegalArgumentException;
+
 }
