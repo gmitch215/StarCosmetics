@@ -50,7 +50,9 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromMined(150, Material.STONE), Rarity.COMMON))
             .add(new TrailSelection("heart", BaseTrail.PROJECTILE_TRAIL, Particle.HEART,
                     fromStatistic(Statistic.ANIMALS_BRED, 15), Rarity.COMMON))
-            
+            .add(new TrailSelection("egg", BaseTrail.PROJECTILE_TRAIL, Material.EGG,
+                    fromKilled(20, EntityType.CHICKEN), Rarity.COMMON))
+
             .add(new TrailSelection("iron", BaseTrail.PROJECTILE_TRAIL, Material.IRON_INGOT,
                     fromMined(185, Material.IRON_ORE), Rarity.OCCASIONAL))
             .add(new TrailSelection("redstone", BaseTrail.PROJECTILE_TRAIL, Material.REDSTONE,
