@@ -47,6 +47,9 @@ allprojects {
         maven("https://repo.codemc.org/repository/nms/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://hub.jeff-media.com/nexus/repository/jeff-media-public/")
+        maven("https://libraries.minecraft.net/")
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
 }
 
