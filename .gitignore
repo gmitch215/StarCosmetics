@@ -1,5 +1,6 @@
 .idea/
 *.iml
 *.class
-target/
 .vscode/
+.gradle/
+build/

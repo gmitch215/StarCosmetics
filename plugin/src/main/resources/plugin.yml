@@ -1,10 +1,10 @@
-name: ${project.name}
+name: StarCosmetics
 main: me.gamercoder215.starcosmetics.StarCosmetics
 version: ${project.version}
 description: ${project.description}
 softdepend: [PlaceholderAPI]
 author: GamerCoder
-website: ${project.url}
+website: "https://github.com/GamerCoder215/StarCosmetics"
 load: POSTWORLD
 api-version: 1.13
 permissions:
