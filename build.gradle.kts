@@ -108,7 +108,8 @@ subprojects {
             }
 
             relocate("revxrsal.commands", "me.gamercoder215.shaded.lamp")
-            relocate("org.bstats.bukkit", "me.gamercoder215.shaded.bstats")
+            relocate("org.bstats", "me.gamercoder215.shaded.bstats")
+            relocate("com.jeff_media.updatechecker", "me.gamercoder215.shaded.updatechecker")
 
             archiveFileName.set("${project.name}-${project.version}.jar")
         }
