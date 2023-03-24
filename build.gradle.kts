@@ -58,6 +58,7 @@ val jvmVersion = JavaVersion.VERSION_1_8
 subprojects {
     apply<JavaPlugin>()
     apply(plugin = "org.sonarqube")
+    apply(plugin = "com.github.johnrengelman.shadow")
 
     dependencies {
         compileOnly("org.jetbrains:annotations:24.0.1")

@@ -1,7 +1,3 @@
-plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.0"
-}
-
 val mcVersion = "1.14.4"
 
 dependencies {

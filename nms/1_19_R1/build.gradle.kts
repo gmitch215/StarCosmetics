@@ -1,7 +1,6 @@
 import io.github.patrick.gradle.remapper.RemapTask
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.0"
     id("io.github.patrick.remapper") version "1.4.0"
 }
 
