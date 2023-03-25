@@ -1,8 +1,8 @@
 val mcVersion = "1.9"
 
 dependencies {
-    implementation(project(":starcosmetics-abstraction"))
-    implementation(project(":starcosmetics-api"))
+    api(project(":starcosmetics-abstraction"))
+    api(project(":starcosmetics-api"))
 
     compileOnly("org.spigotmc:spigot:$mcVersion-R0.1-SNAPSHOT")
 }

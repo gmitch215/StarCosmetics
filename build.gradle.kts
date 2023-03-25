@@ -8,6 +8,7 @@ plugins {
 
     java
     `maven-publish`
+    `java-library`
 }
 
 val pGroup = "me.gamercoder215.starcosmetics"
@@ -57,6 +58,7 @@ val jvmVersion = JavaVersion.VERSION_1_8
 
 subprojects {
     apply<JavaPlugin>()
+    apply<JavaLibraryPlugin>()
     apply(plugin = "org.sonarqube")
     apply(plugin = "com.github.johnrengelman.shadow")
 

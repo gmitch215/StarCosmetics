@@ -14,7 +14,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.2")
 
     // API
-    implementation(project(":starcosmetics-api"))
+    api(project(":starcosmetics-api"))
 
     listOf(
         "1_9_R1",
@@ -35,7 +35,7 @@ dependencies {
         "1_19_R1",
         "1_19_R2",
         "1_19_R3"
-    ).forEach { implementation(project(":starcosmetics-$it")) }
+    ).forEach { api(project(":starcosmetics-$it")) }
 }
 
 
