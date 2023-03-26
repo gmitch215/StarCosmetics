@@ -10,7 +10,6 @@ import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -27,11 +26,9 @@ import org.bukkit.util.Vector;
 
 import java.lang.reflect.Method;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 
 public final class CosmeticEvents implements Listener {
-
-    private static final Wrapper w = getWrapper();
 
     private final StarCosmetics plugin;
 

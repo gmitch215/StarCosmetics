@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 
+import static me.gamercoder215.starcosmetics.util.Constants.w;
+
 public interface StructureReader extends Closeable {
 
     Structure read();
@@ -91,7 +93,7 @@ public interface StructureReader extends Closeable {
 
     static StructureReader getStructureReader(Reader r) {
         try {
-            if (Wrapper.getWrapper().isLegacy())
+            if (w.isLegacy())
                 return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.LegacyStructureReader")
                         .asSubclass(StructureReader.class)
                         .getConstructor(Reader.class)

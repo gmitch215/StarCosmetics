@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,11 +13,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 
 public final class LegacyStructure extends Structure {
-
-    private static final Wrapper w = getWrapper();
 
     private final Map<StructurePoint, Material> points;
 

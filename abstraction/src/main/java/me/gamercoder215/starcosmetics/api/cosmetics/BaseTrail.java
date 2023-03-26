@@ -8,8 +8,6 @@ import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
-import me.gamercoder215.starcosmetics.wrapper.DataWrapper;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
@@ -24,15 +22,12 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import static me.gamercoder215.starcosmetics.util.Constants.r;
+import static me.gamercoder215.starcosmetics.util.Constants.*;
 import static me.gamercoder215.starcosmetics.util.entity.StarSelector.isStopped;
 import static org.bukkit.Material.*;
 
 @SuppressWarnings("unchecked")
 public final class BaseTrail<T> implements Trail<T> {
-
-    public static final Wrapper w = Wrapper.getWrapper();
-    public static final DataWrapper dw = Wrapper.getDataWrapper();
 
     private static final double DEFAULT_OFFSET = 0.2;
     
