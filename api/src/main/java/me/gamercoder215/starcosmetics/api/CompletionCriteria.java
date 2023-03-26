@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -120,6 +121,29 @@ public final class CompletionCriteria {
         return progressFunc.apply(p).doubleValue();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CompletionCriteria that = (CompletionCriteria) o;
+        return displayKey.equals(that.displayKey) && Arrays.equals(displayArguments, that.displayArguments);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(displayKey);
+        result = 31 * result + Arrays.hashCode(displayArguments);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "CompletionCriteria{" +
+                "displayKey='" + displayKey + '\'' +
+                ", displayArguments=" + Arrays.toString(displayArguments) +
+                '}';
+    }
+
     // Static Generators
 
     /**
@@ -145,6 +169,7 @@ public final class CompletionCriteria {
      * @param m The material to check for
      * @return CompletionCriteria with the given criteria
      */
+    @NotNull
     public static CompletionCriteria fromMined(int amount, Material m) {
         return new CompletionCriteria(
                 p -> p.getStatistic(Statistic.MINE_BLOCK, m) >= amount,
@@ -158,6 +183,7 @@ public final class CompletionCriteria {
      * @param cm The amount of centimeters to check for
      * @return CompletionCriteria with the given criteria
      */
+    @NotNull
     public static CompletionCriteria fromDistance(Statistic stat, double cm) {
         String formattedDistance;
 
@@ -178,6 +204,7 @@ public final class CompletionCriteria {
      * @param materials Collection of Materials to check for
      * @return CompletionCriteria with the given criteria
      */
+    @NotNull
     public static CompletionCriteria fromMined(int amount, Collection<Material> materials) {
         return new CompletionCriteria(p -> {
             int count = 0;
