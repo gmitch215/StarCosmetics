@@ -69,7 +69,7 @@ jobs:
       - name: Change Permissions
         run: chmod +x ./gradlew
       - name: Build with Gradle
-        run: ./gradlew clean build publishToMavenLocal -x test
+        run: ./gradlew clean assemble publishToMavenLocal
 
   analyze:
     runs-on: ubuntu-latest
@@ -100,7 +100,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew clean build sonar -x test --info
+        run: ./gradlew clean assemble sonar --info
 
   deploy:
     runs-on: ubuntu-latest
