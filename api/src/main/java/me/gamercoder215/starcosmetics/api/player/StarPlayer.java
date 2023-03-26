@@ -5,10 +5,12 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -16,6 +18,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -187,7 +190,7 @@ public final class StarPlayer {
      * @param setting The setting to check.
      * @param def The default value to return if the setting is not set.
      * @param <T> The type of the setting.
-     * @return true if enabled, false otherwise
+     * @return Setting Value, or default value if not found
      */
     @Nullable
     public <T> T getSetting(@NotNull PlayerSetting<T> setting, T def) {
@@ -232,7 +235,8 @@ public final class StarPlayer {
 
             if (clazz.isEnum())
                 try {
-                    return (T) Enum.valueOf(clazz.asSubclass(Enum.class), value.toString()); // Will not compile without Cast on Java 8
+                    // Will not compile without Cast on Java 8
+                    return (T) Enum.valueOf(clazz.asSubclass(Enum.class), value.toString());
                 } catch (IllegalArgumentException e) {
                     return def;
                 }
@@ -262,6 +266,7 @@ public final class StarPlayer {
     private static String toString(Class<? extends Cosmetic> clazz) {
         if (Trail.class.isAssignableFrom(clazz)) return "trails";
         if (ParticleShape.class.isAssignableFrom(clazz)) return "particle_shape";
+        if (Hat.class.isAssignableFrom(clazz)) return "hat";
 
         return clazz.getSimpleName().toLowerCase();
     }
@@ -275,6 +280,9 @@ public final class StarPlayer {
 
         CosmeticLocation<Particle> shape = (CosmeticLocation<Particle>) getSelectedCosmetic(ParticleShape.class);
         if (shape != null) shape.getParent().run(p.getLocation().add(0, .25, 0), shape);
+
+        CosmeticLocation<ItemStack> hat = (CosmeticLocation<ItemStack>) getSelectedCosmetic(Hat.class);
+        if (hat != null) ((Hat) hat.getParent()).run(p, hat);
     }
 
     /**
