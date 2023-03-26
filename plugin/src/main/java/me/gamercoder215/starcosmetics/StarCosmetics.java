@@ -51,8 +51,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -263,6 +265,22 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         saveConfig();
     }
 
+    @Override
+    public StructureReader getStructureReader(InputStream stream) {
+        return Wrapper.getStructureReader(stream);
+    }
+
+    @Override
+    public StructureReader getStructureReader(Reader reader) {
+        return Wrapper.getStructureReader(reader);
+    }
+
+    @Override
+    public StructureReader getStructureReader(File file) {
+        return Wrapper.getStructureReader(file);
+    }
+
+
     // Other Utilities
 
     public static String getServerVersion() {
@@ -449,7 +467,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         try {
             for (String structF : STRUCTURE_FILES) {
                 InputStream struct = StarCosmetics.class.getResourceAsStream("/structures/" + structF + ".scs");
-                StructureReader reader = StructureReader.getStructureReader(struct);
+                StructureReader reader = Wrapper.getStructureReader(struct);
 
                 Structure read = reader.read();
                 if (read == null) {
@@ -471,7 +489,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     @Override
     public void addStructure(@NotNull InputStream stream) {
-        StructureReader reader = StructureReader.getStructureReader(stream);
+        StructureReader reader = Wrapper.getStructureReader(stream);
 
         Structure struct = reader.read();
         STRUCTURE_CACHE.add(struct.getInfo());

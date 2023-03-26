@@ -7,11 +7,9 @@ import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.itemBuilder;
 
 public enum BaseHat implements Hat {
