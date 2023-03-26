@@ -9,11 +9,12 @@ plugins {
     java
     `maven-publish`
     `java-library`
+    jacoco
 }
 
 val pGroup = "me.gamercoder215.starcosmetics"
 val pVersion = "1.1.0"
-val pAuthor = "StarCosmetics"
+val pAuthor = "GamerCoder215"
 
 sonarqube {
     properties {
@@ -59,6 +60,7 @@ val jvmVersion = JavaVersion.VERSION_1_8
 subprojects {
     apply<JavaPlugin>()
     apply<JavaLibraryPlugin>()
+    apply<JacocoPlugin>()
     apply(plugin = "org.sonarqube")
     apply(plugin = "com.github.johnrengelman.shadow")
 
@@ -85,11 +87,24 @@ subprojects {
             options.compilerArgs.addAll(listOf("-Xlint:all", "-Xlint:-processing"))
         }
 
+        jacocoTestReport {
+            dependsOn(test)
+
+            reports {
+                xml.required.set(false)
+                csv.required.set(false)
+
+                html.required.set(true)
+                html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+            }
+        }
+
         test {
             useJUnitPlatform()
             testLogging {
                 events("passed", "skipped", "failed")
             }
+            finalizedBy(jacocoTestReport)
         }
 
         javadoc {
@@ -105,10 +120,13 @@ subprojects {
 
         withType<ShadowJar> {
             manifest {
-                attributes["Implementation-Title"] = project.name
-                attributes["Implementation-Version"] = project.version
-                attributes["Implementation-Vendor"] = pAuthor
+                attributes(
+                    "Implementation-Title" to project.name,
+                    "Implementation-Version" to project.version,
+                    "Implementation-Vendor" to pAuthor
+                )
             }
+            exclude("META-INF", "META-INF/**")
 
             relocate("revxrsal.commands", "me.gamercoder215.shaded.lamp")
             relocate("org.bstats", "me.gamercoder215.shaded.bstats")
