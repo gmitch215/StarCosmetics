@@ -1,20 +1,27 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
-import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
+import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-
-import static me.gamercoder215.starcosmetics.util.Constants.w;
-
+/**
+ * Represents an abstract Structure Reader.
+ */
 public interface StructureReader extends Closeable {
 
+    /**
+     * Reads the structure.
+     * @return Structure.
+     */
     Structure read();
 
+    /**
+     * Checks whether the current server version is compatible with the specified minimum version, formatted in a Strcuture File.
+     * @param minVersion Minimum Structure Version
+     * @return true if compatible, false otherwise
+     */
     static boolean isCompatible(String minVersion) {
         if (minVersion.equalsIgnoreCase("ALL")) return true;
 
@@ -25,6 +32,11 @@ public interface StructureReader extends Closeable {
         return current >= required;
     }
 
+    /**
+     * Trims a line from a Structure File.
+     * @param point Line to trim
+     * @return Trimmed line
+     */
     static String trimLine(String point) {
         String trimmed = point.trim();
         if (point.contains(";")) trimmed = trimmed.substring(0, trimmed.indexOf(";"));
@@ -32,6 +44,11 @@ public interface StructureReader extends Closeable {
         return trimmed;
     }
 
+    /**
+     * Reads a list of Structure Points from a Structure Line.
+     * @param input Structure File Line
+     * @return List of Structure Points
+     */
     static List<StructurePoint> readPoints(String input) {
         List<StructurePoint> points = new ArrayList<>();
 
@@ -66,6 +83,11 @@ public interface StructureReader extends Closeable {
         return points;
     }
 
+    /**
+     * Reads a singular point from its string form.
+     * @param rawInput Raw Point
+     * @return Structure Point
+     */
     static StructurePoint readRawPoint(String rawInput) {
         String input = trimLine(rawInput);
 
@@ -76,37 +98,6 @@ public interface StructureReader extends Closeable {
         int y = Integer.parseInt(split[1]);
         int z = Integer.parseInt(split[2]);
         return new StructurePoint(x, y, z);
-    }
-
-    static StructureReader getStructureReader(File file) {
-        try {
-            return getStructureReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            StarConfig.print(e);
-            return null;
-        }
-    }
-
-    static StructureReader getStructureReader(InputStream stream) {
-        return getStructureReader(new InputStreamReader(stream));
-    }
-
-    static StructureReader getStructureReader(Reader r) {
-        try {
-            if (w.isLegacy())
-                return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.LegacyStructureReader")
-                        .asSubclass(StructureReader.class)
-                        .getConstructor(Reader.class)
-                        .newInstance(r);
-            else
-                return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.ModernStructureReader")
-                        .asSubclass(StructureReader.class)
-                        .getConstructor(Reader.class)
-                        .newInstance(r);
-        } catch (ReflectiveOperationException e) {
-            StarConfig.print(e);
-            return null;
-        }
     }
 
 }

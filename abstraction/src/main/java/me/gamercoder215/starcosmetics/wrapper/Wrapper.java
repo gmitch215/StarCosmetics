@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.StarPet;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
@@ -18,10 +19,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.SecureRandom;
@@ -112,6 +113,37 @@ public interface Wrapper {
                 StarConfig.print(e);
                 return null;
             }
+        }
+    }
+
+    static StructureReader getStructureReader(File file) {
+        try {
+            return getStructureReader(new FileReader(file));
+        } catch (FileNotFoundException e) {
+            StarConfig.print(e);
+            return null;
+        }
+    }
+
+    static StructureReader getStructureReader(InputStream stream) {
+        return getStructureReader(new InputStreamReader(stream));
+    }
+
+    static StructureReader getStructureReader(Reader r) {
+        try {
+            if (w.isLegacy())
+                return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.LegacyStructureReader")
+                        .asSubclass(StructureReader.class)
+                        .getConstructor(Reader.class)
+                        .newInstance(r);
+            else
+                return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.ModernStructureReader")
+                        .asSubclass(StructureReader.class)
+                        .getConstructor(Reader.class)
+                        .newInstance(r);
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+            return null;
         }
     }
 
