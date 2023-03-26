@@ -12,6 +12,8 @@ public enum CosmeticParent {
     TRAILS(Material.ARROW, 20, Trail.class,
             BaseTrail.PROJECTILE_TRAIL, BaseTrail.GROUND_TRAIL, BaseTrail.SOUND_TRAIL),
 
+    // HATS(...)
+
     ;
 
     private final Material icon;
