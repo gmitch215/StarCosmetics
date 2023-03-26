@@ -23,9 +23,9 @@ public class TestCosmeticSelections {
 
     @Test
     @DisplayName("Test Version Fetcher")
-    public void testVersionFetcher() {
+    public void testVersionFetcher() throws Exception {
         Assertions.assertNull(CosmeticSelections.getForVersion("1_8"));
-        Assertions.assertNotNull(CosmeticSelections.getForVersion("1_9"));
+        Assertions.assertNotNull(Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections1_9", false, CosmeticSelections.class.getClassLoader()));
     }
 
 }

@@ -9,8 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 
 public abstract class NBTWrapper {
 
@@ -26,8 +27,14 @@ public abstract class NBTWrapper {
         return item;
     }
 
+    public static ItemStack builder(ItemStack item, Consumer<NBTWrapper> nbtConsumer) {
+        NBTWrapper nbt = of(item);
+        nbtConsumer.accept(nbt);
+        return nbt.getItem();
+    }
+
     public static NBTWrapper of(ItemStack item) {
-        return getWrapper().getNBTWrapper(item);
+        return w.getNBTWrapper(item);
     }
 
     public static float getFloat(ItemStack item, String key) {

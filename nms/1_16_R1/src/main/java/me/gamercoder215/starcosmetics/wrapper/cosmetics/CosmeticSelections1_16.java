@@ -3,12 +3,14 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
@@ -139,6 +141,36 @@ public final class CosmeticSelections1_16 implements CosmeticSelections {
                     fromMined(100, Material.POLISHED_BLACKSTONE_BRICKS), Rarity.UNCOMMON))
             .build();
 
+    // Hats
+
+    // Normal Hats
+
+    private static final List<CosmeticSelection<?>> NORMAL_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new HatSelection("soul_soil", Material.SOUL_SOIL,
+                    fromMined(45, Material.SOUL_SOIL), Rarity.COMMON))
+
+            .add(new HatSelection("polished_basalt", Material.POLISHED_BASALT,
+                    fromMined(90, Material.BASALT), Rarity.OCCASIONAL))
+
+            .add(new HatSelection("blackstone", Material.BLACKSTONE,
+                    fromMined(140, Material.BLACKSTONE), Rarity.UNCOMMON))
+            .add(new HatSelection("crying_obsidian", Material.CRYING_OBSIDIAN,
+                    fromKilled(55, EntityType.GHAST), Rarity.UNCOMMON))
+
+            .add(new HatSelection("polished_blackstone", Material.POLISHED_BLACKSTONE,
+                    fromMined(370, Material.BLACKSTONE), Rarity.RARE))
+            .add(new HatSelection("crimson_wart_block", Material.NETHER_WART_BLOCK,
+                    fromMined(200, Material.CRIMSON_NYLIUM), Rarity.RARE))
+            .add(new HatSelection("warped_wart_block", Material.WARPED_WART_BLOCK,
+                    fromMined(200, Material.WARPED_NYLIUM), Rarity.RARE))
+
+            .add(new HatSelection("lodestone", Material.LODESTONE,
+                    fromMined(11000, Material.NETHERRACK), Rarity.EPIC))
+
+            .add(new HatSelection("netherite_block", Material.NETHERITE_BLOCK,
+                    fromMined(260, Material.ANCIENT_DEBRIS), Rarity.MYTHICAL))
+            .build();
+
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
@@ -150,6 +182,8 @@ public final class CosmeticSelections1_16 implements CosmeticSelections {
             .put(BaseShape.SMALL_DETAILED_RING, join(SMALL_DETAILED_RINGS, BaseShape.SMALL_DETAILED_RING, "1_15"))
             .put(BaseShape.LARGE_RING, join(LARGE_RINGS, BaseShape.LARGE_RING, "1_15"))
             .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_15"))
+
+            .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_15"))
             .build();
 
     @Override

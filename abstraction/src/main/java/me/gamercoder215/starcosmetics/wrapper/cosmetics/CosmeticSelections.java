@@ -29,7 +29,7 @@ public interface CosmeticSelections {
 
     SecureRandom r = Constants.r;
 
-    Wrapper w = Wrapper.getWrapper();
+    Wrapper w = Constants.w;
 
     Map<PetType, PetInfo> PET_MAP = new HashMap<>();
 

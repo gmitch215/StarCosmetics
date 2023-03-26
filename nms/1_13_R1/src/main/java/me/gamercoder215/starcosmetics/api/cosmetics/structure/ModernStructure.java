@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,11 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 
 public final class ModernStructure extends Structure {
-
-    private static final Wrapper w = getWrapper();
 
     private final Map<StructurePoint, Material> points;
     private final Map<StructurePoint, BlockData> pointData;

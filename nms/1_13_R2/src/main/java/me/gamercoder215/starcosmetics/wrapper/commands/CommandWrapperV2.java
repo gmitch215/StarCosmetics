@@ -83,7 +83,7 @@ public class CommandWrapperV2 implements CommandWrapper {
             this.wrapper = CommandWrapperV2.this;
         }
 
-        @Default
+        @DefaultFor({"starcosmetics", "scosmetics", "sc", "cosmetics", "cs"})
         public void cosmetics(Player p) { wrapper.cosmetics(p); StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p); }
 
         @Subcommand({"pets", "pet"})
@@ -103,6 +103,9 @@ public class CommandWrapperV2 implements CommandWrapper {
         @Subcommand({"customsounds", "sounds"})
         @AutoComplete("add")
         public void soundSelection(Player p, @Optional String args) { wrapper.soundSelection(p, args == null ? null : args.split("\\s")); }
+
+        @Subcommand({"hat", "hats"})
+        public void hats(Player p) { wrapper.hats(p); }
 
     }
 

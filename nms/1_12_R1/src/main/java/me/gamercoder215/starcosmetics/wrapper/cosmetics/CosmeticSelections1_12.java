@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
@@ -65,6 +66,8 @@ public final class CosmeticSelections1_12 implements CosmeticSelections {
             .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_11"))
             .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_11"))
             .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_11"))
+
+            .put(BaseHat.NORMAL, getForVersion(BaseHat.NORMAL, "1_11"))
             .build();
 
     @Override

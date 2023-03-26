@@ -15,7 +15,8 @@ import static me.gamercoder215.starcosmetics.wrapper.Wrapper.STAR_PLAYER_CACHE;
 
 public final class StarPlayerUtil {
 
-    public static void clearPets() {
+    public static void onDisable() {
+        // Remove Pets
         for (Player p : Bukkit.getOnlinePlayers()) removePet(p);
     }
 

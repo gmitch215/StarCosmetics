@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
@@ -52,7 +53,7 @@ public final class Generator {
         if (size < 9 || size > 54) return null;
         if (size % 9 > 0) return null;
 
-        StarInventory inv = getWrapper().createInventory(key, size, name);
+        StarInventory inv = w.createInventory(key, size, name);
         ItemStack bg = ItemBuilder.GUI_BACKGROUND;
 
         if (size < 27) return inv;
@@ -65,11 +66,6 @@ public final class Generator {
         }
 
         return inv;
-    }
-
-    @NotNull
-    public static Map<Integer, List<ItemStack>> generateRows(ItemStack... items) {
-        return generateRows(Arrays.asList(items));
     }
 
     @NotNull
@@ -103,7 +99,7 @@ public final class Generator {
         List<ItemStack> list = col
                 .stream()
                 .filter(Objects::nonNull)
-                .filter(m -> getWrapper().isItem(m.getType()))
+                .filter(m -> w.isItem(m.getType()))
                 .collect(Collectors.toList());
 
         if (list.size() == 0) return map;

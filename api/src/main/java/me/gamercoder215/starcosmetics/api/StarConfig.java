@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -8,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -266,5 +269,26 @@ public interface StarConfig {
      * @throws IllegalArgumentException if time is not positive
      */
     void setBlockDisappearTime(long time) throws IllegalArgumentException;
+
+    /**
+     * Fetches the current implementation of the StructureReader.
+     * @param file File to Read
+     * @return StructureReader
+     */
+    StructureReader getStructureReader(@NotNull File file);
+
+    /**
+     * Fetches the current implementation of the StructureReader.
+     * @param stream InputStream to Read
+     * @return StructureReader
+     */
+    StructureReader getStructureReader(@NotNull InputStream stream);
+
+    /**
+     * Fetches the current implementation of the StructureReader.
+     * @param reader Reader to Read
+     * @return StructureReader
+     */
+    StructureReader getStructureReader(@NotNull Reader reader);
 
 }

@@ -31,6 +31,7 @@ import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.*;
@@ -50,8 +51,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -61,14 +64,13 @@ import java.util.stream.Collectors;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.circle;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.head;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.petIcon;
 
 public final class StarCosmetics extends JavaPlugin implements StarConfig, CosmeticRegistry {
-
-    private static final Wrapper w = getWrapper();
 
     private boolean checkCompatible() {
         if (!Wrapper.isCompatible()) {
@@ -182,7 +184,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         getLogger().info("Cancelled Tasks...");
 
         StarConfig.updateCache();
-        StarPlayerUtil.clearPets();
+        StarPlayerUtil.onDisable();
 
         getLogger().info("Removed Data...");
 
@@ -263,6 +265,22 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         saveConfig();
     }
 
+    @Override
+    public StructureReader getStructureReader(InputStream stream) {
+        return Wrapper.getStructureReader(stream);
+    }
+
+    @Override
+    public StructureReader getStructureReader(Reader reader) {
+        return Wrapper.getStructureReader(reader);
+    }
+
+    @Override
+    public StructureReader getStructureReader(File file) {
+        return Wrapper.getStructureReader(file);
+    }
+
+
     // Other Utilities
 
     public static String getServerVersion() {
@@ -315,9 +333,17 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     }
 
     public static final Runnable ASYNC_TICK_TASK = () -> {
-        for (Player p : Bukkit.getOnlinePlayers())
+        for (Player p : Bukkit.getOnlinePlayers()) {
             if (!STAR_PLAYER_CACHE.containsKey(p.getUniqueId()))
                 STAR_PLAYER_CACHE.put(p.getUniqueId(), new StarPlayer(p));
+
+            if (NBTWrapper.of(p.getItemOnCursor()).getBoolean("hat"))
+                p.setItemOnCursor(new ItemStack(Material.AIR));
+
+            Arrays.stream(p.getInventory().getStorageContents())
+                    .filter(i -> i != null && NBTWrapper.of(i).getBoolean("hat"))
+                    .forEach(i -> p.getInventory().remove(i));
+        }
 
         for (StarPlayer sp : STAR_PLAYER_CACHE.values()) {
             if (!sp.isOnline()) {
@@ -348,6 +374,11 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             if (r.nextInt(600) == 1 && type.getAmbientSound() != null)
                 p.getWorld().playSound(petEntity.getLocation(), type.getAmbientSound(), 1F, type.getAmbientPitch());
         }
+
+        for (World w : Bukkit.getWorlds())
+            for (Item i : w.getEntitiesByClass(Item.class))
+                if (NBTWrapper.of(i.getItemStack()).getBoolean("hat"))
+                    i.remove();
     };
 
     public static final BukkitRunnable SYNC_TICK_RUNNABLE = new BukkitRunnable() {
@@ -421,7 +452,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             "gold",
             "iron",
             "diamond",
-            "netherite"
+            "netherite",
+            "lodestone_pillar"
     };
 
     public static final Set<StructureInfo> STRUCTURE_CACHE = new HashSet<>();
@@ -435,7 +467,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         try {
             for (String structF : STRUCTURE_FILES) {
                 InputStream struct = StarCosmetics.class.getResourceAsStream("/structures/" + structF + ".scs");
-                StructureReader reader = StructureReader.getStructureReader(struct);
+                StructureReader reader = Wrapper.getStructureReader(struct);
 
                 Structure read = reader.read();
                 if (read == null) {
@@ -457,7 +489,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     @Override
     public void addStructure(@NotNull InputStream stream) {
-        StructureReader reader = StructureReader.getStructureReader(stream);
+        StructureReader reader = Wrapper.getStructureReader(stream);
 
         Structure struct = reader.read();
         STRUCTURE_CACHE.add(struct.getInfo());

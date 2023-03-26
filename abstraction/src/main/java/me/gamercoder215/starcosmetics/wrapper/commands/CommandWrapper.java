@@ -2,10 +2,8 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
-import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
@@ -129,6 +127,7 @@ public interface CommandWrapper {
         lore.add(ChatColor.DARK_PURPLE + getWithArgs("menu.about.particle_shape_count", comma(getCosmeticCount(ParticleShape.class)) ));
         lore.add(ChatColor.DARK_AQUA + getWithArgs("menu.about.structure_count", comma(StarConfig.getRegistry().getAvailableStructures().size()) ));
         lore.add(ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length)));
+        lore.add(ChatColor.GREEN + getWithArgs("menu.about.hat_count", comma(getCosmeticCount(Hat.class))));
 
         lore.add(" ");
 
@@ -213,6 +212,9 @@ public interface CommandWrapper {
 
             inv.setItem(parent.getPlace(), item);
         }
+
+        ItemStack hats = StarInventoryUtil.toItemStack(BaseHat.NORMAL);
+        inv.setItem(22, hats);
 
         List<CosmeticLocation<?>> sel = Wrapper.allFor(BaseShape.class);
         inv.setAttribute("collections:custom:particle", sel);
@@ -427,6 +429,15 @@ public interface CommandWrapper {
             }
         }
 
+        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+    }
+
+    default void hats(Player p) {
+        List<CosmeticLocation<?>> sel = Wrapper.allFor(BaseHat.class);
+        List<StarInventory> invs = Generator.createSelectionInventory(p, sel, get("menu.cosmetics.hat"));
+        invs.forEach(inv -> StarInventoryUtil.setBack(inv, cw::cosmetics));
+
+        p.openInventory(invs.get(0));
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
