@@ -24,6 +24,16 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+🎩 v1.1.0 - March 25, 2023 | "Happy Hats"
+- **Converted Project Build to Gradle**
+- Add Support & Features for MC 1.19.4
+- Created StarCosmetics Hats
+  - Section in /cosmetics allowing players to equip pre-made Hats
+  - Will automatically dismount anything in their helmet slot
+  - Hat objects not obtainable in Inventories or as Entities
+- Created Lodestone Pillar Structure
+- Heavy Optimization & Manual Minimization
+
 🐄 v1.0.2 - Jan 16, 2023
 - Added 6 new Structures, 2 new pets, and other additions
 - Added Configurability for Entity, Block, and Item Trail Disappear Times
@@ -120,6 +130,10 @@ Download the plugin on our Spigot Page, and drop it in to your Spigot/Paper "plu
 ---
 
 ## 📷 Screenshots
+
+<img src="https://media.discordapp.net/attachments/894254760075603980/1089413119933161523/2023-03-25_23.57.33.png" title="Stripped Bamboo Hat" alt="Stripped Bamboo Hat">
+
+<img src="https://media.discordapp.net/attachments/894254760075603980/1089413119538909224/2023-03-25_23.57.19.png" title="Hats GUI" alt="Hats GUI">
 
 <img src="https://media.discordapp.net/attachments/894254760075603980/1053917691632693288/2022-12-18_00.10.32.png" title="Tardigrade Pet" alt="Tardigrade pet">
 
