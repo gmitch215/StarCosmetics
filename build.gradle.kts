@@ -70,7 +70,7 @@ subprojects {
         testImplementation("org.mockito:mockito-core:5.2.0")
         testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 
-        testImplementation("org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT")
+        testImplementation("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
         testImplementation("net.md-5:bungeecord-chat:1.16-R0.4")
     }
 
