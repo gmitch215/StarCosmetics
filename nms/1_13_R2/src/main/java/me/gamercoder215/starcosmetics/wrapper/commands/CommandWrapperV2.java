@@ -104,6 +104,9 @@ public class CommandWrapperV2 implements CommandWrapper {
         @AutoComplete("add")
         public void soundSelection(Player p, @Optional String args) { wrapper.soundSelection(p, args == null ? null : args.split("\\s")); }
 
+        @Subcommand({"hat", "hats"})
+        public void hats(Player p) { wrapper.hats(p); }
+
     }
 
     @Override

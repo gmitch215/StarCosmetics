@@ -51,22 +51,14 @@ public final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
 
                 switch (args[0].toLowerCase()) {
                     case "pet":
-                    case "pets": {
-                        String[] petArgs = Arrays.copyOfRange(args, 1, args.length);
+                    case "pets": pets(p, Arrays.copyOfRange(args, 1, args.length)); break;
 
-                        pets(p, petArgs);
-                        break;
-                    }
-                    case "trails": {
-                        trails(p);
-                        break;
-                    }
+                    case "trails": trails(p); break;
+
                     case "particleshapes":
                     case "particles":
-                    case "shapes": {
-                        shapes(p);
-                        break;
-                    }
+                    case "shapes": shapes(p); break;
+
                     case "structures":
                     case "structure": {
                         StringBuilder structure = new StringBuilder();
@@ -76,10 +68,10 @@ public final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
                         break;
                     }
                     case "customsounds":
-                    case "sounds": {
-                        soundSelection(p, args);
-                        break;
-                    }
+                    case "sounds": soundSelection(p, args); break;
+
+                    case "hat":
+                    case "hats": hats(p); break;
                     default: {
                         sendError(p, "error.argument");
                         break;
