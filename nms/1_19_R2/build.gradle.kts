@@ -20,7 +20,7 @@ java {
 }
 
 tasks {
-    build {
+    assemble {
         dependsOn("remap")
     }
 
