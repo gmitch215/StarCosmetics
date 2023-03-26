@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
@@ -22,7 +23,6 @@ import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -51,7 +51,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
@@ -60,7 +62,6 @@ import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 public final class ClickEvents implements Listener {
 
     private static StarCosmetics plugin;
-    private static final Wrapper w = getWrapper();
 
 
     public ClickEvents(StarCosmetics plugin) {
@@ -546,6 +547,16 @@ public final class ClickEvents implements Listener {
 
                 p.openInventory(settings);
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            })
+            .put("cancel:cosmetic:hat", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                sp.setSelectedCosmetic(Hat.class, null);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+                updateCache(p);
+
+                p.getEquipment().setHelmet(null);
             })
 
             .build();
