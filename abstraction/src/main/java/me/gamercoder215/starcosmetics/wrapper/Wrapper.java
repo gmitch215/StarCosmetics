@@ -18,6 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +27,8 @@ import java.lang.reflect.Modifier;
 import java.security.SecureRandom;
 import java.util.*;
 
+import static me.gamercoder215.starcosmetics.util.Constants.w;
+
 public interface Wrapper {
 
     SecureRandom r = Constants.r;
@@ -33,7 +36,7 @@ public interface Wrapper {
     Map<UUID, StarPlayer> STAR_PLAYER_CACHE = new HashMap<>();
 
     static boolean isCompatible() {
-        return getWrapper() != null && !isOutdatedSubversion();
+        return w != null && !isOutdatedSubversion();
     }
 
     // Only includes Sub-Versions that won't compile
@@ -57,7 +60,7 @@ public interface Wrapper {
 
     static DataWrapper getDataWrapper() {
         try {
-            if (getWrapper().isLegacy())
+            if (w.isLegacy())
                 return Class.forName("me.gamercoder215.starcosmetics.wrapper.LegacyDataWrapper")
                     .asSubclass(DataWrapper.class)
                     .getConstructor()
@@ -91,14 +94,24 @@ public interface Wrapper {
 
     static CosmeticSelections getCosmeticSelections() {
         String cosmeticV = getServerVersion().split("_")[0] + "_" + getServerVersion().split("_")[1];
+
         try {
-            return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
+            // Attempt to load Special Cosmetic Selections
+            return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + getServerVersion())
                     .asSubclass(CosmeticSelections.class)
                     .getConstructor()
                     .newInstance();
-        } catch (ReflectiveOperationException e) {
-            StarConfig.print(e);
-            return null;
+        } catch (ReflectiveOperationException ignored) {
+            // Load Normal Cosmetic Selections
+            try {
+                return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
+                        .asSubclass(CosmeticSelections.class)
+                        .getConstructor()
+                        .newInstance();
+            } catch (ReflectiveOperationException e) {
+                StarConfig.print(e);
+                return null;
+            }
         }
     }
 
@@ -146,6 +159,8 @@ public interface Wrapper {
 
     String getAdvancementDescription(String s);
 
+    default boolean hasFeatureFlag(String flag) { return false; }
+
     // Other Utilities
 
     @NotNull
@@ -156,6 +171,11 @@ public interface Wrapper {
     static <T extends Cosmetic> List<CosmeticLocation<?>> allFor(Class<T> clazz) {
         List<CosmeticLocation<?>> selections = new ArrayList<>();
         try {
+            if (clazz.isEnum()) {
+                for (T c : clazz.getEnumConstants()) selections.addAll(StarConfig.getRegistry().getAllFor(c));
+                return selections;
+            }
+
             for (Field f : clazz.getDeclaredFields()) {
                 if (!Modifier.isStatic(f.getModifiers())) continue;
                 if (!Modifier.isFinal(f.getModifiers())) continue;

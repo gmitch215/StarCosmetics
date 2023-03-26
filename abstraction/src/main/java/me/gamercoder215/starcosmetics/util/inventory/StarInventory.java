@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWrapper;
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 
 public interface StarInventory extends Inventory, Cloneable {
 
@@ -22,7 +22,7 @@ public interface StarInventory extends Inventory, Cloneable {
     }
 
     default StarInventory copy() {
-        StarInventory inv = getWrapper().createInventory(getKey(), getSize(), getAttribute("_name", String.class));
+        StarInventory inv = w.createInventory(getKey(), getSize(), getAttribute("_name", String.class));
         inv.setContents(getContents());
         inv.setAttributes(getAllAttributes());
         return inv;

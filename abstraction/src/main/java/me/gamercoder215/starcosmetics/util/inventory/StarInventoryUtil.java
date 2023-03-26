@@ -2,10 +2,13 @@ package me.gamercoder215.starcosmetics.util.inventory;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.sun.tools.javac.jvm.Items;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
@@ -14,13 +17,9 @@ import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.StarUtil;
-import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.apache.commons.lang3.text.WordUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -44,14 +43,26 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.StarMaterial.*;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 import static org.bukkit.Material.*;
 
 public final class StarInventoryUtil {
 
-    private static final Wrapper w = getWrapper();
+    public static ItemStack itemBuilder(ItemStack original, Consumer<ItemMeta> metaConsumer) {
+        ItemStack item = original.clone();
+        ItemMeta meta = item.getItemMeta();
+        metaConsumer.accept(meta);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public static ItemStack itemBuilder(Material material, Consumer<ItemMeta> metaConsumer) {
+        return itemBuilder(new ItemStack(material), metaConsumer);
+    }
 
     @NotNull
     public static Material toMaterial(@NotNull Class<? extends Event> eventClass) {
@@ -344,6 +355,7 @@ public final class StarInventoryUtil {
         ItemStack item = new ItemStack(c.getIcon());
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.GOLD + c.getDisplayName());
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
         NBTWrapper nbt = of(item);
         nbt.setID("cosmetic:selection");
@@ -351,17 +363,21 @@ public final class StarInventoryUtil {
         nbt.set("display", c.getDisplayName());
 
         if (c instanceof Trail<?>) nbt.set("trail_type", ((Trail<?>) c).getType().name());
-        item = nbt.getItem();
 
-        return item;
+        return nbt.getItem();
     }
 
     @NotNull
     public static String toInputString(@NotNull Object input) {
+        if (input == null) throw new IllegalArgumentException("Null Input");
+
         if (input instanceof Sound || input instanceof StarSound) {
             Sound s = input instanceof StarSound ? ((StarSound) input).find() : (Sound) input;
             return getFriendlyName(s);
         }
+
+        if (input instanceof ItemStack)
+            return toInputString(((ItemStack) input).getType());
 
         if (input instanceof Enum<?>) {
             Enum<?> e = (Enum<?>) input;
@@ -428,9 +444,8 @@ public final class StarInventoryUtil {
     @NotNull
     public static ItemStack toItemStack(@NotNull Player p, @NotNull CosmeticLocation<?> loc) {
         Object input = loc.getInput();
-        Material type = toInputMaterial(input);
 
-        ItemStack item = new ItemStack(type);
+        ItemStack item = input instanceof ItemStack ? ((ItemStack) input).clone() : new ItemStack(toInputMaterial(input));
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + loc.getDisplayName());
         meta.addItemFlags(ItemFlag.values());
@@ -722,6 +737,13 @@ public final class StarInventoryUtil {
             NBTWrapper nbt = of(reset);
             nbt.setID("cancel:cosmetic:trail");
             nbt.set("trail", type.name());
+            reset = nbt.getItem();
+        } else if (Hat.class.isAssignableFrom(parent.getClass())) {
+            meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset.hat"));
+            reset.setItemMeta(meta);
+
+            NBTWrapper nbt = of(reset);
+            nbt.setID("cancel:cosmetic:hat");
             reset = nbt.getItem();
         } else {
             meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset"));

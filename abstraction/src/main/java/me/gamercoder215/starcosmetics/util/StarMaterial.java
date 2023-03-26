@@ -20,6 +20,10 @@ public enum StarMaterial {
 
     OAK_LOG("log"),
 
+    ACACIA_LOG("log_2"),
+
+    JUNGLE_LOG(3, "log"),
+
     END_STONE("ender_stone"),
 
     COMMAND_BLOCK("command"),
@@ -96,7 +100,13 @@ public enum StarMaterial {
 
     OAK_LEAVES("leaves"),
 
-    OAK_BUTTON("wooden_button")
+    OAK_BUTTON("wooden_button"),
+
+    OAK_FENCE("fence"),
+
+    OAK_FENCE_GATE("fence_gate"),
+
+    SPAWNER("mob_spawner"),
     ;
 
     private final Material defaultV;
