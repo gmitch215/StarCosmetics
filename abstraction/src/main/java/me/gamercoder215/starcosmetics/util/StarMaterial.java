@@ -107,6 +107,8 @@ public enum StarMaterial {
     OAK_FENCE_GATE("fence_gate"),
 
     SPAWNER("mob_spawner"),
+
+    WHEAT_SEEDS("seeds")
     ;
 
     private final Material defaultV;

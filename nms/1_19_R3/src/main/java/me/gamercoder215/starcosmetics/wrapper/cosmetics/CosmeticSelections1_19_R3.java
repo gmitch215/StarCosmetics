@@ -20,7 +20,6 @@ import java.util.Map;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromCrafted;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromMined;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
 public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
@@ -69,13 +68,13 @@ public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
 
             .build();
 
-    // Particle Shapes
+    // Shapes
 
-    // Small Detailed Rings
-
-    private static final List<CosmeticSelection<?>> SMALL_DETAILED_RING = ImmutableList.<CosmeticSelection<?>>builder()
+    private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            // Small Rings
             .add(new ParticleSelection("cherry_leaves", BaseShape.SMALL_RING, Particle.FALLING_CHERRY_LEAVES,
                     fromMined(20, Material.CHERRY_LOG), COMMON))
+
             .build();
 
     // Hats
@@ -102,10 +101,7 @@ public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
             .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAIL, BaseTrail.GROUND_TRAIL, "1_19"))
             .put(BaseTrail.SOUND_TRAIL, join(SOUND_TRAIL, BaseTrail.SOUND_TRAIL, "1_19"))
 
-            .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_19"))
-            .put(BaseShape.SMALL_DETAILED_RING, join(SMALL_DETAILED_RING, BaseShape.SMALL_DETAILED_RING, "1_19"))
-            .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_19"))
-            .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_19"))
+            .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_19"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_19"))
             .build();

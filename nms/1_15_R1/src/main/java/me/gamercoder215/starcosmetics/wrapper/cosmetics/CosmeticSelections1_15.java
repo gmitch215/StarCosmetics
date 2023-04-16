@@ -57,11 +57,11 @@ public final class CosmeticSelections1_15 implements CosmeticSelections {
 
     // Shapes
 
-    // Small Rings
-
-    private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+    private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            // Small Rings
             .add(new ParticleSelection("honey", BaseShape.SMALL_RING, Particle.DRIPPING_HONEY,
                     fromCrafted(180, Material.BEEHIVE), Rarity.RARE))
+
             .build();
 
     // Hats
@@ -83,10 +83,7 @@ public final class CosmeticSelections1_15 implements CosmeticSelections {
             .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_14"))
             .put(BaseTrail.SOUND_TRAIL, join(SOUND_TRAILS, BaseTrail.SOUND_TRAIL, "1_14"))
 
-            .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_14"))
-            .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_14"))
-            .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_14"))
-            .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_14"))
+            .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_14"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_14"))
             .build();
