@@ -201,27 +201,7 @@ public interface Wrapper {
     }
 
     static <T extends Cosmetic> List<CosmeticLocation<?>> allFor(Class<T> clazz) {
-        List<CosmeticLocation<?>> selections = new ArrayList<>();
-        try {
-            if (clazz.isEnum()) {
-                for (T c : clazz.getEnumConstants()) selections.addAll(StarConfig.getRegistry().getAllFor(c));
-                return selections;
-            }
-
-            for (Field f : clazz.getDeclaredFields()) {
-                if (!Modifier.isStatic(f.getModifiers())) continue;
-                if (!Modifier.isFinal(f.getModifiers())) continue;
-                if (!Modifier.isPublic(f.getModifiers())) continue;
-
-                if (!clazz.isAssignableFrom(f.getType())) continue;
-
-                Cosmetic c = (Cosmetic) f.get(null);
-                selections.addAll(StarConfig.getRegistry().getAllFor(c));
-            }
-        } catch (ReflectiveOperationException e) {
-            StarConfig.print(e);
-        }
-        return selections;
+        return StarConfig.getRegistry().getAllFor(clazz);
     }
 
     static String get(String key) {

@@ -28,7 +28,7 @@ import java.util.*;
 
 /**
  * Represents a player used by StarCosmetics to manage their configuration.
-*/
+ */
 @SuppressWarnings("unchecked")
 public final class StarPlayer {
 

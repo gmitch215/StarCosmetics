@@ -49,7 +49,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -410,22 +409,6 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         return locs;
     }
-
-    @Override
-    public @NotNull List<CosmeticLocation<?>> getAllFor(@Nullable Cosmetic parent) {
-        List<CosmeticLocation<?>> locs = new ArrayList<>();
-        if (parent == null) return locs;
-
-        Map<Cosmetic, List<CosmeticSelection<?>>> selections = getCosmeticSelections().getAllSelections();
-        for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
-            if (entry.getKey().getNamespace().equals(parent.getNamespace())) locs.addAll(entry.getValue());
-
-        Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
-        locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
-
-        return locs;
-    }
-
 
     @Override
     public List<Cosmetic> getAllParents() {

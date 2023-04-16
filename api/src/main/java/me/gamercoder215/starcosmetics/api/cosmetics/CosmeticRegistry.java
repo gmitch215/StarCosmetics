@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * Represents the registry for all StarCosmetics Cosmetics.
-*/
+ */
 public interface CosmeticRegistry {
 
     /**
@@ -30,7 +30,9 @@ public interface CosmeticRegistry {
      * @return List of Cosmetic Locations
      */
     @NotNull
-    List<CosmeticLocation<?>> getAllFor(@Nullable Cosmetic parent);
+    default List<CosmeticLocation<?>> getAllFor(@Nullable Cosmetic parent) {
+        return getAllFor(parent.getClass());
+    }
 
     /**
      * Fetches a list of all registered CosmeticLocations.
