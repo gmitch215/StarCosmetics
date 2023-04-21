@@ -112,7 +112,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromKilled(65, EntityType.IRON_GOLEM), RARE))
             .add(new TrailSelection("endermite", BaseTrail.PROJECTILE_TRAIL, EntityType.ENDERMITE,
                     fromKilled(150, EntityType.ENDERMITE), RARE))
-            .add(new TrailSelection("quartz_block", BaseTrail.GROUND_TRAIL, "fancy_block:quartz_block",
+            .add(new TrailSelection("quartz_block", BaseTrail.PROJECTILE_TRAIL, "fancy_block:quartz_block",
                     fromMined(220, StarMaterial.NETHER_QUARTZ_ORE.find()), RARE))
 
             .add(new TrailSelection("chorus_fruit", BaseTrail.PROJECTILE_TRAIL, Material.CHORUS_FRUIT,
@@ -190,6 +190,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromMined(155, Material.PURPUR_BLOCK), UNCOMMON))
             .add(new TrailSelection("nether_quartz", BaseTrail.GROUND_TRAIL, Material.QUARTZ,
                     fromMined(100, StarMaterial.NETHER_QUARTZ_ORE.find()), UNCOMMON))
+            .add(new TrailSelection("golden_nugget", BaseTrail.GROUND_TRAIL, Material.GOLD_NUGGET,
+                    fromMined(70, Material.GOLD_ORE), UNCOMMON))
             
             .add(new TrailSelection("lava", BaseTrail.GROUND_TRAIL, Particle.LAVA,
                     fromKilled(525, EntityType.BLAZE), RARE))

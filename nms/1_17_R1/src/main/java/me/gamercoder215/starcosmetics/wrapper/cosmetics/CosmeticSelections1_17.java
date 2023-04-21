@@ -52,6 +52,8 @@ public final class CosmeticSelections1_17 implements CosmeticSelections {
                     fromMined(500, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE), Rarity.RARE))
             .add(new TrailSelection("candle", BaseTrail.PROJECTILE_TRAIL, Material.CANDLE,
                     fromCrafted(135, Material.CANDLE), Rarity.RARE))
+            .add(new TrailSelection("copper_ingot", BaseTrail.PROJECTILE_TRAIL, Material.COPPER_INGOT,
+                    fromMined(350, Material.COPPER_ORE), Rarity.RARE))
             
             .add(new TrailSelection("amethyst", BaseTrail.PROJECTILE_TRAIL, Material.AMETHYST_SHARD,
                     fromMined(2000, Material.AMETHYST_BLOCK), Rarity.EPIC))
