@@ -436,7 +436,9 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             "iron",
             "diamond",
             "netherite",
-            "lodestone_pillar"
+            "lodestone_pillar",
+            "emerald",
+            "letter_y"
     };
 
     public static final Set<StructureInfo> STRUCTURE_CACHE = new HashSet<>();

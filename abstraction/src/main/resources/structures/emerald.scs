@@ -1,0 +1,6 @@
+ALL
+:emerald:
+constants.cosmetics.structures.emerald
+mythical
+---
+emerald_block:(1,1,1,1,1,1)^[0,0,0]
