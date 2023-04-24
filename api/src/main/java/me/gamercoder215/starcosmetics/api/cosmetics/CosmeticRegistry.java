@@ -36,12 +36,24 @@ public interface CosmeticRegistry {
 
     /**
      * Fetches a list of all registered CosmeticLocations.
-     *
      * @return List of Cosmetic Locations
      */
     @NotNull
     default List<CosmeticLocation<?>> getAllCosmetics() {
         return getAllFor(Cosmetic.class);
+    }
+
+    /**
+     * Fetches a CosmeticLocation by its full key.
+     * @param key Full Key
+     * @return Cosmetic Location found, or null if not found
+     */
+    @Nullable
+    default CosmeticLocation<?> getByFullKey(@Nullable String key) {
+        return getAllCosmetics().stream()
+                .filter(l -> l.getFullKey().equals(key))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
