@@ -7,6 +7,8 @@ import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
 public final class CosmeticSelections1_11 implements CosmeticSelections {
@@ -88,6 +91,15 @@ public final class CosmeticSelections1_11 implements CosmeticSelections {
 
     @Override
     public void loadPets() {
+        PET_MAP.putAll(
+                ImmutableMap.<PetType, PetInfo>builder()
+                        .put(PetType.EAGLE, of(
+                                "Eagle", Rarity.LEGENDARY,
+                                petIcon("eagle_pet", "Eagle"), fromKilled(15000, EntityType.VEX)
+                        ))
+                        .build()
+        );
+
         loadExternalPets("1_10");
     }
 

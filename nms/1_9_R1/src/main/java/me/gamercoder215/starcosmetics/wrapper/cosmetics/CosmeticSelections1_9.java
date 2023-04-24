@@ -332,7 +332,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromMined(100, Material.HAY_BLOCK), UNCOMMON))
 
             .add(new ParticleSelection("string", BaseShape.LARGE_DETAILED_TRIANGLE, Material.STRING,
-                    fromMined(350, Material.WEB), RARE))
+                    fromMined(350, StarMaterial.COBWEB.find()), RARE))
 
             // Small Squares
             .add(new ParticleSelection("cobblestone", BaseShape.SMALL_SQUARE, Material.COBBLESTONE,
@@ -352,9 +352,6 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromStatistic(Statistic.MOB_KILLS, 7800), RARE))
 
             // Detailed Pentagons
-            .add(new ParticleSelection("wool", BaseShape.DETAILED_PENTAGON, StarMaterial.WHITE_WOOL,
-                    fromCrafted(75, StarMaterial.WHITE_WOOL.find()), RARE))
-
             .add(new ParticleSelection("crit_magic", BaseShape.DETAILED_PENTAGON, Particle.CRIT_MAGIC,
                     fromStatistic(Statistic.MOB_KILLS, 17500), LEGENDARY))
 

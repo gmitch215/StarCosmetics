@@ -108,7 +108,9 @@ public enum StarMaterial {
 
     SPAWNER("mob_spawner"),
 
-    WHEAT_SEEDS("seeds")
+    WHEAT_SEEDS("seeds"),
+
+    COBWEB("web"),
     ;
 
     private final Material defaultV;

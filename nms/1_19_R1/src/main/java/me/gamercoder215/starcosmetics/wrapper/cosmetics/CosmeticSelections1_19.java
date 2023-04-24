@@ -100,6 +100,10 @@ public final class CosmeticSelections1_19 implements CosmeticSelections {
             .add(new ParticleSelection("mud", BaseShape.SMALL_DETAILED_RING, Material.MUD,
                     fromMined(60, Material.DIRT), Rarity.COMMON))
 
+            // Pentagon
+            .add(new ParticleSelection("sculk", BaseShape.PENTAGON, Material.SCULK,
+                    fromMined(270, Material.SCULK), Rarity.UNCOMMON))
+
             .build();
 
     // Hats
