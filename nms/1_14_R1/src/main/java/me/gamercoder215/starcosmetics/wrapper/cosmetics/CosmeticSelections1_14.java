@@ -87,10 +87,7 @@ public final class CosmeticSelections1_14 implements CosmeticSelections {
             .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_13"))
             .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_13"))
 
-            .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_13"))
-            .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_13"))
-            .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_13"))
-            .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_13"))
+            .put(BaseShape.ALL, getForVersion(BaseShape.ALL, "1_13"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_13"))
             .build();

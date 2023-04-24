@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
@@ -148,26 +149,21 @@ public final class CosmeticSelections1_13 implements CosmeticSelections {
 
     // Shapes
 
-    // Small Detailed Rings
-
-    private static final List<CosmeticSelection<?>> SMALL_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+    private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            // Small Detailed Rings
             .add(new ParticleSelection("nautilus", SMALL_DETAILED_RING, Particle.NAUTILUS,
                     fromKilled(2650, EntityType.DROWNED), LEGENDARY))
-            .build();
 
-    // Large Rings
-
-    private static final List<CosmeticSelection<?>> LARGE_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Large Rings
             .add(new ParticleSelection("kelp", LARGE_RING, Material.KELP,
                     fromMined(250, Material.KELP), UNCOMMON))
-            .build();
 
-    // Large Detailed Rings
-
-    private static final List<CosmeticSelection<?>> LARGE_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Large Detailed Rings
             .add(new ParticleSelection("dried_kelp_block", LARGE_DETAILED_RING, Material.DRIED_KELP_BLOCK,
                     fromMined(250, Material.DRIED_KELP_BLOCK), UNCOMMON))
+
             .build();
+
 
     // Hats
 
@@ -210,10 +206,7 @@ public final class CosmeticSelections1_13 implements CosmeticSelections {
             .put(GROUND_TRAIL, join(GROUND_TRAILS, GROUND_TRAIL, "1_12"))
             .put(SOUND_TRAIL, join(SOUND_TRAILS, SOUND_TRAIL, "1_12"))
 
-            .put(SMALL_RING, getForVersion(SMALL_RING, "1_12"))
-            .put(SMALL_DETAILED_RING, join(SMALL_DETAILED_RINGS, SMALL_DETAILED_RING, "1_12"))
-            .put(LARGE_RING, join(LARGE_RINGS, LARGE_RING, "1_12"))
-            .put(LARGE_DETAILED_RING, join(LARGE_DETAILED_RINGS, LARGE_DETAILED_RING, "1_12"))
+            .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_12"))
 
             .put(NORMAL, join(NORMAL_HATS, NORMAL, "1_12"))
             .build();

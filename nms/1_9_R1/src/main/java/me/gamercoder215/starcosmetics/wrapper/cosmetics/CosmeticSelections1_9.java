@@ -112,7 +112,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromKilled(65, EntityType.IRON_GOLEM), RARE))
             .add(new TrailSelection("endermite", BaseTrail.PROJECTILE_TRAIL, EntityType.ENDERMITE,
                     fromKilled(150, EntityType.ENDERMITE), RARE))
-            .add(new TrailSelection("quartz_block", BaseTrail.GROUND_TRAIL, "fancy_block:quartz_block",
+            .add(new TrailSelection("quartz_block", BaseTrail.PROJECTILE_TRAIL, "fancy_block:quartz_block",
                     fromMined(220, StarMaterial.NETHER_QUARTZ_ORE.find()), RARE))
 
             .add(new TrailSelection("chorus_fruit", BaseTrail.PROJECTILE_TRAIL, Material.CHORUS_FRUIT,
@@ -190,6 +190,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromMined(155, Material.PURPUR_BLOCK), UNCOMMON))
             .add(new TrailSelection("nether_quartz", BaseTrail.GROUND_TRAIL, Material.QUARTZ,
                     fromMined(100, StarMaterial.NETHER_QUARTZ_ORE.find()), UNCOMMON))
+            .add(new TrailSelection("golden_nugget", BaseTrail.GROUND_TRAIL, Material.GOLD_NUGGET,
+                    fromMined(70, Material.GOLD_ORE), UNCOMMON))
             
             .add(new TrailSelection("lava", BaseTrail.GROUND_TRAIL, Particle.LAVA,
                     fromKilled(525, EntityType.BLAZE), RARE))
@@ -247,9 +249,8 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Shapes
 
-    // Small Rings
-
-    private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+    private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            // Small Rings
             .add(new ParticleSelection("heart", BaseShape.SMALL_RING, Particle.HEART,
                     fromStatistic(Statistic.ANIMALS_BRED, 15), COMMON))
             .add(new ParticleSelection("apple", BaseShape.SMALL_RING, Material.APPLE,
@@ -274,10 +275,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("emerald", BaseShape.SMALL_RING, Material.EMERALD,
                     fromCrafted(30, Material.EMERALD_BLOCK), LEGENDARY))
 
-            .build();
-
-    // Small Detailed Rings
-    private static final List<CosmeticSelection<?>> SMALL_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Small Detailed Rings
             .add(new ParticleSelection("stone", BaseShape.SMALL_DETAILED_RING, Material.STONE,
                     fromMined(30, Material.STONE), COMMON))
 
@@ -289,22 +287,17 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("snow", BaseShape.SMALL_DETAILED_RING, Particle.SNOW_SHOVEL,
                     fromKilled(100, EntityType.SNOWMAN), RARE))
 
-            .build();
+            .add(new ParticleSelection("barrier", BaseShape.SMALL_DETAILED_RING, Material.BARRIER,
+                    fromBlocksMined(750000), SPECIAL))
 
-    // Large Rings
-
-    private static final List<CosmeticSelection<?>> LARGE_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Large Rings
             .add(new ParticleSelection("sand", BaseShape.LARGE_RING, Material.SAND,
                     fromMined(80, Material.SAND), COMMON))
 
             .add(new ParticleSelection("note", BaseShape.LARGE_RING, Particle.NOTE,
                     fromCrafted(200, Material.NOTE_BLOCK), RARE))
 
-            .build();
-
-    // Large Detailed Rings
-
-    private static final List<CosmeticSelection<?>> LARGE_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Large Detailed Rings
             .add(new ParticleSelection("soul_sand", BaseShape.LARGE_DETAILED_RING, Material.SOUL_SAND,
                     fromMined(90, Material.SOUL_SAND), OCCASIONAL))
             .add(new ParticleSelection("end_stone", BaseShape.LARGE_DETAILED_RING, StarMaterial.END_STONE.find(),
@@ -312,6 +305,55 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new ParticleSelection("enchantment", BaseShape.LARGE_DETAILED_RING, Particle.ENCHANTMENT_TABLE,
                     fromStatistic(Statistic.ITEM_ENCHANTED, 385), EPIC))
+
+            // Small Triangles
+            .add(new ParticleSelection("glass", BaseShape.SMALL_TRIANGLE, Material.GLASS,
+                    fromCrafted(105, Material.GLASS), COMMON))
+
+            .add(new ParticleSelection("quartz_block", BaseShape.SMALL_TRIANGLE, Material.QUARTZ_BLOCK,
+                    fromCrafted(75, Material.QUARTZ_BLOCK), OCCASIONAL))
+
+            // Medium Triangles
+            .add(new ParticleSelection("water", BaseShape.MEDIUM_TRIANGLE, Particle.WATER_SPLASH,
+                    fromCrafted(85, Material.WATER_BUCKET), OCCASIONAL))
+
+            .add(new ParticleSelection("endstone", BaseShape.MEDIUM_TRIANGLE, StarMaterial.END_STONE.find(),
+                    fromMined(310, StarMaterial.END_STONE.find()), UNCOMMON))
+
+            // Large Triangles
+            .add(new ParticleSelection("gravel", BaseShape.LARGE_TRIANGLE, Material.GRAVEL,
+                    fromMined(95, Material.GRAVEL), UNCOMMON))
+
+            .add(new ParticleSelection("anvil", BaseShape.LARGE_TRIANGLE, Material.ANVIL,
+                    fromCrafted(160, Material.ANVIL), RARE))
+
+            // Large Detailed Triangles
+            .add(new ParticleSelection("seeds", BaseShape.LARGE_DETAILED_TRIANGLE, StarMaterial.WHEAT_SEEDS.find(),
+                    fromMined(100, Material.HAY_BLOCK), UNCOMMON))
+
+            .add(new ParticleSelection("string", BaseShape.LARGE_DETAILED_TRIANGLE, Material.STRING,
+                    fromMined(350, StarMaterial.COBWEB.find()), RARE))
+
+            // Small Squares
+            .add(new ParticleSelection("cobblestone", BaseShape.SMALL_SQUARE, Material.COBBLESTONE,
+                    fromMined(25, Material.COBBLESTONE), COMMON))
+            .add(new ParticleSelection("netherrack", BaseShape.SMALL_SQUARE, Material.NETHERRACK,
+                    fromMined(65, Material.NETHERRACK), COMMON))
+
+            // Large Squares
+            .add(new ParticleSelection("pumpkin_seeds", BaseShape.LARGE_SQUARE, Material.PUMPKIN_SEEDS,
+                    fromMined(140, Material.PUMPKIN), UNCOMMON))
+
+            .add(new ParticleSelection("redstone", BaseShape.LARGE_SQUARE, Material.REDSTONE,
+                    fromCrafted(400, Material.REDSTONE_BLOCK), EPIC))
+
+            // Pentagons
+            .add(new ParticleSelection("crit", BaseShape.PENTAGON, Particle.CRIT,
+                    fromStatistic(Statistic.MOB_KILLS, 7800), RARE))
+
+            // Detailed Pentagons
+            .add(new ParticleSelection("crit_magic", BaseShape.DETAILED_PENTAGON, Particle.CRIT_MAGIC,
+                    fromStatistic(Statistic.MOB_KILLS, 17500), LEGENDARY))
 
             .build();
 
@@ -416,10 +458,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .put(BaseTrail.GROUND_TRAIL, GROUND_TRAILS)
             .put(BaseTrail.SOUND_TRAIL, SOUND_TRAILS)
 
-            .put(BaseShape.SMALL_RING, SMALL_RINGS)
-            .put(BaseShape.SMALL_DETAILED_RING, SMALL_DETAILED_RINGS)
-            .put(BaseShape.LARGE_RING, LARGE_RINGS)
-            .put(BaseShape.LARGE_DETAILED_RING, LARGE_DETAILED_RINGS)
+            .put(BaseShape.ALL, PARTICLE_SHAPES)
 
             .put(BaseHat.NORMAL, NORMAL_HATS)
             .build();
@@ -428,7 +467,4 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
     public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
         return SELECTIONS;
     }
-
-    @Override
-    public void loadPets() {}
 }

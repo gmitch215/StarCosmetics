@@ -134,6 +134,20 @@ public enum PetType {
      * Represents a Demogorgon.
      */
     DEMOGORGON(Sound.ENTITY_WOLF_GROWL, 0F),
+
+    /**
+     * Represents a Tarantula.
+     */
+    TARANTULA(Sound.ENTITY_SPIDER_AMBIENT, 0.5F),
+    /**
+     * Represents a Gekko.
+     */
+    GEKKO(Sound.ENTITY_SLIME_JUMP, 2F),
+
+    /**
+     * Represents an Eagle.
+     */
+    EAGLE("ENTITY_VEX_AMBIENT", 2F)
     ;
 
     private final Sound ambientSound;

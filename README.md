@@ -24,6 +24,15 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+📖 v1.1.1 - April 23, 2023
+- Gradle Updates
+- Added New Cosmetics, Pets, and Structures
+  - Added More ParticleShape Shapes
+- Heavy Optimization
+- Pet Cosmetics Options
+  - Your pets (tameables and StarCosmetics pets) can now have the same Particle Shapes as you!
+- Minor Improvements 
+
 🎩 v1.1.0 - March 25, 2023 | "Happy Hats"
 - **Converted Project Build to Gradle**
 - Add Support & Features for MC 1.19.4
@@ -52,7 +61,7 @@ First Release of StarCosmetics
 
 ## 🔮 Future Features
 
-#### v1.1.0
+#### v1.2.0
 - [ ] Custom Player Soundtracks
 - [ ] Custom Structures using StarCosmetics Structure Files (.scs)
 

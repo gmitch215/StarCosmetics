@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents a specific entry for a cosmetic.
  * @param <T> Input Type
-*/
+ */
 public interface CosmeticLocation<T> {
 
     /**

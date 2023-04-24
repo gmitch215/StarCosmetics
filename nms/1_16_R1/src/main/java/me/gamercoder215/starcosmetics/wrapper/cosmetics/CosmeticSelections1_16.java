@@ -118,27 +118,21 @@ public final class CosmeticSelections1_16 implements CosmeticSelections {
 
     // Shapes
 
-    // Small Rings
-
-    private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+    private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            // Small Rings
             .add(new ParticleSelection("soul_flame", BaseShape.SMALL_RING, Particle.SOUL_FIRE_FLAME,
                     fromKilled(500, EntityType.WITHER_SKELETON), Rarity.RARE))
-            .build();
 
-    // Small Detailed Rings
-
-    private static final List<CosmeticSelection<?>> SMALL_DETAILED_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Small Detailed Rings
             .add(new ParticleSelection("blackstone", BaseShape.SMALL_DETAILED_RING, Material.BLACKSTONE,
                     fromMined(230, Material.BLACKSTONE), Rarity.RARE))
             .add(new ParticleSelection("warped_block", BaseShape.SMALL_DETAILED_RING, Material.WARPED_WART_BLOCK,
                     fromMined(145, Material.WARPED_NYLIUM), Rarity.RARE))
-            .build();
 
-    // Large Rings
-
-    private static final List<CosmeticSelection<?>> LARGE_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Large Rings
             .add(new ParticleSelection("blackstone", BaseShape.LARGE_RING, Material.POLISHED_BLACKSTONE,
                     fromMined(100, Material.POLISHED_BLACKSTONE_BRICKS), Rarity.UNCOMMON))
+
             .build();
 
     // Hats
@@ -178,10 +172,7 @@ public final class CosmeticSelections1_16 implements CosmeticSelections {
             .put(BaseTrail.SOUND_TRAIL, join(SOUND_TRAILS, BaseTrail.SOUND_TRAIL, "1_15"))
             .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_15"))
 
-            .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_15"))
-            .put(BaseShape.SMALL_DETAILED_RING, join(SMALL_DETAILED_RINGS, BaseShape.SMALL_DETAILED_RING, "1_15"))
-            .put(BaseShape.LARGE_RING, join(LARGE_RINGS, BaseShape.LARGE_RING, "1_15"))
-            .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_15"))
+            .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_15"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_15"))
             .build();

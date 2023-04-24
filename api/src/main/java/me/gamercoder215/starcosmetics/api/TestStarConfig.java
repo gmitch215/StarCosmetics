@@ -1,11 +1,13 @@
 package me.gamercoder215.starcosmetics.api;
 
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.Set;
 
 final class TestStarConfig implements StarConfig {
 
@@ -63,5 +65,14 @@ final class TestStarConfig implements StarConfig {
     public StructureReader getStructureReader(@NotNull Reader reader) {
         return null;
     }
+
+    @Override
+    public @NotNull Set<CosmeticLocation<?>> getDisabledCosmetics() { return null; }
+
+    @Override
+    public boolean isAmbientPetSoundEnabled() { return true; }
+
+    @Override
+    public void setAmbientPetSoundEnabled(boolean enabled) {}
 
 }

@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.api;
 
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Locale;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -129,6 +131,9 @@ public interface StarConfig {
         if (!config.isInt("cosmetics.item-disappear-time")) config.set("cosmetics.item-disappear-time", 10);
         if (!config.isInt("cosmetics.block-disappear-time")) config.set("cosmetics.block-disappear-time", 4);
         if (!config.isInt("cosmetics.entity-disappear-time")) config.set("cosmetics.entity-disappear-time", 15);
+
+        if (!config.isConfigurationSection("cosmetics.pets")) config.createSection("cosmetics.pets");
+        if (!config.isBoolean("cosmetics.pets.ambient-sound")) config.set("cosmetics.pets.ambient-sound", true);
 
         try {
             config.save(getConfigurationFile());
@@ -290,5 +295,24 @@ public interface StarConfig {
      * @return StructureReader
      */
     StructureReader getStructureReader(@NotNull Reader reader);
+
+    /**
+     * Fetches a list of all disabled cosmetics.
+     * @return Disabled Cosmetics
+     */
+    @NotNull
+    Set<CosmeticLocation<?>> getDisabledCosmetics();
+
+    /**
+     * Whether pets can play their ambient sound.
+     * @return true if enabled, else false
+     */
+    boolean isAmbientPetSoundEnabled();
+
+    /**
+     * Sets whether pets can play their ambient sound.
+     * @param enabled true if enabled, else false
+     */
+    void setAmbientPetSoundEnabled(boolean enabled);
 
 }

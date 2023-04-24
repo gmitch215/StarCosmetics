@@ -10,7 +10,6 @@ import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -28,7 +27,7 @@ import java.util.*;
 
 /**
  * Represents a player used by StarCosmetics to manage their configuration.
-*/
+ */
 @SuppressWarnings("unchecked")
 public final class StarPlayer {
 

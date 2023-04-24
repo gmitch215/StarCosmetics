@@ -27,6 +27,11 @@ functionality:
 # Configuration Section related to Cosmetics
 cosmetics:
 
+  # Pet-specifc Cosmetic Settings
+  pets:
+    # Whether pets play ambient sounds
+    ambient-sound: true
+
   # How long, in ticks, an item cosmetic should last for.
   # 1 tick = 1/20 of a second
   item-disappear-time: 10
@@ -36,3 +41,13 @@ cosmetics:
 
   # How long, in ticks, an entity cosmetic should last for.
   entity-disappear-time: 15
+
+  # A List of Disabled Cosmetics
+  #
+  # Put the cosmetic's full key here to disable it.
+  # Examples:
+  # "hat/normal[spawner]"
+  # "trail/projectile[red_flowers]"
+  #
+  # You can figure out a cosmetic's key by equipping it, then navigating to your player information file.
+  disabled: []

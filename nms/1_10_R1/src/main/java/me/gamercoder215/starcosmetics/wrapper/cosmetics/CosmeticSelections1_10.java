@@ -10,6 +10,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
+import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
 
@@ -47,6 +48,19 @@ public final class CosmeticSelections1_10 implements CosmeticSelections {
 
             .build();
 
+    // Shapes
+
+    private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            // Large Detailed Trianges
+            .add(new ParticleSelection("structure_void", BaseShape.LARGE_DETAILED_TRIANGLE, Material.STRUCTURE_VOID,
+                    fromMined(7100, Material.OBSIDIAN), Rarity.LEGENDARY))
+
+            // Pentagons
+            .add(new ParticleSelection("magma_block", BaseShape.PENTAGON, StarMaterial.MAGMA_BLOCK.find(),
+                    fromMined(195, StarMaterial.MAGMA_BLOCK.find()), Rarity.COMMON))
+
+            .build();
+
     // Hats
 
     // Normal Hats
@@ -63,10 +77,7 @@ public final class CosmeticSelections1_10 implements CosmeticSelections {
             .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_9"))
             .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_9"))
 
-            .put(BaseShape.SMALL_RING, getForVersion(BaseShape.SMALL_RING, "1_9"))
-            .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_9"))
-            .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_9"))
-            .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_9"))
+            .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_9"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_9"))
             .build();

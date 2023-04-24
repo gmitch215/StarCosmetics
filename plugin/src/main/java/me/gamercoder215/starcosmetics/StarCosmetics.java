@@ -10,12 +10,15 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetCosmetics;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
+import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
@@ -49,7 +52,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,6 +65,7 @@ import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.circle;
+import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.polygon;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
@@ -280,6 +283,27 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         return Wrapper.getStructureReader(file);
     }
 
+    @Override
+    public @NotNull Set<CosmeticLocation<?>> getDisabledCosmetics() {
+        List<String> disabled = config.getStringList("cosmetics.disabled");
+
+        return ImmutableSet.copyOf(disabled.stream()
+                .map(StarConfig.getRegistry()::getByFullKey)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet()));
+    }
+
+    @Override
+    public boolean isAmbientPetSoundEnabled() {
+        return config.getBoolean("cosmetics.pets.ambient-sound", true);
+    }
+
+    @Override
+    public void setAmbientPetSoundEnabled(boolean enabled) {
+        config.set("cosmetics.pets.ambient-sound", enabled);
+        saveConfig();
+    }
+
 
     // Other Utilities
 
@@ -353,6 +377,18 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
             sp.tick();
         }
+
+        for (Map.Entry<UUID, Pet> entry : StarPlayerUtil.getPets().entrySet()) {
+            Player p = Bukkit.getPlayer(entry.getKey());
+            if (p == null) continue;
+
+            Pet pet = entry.getValue();
+            PetType type = pet.getPetType();
+
+            LivingEntity petEntity = pet.getEntity();
+            if (StarConfig.getConfig().isAmbientPetSoundEnabled() && r.nextInt(600) == 1 && type.getAmbientSound() != null)
+                p.getWorld().playSound(petEntity.getLocation(), type.getAmbientSound(), 1F, type.getAmbientPitch());
+        }
     };
 
     public static final BukkitRunnable ASYNC_TICK_RUNNABLE = new BukkitRunnable() {
@@ -363,16 +399,27 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     };
 
     public static final Runnable SYNC_TICK_TASK = () -> {
-        for (Map.Entry<UUID, Pet> entry : StarPlayerUtil.getPets().entrySet()) {
-            Player p = Bukkit.getPlayer(entry.getKey());
-            if (p == null) continue;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            StarPlayer sp = getCached(p);
 
-            Pet pet = entry.getValue();
-            PetType type = pet.getPetType();
+            PetCosmetics setting = sp.getSetting(PlayerSetting.PET_COSMETICS);
+            CosmeticLocation<?> shape = sp.getSelectedCosmetic(ParticleShape.class);
 
-            LivingEntity petEntity = pet.getEntity();
-            if (r.nextInt(600) == 1 && type.getAmbientSound() != null)
-                p.getWorld().playSound(petEntity.getLocation(), type.getAmbientSound(), 1F, type.getAmbientPitch());
+            if (shape != null) {
+                if (setting.isStarPet() && StarPlayerUtil.getPets().containsKey(p.getUniqueId())) {
+                    LivingEntity petEntity = StarPlayerUtil.getPets().get(p.getUniqueId()).getEntity();
+                    shape.getParent().run(petEntity.getLocation().add(0, 0.8, 0), shape);
+                }
+
+                if (setting.isTameables())
+                    Bukkit.getWorlds().forEach(w ->
+                            w.getEntitiesByClass(LivingEntity.class)
+                                    .stream()
+                                    .filter(l -> l instanceof Tameable && ((Tameable) l).getOwner() != null && ((Tameable) l).getOwner().getUniqueId().equals(p.getUniqueId()))
+                                    .map(l -> (Tameable & LivingEntity) l)
+                                    .forEach(t -> shape.getParent().run(t.getLocation(), shape))
+                    );
+            }
         }
 
         for (World w : Bukkit.getWorlds())
@@ -408,24 +455,11 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
         locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
 
-        return locs;
+        return ImmutableList.copyOf(locs.stream()
+                .filter(l -> !getDisabledCosmetics().contains(l))
+                .collect(Collectors.toList())
+        );
     }
-
-    @Override
-    public @NotNull List<CosmeticLocation<?>> getAllFor(@Nullable Cosmetic parent) {
-        List<CosmeticLocation<?>> locs = new ArrayList<>();
-        if (parent == null) return locs;
-
-        Map<Cosmetic, List<CosmeticSelection<?>>> selections = getCosmeticSelections().getAllSelections();
-        for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
-            if (entry.getKey().getNamespace().equals(parent.getNamespace())) locs.addAll(entry.getValue());
-
-        Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
-        locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
-
-        return locs;
-    }
-
 
     @Override
     public List<Cosmetic> getAllParents() {
@@ -453,7 +487,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             "iron",
             "diamond",
             "netherite",
-            "lodestone_pillar"
+            "lodestone_pillar",
+            "emerald",
+            "letter_y",
+            "letter_j"
     };
 
     public static final Set<StructureInfo> STRUCTURE_CACHE = new HashSet<>();
@@ -544,6 +581,12 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                             if (r.nextInt(100) < 10) circle(head(stand), Particle.SLIME, 3, 0.5);
                         }
                 ))
+                .put(PetType.GEKKO, of(
+                        "Gekko", Rarity.RARE,
+                        petIcon("gekko_pet", "Gekko"), fromKilled(550, EntityType.SLIME), stand -> {
+                            if (r.nextInt(100) < 5) circle(head(stand), Particle.CRIT_MAGIC, 2, 0.25);
+                        }
+                ))
 
                 .put(PetType.RABBIT, of(
                         "Rabbit", Rarity.EPIC,
@@ -589,6 +632,13 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                         petIcon("capybara_pet", "Capybara"), fromMined(1000000, StarMaterial.OAK_LOG.find()), stand -> {
                             if (r.nextInt(100) < 5) circle(head(stand), new ItemStack(Material.GOLDEN_CARROT), 3, 0.5);
                             if (r.nextInt(100) < 10) w.spawnFakeItem(new ItemStack(Material.APPLE), head(stand), 10);
+                        }
+                ))
+                .put(PetType.TARANTULA, of(
+                        "Tarantula", Rarity.MYTHICAL,
+                        petIcon("tarantula_pet", "Tarantula"), fromKilled(1500000, EntityType.SPIDER), stand -> {
+                            if (r.nextInt(100) < 10) circle(head(stand), StarMaterial.WHITE_WOOL.find(), 8, 1);
+                            if (r.nextInt(100) < 10) polygon(head(stand), new ItemStack(Material.STRING), 6, 0.75);
                         }
                 ))
 

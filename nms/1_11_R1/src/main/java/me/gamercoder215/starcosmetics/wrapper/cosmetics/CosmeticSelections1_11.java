@@ -7,6 +7,8 @@ import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
+import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
 public final class CosmeticSelections1_11 implements CosmeticSelections {
@@ -55,9 +58,7 @@ public final class CosmeticSelections1_11 implements CosmeticSelections {
 
     // Shapes
 
-    // Small Rings
-
-    private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+    private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new ParticleSelection("totem", BaseShape.SMALL_RING, Particle.TOTEM,
                     fromKilled(350, EntityType.EVOKER), Rarity.EPIC))
             .build();
@@ -78,10 +79,7 @@ public final class CosmeticSelections1_11 implements CosmeticSelections {
             .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_10"))
             .put(BaseTrail.SOUND_TRAIL, getForVersion(BaseTrail.SOUND_TRAIL, "1_10"))
 
-            .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_10"))
-            .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_10"))
-            .put(BaseShape.LARGE_RING, getForVersion(BaseShape.LARGE_RING, "1_10"))
-            .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_10"))
+            .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_10"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_10"))
             .build();
@@ -93,6 +91,15 @@ public final class CosmeticSelections1_11 implements CosmeticSelections {
 
     @Override
     public void loadPets() {
+        PET_MAP.putAll(
+                ImmutableMap.<PetType, PetInfo>builder()
+                        .put(PetType.EAGLE, of(
+                                "Eagle", Rarity.LEGENDARY,
+                                petIcon("eagle_pet", "Eagle"), fromKilled(15000, EntityType.VEX)
+                        ))
+                        .build()
+        );
+
         loadExternalPets("1_10");
     }
 

@@ -52,6 +52,8 @@ public final class CosmeticSelections1_17 implements CosmeticSelections {
                     fromMined(500, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE), Rarity.RARE))
             .add(new TrailSelection("candle", BaseTrail.PROJECTILE_TRAIL, Material.CANDLE,
                     fromCrafted(135, Material.CANDLE), Rarity.RARE))
+            .add(new TrailSelection("copper_ingot", BaseTrail.PROJECTILE_TRAIL, Material.COPPER_INGOT,
+                    fromMined(350, Material.COPPER_ORE), Rarity.RARE))
             
             .add(new TrailSelection("amethyst", BaseTrail.PROJECTILE_TRAIL, Material.AMETHYST_SHARD,
                     fromMined(2000, Material.AMETHYST_BLOCK), Rarity.EPIC))
@@ -114,9 +116,8 @@ public final class CosmeticSelections1_17 implements CosmeticSelections {
 
     // Shapes
 
-    // Small Rings
-
-    private static final List<CosmeticSelection<?>> SMALL_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+    private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            // Small Rings
             .add(new ParticleSelection("dripstone", BaseShape.SMALL_RING, Material.DRIPSTONE_BLOCK,
                     fromMined(50, Material.DRIPSTONE_BLOCK), Rarity.OCCASIONAL))
 
@@ -127,11 +128,7 @@ public final class CosmeticSelections1_17 implements CosmeticSelections {
             .add(new ParticleSelection("calcite", BaseShape.SMALL_RING, Material.CALCITE,
                     fromMined(125, Material.CALCITE), Rarity.RARE))
 
-            .build();
-
-    // Large Rings
-
-    private static final List<CosmeticSelection<?>> LARGE_RINGS = ImmutableList.<CosmeticSelection<?>>builder()
+            // Large Rings
             .add(new ParticleSelection("deepslate", BaseShape.LARGE_RING, Material.DEEPSLATE,
                     fromMined(145, Material.DEEPSLATE), Rarity.UNCOMMON))
             .build();
@@ -171,10 +168,7 @@ public final class CosmeticSelections1_17 implements CosmeticSelections {
             .put(BaseTrail.GROUND_TRAIL, join(GROUND_TRAILS, BaseTrail.GROUND_TRAIL, "1_16"))
             .put(BaseTrail.SOUND_TRAIL, join(SOUND_TRAILS, BaseTrail.SOUND_TRAIL, "1_16"))
 
-            .put(BaseShape.SMALL_RING, join(SMALL_RINGS, BaseShape.SMALL_RING, "1_16"))
-            .put(BaseShape.SMALL_DETAILED_RING, getForVersion(BaseShape.SMALL_DETAILED_RING, "1_16"))
-            .put(BaseShape.LARGE_RING, join(LARGE_RINGS, BaseShape.LARGE_RING, "1_16"))
-            .put(BaseShape.LARGE_DETAILED_RING, getForVersion(BaseShape.LARGE_DETAILED_RING, "1_16"))
+            .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_16"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_16"))
             .build();
