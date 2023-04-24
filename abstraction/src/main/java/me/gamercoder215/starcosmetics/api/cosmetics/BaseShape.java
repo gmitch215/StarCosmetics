@@ -195,9 +195,9 @@ public final class BaseShape implements ParticleShape {
 
             double dX = x2 - x;
             double dZ = z2 - z;
-            double dist = Math.sqrt((dX - x) * (dX - x) + (dZ - z) * (dZ - z));
+            double dist = Math.sqrt((dX - x) * (dX - x) + (dZ - z) * (dZ - z)) / radius;
 
-            for (double d = 0; d < dist - .1; d += .1) {
+            for (double d = 0; d < (dist - (2.0 - (2 * ((double) points / 10))) ); d += .1) {
                 l.add(x + dX * d, 0, z + dZ * d);
                 spawn(l, o);
                 l.subtract(x + dX * d, 0, z + dZ * d);
@@ -213,7 +213,7 @@ public final class BaseShape implements ParticleShape {
     private BaseShape(String name, BiConsumer<Location, Object> runnable) {
         this.name = name;
         this.particle = runnable;
-        this.size = ParticleSize.valueOf(name.toUpperCase());
+        this.size = name.equalsIgnoreCase("all") ? null : ParticleSize.valueOf(name.toUpperCase());
 
         Constants.PARENTS.add(this);
     }
