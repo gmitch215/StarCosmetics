@@ -100,7 +100,7 @@ public interface Wrapper {
                     .asSubclass(CosmeticSelections.class)
                     .getConstructor()
                     .newInstance();
-        } catch (ReflectiveOperationException ignored) {
+        } catch (ClassNotFoundException ignored) {
             // Load Normal Cosmetic Selections
             try {
                 return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
@@ -111,6 +111,9 @@ public interface Wrapper {
                 StarConfig.print(e);
                 return null;
             }
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+            return null;
         }
     }
 
