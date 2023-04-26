@@ -42,8 +42,8 @@ dependencies {
 tasks {
     register("sourcesJar", Jar::class.java) {
         dependsOn("classes")
+        archiveClassifier.set("sources")
 
-        archiveFileName.set("StarCosmetics-${project.version}-sources.jar")
         from(sourceSets["main"].allSource)
     }
 
@@ -54,7 +54,15 @@ tasks {
     }
 
     withType<ShadowJar> {
-        archiveFileName.set("StarCosmetics-${project.version}.jar")
+        dependsOn("sourcesJar")
+    }
+}
+
+publishing {
+    publications {
+        getByName<MavenPublication>("maven") {
+            artifact(tasks["sourcesJar"])
+        }
     }
 }
 

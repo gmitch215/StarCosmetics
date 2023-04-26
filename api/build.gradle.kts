@@ -23,21 +23,29 @@ tasks {
 
     register("sourcesJar", Jar::class.java) {
         dependsOn("classes")
+        archiveClassifier.set("sources")
 
-        archiveFileName.set("StarCosmetics-API-${project.version}-sources.jar")
         from(sourceSets["main"].allSource)
     }
 
     register("javadocJar", Jar::class.java) {
         dependsOn("javadoc")
+        archiveClassifier.set("javadoc")
 
-        archiveFileName.set("StarCosmetics-API-${project.version}-javadoc.jar")
         from(javadoc.get().destinationDir)
     }
 
     withType<ShadowJar> {
         dependsOn("sourcesJar", "javadocJar")
-        archiveFileName.set("StarCosmetics-API-${project.version}.jar")
+    }
+}
+
+publishing {
+    publications {
+        getByName<MavenPublication>("maven") {
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
+        }
     }
 }
 
