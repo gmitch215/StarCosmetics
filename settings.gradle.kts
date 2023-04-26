@@ -7,7 +7,10 @@ pluginManagement {
     }
 }
 
-listOf("plugin", "api", "abstraction").forEach {
+include(":starcosmetics")
+project(":starcosmetics").projectDir = rootDir.resolve("plugin")
+
+listOf("api", "abstraction").forEach {
     include(":starcosmetics-$it")
     project(":starcosmetics-$it").projectDir = rootDir.resolve(it)
 }
