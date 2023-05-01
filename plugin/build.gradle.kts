@@ -7,7 +7,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT")
 
     // Implementation Dependencies
-    implementation("org.bstats:bstats-bukkit:3.0.1")
+    implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.jeff_media:SpigotUpdateChecker:3.0.2")
 
     // Soft Dependencies
