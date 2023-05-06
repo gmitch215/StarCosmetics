@@ -23,6 +23,8 @@ done
 cp -Rfv ./docs/* ./
 rm -rf ./docs
 
+echo "starcosmetics.gamercoder215.me" > CNAME
+
 git add .
 git branch -D gh-pages
 git branch -m gh-pages
