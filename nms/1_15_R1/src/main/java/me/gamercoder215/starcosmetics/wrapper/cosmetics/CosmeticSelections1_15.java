@@ -25,7 +25,7 @@ import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public final class CosmeticSelections1_15 implements CosmeticSelections {
+final class CosmeticSelections1_15 implements CosmeticSelections {
 
     // Cosmetic Maps
 

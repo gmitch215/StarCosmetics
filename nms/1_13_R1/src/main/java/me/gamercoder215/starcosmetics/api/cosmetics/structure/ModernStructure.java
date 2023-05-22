@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.util.Constants.w;
 
-public final class ModernStructure extends Structure {
+final class ModernStructure extends Structure {
 
     private final Map<StructurePoint, Material> points;
     private final Map<StructurePoint, BlockData> pointData;

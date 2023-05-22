@@ -14,13 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class LegacyStructureReader implements StructureReader {
+final class LegacyStructureReader implements StructureReader {
     
     private final BufferedReader reader;
 
     private static final SecureRandom r = Constants.r;
 
-    public LegacyStructureReader(Reader r) {
+    LegacyStructureReader(Reader r) {
         this.reader = new BufferedReader(r);
     }
 

@@ -31,7 +31,7 @@ import static me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public final class CosmeticSelections1_13 implements CosmeticSelections {
+final class CosmeticSelections1_13 implements CosmeticSelections {
 
     // Cosmetic Maps
 

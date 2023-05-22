@@ -30,7 +30,7 @@ import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.circle;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public final class CosmeticSelections1_17 implements CosmeticSelections {
+final class CosmeticSelections1_17 implements CosmeticSelections {
 
     // Cosmetic Maps
 

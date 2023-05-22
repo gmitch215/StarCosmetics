@@ -26,7 +26,7 @@ import java.util.Map;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
 
-public final class CosmeticSelections1_9 implements CosmeticSelections {
+final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Cosmetic Maps
 

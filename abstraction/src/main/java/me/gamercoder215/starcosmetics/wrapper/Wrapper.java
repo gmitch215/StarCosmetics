@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -59,16 +60,17 @@ public interface Wrapper {
 
     static DataWrapper getDataWrapper() {
         try {
-            if (w.isLegacy())
-                return Class.forName("me.gamercoder215.starcosmetics.wrapper.LegacyDataWrapper")
+            Constructor<? extends DataWrapper> constr;
+
+            if (w.isLegacy()) constr = Class.forName("me.gamercoder215.starcosmetics.wrapper.v1_9_R1.LegacyDataWrapper")
                     .asSubclass(DataWrapper.class)
-                    .getConstructor()
-                    .newInstance();
-            else
-                return Class.forName("me.gamercoder215.starcosmetics.wrapper.ModernDataWrapper")
+                    .getDeclaredConstructor();
+            else constr = Class.forName("me.gamercoder215.starcosmetics.wrapper.v1_13_R1.ModernDataWrapper")
                     .asSubclass(DataWrapper.class)
-                    .getConstructor()
-                    .newInstance();
+                    .getDeclaredConstructor();
+            
+            constr.setAccessible(true);
+            return constr.newInstance();
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
             return null;
@@ -77,10 +79,12 @@ public interface Wrapper {
 
     static Wrapper getWrapper() {
         try {
-            return Class.forName("me.gamercoder215.starcosmetics.wrapper.Wrapper" + getServerVersion())
+            Constructor<? extends Wrapper> constr = Class.forName("me.gamercoder215.starcosmetics.wrapper.v" + getServerVersion() + ".Wrapper" + getServerVersion())
                     .asSubclass(Wrapper.class)
-                    .getConstructor()
-                    .newInstance();
+                    .getDeclaredConstructor();
+
+            constr.setAccessible(true);
+            return constr.newInstance();
         } catch (ArrayIndexOutOfBoundsException | NoSuchMethodException ignored) { // Using test server
             return new TestWrapper();
         } catch (ClassNotFoundException e) { // Using unsupported version
@@ -95,26 +99,32 @@ public interface Wrapper {
         String cosmeticV = getServerVersion().split("_")[0] + "_" + getServerVersion().split("_")[1];
 
         try {
-            // Attempt to load Special Cosmetic Selections
-            return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + getServerVersion())
-                    .asSubclass(CosmeticSelections.class)
-                    .getConstructor()
-                    .newInstance();
-        } catch (ClassNotFoundException ignored) {
-            // Load Normal Cosmetic Selections
+            Constructor<? extends CosmeticSelections> constr;
+
             try {
-                return Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
+                // Attempt to load Special Cosmetic Selections
+                constr = Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + getServerVersion())
                         .asSubclass(CosmeticSelections.class)
-                        .getConstructor()
-                        .newInstance();
-            } catch (ReflectiveOperationException e) {
-                StarConfig.print(e);
-                return null;
+                        .getDeclaredConstructor();
+            } catch (ClassNotFoundException ignored) {
+                // Load Normal Cosmetic Selections
+                try {
+                    constr = Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + cosmeticV)
+                            .asSubclass(CosmeticSelections.class)
+                            .getDeclaredConstructor();
+                } catch (ClassNotFoundException e) {
+                    StarConfig.print(e);
+                    return null;
+                }
             }
+
+            constr.setAccessible(true);
+            return constr.newInstance();
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
             return null;
         }
+
     }
 
     static StructureReader getStructureReader(File file) {
@@ -132,16 +142,17 @@ public interface Wrapper {
 
     static StructureReader getStructureReader(Reader r) {
         try {
-            if (w.isLegacy())
-                return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.LegacyStructureReader")
+            Constructor<? extends StructureReader> constr;
+
+            if (w.isLegacy()) constr = Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.LegacyStructureReader")
                         .asSubclass(StructureReader.class)
-                        .getConstructor(Reader.class)
-                        .newInstance(r);
-            else
-                return Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.ModernStructureReader")
+                        .getDeclaredConstructor(Reader.class);
+            else constr = Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.structure.ModernStructureReader")
                         .asSubclass(StructureReader.class)
-                        .getConstructor(Reader.class)
-                        .newInstance(r);
+                        .getDeclaredConstructor(Reader.class);
+            
+            constr.setAccessible(true);
+            return constr.newInstance(r);
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
             return null;

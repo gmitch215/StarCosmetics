@@ -15,7 +15,7 @@ import java.util.Set;
 
 import static me.gamercoder215.starcosmetics.util.Constants.w;
 
-public final class LegacyStructure extends Structure {
+final class LegacyStructure extends Structure {
 
     private final Map<StructurePoint, Material> points;
 

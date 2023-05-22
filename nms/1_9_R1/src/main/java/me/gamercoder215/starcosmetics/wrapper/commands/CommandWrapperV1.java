@@ -15,7 +15,7 @@ import java.util.List;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.sendError;
 
-public final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
+final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
 
     private final Plugin plugin;
 

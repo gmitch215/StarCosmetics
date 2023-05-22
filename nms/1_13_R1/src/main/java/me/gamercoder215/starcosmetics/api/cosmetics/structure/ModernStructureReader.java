@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class ModernStructureReader implements StructureReader {
+final class ModernStructureReader implements StructureReader {
 
     private final BufferedReader reader;
 

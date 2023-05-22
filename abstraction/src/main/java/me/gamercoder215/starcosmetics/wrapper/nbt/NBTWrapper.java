@@ -15,11 +15,11 @@ import static me.gamercoder215.starcosmetics.util.Constants.w;
 
 public abstract class NBTWrapper {
 
-    static final String ROOT = "StarCosmetics";
+    protected static final String ROOT = "StarCosmetics";
 
-    ItemStack item;
+    protected ItemStack item;
 
-    NBTWrapper(ItemStack item) {
+    protected NBTWrapper(ItemStack item) {
         this.item = item;
     }
     
