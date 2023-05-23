@@ -4,7 +4,6 @@ val lampVersion = "3.1.5"
 dependencies {
     api(project(":starcosmetics-abstraction"))
     api(project(":starcosmetics-api"))
-    api(project(":starcosmetics-1_12_R1"))
 
     implementation("com.github.Revxrsal.Lamp:bukkit:$lampVersion")
     implementation("com.github.Revxrsal.Lamp:common:$lampVersion")
