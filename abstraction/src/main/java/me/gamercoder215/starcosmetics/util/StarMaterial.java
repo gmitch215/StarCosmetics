@@ -111,6 +111,8 @@ public enum StarMaterial {
     WHEAT_SEEDS("seeds"),
 
     COBWEB("web"),
+
+    END_PORTAL_FRAME("ender_portal_frame"),
     ;
 
     private final Material defaultV;

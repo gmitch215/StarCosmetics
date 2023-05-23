@@ -4,6 +4,7 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
@@ -17,7 +18,10 @@ import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.it
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
 
-public final class HatSelection extends CosmeticSelection<ItemStack> {
+import java.util.Arrays;
+import java.util.Objects;
+
+public final class HatSelection extends CosmeticSelection<Object> {
 
     private final Hat parent;
     private final String name;
@@ -37,6 +41,29 @@ public final class HatSelection extends CosmeticSelection<ItemStack> {
         this(name, itemBuilder(StarMaterial.PLAYER_HEAD.find(), meta -> ((SkullMeta) meta).setOwner(skullOwner)), criteria, rarity);
     }
 
+    public HatSelection(String name, AnimatedHatData data, CompletionCriteria criteria, Rarity rarity) {
+        super(data.map(i -> NBTWrapper.builder(i, nbt -> nbt.set("hat", true))), criteria, rarity);
+
+        this.parent = BaseHat.ANIMATED;
+        this.name = name;
+    }
+
+    public static AnimatedHatData of(long interval, ItemStack... frames) {
+        AnimatedHatData.Builder builder = AnimatedHatData.builder();
+        for (ItemStack item : frames)
+            builder.addFrame(interval, item);
+        
+        return builder.build();
+    }
+
+    public static AnimatedHatData of(long interval, Material... frames) {
+        return of(interval, Arrays.stream(frames)
+                .filter(Objects::nonNull)
+                .map(ItemStack::new)
+                .toArray(ItemStack[]::new)
+        );
+    }
+
     @Override
     public @NotNull String getKey() {
         return name;
@@ -44,15 +71,42 @@ public final class HatSelection extends CosmeticSelection<ItemStack> {
 
     @Override
     public @NotNull String getDisplayName() {
-        ItemStack input = getInput();
+        Object o = getInput();
 
-        boolean head = input.getType() == StarMaterial.PLAYER_HEAD.find();
-        String owner = head ? ((SkullMeta) input.getItemMeta()).getOwner() : "";
-        boolean mhf = owner.startsWith("MHF_");
+        if (o instanceof ItemStack) {
+            ItemStack input = (ItemStack) o;
+            String owner = "";
+            if (input.getItemMeta() instanceof SkullMeta) {
+                String s = ((SkullMeta) input.getItemMeta()).getOwner();
+                if (s.contains("MHF_"))
+                    owner = s.split("MHF_")[1];
+                else
+                    owner = s;
+            }
 
-        return getWithArgs("constants.hat",
-                get("cosmetics.hat." + name, head && mhf ? owner.split("_")[1] : StarInventoryUtil.toInputString(input))
-        );
+            return getWithArgs("constants.hat",
+                    get("cosmetics.hat." + name, isMHF(input) ? owner.split("_")[1] : StarInventoryUtil.toInputString(input))
+            );
+        } else {
+            AnimatedHatData data = (AnimatedHatData) o;
+            ItemStack input = data.getFrames().get(0).getValue();
+            String owner = "";
+            if (input.getItemMeta() instanceof SkullMeta) {
+                String s = ((SkullMeta) input.getItemMeta()).getOwner();
+                if (s.contains("MHF_"))
+                    owner = s.split("MHF_")[1];
+                else
+                    owner = s;
+            }
+
+            return getWithArgs("constants.hat",
+                    get("cosmetics.hat." + name, isMHF(input) ? owner.split("_")[1] : StarInventoryUtil.toInputString(input))
+            );   
+        }
+    }
+
+    private static boolean isMHF(ItemStack input) {
+        return input.getType() == StarMaterial.PLAYER_HEAD.find() && ((SkullMeta) input.getItemMeta()).getOwner().startsWith("MHF_");
     }
 
     @Override

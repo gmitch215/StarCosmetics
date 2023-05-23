@@ -21,153 +21,74 @@ public final class BaseShape implements ParticleShape {
 
     // Rings
 
-    public static final BaseShape SMALL_RING = new BaseShape("small_ring", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            circle(l, input, 35, 4);
-        } else
-            circle(l, o, 35, 4);
-    });
+    public static final BaseShape SMALL_RING = new BaseShape("small_ring", (l, o) -> circle(l, o, 35, 4));
 
     public static final BaseShape SMALL_DETAILED_RING = new BaseShape("small_detailed_ring", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            circle(l, input, 50, 5);
-            circle(l, input, 35, 3);
-        } else {
-            circle(l, o, 50, 5);
-            circle(l, o, 35, 3);
-        }
+        circle(l, o, 50, 5);
+        circle(l, o, 35, 3);
     });
 
-    public static final BaseShape LARGE_RING = new BaseShape("large_ring", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            circle(l, input, 50, 6);
-        } else
-            circle(l, o, 50, 6);
-    });
+    public static final BaseShape LARGE_RING = new BaseShape("large_ring", (l, o) -> circle(l, o, 50, 6));
 
     public static final BaseShape LARGE_DETAILED_RING = new BaseShape("large_detailed_ring", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-
-            circle(l, input, 60, 10);
-            circle(l, input, 45, 7);
-            circle(l, input, 20, 2);
-        } else {
-            circle(l, o, 60, 10);
-            circle(l, o, 45, 7);
-            circle(l, o, 20, 2);
-        }
+        circle(l, o, 60, 10);
+        circle(l, o, 45, 7);
+        circle(l, o, 20, 2);
     });
 
     // Trianges
 
-    public static final BaseShape SMALL_TRIANGLE = new BaseShape("small_triangle", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            polygon(l, input, 3, 3);
-        } else
-            polygon(l, o, 3, 3);
-    });
-
-    public static final BaseShape MEDIUM_TRIANGLE = new BaseShape("medium_triangle", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            polygon(l, input, 3, 5.5);
-        } else
-            polygon(l, o, 3, 5.5);
-    });
-
-    public static final BaseShape LARGE_TRIANGLE = new BaseShape("large_triangle", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            polygon(l, input, 3, 8);
-        } else
-            polygon(l, o, 3, 8);
-    });
+    public static final BaseShape SMALL_TRIANGLE = new BaseShape("small_triangle", (l, o) -> polygon(l, o, 3, 3));
+    public static final BaseShape MEDIUM_TRIANGLE = new BaseShape("medium_triangle", (l, o) -> polygon(l, o, 3, 5.5));
+    public static final BaseShape LARGE_TRIANGLE = new BaseShape("large_triangle", (l, o) -> polygon(l, o, 3, 8));
 
     public static final BaseShape LARGE_DETAILED_TRIANGLE = new BaseShape("large_detailed_triangle", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            polygon(l, input, 3, 8);
-            polygon(l, input, 3, 6);
-            polygon(l, input, 3, 4);
-            polygon(l, input, 3, 2);
-        } else {
-            polygon(l, o, 3, 8);
-            polygon(l, o, 3, 6);
-            polygon(l, o, 3, 4);
-            polygon(l, o, 3, 2);
-        }
+        polygon(l, o, 3, 8);
+        polygon(l, o, 3, 6);
+        polygon(l, o, 3, 4);
+        polygon(l, o, 3, 2);
     });
 
     // Squares
 
-    public static final BaseShape SMALL_SQUARE = new BaseShape("small_square", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            polygon(l, input, 4, 2.5);
-        } else
-            polygon(l, o, 4, 2.5);
-    });
-
-    public static final BaseShape LARGE_SQUARE = new BaseShape("large_square", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            polygon(l, input, 4, 7);
-        } else
-            polygon(l, o, 4, 7);
-    });
+    public static final BaseShape SMALL_SQUARE = new BaseShape("small_square", (l, o) -> polygon(l, o, 4, 2.5));
+    public static final BaseShape LARGE_SQUARE = new BaseShape("large_square", (l, o) -> polygon(l, o, 4, 7));
 
     // Pentagons
 
-    public static final BaseShape PENTAGON = new BaseShape("pentagon", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
-            polygon(l, input, 5, 2.5);
-        } else
-            polygon(l, o, 5, 2.5);
-    });
+    public static final BaseShape PENTAGON = new BaseShape("pentagon", (l, o) -> polygon(l, o, 5, 2.5));
 
     public static final BaseShape DETAILED_PENTAGON = new BaseShape("detailed_pentagon", (l, o) -> {
-        if (o instanceof Material) {
-            Material m = (Material) o;
-            Object input = m.isBlock() ? m : new ItemStack(m);
+        polygon(l, o, 5, 3);
+        polygon(l, o, 5, 2.5);
+        polygon(l, o, 5, 2);
+        polygon(l, o, 5, 1.5);
+    });
 
-            polygon(l, input, 5, 3);
-            polygon(l, input, 5, 2.5);
-            polygon(l, input, 5, 2);
-            polygon(l, input, 5, 1.5);
-        } else {
-            polygon(l, o, 5, 3);
-            polygon(l, o, 5, 2.5);
-            polygon(l, o, 5, 2);
-            polygon(l, o, 5, 1.5);
-        }
+    // Combinations
+
+    public static final BaseShape SQUARE_RING = new BaseShape("square_ring", (l, o) -> {
+        circle(l, o, 50, 3);
+        polygon(l, o, 4, 3);
+    });
+
+    public static final BaseShape PENTAGON_RING = new BaseShape("pentagon_ring", (l, o) -> {
+        circle(l, o, 60, 3.5);
+        polygon(l, o, 5, 3.5);
     });
 
     // Spawn Utilities
 
     public static void spawn(Location l, Object o) {
-        if (o instanceof ItemStack) {
-            ItemStack item = (ItemStack) o;
-            l.getWorld().spawnParticle(Particle.ITEM_CRACK, l, 1, 0, 0, 0, 0, item);
-        } else if (o instanceof Material) {
+        if (o instanceof Material) {
             Material m = (Material) o;
-            dw.blockDataParticle(Particle.BLOCK_CRACK, l, 1, m);
+            Object input = m.isBlock() ? m : new ItemStack(m);
+
+            if (input instanceof ItemStack) {
+                ItemStack item = (ItemStack) input;
+                l.getWorld().spawnParticle(Particle.ITEM_CRACK, l, 1, 0, 0, 0, 0, item);
+            } else
+                dw.blockDataParticle(Particle.BLOCK_CRACK, l, 1, m);
         } else if (o instanceof Particle) {
             Particle p = (Particle) o;
             l.getWorld().spawnParticle(p, l, 1, 0, 0, 0, 0);
