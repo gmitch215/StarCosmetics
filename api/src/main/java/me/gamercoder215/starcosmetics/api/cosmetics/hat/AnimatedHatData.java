@@ -186,7 +186,7 @@ public final class AnimatedHatData implements Cloneable {
 
         /**
          * Adds a frame to this Animated Hat Data.
-         * @param frame list of frames to add
+         * @param frames list of frames to add
          * @return this class, for chaining
          */
         @NotNull
