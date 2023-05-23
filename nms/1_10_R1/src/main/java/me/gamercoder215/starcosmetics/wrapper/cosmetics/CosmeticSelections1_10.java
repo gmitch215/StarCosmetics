@@ -80,6 +80,7 @@ final class CosmeticSelections1_10 implements CosmeticSelections {
             .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_9"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_9"))
+            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_9"))
             .build();
 
     @Override

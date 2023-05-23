@@ -23,6 +23,7 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 
 public final class CosmeticSelections1_19 implements CosmeticSelections {
 
@@ -140,6 +141,7 @@ public final class CosmeticSelections1_19 implements CosmeticSelections {
             .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_18"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_18"))
+            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_18"))
             .build();
 
     @Override

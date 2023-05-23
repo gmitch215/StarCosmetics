@@ -171,6 +171,7 @@ final class CosmeticSelections1_17 implements CosmeticSelections {
             .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_16"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_16"))
+            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_16"))
             .build();
 
     @Override

@@ -55,6 +55,18 @@ public final class CosmeticSelections1_12 implements CosmeticSelections {
 
             .build();
 
+    // Hats
+
+    // Animated Hats
+
+    private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("glazed_terracotta", BaseTrail.GROUND_TRAIL, ImmutableList.of(
+                    Material.RED_GLAZED_TERRACOTTA, Material.ORANGE_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA,
+                    Material.GREEN_GLAZED_TERRACOTTA, Material.CYAN_GLAZED_TERRACOTTA, Material.BLUE_GLAZED_TERRACOTTA,
+                    Material.MAGENTA_GLAZED_TERRACOTTA, Material.PURPLE_GLAZED_TERRACOTTA, Material.PINK_GLAZED_TERRACOTTA
+            ), fromStatistic(Statistic.ANIMALS_BRED, 850), Rarity.EPIC))
+            .build();
+
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
@@ -65,6 +77,7 @@ public final class CosmeticSelections1_12 implements CosmeticSelections {
             .put(BaseShape.ALL, getForVersion(BaseShape.ALL, "1_11"))
 
             .put(BaseHat.NORMAL, getForVersion(BaseHat.NORMAL, "1_11"))
+            .put(BaseHat.ANIMATED, join(ANIMATED_HATS, BaseHat.ANIMATED, "1_11"))
             .build();
 
     @Override

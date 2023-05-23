@@ -25,7 +25,7 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
-import static me.gamercoder215.starcosmetics.api.cosmetics.BaseHat.NORMAL;
+import static me.gamercoder215.starcosmetics.api.cosmetics.BaseHat.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
@@ -198,6 +198,28 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
             .add(new HatSelection("polished_granite", Material.POLISHED_GRANITE,
                     fromMined(120, Material.GRANITE), UNCOMMON))
             .build();
+    
+    // Animated Hats
+
+    private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new HatSelection("colored_glass", HatSelection.of(20,
+                        Material.GRAY_STAINED_GLASS,
+                        Material.WHITE_STAINED_GLASS,
+                        Material.RED_STAINED_GLASS,
+                        Material.ORANGE_STAINED_GLASS,
+                        Material.YELLOW_STAINED_GLASS,
+                        Material.LIME_STAINED_GLASS,
+                        Material.GREEN_STAINED_GLASS,
+                        Material.BLUE_STAINED_GLASS,
+                        Material.CYAN_STAINED_GLASS,
+                        Material.PURPLE_STAINED_GLASS,
+                        Material.MAGENTA_STAINED_GLASS,
+                        Material.PINK_STAINED_GLASS,
+                        Material.BROWN_STAINED_GLASS,
+                        Material.GRAY_STAINED_GLASS,
+                        Material.BLACK_STAINED_GLASS
+                    ), fromMined(100000, Material.SAND), LEGENDARY))
+            .build();
 
     // Selections
 
@@ -209,6 +231,7 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
             .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_12"))
 
             .put(NORMAL, join(NORMAL_HATS, NORMAL, "1_12"))
+            .put(ANIMATED, join(ANIMATED_HATS, ANIMATED, "1_12"))
             .build();
 
     @Override

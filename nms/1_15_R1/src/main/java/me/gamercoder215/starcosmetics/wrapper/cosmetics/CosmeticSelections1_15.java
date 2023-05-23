@@ -61,6 +61,10 @@ final class CosmeticSelections1_15 implements CosmeticSelections {
             // Small Rings
             .add(new ParticleSelection("honey", BaseShape.SMALL_RING, Particle.DRIPPING_HONEY,
                     fromCrafted(180, Material.BEEHIVE), Rarity.RARE))
+        
+            // Small Triangles
+            .add(new ParticleSelection("honeycomb", BaseShape.SMALL_TRIANGLE, Material.HONEYCOMB_BLOCK,
+                    fromCrafted(205, Material.BEEHIVE), Rarity.RARE))
 
             .build();
 
@@ -86,6 +90,7 @@ final class CosmeticSelections1_15 implements CosmeticSelections {
             .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_14"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_14"))
+            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_14"))
             .build();
 
     @Override
