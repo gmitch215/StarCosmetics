@@ -19,7 +19,9 @@ import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public final class HatSelection extends CosmeticSelection<Object> {
 
@@ -48,7 +50,7 @@ public final class HatSelection extends CosmeticSelection<Object> {
         this.name = name;
     }
 
-    public static AnimatedHatData of(long interval, ItemStack... frames) {
+    public static AnimatedHatData of(long interval, Iterable<ItemStack> frames) {
         AnimatedHatData.Builder builder = AnimatedHatData.builder();
         for (ItemStack item : frames)
             builder.addFrame(interval, item);
@@ -56,12 +58,20 @@ public final class HatSelection extends CosmeticSelection<Object> {
         return builder.build();
     }
 
-    public static AnimatedHatData of(long interval, Material... frames) {
-        return of(interval, Arrays.stream(frames)
+    public static AnimatedHatData of(long interval, ItemStack... frames) {
+        return of(interval, Arrays.asList(frames));
+    }
+
+    public static AnimatedHatData of(long interval, Collection<Material> frames) {
+        return of(interval, frames.stream()
                 .filter(Objects::nonNull)
                 .map(ItemStack::new)
-                .toArray(ItemStack[]::new)
+                .collect(Collectors.toList())
         );
+    }
+
+    public static AnimatedHatData of(long interval, Material... frames) {
+        return of(interval, Arrays.asList(frames));
     }
 
     @Override

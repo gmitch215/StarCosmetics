@@ -133,6 +133,14 @@ final class CosmeticSelections1_16 implements CosmeticSelections {
             .add(new ParticleSelection("blackstone", BaseShape.LARGE_RING, Material.POLISHED_BLACKSTONE,
                     fromMined(100, Material.POLISHED_BLACKSTONE_BRICKS), Rarity.UNCOMMON))
 
+            // Small Triangles
+            .add(new ParticleSelection("soul", BaseShape.SMALL_TRIANGLE, Particle.SOUL,
+                    fromMined(110, Material.SOUL_SAND), Rarity.UNCOMMON))
+
+            // Combinations
+            .add(new ParticleSelection("netherite_block", BaseShape.PENTAGON_RING, Material.NETHERITE_BLOCK,
+                    fromMined(435, Material.ANCIENT_DEBRIS), Rarity.MYTHICAL))
+            
             .build();
 
     // Hats
@@ -175,7 +183,7 @@ final class CosmeticSelections1_16 implements CosmeticSelections {
             .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_15"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_15"))
-            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_14"))
+            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_15"))
             .build();
 
     @Override

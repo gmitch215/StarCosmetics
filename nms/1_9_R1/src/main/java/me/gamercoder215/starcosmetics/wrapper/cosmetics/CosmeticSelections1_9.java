@@ -469,6 +469,13 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
                         Material.LAPIS_ORE, Material.REDSTONE_ORE, Material.GOLD_ORE,
                         Material.DIAMOND_ORE, Material.EMERALD_ORE
                 ), fromMined(255, Material.COAL_ORE), RARE))
+        
+        .add(new HatSelection("ore_blocks", of(40,
+                        Material.COAL_BLOCK, Material.matchMaterial("COPPER_BLOCK"), Material.IRON_BLOCK,
+                        Material.LAPIS_BLOCK, Material.REDSTONE_BLOCK, Material.GOLD_BLOCK,
+                        Material.DIAMOND_BLOCK, Material.EMERALD_BLOCK
+                ), fromCrafted(565, Material.IRON_BLOCK), EPIC))
+        
         .build();
         
     // Selection Map

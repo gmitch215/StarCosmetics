@@ -16,6 +16,7 @@ import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Statistic;
+import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -202,6 +203,13 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new HatSelection("minerals", HatSelection.of(10,
+                    Material.STONE, Material.ANDESITE, Material.GRANITE, Material.DIORITE),
+                    fromMined(1000, Material.STONE), UNCOMMON))
+    
+            .add(new HatSelection("wood_stairs", HatSelection.of(20, 
+                    Tag.WOODEN_STAIRS.getValues()), fromCrafted(10000, Material.OAK_PLANKS), EPIC))
+            
             .add(new HatSelection("colored_glass", HatSelection.of(20,
                         Material.GRAY_STAINED_GLASS,
                         Material.WHITE_STAINED_GLASS,

@@ -10,6 +10,8 @@ import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
+
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -75,6 +77,10 @@ public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
             // Small Rings
             .add(new ParticleSelection("cherry_leaves", BaseShape.SMALL_RING, Particle.FALLING_CHERRY_LEAVES,
                     fromMined(20, Material.CHERRY_LOG), COMMON))
+        
+            // Combinations
+            .add(new ParticleSelection("cherry_log", BaseShape.PENTAGON_RING, Material.CHERRY_LOG,
+                    fromMined(125, Material.CHERRY_LOG), UNCOMMON))
 
             .build();
 
@@ -110,7 +116,7 @@ public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
 
     @Override
     public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
-        if (!w.hasFeatureFlag("c")) return CosmeticSelections.getForVersion("1_19");
+        if (Wrapper.getServerVersion().equalsIgnoreCase("1_19_R3") && !w.hasFeatureFlag("c")) return CosmeticSelections.getForVersion("1_19");
 
         return SELECTIONS;
     }
