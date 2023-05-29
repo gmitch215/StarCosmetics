@@ -2,7 +2,10 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
@@ -48,6 +51,7 @@ public interface CommandWrapper {
             .put("starstructures", Arrays.asList("sstructures", "sstr"))
             .put("starpets", Arrays.asList("starp", "sp", "spets", "pets"))
             .put("starhelp", Collections.singletonList("shelp"))
+            .put("starcosmeticinfo", Arrays.asList("cosmeticinfo", "scinfo", "scosmeticinfo", "cinfo"))
             .build();
 
     Map<String, String> COMMAND_PERMISSION = ImmutableMap.<String, String>builder()
@@ -56,6 +60,7 @@ public interface CommandWrapper {
             .put("starcosmetics", "starcosmetics.user.cosmetics")
             .put("starstructures", "starcosmetics.user.cosmetics")
             .put("starpets", "starcosmetics.user.cosmetics")
+            .put("starcosmeticinfo", "starcosmetics.user.cosmetics")
             .build();
 
     Map<String, String> COMMAND_DESCRIPTION = ImmutableMap.<String, String>builder()
@@ -66,6 +71,7 @@ public interface CommandWrapper {
             .put("starstructures", "Opens the StarCosmetics structures menu.")
             .put("starpets", "Opens the StarCosmetics pets menu.")
             .put("starhelp", "Displays help for StarCosmetics.")
+            .put("starcosmeticinfo", "Displays information about the cosmetic the player has currently equipped.")
             .build();
 
     Map<String, String> COMMAND_USAGE = ImmutableMap.<String, String>builder()
@@ -76,6 +82,7 @@ public interface CommandWrapper {
             .put("starstructures", "/starstructures [structure]")
             .put("starpets", "/starpets [remove|spawn]")
             .put("starhelp", "/starhelp")
+            .put("starcosmeticinfo", "/starcosmeticinfo <cosmetic>")
             .build();
 
     // Command Methods
@@ -203,6 +210,7 @@ public interface CommandWrapper {
             ItemStack item = new ItemStack(parent.getIcon());
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ChatColor.YELLOW + get(parent.getDisplayKey()));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
             item.setItemMeta(meta);
 
             NBTWrapper nbt = of(item);
@@ -212,9 +220,6 @@ public interface CommandWrapper {
 
             inv.setItem(parent.getPlace(), item);
         }
-
-        ItemStack hats = StarInventoryUtil.toItemStack(BaseHat.NORMAL);
-        inv.setItem(22, hats);
 
         List<CosmeticLocation<?>> sel = Wrapper.allFor(BaseShape.class);
         inv.setAttribute("collections:custom:particle", sel);
@@ -304,7 +309,7 @@ public interface CommandWrapper {
                 info.add(ChatColor.AQUA + "/" + cmd.getName() + ChatColor.WHITE + " - " + ChatColor.BLUE + COMMAND_DESCRIPTION.get(name));
         }
 
-        String msg = ChatColor.DARK_AQUA + "" + ChatColor.UNDERLINE + get("constants.commands") + "\n\n" + String.join("\n", info.toArray(new String[]{}));
+        String msg = ChatColor.DARK_AQUA + String.valueOf(ChatColor.UNDERLINE) + get("constants.commands") + "\n\n" + String.join("\n", info.toArray(new String[]{}));
         sender.sendMessage(msg);
     }
 
@@ -433,12 +438,51 @@ public interface CommandWrapper {
     }
 
     default void hats(Player p) {
-        List<CosmeticLocation<?>> sel = Wrapper.allFor(BaseHat.class);
-        List<StarInventory> invs = Generator.createSelectionInventory(p, sel, get("menu.cosmetics.hat"));
-        invs.forEach(inv -> StarInventoryUtil.setBack(inv, cw::cosmetics));
-
-        p.openInventory(invs.get(0));
+        StarInventory parentInv = Generator.createParentInventory(CosmeticParent.HATS);
+        p.openInventory(parentInv);
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+    }
+
+    Map<String, Object> PARENTS_INFO = ImmutableMap.<String, Object>builder()
+            .put("projectile_trail", TrailType.PROJECTILE)
+            .put("sound_trail", TrailType.PROJECTILE_SOUND)
+            .put("ground_trail", TrailType.GROUND)
+
+            .put("hat", Hat.class)
+            .put("particle_shape", ParticleShape.class)
+            .build();
+
+    default void cosmeticInfo(Player p, TrailType type) {
+        StarPlayer sp = new StarPlayer(p);
+        CosmeticLocation<?> loc = sp.getSelectedTrail(type);
+
+        if (loc == null) {
+            sendError(p, "error.cosmetics.unequipped.trail");
+            return;
+        }
+
+        String[] s = new String[] {
+                ChatColor.DARK_GREEN + getWithArgs("command.cosmetic_info.selected_cosmetic_parent", ChatColor.AQUA + loc.getParent().getDisplayName()),
+                ChatColor.DARK_GREEN + getWithArgs("command.cosmetic_info.selected_trail", ChatColor.AQUA + loc.getDisplayName() + " (" + ChatColor.DARK_AQUA + loc.getFullKey() + ChatColor.AQUA + ")\n"),
+                ChatColor.DARK_GREEN + getWithArgs("command.cosmetic_info.selected_trail_type", ChatColor.AQUA + type.name())
+        };
+        p.sendMessage(s);
+    }
+
+    default void cosmeticInfo(Player p, Class<? extends Cosmetic> cosmetic) {
+        StarPlayer sp = new StarPlayer(p);
+        CosmeticLocation<?> loc = sp.getSelectedCosmetic(cosmetic);
+
+        if (loc == null) {
+            sendError(p, "error.cosmetics.unequipped");
+            return;
+        }
+
+        String[] s = new String[] {
+                ChatColor.DARK_GREEN + getWithArgs("command.cosmetic_info.selected_cosmetic_parent", ChatColor.AQUA + loc.getParent().getDisplayName()),
+                ChatColor.DARK_GREEN + getWithArgs("command.cosmetic_info.selected_cosmetic", ChatColor.AQUA + loc.getDisplayName() + " (" + ChatColor.DARK_AQUA + loc.getFullKey() + ChatColor.AQUA + ")\n"),
+        };
+        p.sendMessage(s);
     }
 
     // Utilities
@@ -478,7 +522,7 @@ public interface CommandWrapper {
     }
 
     static String comma(long l) {
-        return String.format("%,.0f", (double) l);
+        return String.format("%,d", l);
     }
 
 }

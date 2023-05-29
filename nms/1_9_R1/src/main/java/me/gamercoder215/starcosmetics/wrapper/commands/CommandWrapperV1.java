@@ -1,6 +1,8 @@
 package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.sendError;
 
+@SuppressWarnings("unchecked")
 final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
 
     private final Plugin plugin;
@@ -72,6 +75,22 @@ final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
 
                     case "hat":
                     case "hats": hats(p); break;
+                    case "info":
+                    case "equipped": {
+                        if (args.length < 2) {
+                            sendError(p, "error.argument.cosmetic");
+                            return true;
+                        }
+
+                        Object o = PARENTS_INFO.get(args[1]);
+                        if (o == null) {
+                            sendError(p, "error.argument.cosmetic");
+                            return true;
+                        }
+
+                        if (o instanceof TrailType) cosmeticInfo(p, (TrailType) o);
+                        else cosmeticInfo(p, (Class<? extends Cosmetic>) o);
+                    }
                     default: {
                         sendError(p, "error.argument");
                         break;
@@ -103,6 +122,24 @@ final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
 
                 pets(p, args);
                 break;
+            }
+            case "starcosmeticinfo": {
+                if (!(sender instanceof Player)) return false;
+                Player p = (Player) sender;
+
+                if (args.length < 1) {
+                    sendError(p, "error.argument.cosmetic");
+                    return true;
+                }
+
+                Object o = PARENTS_INFO.get(args[0]);
+                if (o == null) {
+                    sendError(p, "error.argument.cosmetic");
+                    return true;
+                }
+
+                if (o instanceof TrailType) cosmeticInfo(p, (TrailType) o);
+                else cosmeticInfo(p, (Class<? extends Cosmetic>) o);
             }
         }
 

@@ -1,8 +1,10 @@
 package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
+import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,9 +14,10 @@ import revxrsal.commands.autocomplete.SuggestionProvider;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
 
-import java.util.stream.Collectors;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.sendError;
 
-public class CommandWrapperV2 implements CommandWrapper {
+@SuppressWarnings("unchecked")
+final class CommandWrapperV2 implements CommandWrapper {
 
     private static BukkitCommandHandler handler;
 
@@ -23,10 +26,8 @@ public class CommandWrapperV2 implements CommandWrapper {
         handler = BukkitCommandHandler.create(plugin);
 
         handler.getAutoCompleter()
-                .registerSuggestion("structures", SuggestionProvider.of(() -> plugin.getAvailableStructures()
-                    .stream()
-                    .map(StructureInfo::getLocalizedName)
-                    .collect(Collectors.toList())));
+                .registerSuggestion("structures", SuggestionProvider.map(plugin::getAvailableStructures, StructureInfo::getLocalizedName))
+                .registerSuggestion("parents", SuggestionProvider.of(PARENTS_INFO.keySet()));
 
         handler.register(
                 this,
@@ -75,7 +76,7 @@ public class CommandWrapperV2 implements CommandWrapper {
     @Description("Opens the StarCosmetics Cosmetics menu.")
     @Usage("/starcosmetics")
     @CommandPermission("starcosmetics.user.cosmetics")
-    public final class CosmeticCommands {
+    final class CosmeticCommands {
 
         private final CommandWrapperV2 wrapper;
 
@@ -107,6 +108,9 @@ public class CommandWrapperV2 implements CommandWrapper {
         @Subcommand({"hat", "hats"})
         public void hats(Player p) { wrapper.hats(p); }
 
+        @Subcommand({"info", "equipped"})
+        @AutoComplete("@parents *")
+        public void cosmeticInfo(Player p, @Single String cosmetic) { wrapper.cosmeticInfo(p, cosmetic); }
     }
 
     @Override
@@ -125,5 +129,21 @@ public class CommandWrapperV2 implements CommandWrapper {
     @CommandPermission("starcosmetics.user.cosmetics")
     @AutoComplete("remove")
     public void pets(Player p, @Optional String args) { CommandWrapper.super.pets(p, args == null ? null : args.split("\\s")); }
+
+    @Command({"starcosmeticinfo", "cosmeticinfo", "scinfo", "scosmeticinfo", "cinfo"})
+    @Description("Displays information about the cosmetic the player has currently equipped.")
+    @Usage("/starcosmeticinfo <cosmetic>")
+    @CommandPermission("starcosmetics.user.cosmetics")
+    @AutoComplete("@parents *")
+    public void cosmeticInfo(Player p, @Single String cosmetic) {
+        Object o = PARENTS_INFO.get(cosmetic);
+        if (o == null) {
+            sendError(p, "error.argument.cosmetic");
+            return;
+        }
+
+        if (o instanceof TrailType) cosmeticInfo(p, (TrailType) o);
+        else cosmeticInfo(p, (Class<? extends Cosmetic>) o);
+    }
 
 }
