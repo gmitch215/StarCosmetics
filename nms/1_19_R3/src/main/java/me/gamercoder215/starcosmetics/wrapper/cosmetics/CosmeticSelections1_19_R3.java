@@ -11,7 +11,6 @@ import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
-
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -22,10 +21,11 @@ import java.util.Map;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromCrafted;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromMined;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
-import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
-public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
+@SuppressWarnings("UnstableApiUsage")
+final class CosmeticSelections1_19_R3 implements CosmeticSelections {
 
     // Trails
 

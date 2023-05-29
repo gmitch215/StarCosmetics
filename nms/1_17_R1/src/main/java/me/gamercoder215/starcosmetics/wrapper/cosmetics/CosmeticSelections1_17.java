@@ -171,7 +171,7 @@ final class CosmeticSelections1_17 implements CosmeticSelections {
             ), fromMined(400, Material.DEEPSLATE_COAL_ORE), Rarity.EPIC))
             .add(new HatSelection("animated_azalea", HatSelection.of(60,
                 Material.AZALEA, Material.FLOWERING_AZALEA
-            ), fromMined(500, Material.AZALEA_LEAVES), Rarity.LEGENDARY)) // TODO Translate "cosmetics.hat.animated_azalea"
+            ), fromMined(500, Material.AZALEA_LEAVES), Rarity.LEGENDARY))
             .build();
 
     // Selections
