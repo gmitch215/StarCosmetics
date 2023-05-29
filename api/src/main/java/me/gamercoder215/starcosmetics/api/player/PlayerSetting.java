@@ -126,7 +126,7 @@ public final class PlayerSetting<T> {
     }
 
     private static <T extends Enum<T>> PlayerSetting<T> ofEnum(String id, String displayKey, T def) {
-        return new PlayerSetting<T>(id, displayKey, (Class<T>) def.getClass(), def, (T[]) def.getClass().getEnumConstants());
+        return new PlayerSetting<>(id, displayKey, (Class<T>) def.getClass(), def, (T[]) def.getClass().getEnumConstants());
     }
 
     /**
