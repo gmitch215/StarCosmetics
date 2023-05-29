@@ -13,7 +13,7 @@ import org.bukkit.event.Event;
 import java.util.Date;
 import java.util.UUID;
 
-public final class NBTWrapper1_9_R2 extends NBTWrapper {
+final class NBTWrapper1_9_R2 extends NBTWrapper {
 
     NBTWrapper1_9_R2(org.bukkit.inventory.ItemStack item) {
         super(item);

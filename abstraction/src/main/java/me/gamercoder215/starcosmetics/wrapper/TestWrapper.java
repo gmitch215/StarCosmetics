@@ -64,5 +64,8 @@ public final class TestWrapper implements Wrapper {
         return s;
     }
 
+    @Override
+    public ItemStack cleanSkull(ItemStack item) { return null; }
+
 
 }

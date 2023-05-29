@@ -7,7 +7,7 @@ import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftInventoryCustom;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class StarInventory1_19_R3 extends CraftInventoryCustom implements StarInventory {
+final class StarInventory1_19_R3 extends CraftInventoryCustom implements StarInventory {
     
     private final String key;
     private final Map<String, Object> attributes = new HashMap<>();

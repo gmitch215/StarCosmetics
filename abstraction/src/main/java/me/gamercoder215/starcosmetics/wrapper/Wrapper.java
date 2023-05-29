@@ -205,6 +205,8 @@ public interface Wrapper {
 
     default boolean hasFeatureFlag(String flag) { return false; }
 
+    ItemStack cleanSkull(ItemStack item);
+
     // Other Utilities
 
     @NotNull

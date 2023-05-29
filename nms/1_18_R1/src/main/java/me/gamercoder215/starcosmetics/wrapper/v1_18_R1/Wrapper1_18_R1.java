@@ -11,6 +11,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
@@ -175,7 +176,7 @@ final class Wrapper1_18_R1 implements Wrapper {
 
     @Override
     public String getKey(Sound s) {
-        return s.getKey().toString();
+        return s.getKey().getKey();
     }
 
     @Override
@@ -209,6 +210,19 @@ final class Wrapper1_18_R1 implements Wrapper {
         DisplayInfo display = ca.getHandle().getDisplay();
 
         return display.getDescription().getString();
+    }
+
+    @Override
+    public ItemStack cleanSkull(ItemStack item) {
+        net.minecraft.world.item.ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+        CompoundTag tag = nmsitem.getOrCreateTag();
+        CompoundTag skullOwner = tag.getCompound("SkullOwner");
+
+        skullOwner.remove("Id");
+        skullOwner.remove("Properties");
+        tag.put("SkullOwner", skullOwner);
+        nmsitem.setTag(tag);
+        return CraftItemStack.asBukkitCopy(nmsitem);
     }
 
 }

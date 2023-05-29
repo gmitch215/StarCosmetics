@@ -170,7 +170,7 @@ final class Wrapper1_16_R3 implements Wrapper {
 
     @Override
     public String getKey(Sound s) {
-        return s.getKey().toString();
+        return s.getKey().getKey();
     }
 
     @Override
@@ -205,6 +205,19 @@ final class Wrapper1_16_R3 implements Wrapper {
         AdvancementDisplay display = ca.getHandle().c();
 
         return display.b().getString();
+    }
+
+    @Override
+    public ItemStack cleanSkull(ItemStack item) {
+        net.minecraft.server.v1_16_R3.ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = nmsitem.getOrCreateTag();
+        NBTTagCompound skullOwner = tag.getCompound("SkullOwner");
+
+        skullOwner.remove("Id");
+        skullOwner.remove("Properties");
+        tag.set("SkullOwner", skullOwner);
+        nmsitem.setTag(tag);
+        return CraftItemStack.asBukkitCopy(nmsitem);
     }
 
 }

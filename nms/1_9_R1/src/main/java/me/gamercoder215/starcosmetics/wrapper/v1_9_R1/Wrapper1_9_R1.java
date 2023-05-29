@@ -44,7 +44,7 @@ final class Wrapper1_9_R1 implements Wrapper {
         SoundEffect se = CraftSound.getSoundEffect(CraftSound.getSound(s));
         MinecraftKey key = SoundEffect.a.b(se);
 
-        return key.toString();
+        return key.b();
     }
 
     @Override
@@ -115,6 +115,19 @@ final class Wrapper1_9_R1 implements Wrapper {
     @Override
     public StarInventory createInventory(String key, int size, String title) {
         return new StarInventory1_9_R1(key, size, title);
+    }
+
+    @Override
+    public ItemStack cleanSkull(ItemStack item) {
+        net.minecraft.server.v1_9_R1.ItemStack nmsitem = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = nmsitem.hasTag() ? nmsitem.getTag() : new NBTTagCompound();
+        NBTTagCompound skullOwner = tag.getCompound("SkullOwner");
+
+        skullOwner.remove("Id");
+        skullOwner.remove("Properties");
+        tag.set("SkullOwner", skullOwner);
+        nmsitem.setTag(tag);
+        return CraftItemStack.asBukkitCopy(nmsitem);
     }
 
 }
