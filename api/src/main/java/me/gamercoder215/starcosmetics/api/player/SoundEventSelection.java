@@ -68,7 +68,7 @@ public final class SoundEventSelection implements ConfigurationSerializable {
 
     /**
      * <p>A List of all Available Events to be used in a {@link SoundEventSelection}.</p>
-     * <strong>This list is not mutable; Integration for custom events is supported.</strong>
+     * <strong>This list is mutable; Integration for custom events is supported.</strong>
      */
     public static final List<Class<? extends Event>> AVAILABLE_EVENTS;
 

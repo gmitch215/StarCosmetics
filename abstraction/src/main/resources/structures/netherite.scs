@@ -3,4 +3,4 @@
 constants.cosmetics.structures.netherite
 mythical
 ---
-netherite_block:(1,1,1,1,1,1)^[0,0,0]
+netherite_block:(-1,1,-1,1,-1,1)^[0,0,0]

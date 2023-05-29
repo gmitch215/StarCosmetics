@@ -10,6 +10,7 @@ import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
+import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -20,9 +21,11 @@ import java.util.Map;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromCrafted;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromMined;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
+import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
-public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
+@SuppressWarnings("UnstableApiUsage")
+final class CosmeticSelections1_19_R3 implements CosmeticSelections {
 
     // Trails
 
@@ -74,6 +77,10 @@ public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
             // Small Rings
             .add(new ParticleSelection("cherry_leaves", BaseShape.SMALL_RING, Particle.FALLING_CHERRY_LEAVES,
                     fromMined(20, Material.CHERRY_LOG), COMMON))
+        
+            // Combinations
+            .add(new ParticleSelection("cherry_log", BaseShape.PENTAGON_RING, Material.CHERRY_LOG,
+                    fromMined(125, Material.CHERRY_LOG), UNCOMMON))
 
             .build();
 
@@ -104,11 +111,12 @@ public final class CosmeticSelections1_19_R3 implements CosmeticSelections {
             .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_19"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_19"))
+            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_19"))
             .build();
 
     @Override
     public Map<Cosmetic, List<CosmeticSelection<?>>> getAllSelections() {
-        if (!w.hasFeatureFlag("c")) return CosmeticSelections.getForVersion("1_19");
+        if (Wrapper.getServerVersion().equalsIgnoreCase("1_19_R3") && !w.hasFeatureFlag("c")) return CosmeticSelections.getForVersion("1_19");
 
         return SELECTIONS;
     }

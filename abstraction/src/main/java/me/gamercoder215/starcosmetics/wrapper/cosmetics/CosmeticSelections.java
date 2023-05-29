@@ -17,8 +17,6 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +74,8 @@ public interface CosmeticSelections {
         try {
             Class<?> selClass = Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + ver);
 
-            Constructor<?> selConstructor = selClass.getConstructor();
+            Constructor<?> selConstructor = selClass.getDeclaredConstructor();
+            selConstructor.setAccessible(true);
             CosmeticSelections sel = (CosmeticSelections) selConstructor.newInstance();
             sel.loadPets();
         } catch (ClassNotFoundException ignored) { // Using unsupported version
@@ -97,21 +96,18 @@ public interface CosmeticSelections {
         return join(list, getForVersion(ver).get(key));
     }
 
-    @SuppressWarnings("unchecked")
     static Map<Cosmetic, List<CosmeticSelection<?>>> getForVersion(String version) {
         try {
-            Class<?> selClass = Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + version);
+            Class<? extends CosmeticSelections> selClass = Class.forName("me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections" + version)
+                    .asSubclass(CosmeticSelections.class);
 
-            Field selectionsF = selClass.getDeclaredField("SELECTIONS");
-            selectionsF.setAccessible(true);
-            if (!Modifier.isStatic(selectionsF.getModifiers()))
-                throw new AssertionError("SELECTIONS field is not static: " + version);
-
-            return (Map<Cosmetic, List<CosmeticSelection<?>>>) selectionsF.get(null);
-        } catch (NoSuchFieldException e) {
-            throw new AssertionError("SELECTIONS field not found: " + version);
+            Constructor<? extends CosmeticSelections> constr = selClass.getDeclaredConstructor();
+            constr.setAccessible(true);
+            CosmeticSelections sel = constr.newInstance();
+            return sel.getAllSelections();
         } catch (ClassNotFoundException e) { // Using unsupported version
-            return null;
+            StarConfig.print(e);
+            return new HashMap<>();
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
         }

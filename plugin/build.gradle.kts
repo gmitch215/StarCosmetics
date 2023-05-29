@@ -40,6 +40,16 @@ dependencies {
 
 
 tasks {
+    compileJava {
+        listOf(
+            "1_18_R1",
+            "1_18_R2",
+            "1_19_R1",
+            "1_19_R2",
+            "1_19_R3"
+        ).forEach { dependsOn(project(":starcosmetics-$it").tasks["remap"]) }
+    }
+
     register("sourcesJar", Jar::class.java) {
         dependsOn("classes")
         archiveClassifier.set("sources")

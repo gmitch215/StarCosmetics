@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.gson.Gson;
 import com.jeff_media.updatechecker.UpdateCheckSource;
 import com.jeff_media.updatechecker.UpdateChecker;
 import me.gamercoder215.starcosmetics.api.Rarity;
@@ -52,15 +53,18 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
+import java.lang.reflect.Constructor;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
@@ -74,6 +78,8 @@ import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelection
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.petIcon;
 
 public final class StarCosmetics extends JavaPlugin implements StarConfig, CosmeticRegistry {
+
+    private static final Gson GSON = new Gson();
 
     private boolean checkCompatible() {
         if (!Wrapper.isCompatible()) {
@@ -304,8 +310,118 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         saveConfig();
     }
 
+    @Override
+    public double getRequirementMultiplier() {
+        return config.getDouble("cosmetics.requirement-multiplier.global", 1.0);
+    }
+
+    @Override
+    public double getRequirementMultiplier(@Nullable CosmeticLocation<?> loc) {
+        if (loc == null) return getRequirementMultiplier();
+        return config.getConfigurationSection("cosmetics.requirement-multiplier.cosmetics")
+                .getValues(false)
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().equalsIgnoreCase(loc.getFullKey()) && entry.getValue() instanceof Number)
+                .mapToDouble(entry -> ((Number) entry.getValue()).doubleValue())
+                .findFirst()
+                .orElse(getRequirementMultiplier());
+    }
+
+    @Override
+    public void setRequirementMultiplier(double multiplier) {
+        config.set("cosmetics.requirement-multiplier.global", multiplier);
+        saveConfig();
+    }
+
+    @Override
+    public void setRequirementMultiplier(@Nullable CosmeticLocation<?> loc, double multiplier) {
+        if (loc == null) return;
+        config.set("cosmetics.requirement-multiplier.cosmetics." + loc.getFullKey(), multiplier);
+        saveConfig();
+    }
+
+    @Override
+    public @NotNull List<OfflinePlayer> getBlacklistedPlayers() {
+        return config.getStringList("cosmetics.blacklisted-players").stream()
+                .map(StarCosmetics::getPlayer)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setBlacklistedPlayers(@NotNull Iterable<? extends OfflinePlayer> players) {
+        config.set("cosmetics.blacklisted-players", ImmutableSet.copyOf(players).stream()
+                .map(OfflinePlayer::getName)
+                .collect(Collectors.toList())
+        );
+        saveConfig();
+    }
+
+    @Override
+    public @NotNull Set<Sound> getBlacklistedSounds() {
+        return ImmutableSet.copyOf(config.getStringList("cosmetics.custom-sound-events.blacklisted-sounds")
+                .stream()
+                .map(s -> Arrays.stream(Sound.values())
+                        .filter(sound -> Pattern.compile(s).matcher(w.getKey(sound)).find())
+                        .findFirst()
+                        .orElse(null)
+                )
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet())
+        );
+    }
+
+    @Override
+    public void setBlacklistedSounds(@NotNull Iterable<Sound> sounds) {
+        config.set("cosmetics.custom-sound-events.blacklisted-sounds", ImmutableSet.copyOf(sounds).stream()
+                .map(w::getKey)
+                .collect(Collectors.toList())
+        );
+        saveConfig();
+    }
 
     // Other Utilities
+
+    private static OfflinePlayer getPlayer(String name) {
+        if (Bukkit.getOnlineMode()) {
+            try {
+                URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("User-Agent", "GamerCoder215/StarCosmetics Java 8");
+
+                int code = connection.getResponseCode();
+
+                if (code == HttpURLConnection.HTTP_OK || code == HttpURLConnection.HTTP_ACCEPTED) {
+                    BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder builder = new StringBuilder();
+                    String line;
+                    while ((line = input.readLine()) != null) builder.append(line);
+
+                    return Bukkit.getOfflinePlayer(untrim(
+                            String.valueOf(GSON.fromJson(builder.toString(), Map.class).get("id"))
+                    ));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else
+            return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(StandardCharsets.UTF_8)));
+        return null;
+    }
+
+    public static UUID untrim(String old) {
+        if (old == null || old.length() != 32) return null;
+        return UUID.fromString(
+                old.substring(0, 8) + "-" +
+                old.substring(8, 12) + "-" +
+                old.substring(12, 16) + "-" +
+                old.substring(16, 20) + "-" +
+                old.substring(20, 32)
+        );
+    }
 
     public static String getServerVersion() {
         return Wrapper.getServerVersion();
@@ -321,21 +437,18 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         String v = config.get("functionality.command-version", "auto").toString();
         switch (v) {
-            case "1":
-                cmdV = 1;
-                break;
-            case "2":
-                cmdV = 2;
-                break;
-            default:
-                cmdV = w.getCommandVersion();
-                break;
+            case "1": cmdV = 1;break;
+            case "2": cmdV = 2; break;
+            default: cmdV = w.getCommandVersion(); break;
         }
 
         try {
-            return (CommandWrapper) Class.forName("me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapperV" + cmdV)
-                    .getConstructor(Plugin.class)
-                    .newInstance(StarConfig.getPlugin());
+            Constructor<? extends CommandWrapper> constr = Class.forName("me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapperV" + cmdV)
+                    .asSubclass(CommandWrapper.class)
+                    .getDeclaredConstructor(Plugin.class);
+
+            constr.setAccessible(true);
+            return constr.newInstance(StarConfig.getPlugin());
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
             return null;
@@ -462,6 +575,25 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     }
 
     @Override
+    @NotNull
+    public List<CosmeticLocation<?>> getAllFor(Cosmetic parent) {
+        List<CosmeticLocation<?>> locs = new ArrayList<>();
+        if (parent == null) return locs;
+
+        Map<Cosmetic, List<CosmeticSelection<?>>> selections = getCosmeticSelections().getAllSelections();
+        for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
+            if (entry.getKey().equals(parent)) locs.addAll(entry.getValue());
+
+        Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
+        locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
+
+        return ImmutableList.copyOf(locs.stream()
+                .filter(l -> !getDisabledCosmetics().contains(l))
+                .collect(Collectors.toList())
+        );
+    }
+
+    @Override
     public List<Cosmetic> getAllParents() {
         return Constants.PARENTS;
     }
@@ -490,7 +622,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             "lodestone_pillar",
             "emerald",
             "letter_y",
-            "letter_j"
+            "letter_j",
+            "letter_h",
+            "letter_o",
+            "netherite_beacon"
     };
 
     public static final Set<StructureInfo> STRUCTURE_CACHE = new HashSet<>();

@@ -1,0 +1,7 @@
+1.15
+:letter_h:
+constants.cosmetics.structures.letter_h
+occasional
+---
+honeycomb_block:(-2,2,0,0,0,0)^[0,4,0]
+honeycomb_block:(0,0,-4,4,0,0)^[-3,4,0]*(0,0,-4,4,0,0)^[3,4,0]

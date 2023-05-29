@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,14 +13,15 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static me.gamercoder215.starcosmetics.util.Constants.w;
+import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.itemBuilder;
 
 public abstract class NBTWrapper {
 
-    static final String ROOT = "StarCosmetics";
+    protected static final String ROOT = "StarCosmetics";
 
-    ItemStack item;
+    protected ItemStack item;
 
-    NBTWrapper(ItemStack item) {
+    protected NBTWrapper(ItemStack item) {
         this.item = item;
     }
     
@@ -31,6 +33,10 @@ public abstract class NBTWrapper {
         NBTWrapper nbt = of(item);
         nbtConsumer.accept(nbt);
         return nbt.getItem();
+    }
+
+    public static ItemStack builder(ItemStack item, Consumer<ItemMeta> meta, Consumer<NBTWrapper> nbtConsumer) {
+        return builder(itemBuilder(item, meta), nbtConsumer);
     }
 
     public static NBTWrapper of(ItemStack item) {

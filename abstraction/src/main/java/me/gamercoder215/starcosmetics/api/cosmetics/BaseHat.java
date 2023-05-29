@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.HatType;
 import me.gamercoder215.starcosmetics.util.Constants;
@@ -15,7 +16,7 @@ import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.it
 public enum BaseHat implements Hat {
 
     NORMAL,
-//    ANIMATED
+    ANIMATED
 
     ;
 
@@ -30,33 +31,42 @@ public enum BaseHat implements Hat {
 
     @Override
     public @NotNull String getDisplayName() {
-        return StarConfig.getConfig().get("menu.cosmetics.hat");
+        return StarConfig.getConfig().get("menu.cosmetics.hats." + name().toLowerCase());
     }
 
     @Override
     public @NotNull Material getIcon() {
-        return Material.LEATHER_HELMET;
+        return this == NORMAL ? Material.LEATHER_HELMET : Material.DIAMOND_HELMET;
     }
 
     @Override
     public void run(@NotNull Player p, CosmeticLocation<?> loc) {
-        if (!ItemStack.class.isAssignableFrom(loc.getInputType())) return;
+        if (!ItemStack.class.isAssignableFrom(loc.getInputType()) && !AnimatedHatData.class.isAssignableFrom(loc.getInputType())) return;
 
+        boolean normal = this == NORMAL;
         if (p.getEquipment().getHelmet() != null) {
             ItemStack helmet = p.getEquipment().getHelmet();
             NBTWrapper nbt = NBTWrapper.of(helmet);
 
-            if (!nbt.getBoolean("hat")) {
+            boolean hat = nbt.getBoolean("hat");
 
+            if (!hat) {
                 if (p.getInventory().firstEmpty() == -1) p.getWorld().dropItemNaturally(p.getLocation(), helmet);
                 else p.getInventory().addItem(helmet);
 
                 p.getEquipment().setHelmet(null);
             }
+
+            if (hat && normal) return;
         }
 
-        ItemStack item = (ItemStack) loc.getInput();
-        p.getEquipment().setHelmet(itemBuilder(item, meta -> meta.setDisplayName(" ")));
+        if (normal) {
+            ItemStack item = (ItemStack) loc.getInput();
+            p.getEquipment().setHelmet(itemBuilder(item, meta -> meta.setDisplayName(" ")));
+        } else {
+            AnimatedHatData data = (AnimatedHatData) loc.getInput();
+            data.tryStart(p);
+        }
     }
 
     @Override

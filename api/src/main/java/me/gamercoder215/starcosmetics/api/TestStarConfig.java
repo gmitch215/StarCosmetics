@@ -2,11 +2,17 @@ package me.gamercoder215.starcosmetics.api;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 final class TestStarConfig implements StarConfig {
@@ -74,5 +80,29 @@ final class TestStarConfig implements StarConfig {
 
     @Override
     public void setAmbientPetSoundEnabled(boolean enabled) {}
+
+    @Override
+    public double getRequirementMultiplier() { return 0; }
+
+    @Override
+    public double getRequirementMultiplier(@Nullable CosmeticLocation<?> loc) { return 0;}
+
+    @Override
+    public void setRequirementMultiplier(double multiplier) {}
+
+    @Override
+    public void setRequirementMultiplier(@Nullable CosmeticLocation<?> loc, double multiplier) {}
+
+    @Override
+    public @NotNull List<OfflinePlayer> getBlacklistedPlayers() { return new ArrayList<>(); }
+
+    @Override
+    public void setBlacklistedPlayers(@NotNull Iterable<? extends OfflinePlayer> players) {}
+
+    @Override
+    public @NotNull Set<Sound> getBlacklistedSounds() { return new HashSet<>(); }
+
+    @Override
+    public void setBlacklistedSounds(@NotNull Iterable<Sound> sounds) {}
 
 }

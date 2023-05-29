@@ -1,0 +1,7 @@
+ALL
+:letter_o:
+constants.cosmetics.structures.letter_o
+uncommon
+---
+sea_lantern:(-2,2,0,0,0,0)^[0,0,0]*(-2,2,0,0,0,0)^[0,5,0]
+sea_lantern:(0,0,0,5,0,0)^[-2,0,0]*(0,0,0,5,0,0)^[2,0,0]

@@ -55,9 +55,9 @@ public class TestStructureReader {
         Assertions.assertEquals(18, StructureReader.readPoints("(1,-1,0,0,1,-1)^[1, 2, 3]*(1,-1,0,0,1,-1)^[-3,5,7]").size());
 
         Assertions.assertEquals(Arrays.asList(
-                point(0, 5, 0), point(0, 5, 1), point(0, 5, 2),
-                point(1, 5, 0), point(1, 5, 1), point(1, 5, 2),
-                point(2, 5, 0), point(2, 5, 1), point(2, 5, 2)
+                point(-1, 5, -1), point(-1, 5, 0), point(-1  , 5, 1),
+                point(0, 5, -1), point(0, 5, 0), point(0, 5, 1),
+                point(1, 5, -1), point(1, 5, 0), point(1, 5, 1)
         ), StructureReader.readPoints("(1,-1,0,0,1,-1)^[0,5,0]"));
     }
 

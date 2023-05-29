@@ -34,7 +34,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.util.Constants.w;
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
+import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 @SuppressWarnings("unchecked")
@@ -394,17 +395,19 @@ public final class Generator {
             parentInv.setItem(place, cItem);
         }
 
-        ItemStack resetAll = new ItemStack(Material.BARRIER);
-        ItemMeta resetMeta = resetAll.getItemMeta();
-        resetMeta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all_" + parent.name().toLowerCase()));
-        resetAll.setItemMeta(resetMeta);
+        if (parent == CosmeticParent.TRAILS) {
+            ItemStack resetAll = new ItemStack(Material.BARRIER);
+            ItemMeta resetMeta = resetAll.getItemMeta();
+            resetMeta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all_trails"));
+            resetAll.setItemMeta(resetMeta);
 
-        NBTWrapper resetNBT = of(resetAll);
-        resetNBT.setID("cancel:cosmetic:all");
-        resetNBT.set("parent", parent.name());
-        resetAll = resetNBT.getItem();
+            NBTWrapper resetNBT = of(resetAll);
+            resetNBT.setID("cancel:cosmetic:all");
+            resetNBT.set("parent", parent.name());
+            resetAll = resetNBT.getItem();
 
-        parentInv.setItem(size - 1, resetAll);
+            parentInv.setItem(size - 1, resetAll);
+        }
 
         StarInventoryUtil.setBack(parentInv, cw::cosmetics);
         parentInv.setAttribute("selection_back", (Consumer<Player>) pl -> pl.openInventory(parentInv));

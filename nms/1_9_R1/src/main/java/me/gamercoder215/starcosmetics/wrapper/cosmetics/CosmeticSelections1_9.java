@@ -25,8 +25,9 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
+import static me.gamercoder215.starcosmetics.util.selection.HatSelection.of;
 
-public final class CosmeticSelections1_9 implements CosmeticSelections {
+final class CosmeticSelections1_9 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -355,6 +356,13 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("crit_magic", BaseShape.DETAILED_PENTAGON, Particle.CRIT_MAGIC,
                     fromStatistic(Statistic.MOB_KILLS, 17500), LEGENDARY))
 
+            // Combinations
+            .add(new ParticleSelection("snowball", BaseShape.SQUARE_RING, Particle.SNOWBALL,
+                    fromKilled(85, EntityType.SNOWMAN), UNCOMMON))
+        
+            .add(new ParticleSelection("end_portal_frame", BaseShape.PENTAGON_RING, StarMaterial.END_PORTAL_FRAME.find(),
+                    fromKilled(75000, EntityType.ENDERMITE), MYTHICAL))
+
             .build();
 
     // Hats
@@ -448,9 +456,28 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new HatSelection("spawner", StarMaterial.SPAWNER.find(),
                     fromStatistic(Statistic.MOB_KILLS, 500000), MYTHICAL))
+            .add(new HatSelection("end_portal_frame", StarMaterial.END_PORTAL_FRAME.find(),
+                    fromKilled(100000, EntityType.ENDERMITE), MYTHICAL))
 
             .build();
 
+    // Animated Hats
+
+    private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+        .add(new HatSelection("ores", of(30,
+                        Material.COAL_ORE, Material.matchMaterial("COPPER_ORE"), Material.IRON_ORE,
+                        Material.LAPIS_ORE, Material.REDSTONE_ORE, Material.GOLD_ORE,
+                        Material.DIAMOND_ORE, Material.EMERALD_ORE
+                ), fromMined(255, Material.COAL_ORE), RARE))
+        
+        .add(new HatSelection("ore_blocks", of(40,
+                        Material.COAL_BLOCK, Material.matchMaterial("COPPER_BLOCK"), Material.IRON_BLOCK,
+                        Material.LAPIS_BLOCK, Material.REDSTONE_BLOCK, Material.GOLD_BLOCK,
+                        Material.DIAMOND_BLOCK, Material.EMERALD_BLOCK
+                ), fromCrafted(565, Material.IRON_BLOCK), EPIC))
+        
+        .build();
+        
     // Selection Map
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
@@ -461,6 +488,7 @@ public final class CosmeticSelections1_9 implements CosmeticSelections {
             .put(BaseShape.ALL, PARTICLE_SHAPES)
 
             .put(BaseHat.NORMAL, NORMAL_HATS)
+            .put(BaseHat.ANIMATED, ANIMATED_HATS)
             .build();
 
     @Override

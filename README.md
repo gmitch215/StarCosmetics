@@ -24,6 +24,19 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+🔧 v1.1.2 - May 28, 2023
+- Gradle Updates
+- New Configuration Options
+  - Blacklisted Players/Cosmetics 
+- Cosmetics Information Command
+- New PetPosition Settings
+  - BACKPACK and SHOULDER
+- Add Animated Hats
+- Other Additions 
+  - Minor Bug Fixes
+  - Hat Performance Additions
+  - Fix MHF-related Normal Hats
+
 📖 v1.1.1 - April 23, 2023
 - Gradle Updates
 - Added New Cosmetics, Pets, and Structures

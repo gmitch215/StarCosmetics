@@ -30,7 +30,7 @@ import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.circle;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
-public final class CosmeticSelections1_17 implements CosmeticSelections {
+final class CosmeticSelections1_17 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -160,6 +160,19 @@ public final class CosmeticSelections1_17 implements CosmeticSelections {
             .add(new HatSelection("sculk_sensor", Material.SCULK_SENSOR,
                     fromStatistic(Statistic.MOB_KILLS, 25000), Rarity.LEGENDARY))
             .build();
+    
+    // Animated Hats
+
+    private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new HatSelection("deepslate_ores", HatSelection.of(20,
+                Material.DEEPSLATE_COAL_ORE, Material.DEEPSLATE_COPPER_ORE, Material.DEEPSLATE_IRON_ORE,
+                Material.DEEPSLATE_LAPIS_ORE, Material.DEEPSLATE_REDSTONE_ORE, Material.DEEPSLATE_GOLD_ORE,
+                Material.DEEPSLATE_DIAMOND_ORE, Material.DEEPSLATE_EMERALD_ORE  
+            ), fromMined(400, Material.DEEPSLATE_COAL_ORE), Rarity.EPIC))
+            .add(new HatSelection("animated_azalea", HatSelection.of(60,
+                Material.AZALEA, Material.FLOWERING_AZALEA
+            ), fromMined(500, Material.AZALEA_LEAVES), Rarity.LEGENDARY))
+            .build();
 
     // Selections
 
@@ -171,6 +184,7 @@ public final class CosmeticSelections1_17 implements CosmeticSelections {
             .put(BaseShape.ALL, join(PARTICLE_SHAPES, BaseShape.ALL, "1_16"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_16"))
+            .put(BaseHat.ANIMATED, join(ANIMATED_HATS, BaseHat.ANIMATED, "1_16"))
             .build();
 
     @Override

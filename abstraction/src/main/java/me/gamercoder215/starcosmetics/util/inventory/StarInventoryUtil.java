@@ -6,6 +6,7 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
@@ -63,6 +64,10 @@ public final class StarInventoryUtil {
 
     public static ItemStack itemBuilder(Material material, Consumer<ItemMeta> metaConsumer) {
         return itemBuilder(new ItemStack(material), metaConsumer);
+    }
+
+    public static ItemStack cleanSkull(ItemStack item) {
+        return w.cleanSkull(item);
     }
 
     @NotNull
@@ -446,7 +451,14 @@ public final class StarInventoryUtil {
     public static ItemStack toItemStack(@NotNull Player p, @NotNull CosmeticLocation<?> loc) {
         Object input = loc.getInput();
 
-        ItemStack item = input instanceof ItemStack ? ((ItemStack) input).clone() : new ItemStack(toInputMaterial(input));
+        ItemStack item;
+        if (input instanceof ItemStack)
+            item = ((ItemStack) input).clone();
+        else if (input instanceof AnimatedHatData)
+            item = ((AnimatedHatData) input).getFrames().get(0).getValue();
+        else
+            item = new ItemStack(toInputMaterial(input));
+
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + loc.getDisplayName());
         meta.addItemFlags(ItemFlag.values());

@@ -18,7 +18,7 @@ import java.util.Map;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
-public final class CosmeticSelections1_18 implements CosmeticSelections {
+final class CosmeticSelections1_18 implements CosmeticSelections {
 
     // Cosmetic Maps
 
@@ -38,6 +38,7 @@ public final class CosmeticSelections1_18 implements CosmeticSelections {
             .put(BaseShape.ALL, getForVersion(BaseShape.ALL, "1_17"))
 
             .put(BaseHat.NORMAL, getForVersion(BaseHat.NORMAL, "1_17"))
+            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_17"))
             .build();
 
     @Override
