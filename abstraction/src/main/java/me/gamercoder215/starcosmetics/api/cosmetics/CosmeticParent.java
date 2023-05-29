@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,7 +13,8 @@ public enum CosmeticParent {
     TRAILS(Material.ARROW, 20, Trail.class,
             BaseTrail.PROJECTILE_TRAIL, BaseTrail.GROUND_TRAIL, BaseTrail.SOUND_TRAIL),
 
-    // HATS(...)
+    HATS(Material.LEATHER_HELMET, 22, Hat.class,
+            BaseHat.NORMAL, BaseHat.ANIMATED)
 
     ;
 
