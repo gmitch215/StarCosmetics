@@ -1,20 +1,25 @@
 package me.gamercoder215.starcosmetics.api;
 
+import com.google.common.collect.Iterables;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
+import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Represents the main StarCosmetics Configuration.
@@ -134,6 +139,12 @@ public interface StarConfig {
 
         if (!config.isConfigurationSection("cosmetics.pets")) config.createSection("cosmetics.pets");
         if (!config.isBoolean("cosmetics.pets.ambient-sound")) config.set("cosmetics.pets.ambient-sound", true);
+
+        if (!config.isConfigurationSection("cosmetics.requirement-multiplier")) config.createSection("cosmetics.requirement-multiplier");
+        if (!config.isDouble("cosmetics.requirement-multiplier.global") && !config.isInt("cosmetics.requirement-multipler.global")) config.set("cosmetics.requirement-multiplier.level", 1.0D);
+        if (!config.isConfigurationSection("cosmetics.requirement-multiplier.cosmetics")) config.createSection("cosmetics.requirement-multiplier.cosmetics");
+
+        if (!config.isList("cosmetics.blacklisted-players")) config.set("cosmetics.blacklisted-players", new ArrayList<>());
 
         try {
             config.save(getConfigurationFile());
@@ -314,5 +325,117 @@ public interface StarConfig {
      * @param enabled true if enabled, else false
      */
     void setAmbientPetSoundEnabled(boolean enabled);
+
+    /**
+     * Fetches the requirement multiplier for all cosmetics.
+     * @return Requirement Multiplier
+     */
+    double getRequirementMultiplier();
+
+    /**
+     * Fetches the requirement multiplier for a specific cosmetic.
+     * @param loc Cosmetic Location
+     * @return Requirement Multiplier
+     */
+    double getRequirementMultiplier(@Nullable CosmeticLocation<?> loc);
+
+    /**
+     * Sets the requirement multiplier for all cosmetics.
+     * @param multiplier Requirement Multiplier
+     */
+    void setRequirementMultiplier(double multiplier);
+
+    /**
+     * Sets the requirement multiplier for a specific cosmetic.
+     * @param loc Cosmetic Location
+     * @param multiplier Requirement Multiplier
+     */
+    void setRequirementMultiplier(@Nullable CosmeticLocation<?> loc, double multiplier);
+
+    /**
+     * Fetches an immutable list of all of the players who cannot use cosmetics.
+     * @return Blacklisted Players
+     */
+    @NotNull
+    List<OfflinePlayer> getBlacklistedPlayers();
+
+    /**
+     * Adds a player to the blacklist.
+     * @param player Player to add
+     */
+    default void addBlacklistedPlayer(@NotNull OfflinePlayer player) {
+        if (isBlacklisted(player)) return;
+        setBlacklistedPlayers(Iterables.concat(getBlacklistedPlayers(), Collections.singleton(player)));
+    }
+
+    /**
+     * Removes a player from the blacklist.
+     * @param player Player to remove
+     */
+    default void removeBlacklistedPlayer(@Nullable OfflinePlayer player) {
+        setBlacklistedPlayers(getBlacklistedPlayers()
+                .stream()
+                .filter(p -> !p.equals(player))
+                .collect(Collectors.toList())
+        );
+    }
+
+    /**
+     * Whether a player is blacklisted.
+     * @param player Player to check
+     * @return true if blacklisted, else false
+     */
+    default boolean isBlacklisted(@Nullable OfflinePlayer player) {
+        return getBlacklistedPlayers().contains(player);
+    }
+
+    /**
+     * Sets the list of blacklisted players.
+     * @param players Blacklisted Players
+     */
+    void setBlacklistedPlayers(@NotNull Iterable<? extends OfflinePlayer> players);
+
+    /**
+     * Fetches an immutable list of all of the sounds unavailable for use in {@linkplain SoundEventSelection Custom Sound Events}.
+     * @return Blacklisted Sounds
+     */
+    @NotNull
+    Set<Sound> getBlacklistedSounds();
+
+    /**
+     * Adds a sound to the blacklist.
+     * @param sound Sound to add
+     */
+    default void addBlacklistedSound(@NotNull Sound sound) {
+        if (isBlacklisted(sound)) return;
+        setBlacklistedSounds(Iterables.concat(getBlacklistedSounds(), Collections.singleton(sound)));
+    }
+
+    /**
+     * Removes a sound from the blacklist.
+     * @param sound Sound to remove
+     */
+    default void removeBlacklistedSound(@Nullable Sound sound) {
+        setBlacklistedSounds(getBlacklistedSounds()
+                .stream()
+                .filter(s -> s != sound)
+                .collect(Collectors.toSet())
+        );
+    }
+
+    /**
+     * Whether a sound is blacklisted.
+     * @param sound Sound to check
+     * @return true if blacklisted, else false
+     */
+    default boolean isBlacklisted(@Nullable Sound sound) {
+        return getBlacklistedSounds().contains(sound);
+    }
+
+    /**
+     * Sets the list of blacklisted sounds.
+     * @param sounds Blacklisted Sounds
+     */
+    void setBlacklistedSounds(@NotNull Iterable<Sound> sounds);
 
 }

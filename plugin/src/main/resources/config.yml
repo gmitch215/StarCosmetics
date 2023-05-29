@@ -51,3 +51,27 @@ cosmetics:
   #
   # You can figure out a cosmetic's key by equipping it, then navigating to your player information file.
   disabled: []
+
+  # The multipler against the numerical amount required for a cosmetic
+  requirement-multiplier:
+    # Applies to all cosmetics
+    global: 1.0
+
+    # Enter a cosmetic key to override global multiplier
+    cosmetics: {}
+
+  # A List of Players who cannot use any cosmetics
+  # Supports Player Names only.
+  blacklisted-players: []
+
+  # Configuration for Custom Sound Events
+  custom-sound-events:
+
+    # An array of sounds that are blacklisted from being played in Custom Sound Events.
+    # Supports regex (https://en.wikipedia.org/wiki/Regular_expression).
+    #
+    # Examples:
+    # - ambient.*
+    # - ambient.cave
+    # - block.basalt.*
+    blacklisted-sounds: []
