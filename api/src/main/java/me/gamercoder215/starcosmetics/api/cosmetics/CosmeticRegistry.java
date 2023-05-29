@@ -30,9 +30,7 @@ public interface CosmeticRegistry {
      * @return List of Cosmetic Locations
      */
     @NotNull
-    default List<CosmeticLocation<?>> getAllFor(@Nullable Cosmetic parent) {
-        return getAllFor(parent.getClass());
-    }
+    List<CosmeticLocation<?>> getAllFor(@Nullable Cosmetic parent);
 
     /**
      * Fetches a list of all registered CosmeticLocations.
