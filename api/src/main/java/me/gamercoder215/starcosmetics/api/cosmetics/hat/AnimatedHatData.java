@@ -1,24 +1,17 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.hat;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
-import me.gamercoder215.starcosmetics.api.StarConfig;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * <p>Utility class for describing instructions creating an Animated Hat</p>
@@ -110,35 +103,53 @@ public final class AnimatedHatData implements Cloneable {
     }
 
     private void performCycle() {
-        int i = 0;
-        for (Map.Entry<Long, ItemStack> frame : frames) {
+        List<Map.Entry<BukkitRunnable, Long>> toRun = new ArrayList<>();
+
+        long current = 0;
+        for (int i = 0; i < frames.size(); i++) {
+            Map.Entry<Long, ItemStack> frame = frames.get(i);
             ItemStack item = frame.getValue();
 
-            ItemStack item0 = item.clone();
-            ItemMeta meta0 = item0.getItemMeta();
-            meta0.setDisplayName(" ");
-            item0.setItemMeta(meta0);
+            current += i == 0 ? 0 : frames.get(i - 1).getKey();
 
-            if (i == 0) player.getInventory().setHelmet(item0);
-            else {
-                long duration = frames.get(i - 1).getKey();
+            toRun.add(new AbstractMap.SimpleEntry<>(new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (player != null)
+                        player.getInventory().setHelmet(item);
+                }
+            }, current));
+        }
+
+        Map.Entry<BukkitRunnable, Long> last = toRun.get(toRun.size() - 1);
+        toRun.set(toRun.size() - 1, new AbstractMap.SimpleEntry<>(new BukkitRunnable() {
+            @Override
+            public void run() {
+                last.getKey().run();
+
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (!isStarted()) {
-                            cancel();
-                            return;
-                        }
-
-                        player.getInventory().setHelmet(item0);
+                        stop();
                     }
-                }.runTaskLater(StarConfig.getPlugin(), duration);
+                }.runTaskLater(StarConfig.getPlugin(), 10);
             }
+        }, last.getValue()));
 
-            i++;
+        toRun.forEach(entry -> entry.getKey().runTaskLater(StarConfig.getPlugin(), entry.getValue()));
+    }
+
+    /**
+     * Clones this Animated Hat Data.
+     * @return Cloned Animated Hat Data
+     */
+    @NotNull
+    public AnimatedHatData clone() {
+        try {
+            return (AnimatedHatData) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
         }
-
-        player.getEquipment().setHelmet(null);
     }
 
     /**
