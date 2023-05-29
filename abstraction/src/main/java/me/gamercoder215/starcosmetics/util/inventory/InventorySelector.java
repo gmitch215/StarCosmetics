@@ -41,7 +41,10 @@ public final class InventorySelector {
         Map<String, StarInventory> categories = new HashMap<>();
         Map<String, List<ItemStack>> categoryItems = new HashMap<>();
 
+        Set<Sound> blacklisted = StarConfig.getConfig().getBlacklistedSounds();
         for (Sound s : Sound.values()) {
+            if (blacklisted.contains(s)) continue;
+
             String category = s.name().split("_")[0].toLowerCase();
             if (!categories.containsKey(category)) {
                 StarInventory inv = Generator.genGUI("choose:sound_inv", 54, get("menu.cosmetics.choose.sound.item"));
