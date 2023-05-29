@@ -2,7 +2,7 @@ package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
 import org.bukkit.Bukkit;
 
-import java.io.*;
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +61,9 @@ public interface StructureReader extends Closeable {
                 String[] coords = s.split("\\^")[1].replaceAll("[\\[\\]\\s]", "").split(",");
                 String[] split = s.split("\\^")[0].replaceAll("[()\\s]", "").split(",");
 
+                if (coords.length != 3) throw new MalformedStructureException("Malformed Point: " + s);
+                if (split.length != 6) throw new MalformedStructureException("Malformed Point: " + s);
+
                 int cx = Integer.parseInt(coords[0]);
                 int cy = Integer.parseInt(coords[1]);
                 int cz = Integer.parseInt(coords[2]);
@@ -72,9 +75,9 @@ public interface StructureReader extends Closeable {
                 int z1 = Math.min(Integer.parseInt(split[4]), Integer.parseInt(split[5]));
                 int z2 = Math.max(Integer.parseInt(split[4]), Integer.parseInt(split[5]));
 
-                for (int x = Math.abs(x2) - Math.abs(x1); x <= Math.abs(x1) + Math.abs(x2); x++)
-                    for (int y = Math.abs(y2) - Math.abs(y1); y <= Math.abs(y1) + Math.abs(y2); y++)
-                        for (int z = Math.abs(z2) - Math.abs(z1); z <= Math.abs(z1) + Math.abs(z2); z++)
+                for (int x = x1; x <= x2; x++)
+                    for (int y = y1; y <= y2; y++)
+                        for (int z = z1; z <= z2; z++)
                             points.add(new StructurePoint(x + cx, y + cy, z + cz));
 
             } else points.add(readRawPoint(s));
