@@ -1,6 +1,0 @@
-ALL
-:letter_t:
-constants.cosmetics.structures.letter_t
-common
----
-white_wool:[0,0,0]*[0,1,0]*[0,2,0]*[1,2,0]*[-1,2,0]

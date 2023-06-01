@@ -1,7 +1,0 @@
-ALL
-:letter_j:
-constants.cosmetics.structures.letter_j
-occasional
----
-glowstone:[0,0,0]*[1,0,0]*[2,0,0]
-glowstone:[2,1,0]*[2,2,0]*[2,3,0]*[2,4,0]*[2,5,0]

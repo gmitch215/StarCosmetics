@@ -1,8 +1,0 @@
-1.16
-:netherite_beacon:
-constants.cosmetics.structures.netherite_beacon
-legendary
----
-netherite_block:(-1,1,0,5,-1,1)^[0,0,0]
-netherite_block:(-2,2,0,0,-2,2)^[0,4,0]
-beacon:[0,6,0]

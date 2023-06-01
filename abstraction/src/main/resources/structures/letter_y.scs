@@ -1,9 +1,0 @@
-ALL
-:letter_y:
-constants.cosmetics.structures.letter_y
-uncommon
----
-quartz_block:[0,0,0]*[0,1,0]*[0,2,0]
-quartz_block:[1,2,0]*[-1,2,0]
-quartz_block:[1,3,0]*[-1,3,0]
-quartz_block:[2,3,0]*[-2,3,0]*[2,4,0]*[-2,4,0]

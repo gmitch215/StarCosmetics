@@ -1,7 +1,0 @@
-1.16
-:lodestone_pillar:
-constants.cosmetics.structures.lodestone_pillar
-occasional
----
-stone:[0,0,0]*[0,1,0]*[0,2,0]
-lodestone:[0,3,0]
