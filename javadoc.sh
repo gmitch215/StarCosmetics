@@ -9,7 +9,7 @@ fi;
 cp -Rfv api/src/main/javadoc/favicon.ico ./docs/
 cp -Rfv api/build/docs/javadoc/* ./docs/
 
-git checkout gh-pages
+git switch -f gh-pages
 
 for dir in ./*
 do
@@ -26,7 +26,5 @@ rm -rf ./docs
 echo "starcosmetics.gamercoder215.me" > CNAME
 
 git add .
-git branch -D gh-pages
-git branch -m gh-pages
 git commit -m "Update JavaDocs ($1)"
 git push -f origin gh-pages
