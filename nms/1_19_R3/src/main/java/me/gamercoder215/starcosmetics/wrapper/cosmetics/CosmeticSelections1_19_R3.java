@@ -6,13 +6,13 @@ import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.util.StarParticle;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 import java.util.List;
@@ -32,7 +32,7 @@ final class CosmeticSelections1_19_R3 implements CosmeticSelections {
     // Projectile Trails
 
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAIL = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new TrailSelection("cherry_leaves", BaseTrail.PROJECTILE_TRAIL, Particle.FALLING_CHERRY_LEAVES,
+            .add(new TrailSelection("cherry_leaves", BaseTrail.PROJECTILE_TRAIL, StarParticle.CHERRY_LEAVES.find(),
                     fromMined(20, Material.CHERRY_LOG), COMMON))
 
             .add(new TrailSelection("bamboo_block", BaseTrail.PROJECTILE_TRAIL, Material.BAMBOO_BLOCK,
@@ -75,7 +75,7 @@ final class CosmeticSelections1_19_R3 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
             // Small Rings
-            .add(new ParticleSelection("cherry_leaves", BaseShape.SMALL_RING, Particle.FALLING_CHERRY_LEAVES,
+            .add(new ParticleSelection("cherry_leaves", BaseShape.SMALL_RING, StarParticle.CHERRY_LEAVES.find(),
                     fromMined(20, Material.CHERRY_LOG), COMMON))
         
             // Combinations
