@@ -113,14 +113,6 @@ subprojects {
         targetCompatibility = jvmVersion
     }
 
-    publishing {
-        publications {
-            getByName<MavenPublication>("maven") {
-                artifact(tasks["shadowJar"])
-            }
-        }
-    }
-
     tasks {
         compileJava {
             options.encoding = "UTF-8"
@@ -156,8 +148,10 @@ subprojects {
         }
 
         jar.configure {
-            enabled = false
             dependsOn("shadowJar")
+            artifacts {
+                add("default", getByName<ShadowJar>("shadowJar"))
+            }
         }
 
         withType<ShadowJar> {
@@ -174,6 +168,7 @@ subprojects {
             relocate("org.bstats", "me.gamercoder215.shaded.bstats")
             relocate("com.jeff_media.updatechecker", "me.gamercoder215.shaded.updatechecker")
 
+            archiveFileName.set("${project.name}-${project.version}.jar")
             archiveClassifier.set("")
         }
     }
