@@ -13,7 +13,7 @@ plugins {
 }
 
 val pGroup = "me.gamercoder215.starcosmetics"
-val pVersion = "1.1.2"
+val pVersion = "1.2.0"
 val pAuthor = "GamerCoder215"
 
 sonarqube {
