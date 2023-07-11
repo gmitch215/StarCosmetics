@@ -12,9 +12,7 @@ public enum HatType {
 
     /**
      * Represents an Animated Hat.
-     * @deprecated Draft API
      */
-    @Deprecated
     ANIMATED
 
 }
