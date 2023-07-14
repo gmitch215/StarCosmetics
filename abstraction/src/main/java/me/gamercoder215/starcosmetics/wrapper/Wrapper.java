@@ -207,6 +207,8 @@ public interface Wrapper {
 
     ItemStack cleanSkull(ItemStack item);
 
+    default ItemStack createDecoratedPot(Material[] sherds) { throw new UnsupportedOperationException(); }
+
     // Other Utilities
 
     @NotNull

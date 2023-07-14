@@ -4,6 +4,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +38,10 @@ public abstract class NBTWrapper {
 
     public static ItemStack builder(ItemStack item, Consumer<ItemMeta> meta, Consumer<NBTWrapper> nbtConsumer) {
         return builder(itemBuilder(item, meta), nbtConsumer);
+    }
+
+    public static ItemStack builder(Material m, Consumer<ItemMeta> meta, Consumer<NBTWrapper> nbtConsumer) {
+        return builder(itemBuilder(m, meta), nbtConsumer);
     }
 
     public static NBTWrapper of(ItemStack item) {

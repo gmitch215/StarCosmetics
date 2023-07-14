@@ -19,10 +19,23 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 - **Custom Structures** - Spawn temporary structures that players can play around!
 - **Pets** - Spawn a best friend to play along with!
 - **Sound Effects** - Create sound effects for your players to use, on any triggered event.
+- **Gadgets** - Fun, harmless toys for you and your players to use!
 
 ---
 
 ## 📓 Changelog
+
+🔫 v1.2.0 - July 14, 2023
+- Gradle Updates
+- **Introduction of Gadgets**
+  - 5 current Gadgets to play around with
+  - More Coming Soon!
+- Decorated Pot Hats
+- Optimized GUI Loading
+- Translation Fixes
+- API Improvements & Fixes
+  - Rename Rarity#isVisibleRequirements to Rarity#isInvisibleRequirements 
+- Other New Features
 
 🔧 v1.1.2 - May 28, 2023
 - Gradle Updates
@@ -152,6 +165,8 @@ Download the plugin on our Spigot Page, and drop it in to your Spigot/Paper "plu
 ---
 
 ## 📷 Screenshots
+
+<img src="https://media.discordapp.net/attachments/894254760075603980/1129526351444070561/2023-07-14_16.33.56.png" title="StarCosmetics v1.2.0 Gadgets GUI" alt="StarCosmetics GUI">
 
 <img src="https://media.discordapp.net/attachments/894254760075603980/1089413119933161523/2023-03-25_23.57.33.png" title="Stripped Bamboo Hat" alt="Stripped Bamboo Hat">
 

@@ -2,10 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.util.StarParticle;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
@@ -94,9 +91,6 @@ final class CosmeticSelections1_19_R3 implements CosmeticSelections {
             .add(new HatSelection("stripped_bamboo_block", Material.STRIPPED_BAMBOO_BLOCK,
                     fromMined(160, Material.BAMBOO), OCCASIONAL))
 
-            .add(new HatSelection("decorated_pot", Material.DECORATED_POT,
-                    fromCrafted(90, Material.DECORATED_POT), RARE))
-
             .add(new HatSelection("cherry_leaves", Material.CHERRY_LEAVES,
                     fromMined(500, Material.CHERRY_LOG), EPIC))
             .build();
@@ -112,6 +106,8 @@ final class CosmeticSelections1_19_R3 implements CosmeticSelections {
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_19"))
             .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_19"))
+
+            .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_19"))
             .build();
 
     @Override

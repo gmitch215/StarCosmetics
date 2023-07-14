@@ -13,7 +13,7 @@ plugins {
 }
 
 val pGroup = "me.gamercoder215.starcosmetics"
-val pVersion = "1.1.2"
+val pVersion = "1.2.0"
 val pAuthor = "GamerCoder215"
 
 sonarqube {
@@ -147,11 +147,9 @@ subprojects {
             options.memberLevel = JavadocMemberLevel.PROTECTED
         }
 
-        jar.configure {
+        jar {
             dependsOn("shadowJar")
-            artifacts {
-                add("default", getByName<ShadowJar>("shadowJar"))
-            }
+            archiveClassifier.set("dev")
         }
 
         withType<ShadowJar> {
@@ -164,12 +162,16 @@ subprojects {
             }
             exclude("META-INF", "META-INF/**")
 
-            relocate("revxrsal.commands", "me.gamercoder215.shaded.lamp")
-            relocate("org.bstats", "me.gamercoder215.shaded.bstats")
-            relocate("com.jeff_media.updatechecker", "me.gamercoder215.shaded.updatechecker")
+            relocate("revxrsal.commands", "me.gamercoder215.starcosmetics.shaded.lamp")
+            relocate("org.bstats", "me.gamercoder215.starcosmetics.shaded.bstats")
+            relocate("com.jeff_media.updatechecker", "me.gamercoder215.starcosmetics.shaded.updatechecker")
 
             archiveFileName.set("${project.name}-${project.version}.jar")
             archiveClassifier.set("")
         }
+    }
+
+    artifacts {
+        add("default", tasks.getByName<ShadowJar>("shadowJar"))
     }
 }

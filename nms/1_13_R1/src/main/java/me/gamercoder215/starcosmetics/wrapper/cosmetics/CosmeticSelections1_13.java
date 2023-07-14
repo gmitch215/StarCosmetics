@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseGadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
@@ -26,7 +27,8 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
-import static me.gamercoder215.starcosmetics.api.cosmetics.BaseHat.*;
+import static me.gamercoder215.starcosmetics.api.cosmetics.BaseHat.ANIMATED;
+import static me.gamercoder215.starcosmetics.api.cosmetics.BaseHat.NORMAL;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
@@ -240,6 +242,8 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
 
             .put(NORMAL, join(NORMAL_HATS, NORMAL, "1_12"))
             .put(ANIMATED, join(ANIMATED_HATS, ANIMATED, "1_12"))
+
+            .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_12"))
             .build();
 
     @Override

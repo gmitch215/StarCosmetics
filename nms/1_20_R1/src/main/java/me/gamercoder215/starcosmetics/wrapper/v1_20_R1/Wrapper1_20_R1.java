@@ -25,23 +25,31 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R1.advancement.CraftAdvancement;
+import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlockState;
+import org.bukkit.craftbukkit.v1_20_R1.block.CraftDecoratedPot;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -242,6 +250,32 @@ final class Wrapper1_20_R1 implements Wrapper {
         tag.put("SkullOwner", skullOwner);
         nmsitem.setTag(tag);
         return CraftItemStack.asBukkitCopy(nmsitem);
+    }
+
+    @Override
+    public ItemStack createDecoratedPot(Material[] sherds) {
+        try {
+            ItemStack pot = new ItemStack(Material.DECORATED_POT);
+            if (Arrays.stream(sherds).allMatch(m -> m == Material.BRICK)) return pot;
+
+            BlockStateMeta meta = (BlockStateMeta) pot.getItemMeta();
+
+            CraftDecoratedPot dp = (CraftDecoratedPot) meta.getBlockState();
+            Item[] nms = Arrays.stream(sherds).map(CraftMagicNumbers::getItem).toArray(Item[]::new);
+
+            Method snapshot = CraftBlockEntityState.class.getDeclaredMethod("getSnapshot");
+            snapshot.setAccessible(true);
+            DecoratedPotBlockEntity b = (DecoratedPotBlockEntity) snapshot.invoke(dp);
+            b.decorations = new DecoratedPotBlockEntity.Decorations(nms[0], nms[1], nms[2], nms[3]);
+
+            meta.setBlockState(dp);
+            pot.setItemMeta(meta);
+            return pot;
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
+
+        return null;
     }
 
 }

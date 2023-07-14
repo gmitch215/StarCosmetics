@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
@@ -267,6 +268,7 @@ public final class StarPlayer {
         if (Trail.class.isAssignableFrom(clazz)) return "trails";
         if (ParticleShape.class.isAssignableFrom(clazz)) return "particle_shape";
         if (Hat.class.isAssignableFrom(clazz)) return "hat";
+        if (Gadget.class.isAssignableFrom(clazz)) return "gadget";
 
         return clazz.getSimpleName().toLowerCase();
     }
