@@ -51,11 +51,11 @@ public enum Rarity {
     ;
 
     private final String prefix;
-    private final boolean visibleRequirements;
+    private final boolean invisibleRequirements;
 
     Rarity(String prefix, boolean visible) {
         this.prefix = prefix;
-        this.visibleRequirements = visible;
+        this.invisibleRequirements = visible;
     }
 
     Rarity(String prefix) {
@@ -63,10 +63,10 @@ public enum Rarity {
     }
 
     Rarity(ChatColor color) {
-        this(color + "");
+        this(String.valueOf(color));
     }
 
-    Rarity(ChatColor color, boolean secret) { this(color + "", secret); }
+    Rarity(ChatColor color, boolean secret) { this(String.valueOf(color), secret); }
 
     Rarity(int hexColor) {
         this(ChatColor.translateAlternateColorCodes('&',
@@ -94,10 +94,10 @@ public enum Rarity {
     }
 
     /**
-     * Whether this rarity has a visible Completion Requirement.
-     * @return true if requirement is visible, false otherwise
+     * Whether this rarity has an invisible Completion Requirement.
+     * @return true if requirement is invisible, false otherwise
      */
-    public boolean hasVisibleRequirements() {
-        return visibleRequirements;
+    public boolean hasInvisibleRequirements() {
+        return invisibleRequirements;
     }
 }
