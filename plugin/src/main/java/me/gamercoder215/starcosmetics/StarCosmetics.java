@@ -480,6 +480,12 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             Arrays.stream(p.getInventory().getStorageContents())
                     .filter(i -> i != null && NBTWrapper.of(i).getBoolean("hat"))
                     .forEach(i -> p.getInventory().remove(i));
+
+            ItemStack offhand = p.getInventory().getItemInOffHand();
+            if (NBTWrapper.of(offhand).hasString("gadget")) {
+                p.getInventory().setItemInOffHand(null);
+                p.getInventory().addItem(offhand);
+            }
         }
 
         for (StarPlayer sp : STAR_PLAYER_CACHE.values()) {
@@ -536,9 +542,11 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         }
 
         for (World w : Bukkit.getWorlds())
-            for (Item i : w.getEntitiesByClass(Item.class))
-                if (NBTWrapper.of(i.getItemStack()).getBoolean("hat"))
+            for (Item i : w.getEntitiesByClass(Item.class)) {
+                NBTWrapper nbt = NBTWrapper.of(i.getItemStack());
+                if (nbt.getBoolean("hat") || nbt.hasString("gadget"))
                     i.remove();
+            }
     };
 
     public static final BukkitRunnable SYNC_TICK_RUNNABLE = new BukkitRunnable() {

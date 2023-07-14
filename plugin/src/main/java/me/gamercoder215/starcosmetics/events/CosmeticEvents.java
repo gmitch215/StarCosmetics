@@ -10,15 +10,23 @@ import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
+import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
+import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.util.EulerAngle;
@@ -134,6 +142,51 @@ public final class CosmeticEvents implements Listener {
             CosmeticLocation<?> ground = sp.getSelectedTrail(TrailType.GROUND);
             if (ground != null) ((Trail<?>) ground.getParent()).run(p, ground);
         }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Player p = event.getPlayer();
+        ItemStack item = event.getItem();
+        if (item == null) return;
+
+        NBTWrapper nbt = NBTWrapper.of(item);
+        if (!nbt.hasString("gadget")) return;
+
+        GadgetSelection selection = (GadgetSelection) CosmeticLocation.getByFullKey(nbt.getString("gadget"));
+        if (selection == null) return;
+
+        event.setUseItemInHand(Event.Result.DENY);
+        event.setUseInteractedBlock(Event.Result.DENY);
+
+        selection.getInput().accept(p.getEyeLocation());
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if (event.isCancelled()) return;
+
+        Entity damager = event.getDamager();
+        if (damager.hasMetadata("cosmetic"))
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onClick(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player)) return;
+        if (e.getClickedInventory() instanceof PlayerInventory) return;
+
+        Player p = (Player) e.getWhoClicked();
+        if (e.getCursor() != null) {
+            NBTWrapper w = NBTWrapper.of(e.getCursor());
+            if (w.hasString("gadget")) e.setCancelled(true);
+        }
+
+        if (e.getCurrentItem() != null) {
+            NBTWrapper w = NBTWrapper.of(e.getCurrentItem());
+            if (w.hasString("gadget")) e.setCancelled(true);
+        }
+
     }
 
 }

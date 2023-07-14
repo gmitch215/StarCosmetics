@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
@@ -23,6 +24,7 @@ import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -49,6 +51,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -199,6 +202,24 @@ public final class ClickEvents implements Listener {
 
                 StarPlayer sp = new StarPlayer(p);
 
+                if (loc instanceof GadgetSelection) {
+                    GadgetSelection sel = (GadgetSelection) loc;
+
+                    p.getInventory().removeItem(Arrays.stream(p.getInventory().getContents())
+                            .filter(Objects::nonNull)
+                            .filter(i -> {
+                                NBTWrapper n = NBTWrapper.of(i);
+                                return n.hasString("gadget");
+                            }).toArray(ItemStack[]::new));
+
+                    if (p.getInventory().firstEmpty() != -1)
+                        p.getInventory().addItem(sel.createGadgetItem());
+                    else {
+                        StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                        return;
+                    }
+                }
+
                 if (Trail.class.isAssignableFrom(loc.getParent().getClass()))
                     sp.setSelectedTrail(TrailType.valueOf(inv.getAttribute("trail_type", String.class)), loc);
                 else sp.setSelectedCosmetic(loc.getParent().getClass(), loc);
@@ -286,6 +307,15 @@ public final class ClickEvents implements Listener {
                 ItemStack item = e.getCurrentItem();
                 NBTWrapper nbt = of(item);
                 Class<? extends Cosmetic> clazz = nbt.getClass("cosmetic", Cosmetic.class);
+
+                if (Gadget.class.isAssignableFrom(clazz)) {
+                    p.getInventory().removeItem(Arrays.stream(p.getInventory().getContents())
+                            .filter(Objects::nonNull)
+                            .filter(i -> {
+                                NBTWrapper n = NBTWrapper.of(i);
+                                return n.hasString("gadget");
+                            }).toArray(ItemStack[]::new));
+                }
 
                 sp.setSelectedCosmetic(clazz, null);
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
@@ -772,7 +802,7 @@ public final class ClickEvents implements Listener {
         if (inv.hasAttribute("cancel")) e.setCancelled(true);
 
         if (CLICK_INVENTORY.containsKey(inv.getKey())) CLICK_INVENTORY.get(inv.getKey()).accept(inv, e);
-        
+
         NBTWrapper w = of(item);
 
         if (w.hasID()) {
@@ -798,6 +828,7 @@ public final class ClickEvents implements Listener {
         for (ItemStack item : e.getNewItems().values()) {
             if (item == null) return;
             if (item.isSimilar(ItemBuilder.GUI_BACKGROUND)) e.setCancelled(true);
+            if (of(item).hasString("gadget")) e.setCancelled(true);
         }
     }
 
