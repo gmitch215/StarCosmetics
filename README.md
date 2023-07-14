@@ -166,6 +166,8 @@ Download the plugin on our Spigot Page, and drop it in to your Spigot/Paper "plu
 
 ## 📷 Screenshots
 
+<img src="https://media.discordapp.net/attachments/894254760075603980/1129526351444070561/2023-07-14_16.33.56.png" title="StarCosmetics v1.2.0 Gadgets GUI" alt="StarCosmetics GUI">
+
 <img src="https://media.discordapp.net/attachments/894254760075603980/1089413119933161523/2023-03-25_23.57.33.png" title="Stripped Bamboo Hat" alt="Stripped Bamboo Hat">
 
 <img src="https://media.discordapp.net/attachments/894254760075603980/1089413119538909224/2023-03-25_23.57.19.png" title="Hats GUI" alt="Hats GUI">
