@@ -4,7 +4,11 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 dependencies {
     // Spigot
-    compileOnly("org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT") {
+        version {
+            strictly("1.9-R0.1-SNAPSHOT")
+        }
+    }
 
     // Implementation Dependencies
     implementation("org.bstats:bstats-bukkit:3.0.2")
@@ -48,8 +52,8 @@ tasks {
             "1_19_R1",
             "1_19_R2",
             "1_19_R3",
-            "1_20_R1"
-        ).forEach { dependsOn(project(":starcosmetics-$it").tasks["jar"]) }
+            "1_20_R1",
+        ).forEach { dependsOn(project(":starcosmetics-$it").tasks["remap"]) }
     }
 
     register("sourcesJar", Jar::class.java) {
