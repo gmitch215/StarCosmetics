@@ -113,6 +113,8 @@ public enum StarMaterial {
     COBWEB("web"),
 
     END_PORTAL_FRAME("ender_portal_frame"),
+
+    SNOWBALL("snow_ball"),
     ;
 
     private final Material defaultV;

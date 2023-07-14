@@ -16,6 +16,7 @@ import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.StarUtil;
+import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
@@ -418,7 +419,9 @@ public final class StarInventoryUtil {
     }
 
     @NotNull
-    public static Material toInputMaterial(@NotNull Object input) {
+    public static Material toInputMaterial(@NotNull Object input, @Nullable CosmeticLocation<?> location) {
+        if (location instanceof GadgetSelection) return ((GadgetSelection) location).getIcon();
+
         if (input instanceof Material || input instanceof StarMaterial) return input instanceof StarMaterial ? ((StarMaterial) input).find() : (Material) input;
         if (input instanceof Particle) return toMaterial((Particle) input);
         if (input instanceof EntityType) return toMaterial((EntityType) input);
@@ -427,7 +430,7 @@ public final class StarInventoryUtil {
             Collection<?> c = (Collection<?>) input;
             if (c.isEmpty()) throw new IllegalArgumentException("Empty Input List");
 
-            return toInputMaterial(c.stream().findFirst().orElse(null));
+            return toInputMaterial(c.stream().findFirst().orElse(null), location);
         }
 
         if (input instanceof String) {
@@ -457,7 +460,7 @@ public final class StarInventoryUtil {
         else if (input instanceof AnimatedHatData)
             item = ((AnimatedHatData) input).getFrames().get(0).getValue();
         else
-            item = new ItemStack(toInputMaterial(input));
+            item = new ItemStack(toInputMaterial(input, loc));
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + loc.getDisplayName());
@@ -468,7 +471,7 @@ public final class StarInventoryUtil {
 
         ChatColor c = loc.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
 
-        if (!loc.getRarity().hasVisibleRequirements() || loc.isUnlocked(p)) {
+        if (!loc.getRarity().hasInvisibleRequirements() || loc.isUnlocked(p)) {
             lore.add(" ");
             CompletionCriteria criteria = loc.getCompletionCriteria();
 
