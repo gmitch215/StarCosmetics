@@ -19,10 +19,23 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 - **Custom Structures** - Spawn temporary structures that players can play around!
 - **Pets** - Spawn a best friend to play along with!
 - **Sound Effects** - Create sound effects for your players to use, on any triggered event.
+- **Gadgets** - Fun, harmless toys for you and your players to use!
 
 ---
 
 ## 📓 Changelog
+
+🔫 v1.2.0 - July 14, 2023
+- Gradle Updates
+- **Introduction of Gadgets**
+  - 5 current Gadgets to play around with
+  - More Coming Soon!
+- Decorated Pot Hats
+- Optimized GUI Loading
+- Translation Fixes
+- API Improvements & Fixes
+  - Rename Rarity#isVisibleRequirements to Rarity#isInvisibleRequirements 
+- Other New Features
 
 🔧 v1.1.2 - May 28, 2023
 - Gradle Updates
