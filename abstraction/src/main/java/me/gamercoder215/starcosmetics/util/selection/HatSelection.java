@@ -10,6 +10,7 @@ import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ public final class HatSelection extends CosmeticSelection<Object> {
     }
 
     public HatSelection(String name, ItemStack object, CompletionCriteria criteria, Rarity rarity) {
-        super(NBTWrapper.builder(object, nbt -> nbt.set("hat", true)), criteria, rarity);
+        super(NBTWrapper.builder(object, meta -> meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES), nbt -> nbt.set("hat", true)), criteria, rarity);
 
         this.parent = BaseHat.NORMAL;
         this.name = name;
