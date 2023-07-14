@@ -2,22 +2,16 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
-import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
-import me.gamercoder215.starcosmetics.util.selection.HatSelection;
-import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
-import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.Statistic;
-import org.bukkit.entity.EntityType;
+import me.gamercoder215.starcosmetics.util.selection.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -464,19 +458,58 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-        .add(new HatSelection("ores", of(30,
-                        Material.COAL_ORE, Material.matchMaterial("COPPER_ORE"), Material.IRON_ORE,
-                        Material.LAPIS_ORE, Material.REDSTONE_ORE, Material.GOLD_ORE,
-                        Material.DIAMOND_ORE, Material.EMERALD_ORE
-                ), fromMined(255, Material.COAL_ORE), RARE))
-        
-        .add(new HatSelection("ore_blocks", of(40,
-                        Material.COAL_BLOCK, Material.matchMaterial("COPPER_BLOCK"), Material.IRON_BLOCK,
-                        Material.LAPIS_BLOCK, Material.REDSTONE_BLOCK, Material.GOLD_BLOCK,
-                        Material.DIAMOND_BLOCK, Material.EMERALD_BLOCK
-                ), fromCrafted(565, Material.IRON_BLOCK), EPIC))
-        
-        .build();
+            .add(new HatSelection("ores", of(30,
+                            Material.COAL_ORE, Material.matchMaterial("COPPER_ORE"), Material.IRON_ORE,
+                            Material.LAPIS_ORE, Material.REDSTONE_ORE, Material.GOLD_ORE,
+                            Material.DIAMOND_ORE, Material.EMERALD_ORE
+                    ), fromMined(255, Material.COAL_ORE), RARE))
+            .add(new HatSelection("ore_blocks", of(40,
+                            Material.COAL_BLOCK, Material.matchMaterial("COPPER_BLOCK"), Material.IRON_BLOCK,
+                            Material.LAPIS_BLOCK, Material.REDSTONE_BLOCK, Material.GOLD_BLOCK,
+                            Material.DIAMOND_BLOCK, Material.EMERALD_BLOCK
+                    ), fromCrafted(565, Material.IRON_BLOCK), EPIC))
+            .build();
+
+    // Gadgets
+
+    private static final List<CosmeticSelection<?>> GADGETS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new GadgetSelection("snowball", StarMaterial.SNOWBALL.find(), loc -> {
+                Snowball s = loc.getWorld().spawn(loc, Snowball.class);
+                s.setMetadata("cosmetic", new FixedMetadataValue(StarConfig.getPlugin(), true));
+                s.setVelocity(loc.getDirection().multiply(1.5));
+
+                loc.getWorld().playSound(loc, Sound.ENTITY_SNOWBALL_THROW, 2F, r.nextFloat(0.3F, 0.6F));
+            }, fromMined(30, Material.SNOW_BLOCK), COMMON))
+
+            .add(new GadgetSelection("firework", StarMaterial.FIREWORK_ROCKET.find(), loc -> {
+                Firework f = loc.getWorld().spawn(loc, Firework.class);
+                f.setMetadata("cosmetic", new FixedMetadataValue(StarConfig.getPlugin(), true));
+
+                FireworkMeta meta = f.getFireworkMeta();
+                meta.setPower(r.nextInt(1, 4));
+                meta.addEffect(FireworkEffect.builder()
+                        .withColor(Color.fromRGB(r.nextInt(16777215)))
+                        .withFade(Color.fromRGB(r.nextInt(16777215)))
+                        .flicker(r.nextBoolean())
+                        .withTrail()
+                        .build()
+                );
+
+                f.setFireworkMeta(meta);
+            }, fromCrafted(50, StarMaterial.FIREWORK_ROCKET.find()), UNCOMMON))
+
+            .add(new GadgetSelection("lightning", Material.BONE, loc -> loc.getWorld().strikeLightningEffect(loc),
+                    fromKilled(150, EntityType.CREEPER), RARE))
+
+            .add(new GadgetSelection("fireball", Material.BLAZE_ROD, loc -> {
+                LargeFireball f = loc.getWorld().spawn(loc, LargeFireball.class);
+                f.setMetadata("cosmetic", new FixedMetadataValue(StarConfig.getPlugin(), true));
+
+                f.setDirection(loc.getDirection());
+                f.setIsIncendiary(false);
+                f.setYield(0);
+            }, fromKilled(250, EntityType.BLAZE), EPIC))
+            .build();
         
     // Selection Map
 
@@ -489,6 +522,8 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .put(BaseHat.NORMAL, NORMAL_HATS)
             .put(BaseHat.ANIMATED, ANIMATED_HATS)
+
+            .put(BaseGadget.INSTANCE, GADGETS)
             .build();
 
     @Override

@@ -2,22 +2,15 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
-import org.bukkit.block.DecoratedPot;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -56,28 +49,9 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
         return decoratedPot(front, back, front, back);
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private static ItemStack decoratedPot(Material... materials) {
         if (materials.length != 4) throw new IllegalArgumentException("Must have 4 materials");
-
-        ItemStack pot = new ItemStack(Material.DECORATED_POT);
-        if (Arrays.stream(materials).allMatch(m -> m == Material.BRICK)) return pot;
-
-        BlockStateMeta meta = (BlockStateMeta) pot.getItemMeta();
-
-        StringBuilder sherds = new StringBuilder();
-        sherds.append("{sherds:[");
-        for (int i = 0; i < materials.length; i++) {
-            Material m = materials[i];
-            sherds.append("\"minecraft:").append(m.name().toLowerCase()).append("\"");
-            if (i != materials.length - 1) sherds.append(",");
-        }
-        sherds.append("]}");
-
-        DecoratedPot state = (DecoratedPot) Bukkit.createBlockData(Material.DECORATED_POT, sherds.toString()).createBlockState();
-        meta.setBlockState(state);
-        pot.setItemMeta(meta);
-        return pot;
+        return w.createDecoratedPot(materials);
     }
 
     private static final List<CosmeticSelection<?>> NORMAL_HATS = ImmutableList.<CosmeticSelection<?>>builder()
@@ -116,6 +90,8 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_19_R3"))
             .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_19_R3"))
+
+            .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_19_R3"))
             .build();
 
 

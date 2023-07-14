@@ -4,10 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail;
-import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import org.bukkit.Material;
@@ -39,6 +36,8 @@ final class CosmeticSelections1_18 implements CosmeticSelections {
 
             .put(BaseHat.NORMAL, getForVersion(BaseHat.NORMAL, "1_17"))
             .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_17"))
+
+            .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_17"))
             .build();
 
     @Override
