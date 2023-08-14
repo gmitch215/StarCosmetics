@@ -1,8 +1,10 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.pet;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 
 public final class StarPet implements Pet {
@@ -26,6 +28,7 @@ public final class StarPet implements Pet {
 
         entity.setCustomName(getPetName());
         entity.setCustomNameVisible(true);
+        entity.setMetadata("starcosmetics:nointeract", new FixedMetadataValue(StarConfig.getPlugin(), true));
 
         entity.getEquipment().setHelmet(getInfo().getIcon());
         if (info.getAction() != null ) info.getAction().accept(entity);

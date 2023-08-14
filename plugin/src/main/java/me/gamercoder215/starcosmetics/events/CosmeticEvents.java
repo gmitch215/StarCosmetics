@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -160,6 +161,13 @@ public final class CosmeticEvents implements Listener {
         event.setUseInteractedBlock(Event.Result.DENY);
 
         selection.getInput().accept(p.getEyeLocation());
+    }
+
+    @EventHandler
+    public void onInteract(PlayerArmorStandManipulateEvent event) {
+        ArmorStand stand = event.getRightClicked();
+        if (stand.hasMetadata("starcosmetics:nointeract"))
+            event.setCancelled(true);
     }
 
     @EventHandler
