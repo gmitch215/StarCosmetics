@@ -1,0 +1,19 @@
+# Custom Cosmetics File for StarCosmetics
+# Version ${project.version}
+
+# All Particle Shapes are available here:
+# https://starcosmetics.gamercoder215.me/me/gamercoder215/starcosmetics/api/cosmetics/particle/ParticleSize.html
+
+# Shape Objects accept the following types:
+# - Item & Block Materials (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)
+# - Particles (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html)
+particle-shapes: []
+  # Example:
+  # - id: mycosmetic
+  #   name: My Cosmetic
+  #   shape: Square # Case Insensitive
+  #   object: GRASS_BLOCK
+  #   completion:
+  #     enabled: true # Set to false to be unlocked by default
+  #
+
