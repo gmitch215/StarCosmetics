@@ -27,9 +27,9 @@ public final class ParticleSelection extends CosmeticSelection<Object> {
         this.parent = parent;
     }
 
-    public ParticleSelection(Map<String, Object> customData) {
-        super
-    }
+//    public ParticleSelection(Map<String, Object> customData) {
+//        super
+//    }
 
     @Override
     public String getKey() {
