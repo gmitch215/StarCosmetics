@@ -1,7 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 dependencies {
     // Spigot
     compileOnly("org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT") {
@@ -63,13 +59,11 @@ tasks {
         from(sourceSets["main"].allSource)
     }
 
-    withType<ProcessResources> {
-        filesMatching("plugin.yml") {
-            expand(project.properties)
-        }
+    processResources {
+        expand(project.properties)
     }
 
-    withType<ShadowJar> {
+    shadowJar {
         dependsOn("sourcesJar")
     }
 }
