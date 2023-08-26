@@ -26,12 +26,15 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static me.gamercoder215.starcosmetics.util.Constants.w;
 
 public interface Wrapper {
 
     SecureRandom r = Constants.r;
+
+    String PACKET_INJECTOR_ID = "starcosmetics:packet_injector";
 
     Map<UUID, StarPlayer> STAR_PLAYER_CACHE = new HashMap<>();
 
@@ -208,6 +211,12 @@ public interface Wrapper {
     ItemStack cleanSkull(ItemStack item);
 
     default ItemStack createDecoratedPot(Material[] sherds) { throw new UnsupportedOperationException(); }
+
+    void addPacketInjector(Player p);
+
+    void removePacketInjector(Player p);
+
+    void sendSign(Player p, Consumer<String[]> lines);
 
     // Other Utilities
 

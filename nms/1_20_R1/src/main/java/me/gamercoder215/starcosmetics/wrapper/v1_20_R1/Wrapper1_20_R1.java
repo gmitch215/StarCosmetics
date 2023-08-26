@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.v1_20_R1;
 
 import com.mojang.authlib.GameProfile;
+import io.netty.channel.Channel;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
@@ -52,6 +54,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 final class Wrapper1_20_R1 implements Wrapper {
 
@@ -276,6 +279,63 @@ final class Wrapper1_20_R1 implements Wrapper {
         }
 
         return null;
+    }
+
+    @Override
+    public void addPacketInjector(Player p) {
+        ServerPlayer sp = ((CraftPlayer) p).getHandle();
+
+        try {
+            Field connection = ServerGamePacketListenerImpl.class.getDeclaredField("h");
+            connection.setAccessible(true);
+            Channel ch = ((Connection) connection.get(sp.connection)).channel;
+
+            if (ch.pipeline().get(PACKET_INJECTOR_ID) != null) return;
+            ch.pipeline().addAfter("decoder", PACKET_INJECTOR_ID, new PacketHandler1_20_R1(p));
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
+    }
+
+    @Override
+    public void removePacketInjector(Player p) {
+        ServerPlayer sp = ((CraftPlayer) p).getHandle();
+
+        try {
+            Field connection = ServerGamePacketListenerImpl.class.getDeclaredField("h");
+            connection.setAccessible(true);
+            Channel ch = ((Connection) connection.get(sp.connection)).channel;
+
+            if (ch.pipeline().get(PACKET_INJECTOR_ID) == null) return;
+            ch.pipeline().remove(PACKET_INJECTOR_ID);
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
+    }
+
+    @Override
+    public void sendSign(Player p, Consumer<String[]> lines) {
+        addPacketInjector(p);
+
+        Location l = p.getLocation();
+        BlockPos pos = new BlockPos(l.getBlockX(), l.getBlockY(), l.getBlockZ());
+        net.minecraft.world.level.block.state.BlockState old = ((CraftWorld) l.getWorld()).getHandle().getBlockState(pos);
+
+        ClientboundBlockUpdatePacket sent1 = new ClientboundBlockUpdatePacket(pos, Blocks.OAK_SIGN.defaultBlockState());
+        ((CraftPlayer) p).getHandle().connection.send(sent1);
+
+        ClientboundOpenSignEditorPacket sent2 = new ClientboundOpenSignEditorPacket(pos, true);
+        ((CraftPlayer) p).getHandle().connection.send(sent2);
+
+        PacketHandler1_20_R1.PACKET_HANDLERS.put(p.getUniqueId(), packetO -> {
+            if (!(packetO instanceof ServerboundSignUpdatePacket packet)) return false;
+
+            ClientboundBlockUpdatePacket sent3 = new ClientboundBlockUpdatePacket(pos, old);
+            ((CraftPlayer) p).getHandle().connection.send(sent3);
+
+            lines.accept(packet.getLines());
+            return true;
+        });
     }
 
 }

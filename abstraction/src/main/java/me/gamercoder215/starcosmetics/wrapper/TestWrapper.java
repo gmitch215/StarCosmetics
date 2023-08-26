@@ -12,6 +12,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.function.Consumer;
+
 public final class TestWrapper implements Wrapper {
     @Override
     public int getCommandVersion() {
@@ -66,6 +68,15 @@ public final class TestWrapper implements Wrapper {
 
     @Override
     public ItemStack cleanSkull(ItemStack item) { return null; }
+
+    @Override
+    public void addPacketInjector(Player p) {}
+
+    @Override
+    public void removePacketInjector(Player p) {}
+
+    @Override
+    public void sendSign(Player p, Consumer<String[]> lines) {}
 
 
 }

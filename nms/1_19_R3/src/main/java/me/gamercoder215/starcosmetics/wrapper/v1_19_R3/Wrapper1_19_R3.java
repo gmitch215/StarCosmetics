@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.v1_19_R3;
 
 import com.mojang.authlib.GameProfile;
+import io.netty.channel.Channel;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
@@ -44,6 +46,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 final class Wrapper1_19_R3 implements Wrapper {
 
@@ -243,6 +246,68 @@ final class Wrapper1_19_R3 implements Wrapper {
         nmsitem.setTag(tag);
         return CraftItemStack.asBukkitCopy(nmsitem);
     }
+
+    @Override
+    public void addPacketInjector(Player p) {
+        ServerPlayer sp = ((CraftPlayer) p).getHandle();
+
+        try {
+            Field connection = ServerGamePacketListenerImpl.class.getDeclaredField("h");
+            connection.setAccessible(true);
+            Channel ch = ((Connection) connection.get(sp.connection)).channel;
+
+            if (ch.pipeline().get(PACKET_INJECTOR_ID) != null) return;
+            ch.pipeline().addAfter("decoder", PACKET_INJECTOR_ID, new PacketHandler1_19_R3(p));
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
+    }
+
+    @Override
+    public void removePacketInjector(Player p) {
+        ServerPlayer sp = ((CraftPlayer) p).getHandle();
+
+        try {
+            Field connection = ServerGamePacketListenerImpl.class.getDeclaredField("h");
+            connection.setAccessible(true);
+            Channel ch = ((Connection) connection.get(sp.connection)).channel;
+
+            if (ch.pipeline().get(PACKET_INJECTOR_ID) == null) return;
+            ch.pipeline().remove(PACKET_INJECTOR_ID);
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
+    }
+
+    @Override
+    public void sendSign(Player p, Consumer<String[]> lines) {
+        addPacketInjector(p);
+
+        Location l = p.getLocation();
+        BlockPos pos = new BlockPos(l.getBlockX(), 255, l.getBlockZ());
+
+        ClientboundBlockUpdatePacket sent1 = new ClientboundBlockUpdatePacket(pos, Blocks.OAK_SIGN.defaultBlockState());
+        ((CraftPlayer) p).getHandle().connection.send(sent1);
+
+        ClientboundOpenSignEditorPacket sent2 = new ClientboundOpenSignEditorPacket(pos);
+        ((CraftPlayer) p).getHandle().connection.send(sent2);
+
+        PacketHandler1_19_R3.PACKET_HANDLERS.put(p.getUniqueId(), packetO -> {
+            if (!(packetO instanceof ServerboundSignUpdatePacket packet)) return false;
+
+            lines.accept(packet.getLines());
+            return true;
+        });
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ClientboundBlockUpdatePacket sent3 = new ClientboundBlockUpdatePacket(pos, Blocks.AIR.defaultBlockState());
+                ((CraftPlayer) p).getHandle().connection.send(sent3);
+            }
+        }.runTaskLater(StarConfig.getPlugin(), 2L);
+    }
+
 
 }
 
