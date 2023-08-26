@@ -32,6 +32,7 @@ import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.inventory.InventorySelector;
 import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import me.gamercoder215.starcosmetics.wrapper.commands.CommandWrapper;
 import me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections;
@@ -107,6 +108,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     }
 
     private static FileConfiguration config;
+    private static FileConfiguration cosmeticsFile;
 
     private static final List<Class<? extends ConfigurationSerializable>> SERIALIZABLE = ImmutableList.<Class<? extends ConfigurationSerializable>>builder()
             .add(SoundEventSelection.class)
@@ -126,6 +128,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         saveDefaultConfig();
 
         config = StarConfig.loadConfig();
+        cosmeticsFile = StarConfig.loadCosmeticsFile();
         getLogger().info("Loaded Files...");
 
         registerEvents();
@@ -133,6 +136,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         cw = getCommandWrapper();
         SERIALIZABLE.forEach(ConfigurationSerialization::registerClass);
         loadConstructors();
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            getCached(p); // Load Player Cache
+            w.addPacketInjector(p);
+        }
 
         getLogger().info("Loaded Classes...");
 
@@ -154,7 +161,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         // bStats
         Metrics m = new Metrics(this, BSTATS_ID);
-        m.addCustomChart(new SimplePie("language", getLocale()::getDisplayLanguage));
+        m.addCustomChart(new SimplePie("language", this::getLanguage));
 
         getLogger().info("Loaded Dependencies...");
 
@@ -194,6 +201,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         StarConfig.updateCache();
         StarPlayerUtil.onDisable();
+        for (Player p : Bukkit.getOnlinePlayers()) w.removePacketInjector(p);
 
         getLogger().info("Removed Data...");
 
@@ -381,6 +389,42 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         saveConfig();
     }
 
+    @Override
+    public @NotNull Set<CosmeticLocation<?>> getCustomCosmetics() {
+        Set<CosmeticLocation<?>> cosmetics = new HashSet<>();
+
+        // Particle Shapes
+        List<Map<String, Object>> particleShapes = cosmeticsFile.getMapList("particle-shapes").stream()
+                .map(map -> map.entrySet().stream()
+                        .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey().toString(), (Object) entry.getValue()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                )
+                .collect(Collectors.toList());
+
+        for (Map<String, Object> map : particleShapes)
+            cosmetics.add(new ParticleSelection(map));
+
+        return cosmetics;
+    }
+
+    @Override
+    public int getInternalMaxHologramLimit() {
+        return w.isLegacy() ? 16 : 48;
+    }
+
+    @Override
+    public int getMaxHologramLimit() {
+        return config.getInt("cosmetics.max-hologram-limit", getInternalMaxHologramLimit());
+    }
+
+    @Override
+    public void setMaxHologramLimit(int limit) {
+        if (limit < 5 || limit > getInternalMaxHologramLimit()) throw new IllegalArgumentException("Limit must be between 5 and " + getInternalMaxHologramLimit() + "!");
+
+        config.set("cosmetics.max-hologram-limit", limit);
+        saveConfig();
+    }
+
     // Other Utilities
 
     private static OfflinePlayer getPlayer(String name) {
@@ -405,7 +449,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                     ));
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                print(e);
             }
         } else
             return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(StandardCharsets.UTF_8)));
@@ -562,16 +606,24 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         List<CosmeticLocation<?>> locs = new ArrayList<>();
         if (parentClass == null) return locs;
 
-        if (Cosmetic.class.equals(parentClass))
-            return getCosmeticSelections().getAllSelections()
+        if (Cosmetic.class.equals(parentClass)) {
+            List<CosmeticLocation<?>> all = getCosmeticSelections().getAllSelections()
                     .entrySet()
                     .stream()
                     .flatMap(e -> e.getValue().stream())
                     .collect(Collectors.toList());
 
+            all.addAll(getCustomCosmetics());
+
+            return all;
+        }
+
         Map<Cosmetic, List<CosmeticSelection<?>>> selections = getCosmeticSelections().getAllSelections();
         for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
             if (parentClass.isInstance(entry.getKey())) locs.addAll(entry.getValue());
+
+        for (CosmeticLocation<?> loc : getCustomCosmetics())
+            if (parentClass.isInstance(loc.getParent())) locs.add(loc);
 
         Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
         locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
