@@ -443,6 +443,7 @@ public final class ClickEvents implements Listener {
                 ItemStack newItem = Generator.generateSetting(p, setting);
                 inv.setItem(e.getSlot(), newItem);
                 StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 1F, value ? 2F : 0F);
+                STAR_PLAYER_CACHE.remove(p.getUniqueId());
             })
             .put("choose:pet", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
@@ -493,7 +494,10 @@ public final class ClickEvents implements Listener {
                 Enum<?>[] values = clazz.getEnumConstants();
                 int index = Arrays.asList(values).indexOf(value);
 
-                Enum<?> next = values[(index + 1) % values.length];
+                int newIndex = index + (e.getClick().isRightClick() ? -1 : 1);
+                if (newIndex < 0) newIndex = values.length - 1;
+
+                Enum<?> next = values[newIndex % values.length];
                 sp.setSetting(setting, next);
 
                 ItemStack newItem = Generator.generateSetting(p, setting);
@@ -501,6 +505,10 @@ public final class ClickEvents implements Listener {
 
                 float pitch = 2F * (next.ordinal() / (values.length - 1F));
                 StarSound.ENTITY_ARROW_HIT_PLAYER.play(p, 1F, pitch);
+                STAR_PLAYER_CACHE.remove(p.getUniqueId());
+
+                if (setting.equals(PlayerSetting.HOLOGRAM_FORMAT))
+                    StarPlayerUtil.getHologram(p);
             })
             .put("toggle:setting", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();
@@ -586,6 +594,46 @@ public final class ClickEvents implements Listener {
                 updateCache(p);
 
                 p.getEquipment().setHelmet(null);
+            })
+            .put("cosmetic:hologram:set", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                w.sendSign(p, lines -> {
+                    String messageL = String.join(" ", lines).trim();
+                    final String message = messageL.substring(0, Math.min(messageL.length(), StarConfig.getConfig().getMaxHologramLimit()));
+
+                    if (message.isEmpty()) {
+                        StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
+                        return;
+                    }
+
+                    StarInventory confirm = InventorySelector.confirm(p, () -> {
+                        sp.setHologramMessage(message);
+                        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+
+                        STAR_PLAYER_CACHE.remove(p.getUniqueId());
+                        StarPlayerUtil.getHologram(p);
+                        cw.hologramInfo(p);
+                    });
+                    confirm.setItem(13, ItemBuilder.of(StarMaterial.OAK_SIGN)
+                            .name(ChatColor.YELLOW + "\"" + message + "\"")
+                            .build()
+                    );
+                });
+            })
+            .put("cosmetic:hologram:reset", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                InventorySelector.confirm(p, () -> {
+                    sp.setHologramMessage(null);
+                    StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+
+                    STAR_PLAYER_CACHE.remove(p.getUniqueId());
+                    StarPlayerUtil.getHologram(p);
+                    cw.hologramInfo(p);
+                });
             })
 
             .build();

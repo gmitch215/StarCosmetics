@@ -355,6 +355,16 @@ public final class CompletionCriteria {
         return CompletionCriteria.fromCrafted(260, Material.JUKEBOX);
     }
 
+    /**
+     * Generates a CompletionCriteria with the given permission.
+     * @param permission Permission to check for
+     * @return CompletionCriteria with the given criteria
+     */
+    @NotNull
+    public static CompletionCriteria fromPermission(String permission) {
+        return new CompletionCriteria(p -> p.hasPermission(permission), p -> p.hasPermission(permission) ? 100 : 0, "criteria.permission", permission);
+    }
+
     private static String formatTime(long ticks) {
         double seconds = (double) ticks / 20D;
 

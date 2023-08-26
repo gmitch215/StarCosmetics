@@ -23,9 +23,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -139,6 +137,11 @@ public final class CosmeticEvents implements Listener {
             }
         }
 
+        if (StarPlayerUtil.getHologram(p) != null) {
+            ArmorStand as = StarPlayerUtil.getHologram(p);
+            as.teleport(p.getEyeLocation().add(0, 0.3, 0));
+        }
+
         if (!pitchChanged(e.getFrom(), e.getTo())) {
             CosmeticLocation<?> ground = sp.getSelectedTrail(TrailType.GROUND);
             if (ground != null) ((Trail<?>) ground.getParent()).run(p, ground);
@@ -195,6 +198,18 @@ public final class CosmeticEvents implements Listener {
             if (w.hasString("gadget")) e.setCancelled(true);
         }
 
+    }
+
+    // Function Events
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        w.addPacketInjector(e.getPlayer());
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        w.removePacketInjector(e.getPlayer());
     }
 
 }

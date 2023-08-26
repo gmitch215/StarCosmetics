@@ -175,7 +175,7 @@ public final class InventorySelector {
         p.openInventory(inv);
     }
 
-    public static void confirm(@NotNull Player p, @NotNull Runnable confirmR, @NotNull Runnable cancelR) {
+    public static StarInventory confirm(@NotNull Player p, @NotNull Runnable confirmR, @NotNull Runnable cancelR) {
         StarInventory inv = Generator.genGUI("confirm_inv", 27, get("menu.are_you_sure"));
         inv.setCancelled();
         inv.setAttribute("confirm_action", confirmR);
@@ -202,10 +202,11 @@ public final class InventorySelector {
         inv.setItem(15, cancel);
 
         p.openInventory(inv);
+        return inv;
     }
 
-    public static void confirm(@NotNull Player p, @NotNull Runnable confirmR) {
-        confirm(p, confirmR, () -> {
+    public static StarInventory confirm(@NotNull Player p, @NotNull Runnable confirmR) {
+        return confirm(p, confirmR, () -> {
             p.closeInventory();
             StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
         });

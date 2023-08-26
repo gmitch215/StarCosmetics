@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetCosmetics;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetPosition;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a setting available to players.
@@ -57,6 +59,12 @@ public final class PlayerSetting<T> {
     public static final PlayerSetting<PetCosmetics> PET_COSMETICS =
             ofEnum("pet_cosmetics", "settings.pet_cosmetics", PetCosmetics.OWNER_ONLY);
 
+    /**
+     * The color/bold format for the Hologram.
+     */
+    public static final PlayerSetting<HologramFormat> HOLOGRAM_FORMAT =
+            ofEnum("hologram_format", "settings.hologram_format", HologramFormat.YELLOW);
+
     // Setting Enums
 
     /**
@@ -93,6 +101,28 @@ public final class PlayerSetting<T> {
          */
         public double getLaunchPower() {
             return launchPower;
+        }
+    }
+
+    /**
+     * Represents a Hologram Format.
+     */
+    public enum HologramFormat {
+
+        DARK_RED(ChatColor.DARK_RED), RED(ChatColor.RED), GOLD(ChatColor.GOLD), YELLOW(ChatColor.YELLOW), DARK_GREEN(ChatColor.DARK_GREEN), GREEN(ChatColor.GREEN), AQUA(ChatColor.AQUA), DARK_AQUA(ChatColor.DARK_AQUA), DARK_BLUE(ChatColor.DARK_BLUE), BLUE(ChatColor.BLUE), LIGHT_PURPLE(ChatColor.LIGHT_PURPLE), DARK_PURPLE(ChatColor.DARK_PURPLE), WHITE(ChatColor.WHITE), GRAY(ChatColor.GRAY), DARK_GRAY(ChatColor.DARK_GRAY), BLACK(ChatColor.BLACK),
+
+        BOLD_DARK_RED(ChatColor.DARK_RED, ChatColor.BOLD), BOLD_RED(ChatColor.RED, ChatColor.BOLD), BOLD_GOLD(ChatColor.GOLD, ChatColor.BOLD), BOLD_YELLOW(ChatColor.YELLOW, ChatColor.BOLD), BOLD_DARK_GREEN(ChatColor.DARK_GREEN, ChatColor.BOLD), BOLD_GREEN(ChatColor.GREEN, ChatColor.BOLD), BOLD_AQUA(ChatColor.AQUA, ChatColor.BOLD), BOLD_DARK_AQUA(ChatColor.DARK_AQUA, ChatColor.BOLD), BOLD_DARK_BLUE(ChatColor.DARK_BLUE, ChatColor.BOLD), BOLD_BLUE(ChatColor.BLUE, ChatColor.BOLD), BOLD_LIGHT_PURPLE(ChatColor.LIGHT_PURPLE, ChatColor.BOLD), BOLD_DARK_PURPLE(ChatColor.DARK_PURPLE, ChatColor.BOLD), BOLD_WHITE(ChatColor.WHITE, ChatColor.BOLD), BOLD_GRAY(ChatColor.GRAY, ChatColor.BOLD), BOLD_DARK_GRAY(ChatColor.DARK_GRAY, ChatColor.BOLD), BOLD_BLACK(ChatColor.BLACK, ChatColor.BOLD),
+        ;
+
+        private final String toString;
+
+        HologramFormat(ChatColor... format) {
+            this.toString = Arrays.stream(format).map(ChatColor::toString).collect(Collectors.joining());
+        }
+
+        @Override
+        public String toString() {
+            return toString;
         }
     }
 
@@ -250,5 +280,18 @@ public final class PlayerSetting<T> {
                 .filter(s -> s.getId().equalsIgnoreCase(id))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+    	if (obj == null) return false;
+    	if (!(obj instanceof PlayerSetting)) return false;
+    	PlayerSetting<?> setting = (PlayerSetting<?>) obj;
+    	return setting.getId().equals(getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 }

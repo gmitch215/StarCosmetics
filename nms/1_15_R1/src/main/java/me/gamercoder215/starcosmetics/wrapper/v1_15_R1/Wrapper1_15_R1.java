@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.v1_15_R1;
 
 import com.mojang.authlib.GameProfile;
+import io.netty.channel.Channel;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
@@ -29,6 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 final class Wrapper1_15_R1 implements Wrapper {
 
@@ -220,4 +222,58 @@ final class Wrapper1_15_R1 implements Wrapper {
         return CraftItemStack.asBukkitCopy(nmsitem);
     }
 
+    @Override
+    public void addPacketInjector(Player p) {
+        EntityPlayer sp = ((CraftPlayer) p).getHandle();
+        Channel ch = sp.playerConnection.networkManager.channel;
+
+        if (ch.pipeline().get(PACKET_INJECTOR_ID) != null) return;
+
+        ch.pipeline().addAfter("decoder", PACKET_INJECTOR_ID, new PacketHandler1_15_R1(p));
+    }
+
+    @Override
+    public void removePacketInjector(Player p) {
+        EntityPlayer sp = ((CraftPlayer) p).getHandle();
+        Channel ch = sp.playerConnection.networkManager.channel;
+
+        if (ch.pipeline().get(PACKET_INJECTOR_ID) == null) return;
+        ch.pipeline().remove(PACKET_INJECTOR_ID);
+    }
+
+    @Override
+    public void sendSign(Player p, Consumer<String[]> lines) {
+        addPacketInjector(p);
+
+        Location l = p.getLocation();
+        WorldServer ws = ((CraftWorld) l.getWorld()).getHandle();
+        BlockPosition pos = new BlockPosition(l.getBlockX(), 255, l.getBlockZ());
+
+        PacketPlayOutBlockChange sent1 = new PacketPlayOutBlockChange(ws, pos);
+        sent1.block = Blocks.OAK_SIGN.getBlockData();
+
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(sent1);
+
+        PacketPlayOutOpenSignEditor sent2 = new PacketPlayOutOpenSignEditor(pos);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(sent2);
+
+        PacketHandler1_15_R1.PACKET_HANDLERS.put(p.getUniqueId(), packetO -> {
+            if (!(packetO instanceof PacketPlayInUpdateSign)) return false;
+            PacketPlayInUpdateSign packet = (PacketPlayInUpdateSign) packetO;
+
+            lines.accept(packet.c());
+            return true;
+        });
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                PacketPlayOutBlockChange sent3 = new PacketPlayOutBlockChange(ws, pos);
+                sent3.block = Blocks.AIR.getBlockData();
+
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(sent3);
+            }
+        }.runTaskLater(StarConfig.getPlugin(), 2L);
+    }
+    
 }

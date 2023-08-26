@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.wrapper.v1_17_R1;
 
 import com.mojang.authlib.GameProfile;
+import io.netty.channel.Channel;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
@@ -23,6 +24,7 @@ import net.minecraft.server.network.PlayerConnection;
 import net.minecraft.sounds.SoundCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.EntityItem;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.phys.Vec3D;
 import org.bukkit.*;
@@ -40,6 +42,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 final class Wrapper1_17_R1 implements Wrapper {
 
@@ -233,6 +236,54 @@ final class Wrapper1_17_R1 implements Wrapper {
         tag.set("SkullOwner", skullOwner);
         nmsitem.setTag(tag);
         return CraftItemStack.asBukkitCopy(nmsitem);
+    }
+
+    @Override
+    public void addPacketInjector(Player p) {
+        EntityPlayer sp = ((CraftPlayer) p).getHandle();
+        Channel ch = sp.b.a.k;
+
+        if (ch.pipeline().get(PACKET_INJECTOR_ID) != null) return;
+
+        ch.pipeline().addAfter("decoder", PACKET_INJECTOR_ID, new PacketHandler1_17_R1(p));
+    }
+
+    @Override
+    public void removePacketInjector(Player p) {
+        EntityPlayer sp = ((CraftPlayer) p).getHandle();
+        Channel ch = sp.b.a.k;
+
+        if (ch.pipeline().get(PACKET_INJECTOR_ID) == null) return;
+        ch.pipeline().remove(PACKET_INJECTOR_ID);
+    }
+
+    @Override
+    public void sendSign(Player p, Consumer<String[]> lines) {
+        addPacketInjector(p);
+
+        Location l = p.getLocation();
+        BlockPosition pos = new BlockPosition(l.getBlockX(), 255, l.getBlockZ());
+
+        PacketPlayOutBlockChange sent1 = new PacketPlayOutBlockChange(pos, Blocks.cg.getBlockData());
+        ((CraftPlayer) p).getHandle().b.sendPacket(sent1);
+
+        PacketPlayOutOpenSignEditor sent2 = new PacketPlayOutOpenSignEditor(pos);
+        ((CraftPlayer) p).getHandle().b.sendPacket(sent2);
+
+        PacketHandler1_17_R1.PACKET_HANDLERS.put(p.getUniqueId(), packetO -> {
+            if (!(packetO instanceof PacketPlayInUpdateSign packet)) return false;
+
+            lines.accept(packet.c());
+            return true;
+        });
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                PacketPlayOutBlockChange sent3 = new PacketPlayOutBlockChange(pos, Blocks.a.getBlockData());
+                ((CraftPlayer) p).getHandle().b.sendPacket(sent3);
+            }
+        }.runTaskLater(StarConfig.getPlugin(), 2L);
     }
 
 }
