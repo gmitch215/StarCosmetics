@@ -20,10 +20,19 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 - **Pets** - Spawn a best friend to play along with!
 - **Sound Effects** - Create sound effects for your players to use, on any triggered event.
 - **Gadgets** - Fun, harmless toys for you and your players to use!
+- **Holograms** - Messages shown above your head!
 
 ---
 
 ## 📓 Changelog
+
+📰 v1.2.1 - August 26, 2023
+- Gradle Updates
+- **Armor Stand Holograms**
+  - Custom Messages available Above your Head
+  - Change Color & Bold Texture
+- Minor Bug Fixes
+- API Improvements & Fixes
 
 🔫 v1.2.0 - July 14, 2023
 - Gradle Updates
@@ -87,9 +96,11 @@ First Release of StarCosmetics
 
 ## 🔮 Future Features
 
-#### v1.2.0
-- [ ] Custom Player Soundtracks
+#### v1.2.2
 - [ ] Custom Structures using StarCosmetics Structure Files (.scs)
+
+#### v1.3.0
+- [ ] More Animations
 
 ---
 
@@ -165,6 +176,8 @@ Download the plugin on our Spigot Page, and drop it in to your Spigot/Paper "plu
 ---
 
 ## 📷 Screenshots
+
+<img src="https://media.discordapp.net/attachments/894254760075603980/1145101159367987281/2023-08-26_15.51.54.png" title="StarCosmetics v1.2.1 Holograms" alt="StarCosmetics Holograms">
 
 <img src="https://media.discordapp.net/attachments/894254760075603980/1129526351444070561/2023-07-14_16.33.56.png" title="StarCosmetics v1.2.0 Gadgets GUI" alt="StarCosmetics GUI">
 
