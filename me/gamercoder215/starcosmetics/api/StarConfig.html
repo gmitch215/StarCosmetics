@@ -141,6 +141,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Fetches the StarCosmetics Configuration File.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#getCosmeticsFile()" class="member-name-link">getCosmeticsFile</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Fetches the StarCosmetics Custom Cosmetics File.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="cosmetics/CosmeticLocation.html" title="interface in me.gamercoder215.starcosmetics.api.cosmetics">CosmeticLocation</a>&lt;?&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getCustomCosmetics()" class="member-name-link">getCustomCosmetics</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Fetches all of the custom cosmetics found in cosmetics.yml.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#getDataFolder()" class="member-name-link">getDataFolder</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Fetches the plugin's data folder.</div>
@@ -155,25 +165,35 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">How long, in ticks, an entity cosmetic should last for.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getItemDisappearTime()" class="member-name-link">getItemDisappearTime</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getInternalMaxHologramLimit()" class="member-name-link">getInternalMaxHologramLimit</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Fetches the hard-coded internal maximum hologram text size limit.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getItemDisappearTime()" class="member-name-link">getItemDisappearTime</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">How long, in ticks, an item cosmetic should last for.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getLanguage()" class="member-name-link">getLanguage</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getLanguage()" class="member-name-link">getLanguage</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Fetches the current Language.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getLocale()" class="member-name-link">getLocale</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getLocale()" class="member-name-link">getLocale</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Fetches the locale based on <a href="#getLanguage()"><code>getLanguage()</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#getLogger()" class="member-name-link">getLogger</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#getLogger()" class="member-name-link">getLogger</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Fetches the StarCosmetics Logger.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getMaxHologramLimit()" class="member-name-link">getMaxHologramLimit</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Fetches the maximum hologram text size limit.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#getPlayerDirectory()" class="member-name-link">getPlayerDirectory</a>()</code></div>
@@ -248,50 +268,60 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Loads the StarCosmetics Configuration.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#print(java.lang.Throwable)" class="member-name-link">print</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/configuration/file/FileConfiguration.html" title="class or interface in org.bukkit.configuration.file" class="external-link">FileConfiguration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#loadCosmeticsFile()" class="member-name-link">loadCosmeticsFile</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Loads the StarCosmetics Custom Cosmetics File into a FileConfiguration.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#print(java.lang.Throwable)" class="member-name-link">print</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Prints a Throwable in the StarCosmetics Logger.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeBlacklistedPlayer(org.bukkit.OfflinePlayer)" class="member-name-link">removeBlacklistedPlayer</a><wbr>(@Nullable <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/OfflinePlayer.html" title="class or interface in org.bukkit" class="external-link">OfflinePlayer</a>&nbsp;player)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeBlacklistedPlayer(org.bukkit.OfflinePlayer)" class="member-name-link">removeBlacklistedPlayer</a><wbr>(@Nullable <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/OfflinePlayer.html" title="class or interface in org.bukkit" class="external-link">OfflinePlayer</a>&nbsp;player)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Removes a player from the blacklist.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeBlacklistedSound(org.bukkit.Sound)" class="member-name-link">removeBlacklistedSound</a><wbr>(@Nullable <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html" title="class or interface in org.bukkit" class="external-link">Sound</a>&nbsp;sound)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeBlacklistedSound(org.bukkit.Sound)" class="member-name-link">removeBlacklistedSound</a><wbr>(@Nullable <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html" title="class or interface in org.bukkit" class="external-link">Sound</a>&nbsp;sound)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Removes a sound from the blacklist.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setAmbientPetSoundEnabled(boolean)" class="member-name-link">setAmbientPetSoundEnabled</a><wbr>(boolean&nbsp;enabled)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setAmbientPetSoundEnabled(boolean)" class="member-name-link">setAmbientPetSoundEnabled</a><wbr>(boolean&nbsp;enabled)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Sets whether pets can play their ambient sound.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setBlacklistedPlayers(java.lang.Iterable)" class="member-name-link">setBlacklistedPlayers</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;? extends <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/OfflinePlayer.html" title="class or interface in org.bukkit" class="external-link">OfflinePlayer</a>&gt;&nbsp;players)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setBlacklistedPlayers(java.lang.Iterable)" class="member-name-link">setBlacklistedPlayers</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;? extends <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/OfflinePlayer.html" title="class or interface in org.bukkit" class="external-link">OfflinePlayer</a>&gt;&nbsp;players)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Sets the list of blacklisted players.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setBlacklistedSounds(java.lang.Iterable)" class="member-name-link">setBlacklistedSounds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html" title="class or interface in org.bukkit" class="external-link">Sound</a>&gt;&nbsp;sounds)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setBlacklistedSounds(java.lang.Iterable)" class="member-name-link">setBlacklistedSounds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html" title="class or interface in org.bukkit" class="external-link">Sound</a>&gt;&nbsp;sounds)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Sets the list of blacklisted sounds.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setBlockDisappearTime(long)" class="member-name-link">setBlockDisappearTime</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setBlockDisappearTime(long)" class="member-name-link">setBlockDisappearTime</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Sets how long, in ticks, a block cosmetic should last for.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setEntityDisappearTime(long)" class="member-name-link">setEntityDisappearTime</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setEntityDisappearTime(long)" class="member-name-link">setEntityDisappearTime</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Sets how long, in ticks, an entity cosmetic should last for.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setItemDisappearTime(long)" class="member-name-link">setItemDisappearTime</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setItemDisappearTime(long)" class="member-name-link">setItemDisappearTime</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Sets how long, in ticks, an item cosmetic should last for.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setMaxHologramLimit(int)" class="member-name-link">setMaxHologramLimit</a><wbr>(int&nbsp;limit)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Sets the maximum hologram text size limit.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setRequirementMultiplier(double)" class="member-name-link">setRequirementMultiplier</a><wbr>(double&nbsp;multiplier)</code></div>
@@ -436,6 +466,30 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>StarCosmetics Configuration</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCosmeticsFile()">
+<h3>getCosmeticsFile</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="element-name">getCosmeticsFile</span>()</div>
+<div class="block">Fetches the StarCosmetics Custom Cosmetics File.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>StarCosmetics Custom Cosmetics File</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="loadCosmeticsFile()">
+<h3>loadCosmeticsFile</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/configuration/file/FileConfiguration.html" title="class or interface in org.bukkit.configuration.file" class="external-link">FileConfiguration</a></span>&nbsp;<span class="element-name">loadCosmeticsFile</span>()</div>
+<div class="block">Loads the StarCosmetics Custom Cosmetics File into a FileConfiguration.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>StarCosmetics Custom Cosmetics File</dd>
 </dl>
 </section>
 </li>
@@ -877,6 +931,52 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>sounds</code> - Blacklisted Sounds</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCustomCosmetics()">
+<h3>getCustomCosmetics</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="cosmetics/CosmeticLocation.html" title="interface in me.gamercoder215.starcosmetics.api.cosmetics">CosmeticLocation</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">getCustomCosmetics</span>()</div>
+<div class="block">Fetches all of the custom cosmetics found in cosmetics.yml.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Set of Custom Cosmetics</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getInternalMaxHologramLimit()">
+<h3>getInternalMaxHologramLimit</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">getInternalMaxHologramLimit</span>()</div>
+<div class="block">Fetches the hard-coded internal maximum hologram text size limit.
+ <p>In 1.9 until 1.13, this is 16. From 1.13 ownard, this is 48.</p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Internal Maximum Hologram Text Size Limit</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaxHologramLimit()">
+<h3>getMaxHologramLimit</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">getMaxHologramLimit</span>()</div>
+<div class="block">Fetches the maximum hologram text size limit.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Maximum Hologram Text Size Limit</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setMaxHologramLimit(int)">
+<h3>setMaxHologramLimit</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">setMaxHologramLimit</span><wbr><span class="parameters">(int&nbsp;limit)</span></div>
+<div class="block">Sets the maximum hologram text size limit.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>limit</code> - Maximum Hologram Text Size Limit</dd>
 </dl>
 </section>
 </li>
