@@ -105,4 +105,16 @@ final class TestStarConfig implements StarConfig {
     @Override
     public void setBlacklistedSounds(@NotNull Iterable<Sound> sounds) {}
 
+    @Override
+    public @NotNull Set<CosmeticLocation<?>> getCustomCosmetics() { return new HashSet<>(); }
+
+    @Override
+    public int getInternalMaxHologramLimit() { return 48; }
+
+    @Override
+    public int getMaxHologramLimit() { return 0; }
+
+    @Override
+    public void setMaxHologramLimit(int limit) {}
+
 }

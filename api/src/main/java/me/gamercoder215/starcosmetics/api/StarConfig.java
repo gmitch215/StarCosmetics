@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -146,6 +147,10 @@ public interface StarConfig {
 
         if (!config.isList("cosmetics.blacklisted-players")) config.set("cosmetics.blacklisted-players", new ArrayList<>());
 
+        int hologramLimit = config.getInt("cosmetics.max-hologram-size", -1);
+        if (hologramLimit < 5 || hologramLimit > getConfig().getInternalMaxHologramLimit())
+            config.set("cosmetics.max-hologram-size", getConfig().getInternalMaxHologramLimit());
+
         try {
             config.save(getConfigurationFile());
         } catch (IOException e) {
@@ -153,6 +158,34 @@ public interface StarConfig {
         }
 
         return config;
+    }
+
+    /**
+     * Fetches the StarCosmetics Custom Cosmetics File.
+     * @return StarCosmetics Custom Cosmetics File
+     */
+    @NotNull
+    static File getCosmeticsFile() {
+        return new File(getDataFolder(), "cosmetics.yml");
+    }
+
+    /**
+     * Loads the StarCosmetics Custom Cosmetics File into a FileConfiguration.
+     * @return StarCosmetics Custom Cosmetics File
+     */
+    @NotNull
+    static FileConfiguration loadCosmeticsFile() {
+        FileConfiguration cosmetics = YamlConfiguration.loadConfiguration(getCosmeticsFile());
+
+        if (!cosmetics.isList("particle-shapes")) cosmetics.set("particle-shapes", new ArrayList<>());
+
+        try {
+            cosmetics.save(getCosmeticsFile());
+        } catch (IOException e) {
+            print(e);
+        }
+
+        return cosmetics;
     }
 
     /**
@@ -167,7 +200,6 @@ public interface StarConfig {
     /**
      * Fetches the StarCosmetics Player Data Directory.
      * @return StarCosmetics Player Data Directory
-
      */
     static @NotNull File getPlayerDirectory() {
         File f = new File(getDataFolder(), "players");
@@ -437,5 +469,31 @@ public interface StarConfig {
      * @param sounds Blacklisted Sounds
      */
     void setBlacklistedSounds(@NotNull Iterable<Sound> sounds);
+
+    /**
+     * Fetches all of the custom cosmetics found in cosmetics.yml.
+     * @return Set of Custom Cosmetics
+     */
+    @NotNull
+    Set<CosmeticLocation<?>> getCustomCosmetics();
+
+    /**
+     * Fetches the hard-coded internal maximum hologram text size limit.
+     * <p>In 1.9 until 1.13, this is 16. From 1.13 ownard, this is 48.</p>
+     * @return Internal Maximum Hologram Text Size Limit
+     */
+    int getInternalMaxHologramLimit();
+
+    /**
+     * Fetches the maximum hologram text size limit.
+     * @return Maximum Hologram Text Size Limit
+     */
+    int getMaxHologramLimit();
+
+    /**
+     * Sets the maximum hologram text size limit.
+     * @param limit Maximum Hologram Text Size Limit
+     */
+    void setMaxHologramLimit(int limit);
 
 }

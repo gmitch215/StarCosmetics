@@ -75,3 +75,10 @@ cosmetics:
     # - ambient.cave
     # - block.basalt.*
     blacklisted-sounds: []
+
+  # The Maximum Size of a Hologram's Message.
+  #
+  # In 1.9 until 1.13, this is hard-coded tobe 16.
+  # In 1.13+ this is hard-coded to be 48.
+  # The integer must be at or below the hard-coded limit, and must be above 5.
+  max-hologram-size: 16
