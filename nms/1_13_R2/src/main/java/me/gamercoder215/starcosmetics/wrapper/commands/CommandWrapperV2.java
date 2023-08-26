@@ -111,6 +111,9 @@ final class CommandWrapperV2 implements CommandWrapper {
         @Subcommand({"info", "equipped"})
         @AutoComplete("@parents *")
         public void cosmeticInfo(Player p, @Single String cosmetic) { wrapper.cosmeticInfo(p, cosmetic); }
+
+        @Subcommand("hologram")
+        public void hologram(Player p) { wrapper.hologram(p); }
     }
 
     @Override
@@ -144,6 +147,14 @@ final class CommandWrapperV2 implements CommandWrapper {
 
         if (o instanceof TrailType) cosmeticInfo(p, (TrailType) o);
         else cosmeticInfo(p, (Class<? extends Cosmetic>) o);
+    }
+
+    @Command({"starhologram", "starh", "hologram"})
+    @Description("Opens the StarCosmetics Hologram menu.")
+    @CommandPermission("starcosmetics.user.cosmetics")
+    @Usage("/starhologram")
+    public void hologram(Player p) {
+        CommandWrapper.super.hologramInfo(p);
     }
 
 }

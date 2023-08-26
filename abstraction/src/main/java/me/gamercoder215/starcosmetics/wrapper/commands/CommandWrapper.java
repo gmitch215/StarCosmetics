@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
+import static me.gamercoder215.starcosmetics.util.Generator.genGUI;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
@@ -50,6 +51,7 @@ public interface CommandWrapper {
             .put("starpets", Arrays.asList("starp", "sp", "spets", "pets"))
             .put("starhelp", Collections.singletonList("shelp"))
             .put("starcosmeticinfo", Arrays.asList("cosmeticinfo", "scinfo", "scosmeticinfo", "cinfo"))
+            .put("starhologram", Arrays.asList("starh", "hologram"))
             .build();
 
     Map<String, String> COMMAND_PERMISSION = ImmutableMap.<String, String>builder()
@@ -59,6 +61,7 @@ public interface CommandWrapper {
             .put("starstructures", "starcosmetics.user.cosmetics")
             .put("starpets", "starcosmetics.user.cosmetics")
             .put("starcosmeticinfo", "starcosmetics.user.cosmetics")
+            .put("starhologram", "starcosmetics.user.cosmetics")
             .build();
 
     Map<String, String> COMMAND_DESCRIPTION = ImmutableMap.<String, String>builder()
@@ -70,6 +73,7 @@ public interface CommandWrapper {
             .put("starpets", "Opens the StarCosmetics pets menu.")
             .put("starhelp", "Displays help for StarCosmetics.")
             .put("starcosmeticinfo", "Displays information about the cosmetic the player has currently equipped.")
+            .put("starhologram", "Opens the StarCosmetics hologram menu.")
             .build();
 
     Map<String, String> COMMAND_USAGE = ImmutableMap.<String, String>builder()
@@ -81,6 +85,7 @@ public interface CommandWrapper {
             .put("starpets", "/starpets [remove|spawn]")
             .put("starhelp", "/starhelp")
             .put("starcosmeticinfo", "/starcosmeticinfo <cosmetic>")
+            .put("starhologram", "/starhologram")
             .build();
 
     // Command Methods
@@ -507,6 +512,39 @@ public interface CommandWrapper {
                 ChatColor.DARK_GREEN + getWithArgs("command.cosmetic_info.selected_cosmetic", ChatColor.AQUA + loc.getDisplayName() + " (" + ChatColor.DARK_AQUA + loc.getFullKey() + ChatColor.AQUA + ")\n"),
         };
         p.sendMessage(s);
+    }
+
+    default void hologramInfo(Player p) {
+        StarPlayer sp = new StarPlayer(p);
+        StarInventory inv = genGUI(27, get("menu.cosmetics.hologram"));
+        inv.setCancelled();
+
+        ItemStack message = StarMaterial.OAK_SIGN.findStack();
+        ItemMeta mMeta = message.getItemMeta();
+        if (!sp.getHologramMessage().isEmpty())
+            mMeta.setDisplayName(ChatColor.YELLOW + "\"" + sp.getHologramMessage() + "\"");
+        else
+            mMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.hologram.none"));
+        message.setItemMeta(mMeta);
+        inv.setItem(12, message);
+
+        ItemStack setMessage = NBTWrapper.builder(Material.PAPER,
+                meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.hologram.set")),
+                nbt -> nbt.setID("cosmetic:hologram:set")
+        );
+        inv.setItem(14, setMessage);
+
+        ItemStack resetMessage = NBTWrapper.builder(StarMaterial.RED_WOOL.findStack(),
+                meta -> meta.setDisplayName(ChatColor.RED + get("menu.cosmetics.hologram.reset")),
+                nbt -> nbt.setID("cosmetic:hologram:reset")
+        );
+        inv.setItem(22, resetMessage);
+
+        while (inv.firstEmpty() != -1)
+            inv.setItem(inv.firstEmpty(), ItemBuilder.GUI_BACKGROUND);
+
+        p.openInventory(inv);
+        StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
     // Utilities

@@ -91,6 +91,10 @@ final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
                         if (o instanceof TrailType) cosmeticInfo(p, (TrailType) o);
                         else cosmeticInfo(p, (Class<? extends Cosmetic>) o);
                     }
+                    case "hologram": {
+                        hologramInfo(p);
+                        break;
+                    }
                     default: {
                         sendError(p, "error.argument");
                         break;
@@ -140,6 +144,11 @@ final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
 
                 if (o instanceof TrailType) cosmeticInfo(p, (TrailType) o);
                 else cosmeticInfo(p, (Class<? extends Cosmetic>) o);
+            }
+            case "starhologram": {
+                if (!(sender instanceof Player)) return false;
+                hologramInfo((Player) sender);
+                break;
             }
         }
 

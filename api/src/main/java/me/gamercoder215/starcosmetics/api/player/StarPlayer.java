@@ -513,6 +513,26 @@ public final class StarPlayer {
     }
 
     /**
+     * Gets the message that will be displayed on the player's armor stand above their head.
+     * @return Message to Display, or an empty string if not set
+     */
+    @NotNull
+    public String getHologramMessage() {
+        return config.getString("hologram_message", "");
+    }
+
+    /**
+     * Sets the message that will be displayed on the player's armor stand above their head. If the inputted message is null, the message will be set to an empty string.
+     * @param message Message to set
+     */
+    public void setHologramMessage(@Nullable String message) {
+        if (message != null && message.length() > StarConfig.getConfig().getMaxHologramLimit()) throw new IllegalArgumentException("Message exceeds maximum hologram limit of " + StarConfig.getConfig().getMaxHologramLimit() + " characters");
+
+        config.set("hologram_message", message == null ? "" : message);
+        save();
+    }
+
+    /**
      * <p>Saves all of this StarPlayer's configuration.</p>
      * <p>Methods that edit the configuration automatically save the configuration, so an additional call is not necessary.</p>
      */
