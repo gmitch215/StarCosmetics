@@ -28,6 +28,7 @@ public class StarPlaceholders extends PlaceholderExpansion {
         put("projectile_trail", p -> p.getSelectedTrail(TrailType.PROJECTILE).getFullKey());
         put("ground_trail", p -> p.getSelectedTrail(TrailType.GROUND).getFullKey());
         put("sound_trail", p -> p.getSelectedTrail(TrailType.PROJECTILE_SOUND).getFullKey());
+        put("hologram", StarPlayer::getHologramMessage);
     }};
 
     @Override
