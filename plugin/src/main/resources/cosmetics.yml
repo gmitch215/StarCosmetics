@@ -12,8 +12,7 @@ particle-shapes: []
   # - id: mycosmetic
   #   name: My Cosmetic
   #   shape: Square # Case Insensitive
-  #   object: GRASS_BLOCK
-  #   completion:
-  #     enabled: true # Set to false to be unlocked by default
-  #
+  #   object: GRASS_BLOCK # Case Insensitive
+  #   rarity: COMMON # Case Insensitive
+  #   permission: my.cosmetic.permission # The Permission that unlocks this Cosmetic
 
