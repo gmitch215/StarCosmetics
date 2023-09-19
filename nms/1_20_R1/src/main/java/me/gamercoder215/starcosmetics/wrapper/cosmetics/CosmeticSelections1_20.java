@@ -26,6 +26,9 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
     // Projectile Trails
 
     private static final List<CosmeticSelection<?>> PROJECTILE_TRAIL = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new TrailSelection("bamboo_planks", BaseTrail.PROJECTILE_TRAIL, Material.BAMBOO_PLANKS,
+                    fromMined(200, Material.BAMBOO), OCCASIONAL))
+
             .add(new TrailSelection("relic", BaseTrail.PROJECTILE_TRAIL, Material.MUSIC_DISC_RELIC,
                     fromStatistic(Statistic.ANIMALS_BRED, 5500), EPIC))
             .build();
@@ -35,6 +38,9 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> GROUND_TRAIL = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new TrailSelection("pink_petals", BaseTrail.GROUND_TRAIL, Material.PINK_PETALS,
                     fromMined(100, Material.CHERRY_SAPLING), OCCASIONAL))
+
+            .add(new TrailSelection("cherry_pressure_plate", BaseTrail.GROUND_TRAIL, Material.CHERRY_PRESSURE_PLATE,
+                    fromMined(120, Material.CHERRY_LOG), UNCOMMON))
             .build();
 
     // Hats
@@ -62,6 +68,8 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
                     fromCrafted(50, Material.DECORATED_POT), UNCOMMON))
             .add(new HatSelection("heart_pot", decoratedPot(Material.HEART_POTTERY_SHERD),
                     fromStatistic(Statistic.ANIMALS_BRED, 200), UNCOMMON))
+            .add(new HatSelection("tree_pot", decoratedPot(Material.SHELTER_POTTERY_SHERD),
+                    fromMined(80, Material.OAK_LOG), UNCOMMON))
 
             .add(new HatSelection("mourner_pot", decoratedPot(Material.MOURNER_POTTERY_SHERD),
                     fromKilled(1, EntityType.WARDEN), RARE))
@@ -79,6 +87,14 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
                     fromKilled(100, EntityType.PIGLIN_BRUTE), LEGENDARY))
             .build();
 
+    // Animated Hats
+
+    private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new HatSelection("miner_pot_animated", HatSelection.of(20,
+                    decoratedPot(Material.MINER_POTTERY_SHERD), decoratedPot(Material.PRIZE_POTTERY_SHERD)
+            ), fromMined(15, Material.EMERALD_ORE), LEGENDARY))
+            .build();
+
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
@@ -89,7 +105,7 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
             .put(BaseShape.ALL, getForVersion(BaseShape.ALL, "1_19_R3"))
 
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_19_R3"))
-            .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_19_R3"))
+            .put(BaseHat.ANIMATED, join(ANIMATED_HATS, BaseHat.ANIMATED, "1_19_R3"))
 
             .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_19_R3"))
             .build();
