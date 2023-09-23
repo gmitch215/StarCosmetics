@@ -35,7 +35,8 @@ dependencies {
         "1_19_R1",
         "1_19_R2",
         "1_19_R3",
-        "1_20_R1"
+        "1_20_R1",
+        "1_20_R2"
     ).forEach { api(project(":starcosmetics-$it")) }
 }
 
@@ -49,6 +50,7 @@ tasks {
             "1_19_R2",
             "1_19_R3",
             "1_20_R1",
+            "1_20_R2"
         ).forEach { dependsOn(project(":starcosmetics-$it").tasks["remap"]) }
     }
 
