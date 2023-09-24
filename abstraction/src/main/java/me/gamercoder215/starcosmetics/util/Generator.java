@@ -27,15 +27,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.util.Constants.w;
+import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.itemBuilder;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
+import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.builder;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 @SuppressWarnings("unchecked")
@@ -49,10 +50,10 @@ public final class Generator {
         return genGUI("", size, name);
     }
 
-    @Nullable
+    @NotNull
     public static StarInventory genGUI(String key, int size, String name) {
-        if (size < 9 || size > 54) return null;
-        if (size % 9 > 0) return null;
+        if (size < 9 || size > 54) throw new IllegalStateException("Invalid inventory size: " + size);
+        if (size % 9 > 0) throw new IllegalStateException("Invalid inventory size: " + size);
 
         StarInventory inv = w.createInventory(key, size, name);
         ItemStack bg = ItemBuilder.GUI_BACKGROUND;
@@ -103,7 +104,7 @@ public final class Generator {
                 .filter(m -> w.isItem(m.getType()))
                 .collect(Collectors.toList());
 
-        if (list.size() == 0) return map;
+        if (list.isEmpty()) return map;
 
         int size = list.size();
 
@@ -181,16 +182,10 @@ public final class Generator {
 
         for (SoundEventSelection s : sp.getSoundSelections()) inv.addItem(StarInventoryUtil.toItemStack(s));
 
-        ItemStack add = StarInventoryUtil.getHead("plus");
-        ItemMeta aMeta = add.getItemMeta();
-        aMeta.setDisplayName(ChatColor.GREEN + get("constants.cosmetics.add_selection"));
-        add.setItemMeta(aMeta);
-
-        NBTWrapper nbt = of(add);
-        nbt.setID("add:soundevent");
-        add = nbt.getItem();
-
-        if (size < selLimit) inv.addItem(add);
+        if (size < selLimit) inv.addItem(builder(StarInventoryUtil.getHead("plus"),
+                meta -> meta.setDisplayName(ChatColor.GREEN + get("constants.cosmetics.add_selection")),
+                nbt -> nbt.setID("add:soundevent")
+        ));
 
         for (int j = 0; j < BOTTOM_HALF_SLOTS.length; j++) {
             if (selLimit > j) continue;
@@ -198,17 +193,17 @@ public final class Generator {
         }
 
         if (selLimit < 35) {
-            ItemStack limit = new ItemStack(Material.NETHER_STAR);
-            ItemMeta lMeta = limit.getItemMeta();
-            lMeta.setDisplayName(ChatColor.GOLD + get("constants.cosmetics.selection_limit"));
-
             CompletionCriteria nextCriteria = CompletionCriteria.fromSelectionLimit(selLimit + 1);
+            ItemStack limit = itemBuilder(Material.NETHER_STAR,
+                    meta -> {
+                        meta.setDisplayName(ChatColor.GOLD + get("constants.cosmetics.selection_limit"));
+                        meta.setLore(Arrays.asList(
+                                ChatColor.YELLOW + nextCriteria.getDisplayMessage(),
+                                ChatColor.GOLD + getWithArgs("constants.completed", String.format("%,.2f", nextCriteria.getProgressPercentage(p)) + "%")
+                        ));
+                    }
+            );
 
-            lMeta.setLore(Arrays.asList(
-                    ChatColor.YELLOW + nextCriteria.getDisplayMessage(),
-                    ChatColor.GOLD + getWithArgs("constants.completed", String.format("%,.2f", nextCriteria.getProgressPercentage(p)) + "%")
-            ));
-            limit.setItemMeta(lMeta);
             inv.setItem(18, limit);
         }
 
@@ -286,50 +281,42 @@ public final class Generator {
 
         if (Boolean.class.isAssignableFrom(setting.getType())) {
             boolean on = sp.getSetting((PlayerSetting<Boolean>) setting);
-
-            item = on ? StarMaterial.LIME_TERRACOTTA.findStack() : StarMaterial.RED_TERRACOTTA.findStack();
-            ItemMeta meta = item.getItemMeta();
-
-            meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + (on ? ChatColor.GREEN + get("constants.on") : ChatColor.RED + get("constants.off")));
-            if (on) {
-                meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            }
-            item.setItemMeta(meta);
-
-            NBTWrapper nbt = of(item);
-            nbt.setID("toggle:setting:boolean");
-            nbt.set("setting", setting.getId());
-            item = nbt.getItem();
+            item = builder(on ? StarMaterial.LIME_TERRACOTTA.findStack() : StarMaterial.RED_TERRACOTTA.findStack(),
+                    meta -> {
+                        meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + (on ? ChatColor.GREEN + get("constants.on") : ChatColor.RED + get("constants.off")));
+                        if (on) {
+                            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+                            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                        }
+                    },
+                    nbt -> {
+                        nbt.setID("toggle:setting:boolean");
+                        nbt.set("setting", setting.getId());
+                    }
+            );
         } else if (Enum.class.isAssignableFrom(setting.getType())) {
             Enum<?> value = sp.getSetting((PlayerSetting<Enum<?>>) setting);
-
-            item = StarMaterial.LIGHT_BLUE_TERRACOTTA.findStack();
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + ChatColor.AQUA + value.name());
-            item.setItemMeta(meta);
-
-            NBTWrapper nbt = of(item);
-            nbt.setID("toggle:setting:enum");
-            nbt.set("setting", setting.getId());
-            item = nbt.getItem();
+            item = builder(StarMaterial.LIGHT_BLUE_TERRACOTTA.findStack(),
+                meta -> meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + ChatColor.AQUA + value.name()),
+                nbt -> {
+                    nbt.setID("toggle:setting:enum");
+                    nbt.set("setting", setting.getId());
+                }
+            );
         } else {
             Object value = sp.getSetting(setting);
-
-            item = StarMaterial.LIGHT_BLUE_TERRACOTTA.findStack();
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + ChatColor.YELLOW + value);
-            item.setItemMeta(meta);
-
-            NBTWrapper nbt = of(item);
-            nbt.setID("toggle:setting");
-            nbt.set("setting", setting.getId());
-            item = nbt.getItem();
+            item = builder(StarMaterial.LIGHT_BLUE_TERRACOTTA.findStack(),
+                meta ->  meta.setDisplayName(ChatColor.YELLOW + setting.getDisplayName() + ": " + ChatColor.YELLOW + value),
+                nbt -> {
+                    nbt.setID("toggle:setting");
+                    nbt.set("setting", setting.getId());
+                }
+            );
         }
 
-        ItemMeta meta = item.getItemMeta();
         String desc = setting.getDescription() == null ? null : StarConfig.getConfig().get(setting.getDescription());
         if (desc != null && !desc.equalsIgnoreCase("Unknown Value")) {
+            ItemMeta meta = item.getItemMeta();
             List<String> lore = new ArrayList<>();
 
             lore.add(" ");
@@ -338,9 +325,8 @@ public final class Generator {
             ).map(s -> ChatColor.GRAY + s).collect(Collectors.toList()));
 
             meta.setLore(lore);
+            item.setItemMeta(meta);
         }
-
-        item.setItemMeta(meta);
 
         return item;
     }

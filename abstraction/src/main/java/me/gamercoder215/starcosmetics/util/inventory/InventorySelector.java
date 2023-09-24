@@ -6,7 +6,6 @@ import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.util.Generator;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
-import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 import static me.gamercoder215.starcosmetics.util.inventory.ItemBuilder.SAVE;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
-import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
+import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.builder;
 
 public final class InventorySelector {
 
@@ -56,36 +54,30 @@ public final class InventorySelector {
             }
 
             List<ItemStack> items = categoryItems.get(category);
+            ItemStack item = builder(StarInventoryUtil.toMaterial(s),
+                    meta -> {
+                        meta.setDisplayName(ChatColor.GOLD + StarInventoryUtil.getFriendlyName(s));
 
-            Material m = StarInventoryUtil.toMaterial(s);
-            ItemStack item = new ItemStack(m);
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.GOLD + StarInventoryUtil.getFriendlyName(s));
+                        List<String> lore = new ArrayList<>();
+                        String desc = get("menu.cosmetics.choose.sound_desc." + s.name().toLowerCase(), "");
 
-            List<String> lore = new ArrayList<>();
-            String desc = get("menu.cosmetics.choose.sound_desc." + s.name().toLowerCase(), "");
+                        if (!desc.isEmpty()) {
+                            lore.add(" ");
+                            lore.addAll(Arrays.stream(ChatPaginator.wordWrap(desc, 30))
+                                    .map(str -> ChatColor.GRAY + str)
+                                    .collect(Collectors.toList()));
+                            lore.add(" ");
+                        }
 
-            if (!desc.isEmpty()) {
-                lore.add(" ");
-                lore.addAll(Arrays.stream(ChatPaginator.wordWrap(desc, 30))
-                        .map(str -> ChatColor.GRAY + str)
-                        .collect(Collectors.toList()));
-                lore.add(" ");
-            }
+                        lore.add(" ");
+                        lore.add(ChatColor.YELLOW + get("constants.menu.right_click_hear"));
+                        lore.add(ChatColor.YELLOW + get("constants.menu.left_click_select"));
 
-            lore.add(" ");
-            lore.add(ChatColor.YELLOW + get("constants.menu.right_click_hear"));
-            lore.add(ChatColor.YELLOW + get("constants.menu.left_click_select"));
-
-            meta.setLore(lore);
-
-            meta.addItemFlags(ItemFlag.values());
-            item.setItemMeta(meta);
-
-            NBTWrapper nbt = of(item);
-            nbt.set("sound", s.name());
-            item = nbt.getItem();
-
+                        meta.setLore(lore);
+                        meta.addItemFlags(ItemFlag.values());
+                    },
+                    nbt -> nbt.set("sound", s.name())
+            );
             items.add(item);
         }
 
@@ -138,31 +130,26 @@ public final class InventorySelector {
 
         List<ItemStack> items = new ArrayList<>();
         for (Class<? extends Event> clazz : SoundEventSelection.AVAILABLE_EVENTS) {
-            Material m = StarInventoryUtil.toMaterial(clazz);
-            ItemStack item = new ItemStack(m);
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.YELLOW + clazz.getSimpleName());
+            ItemStack item = builder(StarInventoryUtil.toMaterial(clazz),
+                    meta -> {
+                        meta.setDisplayName(ChatColor.YELLOW + clazz.getSimpleName());
 
-            List<String> lore = new ArrayList<>();
-            String desc = get("menu.cosmetics.choose.event_desc." + clazz.getSimpleName().toLowerCase(), "");
+                        List<String> lore = new ArrayList<>();
+                        String desc = get("menu.cosmetics.choose.event_desc." + clazz.getSimpleName().toLowerCase(), "");
 
-            if (!desc.isEmpty()) {
-                lore.add(" ");
-                lore.addAll(Arrays.stream(ChatPaginator.wordWrap(desc, 30))
-                        .map(str -> ChatColor.GRAY + str)
-                        .collect(Collectors.toList()));
-                lore.add(" ");
+                        if (!desc.isEmpty()) {
+                            lore.add(" ");
+                            lore.addAll(Arrays.stream(ChatPaginator.wordWrap(desc, 30))
+                                    .map(str -> ChatColor.GRAY + str)
+                                    .collect(Collectors.toList()));
+                            lore.add(" ");
 
-                meta.setLore(lore);
-            }
+                            meta.setLore(lore);
+                        }
 
-            meta.addItemFlags(ItemFlag.values());
-            item.setItemMeta(meta);
-
-            NBTWrapper nbt = of(item);
-            nbt.set("event", clazz);
-            item = nbt.getItem();
-
+                        meta.addItemFlags(ItemFlag.values());
+                    }, nbt -> nbt.set("event", clazz)
+            );
             items.add(item);
         }
 
@@ -181,24 +168,16 @@ public final class InventorySelector {
         inv.setAttribute("confirm_action", confirmR);
         inv.setAttribute("cancel_action", cancelR);
 
-        ItemStack confirm = StarMaterial.LIME_WOOL.findStack();
-        ItemMeta cMeta = confirm.getItemMeta();
-        cMeta.setDisplayName(ChatColor.GREEN + get("menu.confirm"));
-        confirm.setItemMeta(cMeta);
-
-        NBTWrapper confirmNBT = of(confirm);
-        confirmNBT.set("item", "confirm");
-        confirm = confirmNBT.getItem();
+        ItemStack confirm = builder(StarMaterial.LIME_WOOL.findStack(),
+                meta -> meta.setDisplayName(ChatColor.GREEN + get("menu.confirm")),
+                nbt -> nbt.set("item", "confirm")
+        );
         inv.setItem(11, confirm);
 
-        ItemStack cancel = StarMaterial.RED_WOOL.findStack();
-        ItemMeta caMeta = cancel.getItemMeta();
-        caMeta.setDisplayName(ChatColor.RED + get("menu.cancel"));
-        cancel.setItemMeta(caMeta);
-
-        NBTWrapper cancelNBT = of(cancel);
-        cancelNBT.set("item", "cancel");
-        cancel = cancelNBT.getItem();
+        ItemStack cancel = builder(StarMaterial.RED_WOOL.findStack(),
+                meta -> meta.setDisplayName(ChatColor.RED + get("menu.cancel")),
+                nbt -> nbt.set("item", "cancel")
+        );
         inv.setItem(15, cancel);
 
         p.openInventory(inv);
@@ -218,54 +197,49 @@ public final class InventorySelector {
         inv.setAttribute("sound", sound);
         inv.setCancelled();
 
-        ItemStack pitch = new ItemStack(Material.NOTE_BLOCK);
-        ItemMeta pMeta = pitch.getItemMeta();
-        pMeta.setDisplayName(ChatColor.YELLOW + get("constants.pitch"));
-        pMeta.setLore(Arrays.asList(
-                ChatColor.GREEN + "1.0",
-                " ",
-                ChatColor.YELLOW + get("constants.menu.right_click_up"),
-                ChatColor.YELLOW + get("constants.menu.left_click_down")
-        ));
-        pitch.setItemMeta(pMeta);
-
-        NBTWrapper pitchNBT = of(pitch);
-        pitchNBT.set("item", "pitch");
-        pitchNBT.set("value", 1.0f);
-        pitchNBT.set("min", 0.0f);
-        pitchNBT.set("max", 2.0f);
-        pitch = pitchNBT.getItem();
+        ItemStack pitch = builder(Material.NOTE_BLOCK,
+            meta -> {
+                meta.setDisplayName(ChatColor.YELLOW + get("constants.pitch"));
+                meta.setLore(Arrays.asList(
+                        ChatColor.GREEN + "1.0",
+                        " ",
+                        ChatColor.YELLOW + get("constants.menu.right_click_up"),
+                        ChatColor.YELLOW + get("constants.menu.left_click_down")
+                ));
+            },
+            nbt -> {
+                nbt.set("item", "pitch");
+                nbt.set("value", 1.0f);
+                nbt.set("min", 0.0f);
+                nbt.set("max", 2.0f);
+            }
+        );
         inv.setItem(11, pitch);
 
-        ItemStack volume = new ItemStack(Material.JUKEBOX);
-        ItemMeta vMeta = volume.getItemMeta();
-        vMeta.setDisplayName(ChatColor.YELLOW + get("constants.volume"));
-        vMeta.setLore(Arrays.asList(
-                ChatColor.GREEN + "2.0",
-                " ",
-                ChatColor.YELLOW + get("constants.menu.right_click_up"),
-                ChatColor.YELLOW + get("constants.menu.left_click_down")
-        ));
-        volume.setItemMeta(vMeta);
-
-        NBTWrapper volumeNBT = of(volume);
-        volumeNBT.set("item", "volume");
-        volumeNBT.set("value", 2.0f);
-        volumeNBT.set("max", 10.0f);
-        volumeNBT.set("min", 0.1f);
-        volume = volumeNBT.getItem();
+        ItemStack volume = builder(Material.JUKEBOX,
+            meta -> {
+                meta.setDisplayName(ChatColor.YELLOW + get("constants.volume"));
+                meta.setLore(Arrays.asList(
+                        ChatColor.GREEN + "2.0",
+                        " ",
+                        ChatColor.YELLOW + get("constants.menu.right_click_up"),
+                        ChatColor.YELLOW + get("constants.menu.left_click_down")
+                ));
+            },
+            nbt -> {
+                nbt.set("item", "volume");
+                nbt.set("value", 2.0f);
+                nbt.set("max", 10.0f);
+                nbt.set("min", 0.1f);
+            }
+        );
         inv.setItem(15, volume);
 
-        ItemStack test = new ItemStack(StarInventoryUtil.toMaterial(sound));
-        ItemMeta tMeta = test.getItemMeta();
-        tMeta.setDisplayName(ChatColor.YELLOW + get("constants.test_sound"));
-        test.setItemMeta(tMeta);
-
-        NBTWrapper testNBT = of(test);
-        testNBT.set("item", "test");
-        test = testNBT.getItem();
+        ItemStack test = builder(StarInventoryUtil.toMaterial(sound),
+                meta -> meta.setDisplayName(ChatColor.YELLOW + get("constants.test_sound")),
+                nbt -> nbt.set("item", "test")
+        );
         inv.setItem(22, test);
-
         inv.setItem(23, ItemBuilder.STOP_SOUND);
 
         if (back != null) {
@@ -281,39 +255,28 @@ public final class InventorySelector {
         inv.setAttribute("current_event", initial);
         inv.setAttribute("chosen_action", edited);
 
-        ItemStack sound = new ItemStack(Material.NOTE_BLOCK);
-        ItemMeta sMeta = sound.getItemMeta();
-        sMeta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.sound"));
-        sound.setItemMeta(sMeta);
-
-        NBTWrapper soundNBT = of(sound);
-        soundNBT.set("item", "sound");
-        sound = soundNBT.getItem();
+        ItemStack sound = builder(Material.NOTE_BLOCK,
+                meta -> meta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.sound")),
+                nbt -> nbt.set("item", "sound")
+        );
         inv.setItem(11, sound);
 
-        ItemStack pitchVolume = new ItemStack(Material.NOTE_BLOCK);
-        ItemMeta pMeta = pitchVolume.getItemMeta();
-        pMeta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.pitch_volume"));
-        pMeta.setLore(Arrays.asList(
-                ChatColor.GREEN + getWithArgs("constants.menu.pitch", initial.getPitch()),
-                ChatColor.GREEN + getWithArgs("constants.menu.volume", initial.getVolume())
-        ));
-        pitchVolume.setItemMeta(pMeta);
-
-        NBTWrapper pitchNBT = of(pitchVolume);
-        pitchNBT.set("item", "pitch_volume");
-        pitchVolume = pitchNBT.getItem();
-
+        ItemStack pitchVolume = builder(Material.NOTE_BLOCK,
+                meta -> {
+                    meta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.pitch_volume"));
+                    meta.setLore(Arrays.asList(
+                            ChatColor.GREEN + getWithArgs("constants.menu.pitch", initial.getPitch()),
+                            ChatColor.GREEN + getWithArgs("constants.menu.volume", initial.getVolume())
+                    ));
+                },
+                nbt -> nbt.set("item", "pitch_volume")
+        );
         inv.setItem(13, pitchVolume);
 
-        ItemStack event = new ItemStack(Material.BOOK);
-        ItemMeta eMeta = event.getItemMeta();
-        eMeta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.event"));
-        event.setItemMeta(eMeta);
-
-        NBTWrapper eNBT = of(event);
-        eNBT.set("item", "event");
-        event = eNBT.getItem();
+        ItemStack event = builder(Material.BOOK,
+                meta -> meta.setDisplayName(ChatColor.YELLOW + get("constants.menu.edit.event")),
+                nbt -> nbt.set("item", "event")
+        );
         inv.setItem(15, event);
 
         inv.setItem(22, SAVE);

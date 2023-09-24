@@ -9,6 +9,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -94,7 +95,8 @@ public final class CompletionCriteria {
         return String.format(StarConfig.getConfig().get(displayKey), displayArgs);
     }
 
-    private static String toPlural(String base) {
+    @VisibleForTesting
+    static String toPlural(String base) {
         String lower = base.toLowerCase();
         String trimmed = base.substring(0, base.length() - 1);
 

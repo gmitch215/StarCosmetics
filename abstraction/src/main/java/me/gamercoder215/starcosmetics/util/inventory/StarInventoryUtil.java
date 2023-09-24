@@ -50,6 +50,7 @@ import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.StarMaterial.*;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
+import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.builder;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 import static org.bukkit.Material.*;
 
@@ -110,60 +111,48 @@ public final class StarInventoryUtil {
 
     @NotNull
     public static ItemStack toItemStack(@NotNull SoundEventSelection s) {
-        ItemStack item = new ItemStack(toMaterial(s.getEvent()));
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.YELLOW + s.getEvent().getSimpleName());
-
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.AQUA + get("constants.menu.sound") + " " + ChatColor.GOLD + getFriendlyName(s.getSound()));
-        lore.add(ChatColor.AQUA + getWithArgs("constants.menu.pitch", ChatColor.GOLD + String.format("%,.1f", s.getPitch())));
-        lore.add(ChatColor.AQUA + getWithArgs("constants.menu.volume", ChatColor.GOLD + String.format("%,.1f", s.getVolume())));
-        lore.add(" ");
-
         DateTimeFormatter f = DateTimeFormatter.ofPattern("EEEE, LLL d, yyyy 'at' h:mm:ss a")
                 .withLocale(StarConfig.getConfig().getLocale())
                 .withZone(ZoneId.systemDefault());
 
-        lore.add(ChatColor.GREEN + getWithArgs("constants.menu.created_at", ChatColor.AQUA + f.format(s.getTimestamp().toInstant())));
-
-        lore.add(" ");
-        lore.add(ChatColor.YELLOW + get("constants.menu.left_click_edit"));
-        lore.add(ChatColor.YELLOW + get("constants.menu.right_click_delete"));
-
-        meta.setLore(lore);
-
-        meta.addItemFlags(ItemFlag.values());
-        item.setItemMeta(meta);
-
-        NBTWrapper nbt = of(item);
-        nbt.setID("manage:soundevent");
-        nbt.set("selection", s);
-        item = nbt.getItem();
-
-        return item;
+        return builder(toMaterial(s.getEvent()),
+                meta -> {
+                    meta.setDisplayName(ChatColor.YELLOW + s.getEvent().getSimpleName());
+                    meta.setLore(Arrays.asList(
+                            ChatColor.AQUA + get("constants.menu.sound") + " " + ChatColor.GOLD + getFriendlyName(s.getSound()),
+                            ChatColor.AQUA + getWithArgs("constants.menu.pitch", ChatColor.GOLD + String.format("%,.1f", s.getPitch())),
+                            ChatColor.AQUA + getWithArgs("constants.menu.volume", ChatColor.GOLD + String.format("%,.1f", s.getVolume())),
+                            " ",
+                            ChatColor.GREEN + getWithArgs("constants.menu.created_at", ChatColor.AQUA + f.format(s.getTimestamp().toInstant())),
+                            " ",
+                            ChatColor.YELLOW + get("constants.menu.left_click_edit"),
+                            ChatColor.YELLOW + get("constants.menu.right_click_delete")
+                    ));
+                },
+                nbt -> {
+                    nbt.setID("manage:soundevent");
+                    nbt.set("selection", s);
+                }
+        );
     }
 
     @NotNull
     public static ItemStack toItemStack(@NotNull StructureInfo info) {
-        ItemStack item = new ItemStack(info.getPrimaryMaterial());
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + info.getLocalizedName());
-
-        List<String> lore = new ArrayList<>();
-        lore.add(info.getRarity().toString());
-        lore.add(" ");
-        lore.add(ChatColor.YELLOW + info.getCriteria().getDisplayMessage());
-
-        meta.setLore(lore);
-        meta.addItemFlags(ItemFlag.values());
-        item.setItemMeta(meta);
-
-        NBTWrapper nbt = of(item);
-        nbt.setID("spawn:structure");
-        nbt.set("info", info);
-        item = nbt.getItem();
-
-        return item;
+        return builder(info.getPrimaryMaterial(),
+                meta -> {
+                    meta.setDisplayName(ChatColor.GOLD + info.getLocalizedName());
+                    meta.setLore(Arrays.asList(
+                            info.getRarity().toString(),
+                            " ",
+                            ChatColor.YELLOW + info.getCriteria().getDisplayMessage()
+                    ));
+                    meta.addItemFlags(ItemFlag.values());
+                },
+                nbt -> {
+                    nbt.setID("spawn:structure");
+                    nbt.set("info", info);
+                }
+        );
     }
 
     private static final List<Material> ITEMS = Arrays.stream(Material.values()).filter(w::isItem).collect(Collectors.toList());
@@ -286,31 +275,15 @@ public final class StarInventoryUtil {
         inv.setAttribute("row_count", 0);
         int size = inv.getSize();
 
-        int upM;
-        int downM;
+        inv.setItem(size == 54 ? 26 : 17, builder(getHead("arrow_up"),
+                meta -> meta.setDisplayName(ChatColor.GREEN + get("constants.up")),
+                nbt -> nbt.setID("scroll_up")
+        ));
 
-        switch (size) {
-            case 54: upM = 26; downM = 35; break;
-            default: upM = 17; downM = 26; break;
-        }
-
-        ItemStack up = getHead("arrow_up");
-        ItemMeta uMeta = up.getItemMeta();
-        uMeta.setDisplayName(ChatColor.GREEN + get("constants.up"));
-        up.setItemMeta(uMeta);
-        NBTWrapper uNBT = NBTWrapper.of(up);
-        uNBT.setID("scroll_up");
-        up = uNBT.getItem();
-        inv.setItem(upM, up);
-
-        ItemStack down = getHead("arrow_down");
-        ItemMeta dMeta = down.getItemMeta();
-        dMeta.setDisplayName(ChatColor.GREEN + get("constants.down"));
-        down.setItemMeta(dMeta);
-        NBTWrapper dNBT = NBTWrapper.of(down);
-        dNBT.setID("scroll_down");
-        down = dNBT.getItem();
-        inv.setItem(downM, down);
+        inv.setItem(size == 54 ? 35 : 26, builder(getHead("arrow_down"),
+                meta -> meta.setDisplayName(ChatColor.GREEN + get("constants.down")),
+                nbt -> nbt.setID("scroll_down")
+        ));
     }
 
     public static ItemStack getHead(String key) {
@@ -359,19 +332,19 @@ public final class StarInventoryUtil {
 
     @NotNull
     public static ItemStack toItemStack(@NotNull Cosmetic c) {
-        ItemStack item = new ItemStack(c.getIcon());
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + c.getDisplayName());
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        item.setItemMeta(meta);
-        NBTWrapper nbt = of(item);
-        nbt.setID("cosmetic:selection");
-        nbt.set("cosmetic", c.getNamespace());
-        nbt.set("display", c.getDisplayName());
+        return builder(c.getIcon(),
+                meta -> {
+                    meta.setDisplayName(ChatColor.GOLD + c.getDisplayName());
+                    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                },
+                nbt -> {
+                    nbt.setID("cosmetic:selection");
+                    nbt.set("cosmetic", c.getNamespace());
+                    nbt.set("display", c.getDisplayName());
 
-        if (c instanceof Trail<?>) nbt.set("trail_type", ((Trail<?>) c).getType().name());
-
-        return nbt.getItem();
+                    if (c instanceof Trail<?>) nbt.set("trail_type", ((Trail<?>) c).getType().name());
+                }
+        );
     }
 
     @NotNull
@@ -462,35 +435,33 @@ public final class StarInventoryUtil {
         else
             item = new ItemStack(toInputMaterial(input, loc));
 
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + loc.getDisplayName());
-        meta.addItemFlags(ItemFlag.values());
+        return builder(item,
+                meta -> {
+                    meta.setDisplayName(ChatColor.YELLOW + loc.getParent().getDisplayName() + " | " + loc.getDisplayName());
+                    meta.addItemFlags(ItemFlag.values());
 
-        List<String> lore = new ArrayList<>();
-        lore.add(loc.getRarity().toString());
+                    List<String> lore = new ArrayList<>();
+                    lore.add(loc.getRarity().toString());
 
-        ChatColor c = loc.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
+                    ChatColor c = loc.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
 
-        if (!loc.getRarity().hasInvisibleRequirements() || loc.isUnlocked(p)) {
-            lore.add(" ");
-            CompletionCriteria criteria = loc.getCompletionCriteria();
+                    if (!loc.getRarity().hasInvisibleRequirements() || loc.isUnlocked(p)) {
+                        lore.add(" ");
+                        CompletionCriteria criteria = loc.getCompletionCriteria();
 
-            lore.addAll(Arrays.stream(
-                    ChatPaginator.wordWrap(criteria.getDisplayMessage(), 30)
-            ).map(s -> c + s).collect(Collectors.toList()));
-            lore.add(ChatColor.DARK_GREEN + getWithArgs("constants.completed", String.format("%,.2f", criteria.getProgressPercentage(p)) + "%"));
-        }
+                        lore.addAll(Arrays.stream(
+                                ChatPaginator.wordWrap(criteria.getDisplayMessage(), 30)
+                        ).map(s -> c + s).collect(Collectors.toList()));
+                        lore.add(ChatColor.DARK_GREEN + getWithArgs("constants.completed", String.format("%,.2f", criteria.getProgressPercentage(p)) + "%"));
+                    }
 
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-
-        NBTWrapper nbt = NBTWrapper.of(item);
-        nbt.setID("choose:cosmetic");
-        nbt.set("location", loc);
-
-        item = nbt.getItem();
-
-        return item;
+                    meta.setLore(lore);
+                },
+                nbt -> {
+                    nbt.setID("choose:cosmetic");
+                    nbt.set("location", loc);
+                }
+        );
     }
 
     @NotNull
@@ -516,16 +487,10 @@ public final class StarInventoryUtil {
     }
 
     public static void setBack(@NotNull StarInventory inv, int slot, @NotNull Consumer<Player> action) {
-        ItemStack back = getHead("arrow_left");
-        ItemMeta meta = back.getItemMeta();
-        meta.setDisplayName(ChatColor.RED + get("constants.back"));
-        back.setItemMeta(meta);
-
-        NBTWrapper nbt = of(back);
-        nbt.setID("back");
-        back = nbt.getItem();
-
-        inv.setItem(slot, back);
+        inv.setItem(slot, builder(getHead("arrow_left"),
+                meta -> meta.setDisplayName(ChatColor.RED + get("constants.back")),
+                nbt -> nbt.setID("back")
+        ));
         inv.setAttribute("back_inventory_action", action);
     }
 
@@ -540,17 +505,15 @@ public final class StarInventoryUtil {
             inv.setAttribute("current_page", index.getAndIncrement());
         });
 
-        ItemStack prev = getHead("arrow_left_gray");
-        ItemMeta pMeta = prev.getItemMeta();
-        pMeta.setDisplayName(ChatColor.YELLOW + get("constants.previous_page"));
-        prev.setItemMeta(pMeta);
-        prev = NBTWrapper.setID(prev, "previous_page");
+        ItemStack prev = builder(getHead("arrow_left_gray"),
+            meta -> meta.setDisplayName(ChatColor.YELLOW + get("constants.previous_page")),
+            nbt -> nbt.setID("previous_page")
+        );
 
-        ItemStack next = getHead("arrow_right_gray");
-        ItemMeta nMeta = next.getItemMeta();
-        nMeta.setDisplayName(ChatColor.YELLOW + get("constants.next_page"));
-        next.setItemMeta(nMeta);
-        next = NBTWrapper.setID(next, "next_page");
+        ItemStack next = builder(getHead("arrow_right_gray"),
+            meta -> meta.setDisplayName(ChatColor.YELLOW + get("constants.next_page")),
+            nbt -> nbt.setID("next_page")
+        );
 
         for (int i = 0; i < pages.size(); i++) {
             StarInventory page = pages.get(i);
@@ -718,24 +681,21 @@ public final class StarInventoryUtil {
     @NotNull
     public static ItemStack toItemStack(@NotNull Player p, @NotNull PetInfo info) {
         CompletionCriteria criteria = info.getCriteria();
+        return itemBuilder(info.getIcon(),
+                meta -> {
+                    meta.setDisplayName(ChatColor.GOLD + info.getName());
+                    List<String> lore = new ArrayList<>();
+                    ChatColor c = criteria.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
 
-        ItemStack item = info.getIcon().clone();
-        ItemMeta meta = item.getItemMeta();
-
-        meta.setDisplayName(ChatColor.GOLD + info.getName());
-        List<String> lore = new ArrayList<>();
-        ChatColor c = criteria.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
-
-        lore.add(info.getRarity().toString());
-        lore.add(" ");
-        lore.addAll(Arrays.stream(
-                ChatPaginator.wordWrap(criteria.getDisplayMessage(), 30)
-        ).map(s -> c + s).collect(Collectors.toList()));
-        lore.add(ChatColor.DARK_GREEN + getWithArgs("constants.completed", String.format("%,.2f", criteria.getProgressPercentage(p)) + "%"));
-        meta.setLore(lore);
-
-        item.setItemMeta(meta);
-        return item;
+                    lore.add(info.getRarity().toString());
+                    lore.add(" ");
+                    lore.addAll(Arrays.stream(
+                            ChatPaginator.wordWrap(criteria.getDisplayMessage(), 30)
+                    ).map(s -> c + s).collect(Collectors.toList()));
+                    lore.add(ChatColor.DARK_GREEN + getWithArgs("constants.completed", String.format("%,.2f", criteria.getProgressPercentage(p)) + "%"));
+                    meta.setLore(lore);
+                }
+        );
     }
 
     public static void setReset(@NotNull StarInventory inv) {
