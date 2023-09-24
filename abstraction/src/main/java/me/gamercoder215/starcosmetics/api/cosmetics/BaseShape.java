@@ -9,6 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;
@@ -123,6 +125,34 @@ public final class BaseShape implements ParticleShape {
                 spawn(l, o);
                 l.subtract(x + dX * d, 0, z + dZ * d);
             }
+        }
+    }
+
+    public static void line(Location l, Object o, int length, long stepDelay) {
+        Vector dir = l.getDirection();
+        double width = 0.1;
+
+        int count = 0;
+        for (double i = 0; i < length * (1 / width); i += width) {
+            final double fi = i;
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    dir.multiply(fi);
+                    l.add(dir);
+                    spawn(l, o);
+                    l.subtract(dir);
+                    dir.normalize();
+                }
+            };
+
+            if (stepDelay == 0 || i == 0)
+                r.run();
+            else
+                r.runTaskLater(StarConfig.getPlugin(), stepDelay * count);
+
+            count++;
         }
     }
 
