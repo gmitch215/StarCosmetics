@@ -241,6 +241,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     @Override
     public void updatePluginCache() {
         STAR_PLAYER_CACHE.clear();
+        STRUCTURE_CACHE.clear();
     }
 
     @Override
@@ -423,6 +424,24 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         config.set("cosmetics.max-hologram-limit", limit);
         saveConfig();
+    }
+
+    @Override
+    public @NotNull Set<Structure> getCustomStructures() {
+        List<String> files = config.getStringList("cosmetics.structures");
+        if (files.isEmpty()) return ImmutableSet.of();
+
+        Set<Structure> structures = new HashSet<>();
+
+        for (String file : files) {
+            File f = new File(getDataFolder(), file);
+            StructureReader r = getStructureReader(f);
+            if (r == null) continue;
+
+            structures.add(r.read());
+        }
+
+        return ImmutableSet.copyOf(structures);
     }
 
     // Other Utilities
@@ -711,6 +730,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                 reader.close();
             }
         } catch (IOException e) { StarConfig.print(e); }
+
+        set.addAll(getCustomStructures());
 
         STRUCTURE_CACHE.addAll(set.stream()
                 .map(Structure::getInfo)

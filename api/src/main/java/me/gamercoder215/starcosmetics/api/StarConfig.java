@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.api;
 import com.google.common.collect.Iterables;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import org.bukkit.Bukkit;
@@ -150,6 +151,8 @@ public interface StarConfig {
         int hologramLimit = config.getInt("cosmetics.max-hologram-size", -1);
         if (hologramLimit < 5 || hologramLimit > getConfig().getInternalMaxHologramLimit())
             config.set("cosmetics.max-hologram-size", getConfig().getInternalMaxHologramLimit());
+
+        if (!config.isList("cosmetics.structures")) config.set("cosmetics.structures", new ArrayList<>());
 
         try {
             config.save(getConfigurationFile());
@@ -495,5 +498,12 @@ public interface StarConfig {
      * @param limit Maximum Hologram Text Size Limit
      */
     void setMaxHologramLimit(int limit);
+
+    /**
+     * Fetches all of the custom structures found in config.yml.
+     * @return Set of Custom Structures
+     */
+    @NotNull
+    Set<Structure> getCustomStructures();
 
 }

@@ -82,3 +82,10 @@ cosmetics:
   # In 1.13+ this is hard-coded to be 48.
   # The integer must be at or below the hard-coded limit, and must be above 5.
   max-hologram-size: 16
+
+  # A List of StarCosmetics Structure Files relative to this config.yml file.
+  # For how to format a Custom Structure File, see: https://github.com/GamerCoder215/StarCosmetics/wiki/StarCosmetics-Structure-Files
+  #
+  # Examples:
+  # - 'castle.scs'
+  structures: []

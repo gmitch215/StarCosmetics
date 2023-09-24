@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -116,5 +117,8 @@ final class TestStarConfig implements StarConfig {
 
     @Override
     public void setMaxHologramLimit(int limit) {}
+
+    @Override
+    public @NotNull Set<Structure> getCustomStructures() { return new HashSet<>(); }
 
 }
