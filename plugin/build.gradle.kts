@@ -16,7 +16,7 @@ dependencies {
     implementation("com.jeff_media:SpigotUpdateChecker:3.0.3")
 
     // Soft Dependencies
-    compileOnly("me.clip:placeholderapi:2.11.3")
+    compileOnly("me.clip:placeholderapi:2.11.4")
 
     // API
     api(project(":starcosmetics-api"))
