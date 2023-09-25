@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.api.player;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.Location;
@@ -19,7 +20,10 @@ import org.bukkit.event.player.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -86,30 +90,31 @@ public final class SoundEventSelection implements ConfigurationSerializable {
     }
 
     static {
-        AVAILABLE_EVENTS = new ArrayList<Class<? extends Event>>(){{
-            add(BlockBreakEvent.class);
-            add(BlockPlaceEvent.class);
-            add(FurnaceExtractEvent.class);
-            add(InventoryOpenEvent.class);
-            add(optional("player.PlayerAdvancementDoneEvent"));
-            add(PlayerBedEnterEvent.class);
-            add(PlayerChangedWorldEvent.class);
-            add(PlayerDeathEvent.class);
-            add(PlayerEditBookEvent.class);
-            add(PlayerEggThrowEvent.class);
-            add(PlayerExpChangeEvent.class);
-            add(PlayerFishEvent.class);
-            add(PlayerJoinEvent.class);
-            add(PlayerItemBreakEvent.class);
-            add(PlayerItemConsumeEvent.class);
-            add(PlayerRespawnEvent.class);
-            add(optional("player.PlayerRiptideEvent"));
-            add(optional("player.PlayerItemMendEvent"));
-            add(PlayerGameModeChangeEvent.class);
-            add(SheepDyeWoolEvent.class);
-            add(SignChangeEvent.class);
-            add(PlayerInteractEntityEvent.class);
-        }}.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        AVAILABLE_EVENTS = ImmutableList.copyOf(ImmutableList.<Class<? extends Event>>builder()
+                .add(BlockBreakEvent.class)
+                .add(BlockPlaceEvent.class)
+                .add(FurnaceExtractEvent.class)
+                .add(InventoryOpenEvent.class)
+                .add(optional("player.PlayerAdvancementDoneEvent"))
+                .add(PlayerBedEnterEvent.class)
+                .add(PlayerChangedWorldEvent.class)
+                .add(PlayerDeathEvent.class)
+                .add(PlayerEditBookEvent.class)
+                .add(PlayerEggThrowEvent.class)
+                .add(PlayerExpChangeEvent.class)
+                .add(PlayerFishEvent.class)
+                .add(PlayerJoinEvent.class)
+                .add(PlayerItemBreakEvent.class)
+                .add(PlayerItemConsumeEvent.class)
+                .add(PlayerRespawnEvent.class)
+                .add(optional("player.PlayerRiptideEvent"))
+                .add(optional("player.PlayerItemMendEvent"))
+                .add(PlayerGameModeChangeEvent.class)
+                .add(SheepDyeWoolEvent.class)
+                .add(SignChangeEvent.class)
+                .add(PlayerInteractEntityEvent.class)
+                .build()
+                .stream().filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
     private static Class<? extends Event> optional(String name) {

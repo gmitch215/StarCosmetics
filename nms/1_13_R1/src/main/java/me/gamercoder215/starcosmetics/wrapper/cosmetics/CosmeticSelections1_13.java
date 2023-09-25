@@ -11,6 +11,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
+import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
@@ -231,6 +232,12 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
                     ), fromMined(100000, Material.SAND), LEGENDARY))
             .build();
 
+    // Gadgets
+
+    private static final List<CosmeticSelection<?>> GADGETS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new GadgetSelection("raygun", Material.LAPIS_LAZULI, loc -> line(loc, Particle.WATER_BUBBLE, 3, 5), fromStatistic(Statistic.PLAYER_KILLS, 200), UNCOMMON))
+            .build();
+
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
@@ -243,7 +250,7 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
             .put(NORMAL, join(NORMAL_HATS, NORMAL, "1_12"))
             .put(ANIMATED, join(ANIMATED_HATS, ANIMATED, "1_12"))
 
-            .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_12"))
+            .put(BaseGadget.INSTANCE, join(GADGETS, BaseGadget.INSTANCE, "1_12"))
             .build();
 
     @Override

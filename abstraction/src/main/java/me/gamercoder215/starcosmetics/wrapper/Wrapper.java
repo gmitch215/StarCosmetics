@@ -57,11 +57,12 @@ public interface Wrapper {
     default void registerEvents() {}
 
     static String getServerVersion() {
-        if (Bukkit.getServer() == null) return ""; // Using Test Server
+        if (Bukkit.getServer() == null) return "1_20_R2"; // Using Test Server
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
     }
 
     static DataWrapper getDataWrapper() {
+        if (Bukkit.getServer() == null) return new TestDataWrapper(); // Using Test Server
         try {
             Constructor<? extends DataWrapper> constr;
 
@@ -81,6 +82,7 @@ public interface Wrapper {
     }
 
     static Wrapper getWrapper() {
+        if (Bukkit.getServer() == null) return new TestWrapper(); // Using Test Server
         try {
             Constructor<? extends Wrapper> constr = Class.forName("me.gamercoder215.starcosmetics.wrapper.v" + getServerVersion() + ".Wrapper" + getServerVersion())
                     .asSubclass(Wrapper.class)

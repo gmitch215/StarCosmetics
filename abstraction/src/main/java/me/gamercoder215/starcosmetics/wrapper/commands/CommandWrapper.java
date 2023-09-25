@@ -20,7 +20,6 @@ import me.gamercoder215.starcosmetics.util.inventory.ItemBuilder;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventory;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
-import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -37,8 +36,9 @@ import java.util.*;
 
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.util.Generator.genGUI;
+import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.itemBuilder;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
-import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
+import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.builder;
 
 public interface CommandWrapper {
 
@@ -117,35 +117,29 @@ public interface CommandWrapper {
         StarInventory inv = Generator.genGUI("about", 27, get("menu.about"));
         inv.setCancelled();
 
-        ItemStack head = Generator.generateHead(p);
-        ItemMeta hMeta = head.getItemMeta();
-        hMeta.setDisplayName(ChatColor.AQUA + get("menu.about.head"));
-        head.setItemMeta(hMeta);
+        ItemStack head = itemBuilder(Generator.generateHead(p), meta -> meta.setDisplayName(ChatColor.AQUA + get("menu.about.head")));
         inv.setItem(4, head);
 
-        ItemStack cosmetics = StarMaterial.RED_CONCRETE.findStack();
-        ItemMeta cMeta = cosmetics.getItemMeta();
-        cMeta.setDisplayName(ChatColor.GOLD + get("menu.about.cosmetics"));
-
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.YELLOW + getWithArgs("menu.about.projectile_trail_count", comma(getCosmeticCount(TrailType.PROJECTILE)) ));
-        lore.add(ChatColor.DARK_GREEN + getWithArgs("menu.about.ground_trail_count", comma(getCosmeticCount(TrailType.GROUND)) ));
-        lore.add(ChatColor.AQUA + getWithArgs("menu.about.sound_trail_count", comma(getCosmeticCount(TrailType.PROJECTILE_SOUND)) ));
-
-        lore.add(" ");
-
-        lore.add(ChatColor.DARK_PURPLE + getWithArgs("menu.about.particle_shape_count", comma(getCosmeticCount(ParticleShape.class)) ));
-        lore.add(ChatColor.DARK_AQUA + getWithArgs("menu.about.structure_count", comma(StarConfig.getRegistry().getAvailableStructures().size()) ));
-        lore.add(ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length)));
-        lore.add(ChatColor.GREEN + getWithArgs("menu.about.hat_count", comma(getCosmeticCount(Hat.class))));
-        lore.add(ChatColor.BLUE + getWithArgs("menu.about.gadget_count", comma(getCosmeticCount(Gadget.class))));
-
-        lore.add(" ");
-
-        lore.add(ChatColor.RED + getWithArgs("menu.about.total_cosmetic_count", comma(getCosmeticCount()) ));
-        cMeta.setLore(lore);
-
-        cosmetics.setItemMeta(cMeta);
+        ItemStack cosmetics = itemBuilder(StarMaterial.RED_CONCRETE.findStack(),
+                meta -> {
+                    meta.setDisplayName(ChatColor.GOLD + get("menu.about.cosmetics"));
+                    meta.setLore(
+                            Arrays.asList(
+                                    ChatColor.YELLOW + getWithArgs("menu.about.projectile_trail_count", comma(getCosmeticCount(TrailType.PROJECTILE))),
+                                    ChatColor.DARK_GREEN + getWithArgs("menu.about.ground_trail_count", comma(getCosmeticCount(TrailType.GROUND))),
+                                    ChatColor.AQUA + getWithArgs("menu.about.sound_trail_count", comma(getCosmeticCount(TrailType.PROJECTILE_SOUND))),
+                                    " ",
+                                    ChatColor.DARK_PURPLE + getWithArgs("menu.about.particle_shape_count", comma(getCosmeticCount(ParticleShape.class))),
+                                    ChatColor.DARK_AQUA + getWithArgs("menu.about.structure_count", comma(StarConfig.getRegistry().getAvailableStructures().size())),
+                                    ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length)),
+                                    ChatColor.GREEN + getWithArgs("menu.about.hat_count", comma(getCosmeticCount(Hat.class))),
+                                    ChatColor.BLUE + getWithArgs("menu.about.gadget_count", comma(getCosmeticCount(Gadget.class))),
+                                    " ",
+                                    ChatColor.RED + getWithArgs("menu.about.total_cosmetic_count", comma(getCosmeticCount()))
+                            )
+                    );
+                }
+        );
         inv.setItem(10, cosmetics);
 
         inv.setItem(12,
@@ -212,20 +206,17 @@ public interface CommandWrapper {
 
         // Parents
 
-        for (CosmeticParent parent : CosmeticParent.values()) {
-            ItemStack item = new ItemStack(parent.getIcon());
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.YELLOW + get(parent.getDisplayKey()));
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
-            item.setItemMeta(meta);
-
-            NBTWrapper nbt = of(item);
-            nbt.setID("cosmetic:selection:parent");
-            nbt.set("parent", parent.name());
-            item = nbt.getItem();
-
-            inv.setItem(parent.getPlace(), item);
-        }
+        for (CosmeticParent parent : CosmeticParent.values())
+            inv.setItem(parent.getPlace(), builder(parent.getIcon(),
+                    meta -> {
+                        meta.setDisplayName(ChatColor.YELLOW + get(parent.getDisplayKey()));
+                        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
+                    },
+                    nbt -> {
+                        nbt.setID("cosmetic:selection:parent");
+                        nbt.set("parent", parent.name());
+                    })
+            );
 
         // Particle Shapes
 
@@ -233,85 +224,70 @@ public interface CommandWrapper {
         inv.setAttribute("collections:custom:particle", sel);
         inv.setAttribute("items_display:particle", "menu.cosmetics.shape");
 
-        ItemStack particles = StarMaterial.FIREWORK_STAR.findStack();
-        FireworkEffectMeta pMeta = (FireworkEffectMeta) particles.getItemMeta();
-        pMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.shape"));
-        pMeta.setEffect(FireworkEffect.builder()
-                .withColor(Color.fromRGB(r.nextInt(16777216)))
-                .build());
+        inv.setItem(24, builder(StarMaterial.FIREWORK_STAR.findStack(),
+                meta -> {
+                    FireworkEffectMeta pMeta = (FireworkEffectMeta) meta;
+                    pMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.shape"));
+                    pMeta.setEffect(FireworkEffect.builder()
+                            .withColor(Color.fromRGB(r.nextInt(16777216)))
+                            .build());
 
-        pMeta.addItemFlags(ItemFlag.values());
-
-        particles.setItemMeta(pMeta);
-        NBTWrapper pnbt = of(particles);
-        pnbt.setID("cosmetic:selection:custom");
-        pnbt.set("type", "particle");
-        pnbt.set("custom_id", "particle");
-        particles = pnbt.getItem();
-        inv.setItem(24, particles);
+                    pMeta.addItemFlags(ItemFlag.values());
+                },
+                nbt -> {
+                    nbt.setID("cosmetic:selection:custom");
+                    nbt.set("type", "particle");
+                    nbt.set("custom_id", "particle");
+                }
+        ));
 
         // Structures
 
         try {
             StarInventory structureInv = Generator.createStructureInventory(p);
-
-            ItemStack structures = new ItemStack(Material.STRUCTURE_BLOCK);
-            ItemMeta stMeta = structures.getItemMeta();
-            stMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.structure"));
-
-            structures.setItemMeta(stMeta);
-            NBTWrapper stnbt = of(structures);
-            stnbt.setID("cosmetic:selection:custom_inventory");
-            stnbt.set("inventory_key", "structures");
-            stnbt.set("cooldown", "structures");
-            structures = stnbt.getItem();
-            inv.setItem(29, structures);
+            inv.setItem(29, builder(Material.STRUCTURE_BLOCK,
+                    meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.structure")),
+                    nbt -> {
+                        nbt.setID("cosmetic:selection:custom_inventory");
+                        nbt.set("inventory_key", "structures");
+                        nbt.set("cooldown", "structures");
+                    }
+            ));
             inv.setAttribute("structures", structureInv);
         } catch (IllegalArgumentException ignored) {
             inv.setItem(29, ItemBuilder.LOCKED);
         }
 
         // Sound Events
-
-        ItemStack soundEvents = new ItemStack(Material.NOTE_BLOCK);
-        ItemMeta sMeta = soundEvents.getItemMeta();
-        sMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.sound"));
-
-        soundEvents.setItemMeta(sMeta);
-        NBTWrapper snbt = of(soundEvents);
-        snbt.setID("cosmetic:selection:custom_inventory");
-        snbt.set("inventory_key", "sound_events");
-        soundEvents = snbt.getItem();
-        inv.setItem(30, soundEvents);
+        inv.setItem(30, builder(Material.NOTE_BLOCK,
+                meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.sound")),
+                nbt -> {
+                    nbt.setID("cosmetic:selection:custom_inventory");
+                    nbt.set("inventory_key", "sound_events");
+                })
+        );
         inv.setAttribute("sound_events", Generator.createSelectionInventory(p));
 
         // Gadgets
 
-        ItemStack gadgets = StarMaterial.FIREWORK_ROCKET.findStack();
-        ItemMeta gMeta = gadgets.getItemMeta();
-        gMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.gadget"));
-
-        gadgets.setItemMeta(gMeta);
-
-        NBTWrapper gnbt = of(gadgets);
-        gnbt.setID("cosmetic:selection");
-        gnbt.set("cosmetic", BaseGadget.INSTANCE.getNamespace());
-        gnbt.set("display", BaseGadget.INSTANCE.getDisplayName());
-        gadgets = gnbt.getItem();
-        inv.setItem(32, gadgets);
+        inv.setItem(32, builder(StarMaterial.FIREWORK_ROCKET.findStack(),
+                meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.gadget")),
+                nbt -> {
+                    nbt.setID("cosmetic:selection");
+                    nbt.set("cosmetic", BaseGadget.INSTANCE.getNamespace());
+                    nbt.set("display", BaseGadget.INSTANCE.getDisplayName());
+                })
+        );
 
         // Pets
 
-        ItemStack pets = StarInventoryUtil.getHead("rabbit_pet");
-        ItemMeta petMeta = pets.getItemMeta();
-        petMeta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.pet"));
-        pets.setItemMeta(petMeta);
-
-        NBTWrapper petNBT = of(pets);
-        petNBT.setID("cosmetic:selection:custom_inventory");
-        petNBT.set("inventory_key", "pets");
-        pets = petNBT.getItem();
-        inv.setItem(33, pets);
+        inv.setItem(33, builder(StarInventoryUtil.getHead("rabbit_pet"),
+                meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.pet")),
+                nbt -> {
+                    nbt.setID("cosmetic:selection:custom_inventory");
+                    nbt.set("inventory_key", "pets");
+                }
+        ));
         inv.setAttribute("pets", Generator.createPetInventory(p));
 
         ItemStack settings = ItemBuilder.of(Material.NETHER_STAR)
@@ -421,17 +397,11 @@ public interface CommandWrapper {
         List<StarInventory> invs = Generator.createSelectionInventory(p, sel, get("menu.cosmetics.shape"));
         invs.forEach(inv -> StarInventoryUtil.setBack(inv, cw::cosmetics));
 
-        ItemStack cancel = new ItemStack(Material.BARRIER);
-        ItemMeta meta = cancel.getItemMeta();
-        meta.setDisplayName(ChatColor.RED + get("menu.cosmetics.particle.reset"));
-        cancel.setItemMeta(meta);
-
-        NBTWrapper n = of(cancel);
-        n.setID("cancel:particle");
-        cancel = n.getItem();
-
-        ItemStack cancelF = cancel;
-        invs.forEach(i -> i.setItem(18, cancelF));
+        ItemStack cancel = builder(Material.BARRIER,
+                meta -> meta.setDisplayName(ChatColor.RED + get("menu.cosmetics.particle.reset")),
+                nbt -> nbt.setID("cancel:particle")
+        );
+        invs.forEach(i -> i.setItem(18, cancel));
 
         p.openInventory(invs.get(0));
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
@@ -528,13 +498,13 @@ public interface CommandWrapper {
         message.setItemMeta(mMeta);
         inv.setItem(12, message);
 
-        ItemStack setMessage = NBTWrapper.builder(Material.PAPER,
+        ItemStack setMessage = builder(Material.PAPER,
                 meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.hologram.set")),
                 nbt -> nbt.setID("cosmetic:hologram:set")
         );
         inv.setItem(14, setMessage);
 
-        ItemStack resetMessage = NBTWrapper.builder(StarMaterial.RED_WOOL.findStack(),
+        ItemStack resetMessage = builder(StarMaterial.RED_WOOL.findStack(),
                 meta -> meta.setDisplayName(ChatColor.RED + get("menu.cosmetics.hologram.reset")),
                 nbt -> nbt.setID("cosmetic:hologram:reset")
         );

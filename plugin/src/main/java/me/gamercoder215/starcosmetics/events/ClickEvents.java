@@ -58,6 +58,7 @@ import java.util.function.Consumer;
 import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
+import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.builder;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.of;
 
 @SuppressWarnings("unchecked")
@@ -794,22 +795,20 @@ public final class ClickEvents implements Listener {
                             return;
                         }
 
-                        ItemStack newItem = item.clone();
-                        ItemMeta meta = newItem.getItemMeta();
-                        meta.setLore(Arrays.asList(
-                                ChatColor.GREEN + String.format("%,.1f", newV),
-                                " ",
-                                ChatColor.YELLOW + get("constants.menu.right_click_up"),
-                                ChatColor.YELLOW + get("constants.menu.left_click_down")
-                        ));
-                        newItem.setItemMeta(meta);
-
-                        NBTWrapper newNBT = of(newItem);
-                        newNBT.set("value", newV);
-                        newNBT.set("min", min);
-                        newNBT.set("max", max);
-                        newNBT.set("item", type);
-                        newItem = newNBT.getItem();
+                        ItemStack newItem = builder(item.clone(),
+                                meta -> meta.setLore(Arrays.asList(
+                                        ChatColor.GREEN + String.format("%,.1f", newV),
+                                        " ",
+                                        ChatColor.YELLOW + get("constants.menu.right_click_up"),
+                                        ChatColor.YELLOW + get("constants.menu.left_click_down")
+                                )),
+                                newNBT -> {
+                                    newNBT.set("value", newV);
+                                    newNBT.set("min", min);
+                                    newNBT.set("max", max);
+                                    newNBT.set("item", type);
+                                }
+                        );
 
                         inv.setItem(e.getSlot(), newItem);
                         if (click.isRightClick()) StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);

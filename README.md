@@ -26,6 +26,14 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+🔧 v1.2.2 - September 24, 2023
+- Gradle & CI Updates
+- Heavy Optimization & GUI Creation Changes
+- Added Custom Structures Loader in config.yml
+- Fix StructureReader Bugs
+- Improve Unit Testing
+- Other Minor Additions & Bug Fixes
+
 📰 v1.2.1 - August 26, 2023
 - Gradle Updates
 - **Armor Stand Holograms**

@@ -5,6 +5,11 @@ dependencies {
             strictly("1.9-R0.1-SNAPSHOT")
         }
     }
+    testImplementation("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT") {
+        version {
+            strictly("1.20.2-R0.1-SNAPSHOT")
+        }
+    }
 
     // Implementation Dependencies
     implementation("org.bstats:bstats-bukkit:3.0.2")
@@ -35,7 +40,8 @@ dependencies {
         "1_19_R1",
         "1_19_R2",
         "1_19_R3",
-        "1_20_R1"
+        "1_20_R1",
+        "1_20_R2"
     ).forEach { api(project(":starcosmetics-$it")) }
 }
 
@@ -49,6 +55,7 @@ tasks {
             "1_19_R2",
             "1_19_R3",
             "1_20_R1",
+            "1_20_R2"
         ).forEach { dependsOn(project(":starcosmetics-$it").tasks["remap"]) }
     }
 

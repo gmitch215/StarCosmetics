@@ -51,10 +51,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -82,6 +85,15 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     private static final Gson GSON = new Gson();
 
+    public StarCosmetics() {
+        super();
+    }
+
+    @VisibleForTesting
+    StarCosmetics(@NotNull final JavaPluginLoader loader, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file) {
+        super(loader, description, dataFolder, file);
+    }
+
     private boolean checkCompatible() {
         if (!Wrapper.isCompatible()) {
             getLogger().severe("StarCosmetics is not compatible with: " + Bukkit.getBukkitVersion() + " (Expected Wrapper" + Wrapper.getServerVersion() + ")");
@@ -107,7 +119,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         w.registerEvents();
     }
 
-    private static FileConfiguration config;
+    @VisibleForTesting
+    static FileConfiguration config;
     private static FileConfiguration cosmeticsFile;
 
     private static final List<Class<? extends ConfigurationSerializable>> SERIALIZABLE = ImmutableList.<Class<? extends ConfigurationSerializable>>builder()
@@ -216,6 +229,12 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     }
 
     @Override
+    public void setLanguage(String lang) {
+        config.set("language", lang);
+        saveConfig();
+    }
+
+    @Override
     public String get(String key) {
         Properties p = new Properties();
         String lang = getLanguage().equalsIgnoreCase("en") ? "" : "_" + getLanguage();
@@ -241,6 +260,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     @Override
     public void updatePluginCache() {
         STAR_PLAYER_CACHE.clear();
+        STRUCTURE_CACHE.clear();
     }
 
     @Override
@@ -423,6 +443,24 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
         config.set("cosmetics.max-hologram-limit", limit);
         saveConfig();
+    }
+
+    @Override
+    public @NotNull Set<Structure> getCustomStructures() {
+        List<String> files = config.getStringList("cosmetics.structures");
+        if (files.isEmpty()) return ImmutableSet.of();
+
+        Set<Structure> structures = new HashSet<>();
+
+        for (String file : files) {
+            File f = new File(getDataFolder(), file);
+            StructureReader r = getStructureReader(f);
+            if (r == null) continue;
+
+            structures.add(r.read());
+        }
+
+        return ImmutableSet.copyOf(structures);
     }
 
     // Other Utilities
@@ -711,6 +749,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
                 reader.close();
             }
         } catch (IOException e) { StarConfig.print(e); }
+
+        set.addAll(getCustomStructures());
 
         STRUCTURE_CACHE.addAll(set.stream()
                 .map(Structure::getInfo)

@@ -45,15 +45,19 @@ final class ModernStructureReader implements StructureReader {
                 int i = index.get();
 
                 switch (i) {
-                    case 0: minVersion = line; index.incrementAndGet(); continue;
+                    case 0: {
+                        minVersion = line;
+                        if (!StructureReader.isCompatible(minVersion)) {
+                            close();
+                            return null;
+                        }
+
+                        index.incrementAndGet();
+                        continue;
+                    }
                     case 1: key = line.substring(line.indexOf(":") + 1, line.lastIndexOf(":")); index.incrementAndGet(); continue;
                     case 2: displayKey = line; index.incrementAndGet(); continue;
                     case 3: rarity = Rarity.valueOf(line.toUpperCase()); index.incrementAndGet(); continue;
-                }
-
-                if (!StructureReader.isCompatible(minVersion)) {
-                    close();
-                    return null;
                 }
 
                 if (i == 4 && !line.equalsIgnoreCase("---")) throw new MalformedStructureException("Malformed Strucutre File: Expected '---' but got '" + line + "'");
@@ -68,14 +72,15 @@ final class ModernStructureReader implements StructureReader {
                         String[] entries = material.split(",");
 
                         for (String entry : entries) {
-                            String[] split = entry.split("=");
+                            String[] split = entry.split("=", 2);
+                            String value = split[1].replaceAll("[{}]", "");
 
                             int chance = Integer.parseInt(split[0].replaceAll("[%{}]", ""));
                             amount += chance;
 
-                            if (split[1].contains("[") && split[1].endsWith("]")) {
-                                String mat = split[1].split("\\[")[0];
-                                String data = "[" + split[1].split("\\[")[1];
+                            if (value.contains("[") && value.endsWith("]")) {
+                                String mat = value.split("\\[")[0];
+                                String data = "[" + value.split("\\[")[1].toLowerCase();
 
                                 Material m;
 
@@ -92,7 +97,7 @@ final class ModernStructureReader implements StructureReader {
                                 chances.put(m, chance);
                                 blockDataChances.put(m, data);
                             } else {
-                                String mat = split[1].replace("}", "").toUpperCase();
+                                String mat = value.toUpperCase();
 
                                 Material m;
 
@@ -131,7 +136,7 @@ final class ModernStructureReader implements StructureReader {
                         String data = null;
                         if (material.contains("[") && material.endsWith("]")) {
                             mat = material.split("\\[")[0].toUpperCase();
-                            data = "[" + material.split("\\[")[1];
+                            data = "[" + material.split("\\[")[1].toLowerCase();
                         }
 
                         Material m;
