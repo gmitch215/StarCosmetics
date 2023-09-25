@@ -5,6 +5,11 @@ dependencies {
             strictly("1.9-R0.1-SNAPSHOT")
         }
     }
+    testImplementation("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT") {
+        version {
+            strictly("1.20.2-R0.1-SNAPSHOT")
+        }
+    }
 
     // Implementation Dependencies
     implementation("org.bstats:bstats-bukkit:3.0.2")
