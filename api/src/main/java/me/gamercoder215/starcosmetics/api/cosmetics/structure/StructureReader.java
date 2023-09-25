@@ -24,6 +24,7 @@ public interface StructureReader extends Closeable {
      */
     static boolean isCompatible(String minVersion) {
         if (minVersion.equalsIgnoreCase("ALL")) return true;
+        if (Bukkit.getServer() == null) return false;
 
         String currentV = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
 
