@@ -54,8 +54,6 @@ public interface StarConfig {
      */
     @NotNull
     static StarConfig getConfig() {
-        if (Bukkit.getServer() == null) return new TestStarConfig(); // Using Test Implementation
-
         return (StarConfig) getPlugin();
     }
 
@@ -218,6 +216,13 @@ public interface StarConfig {
      */
     @NotNull
     String getLanguage();
+
+    /**
+     * Sets the current Language.
+     * @param language Language ID to set
+     */
+    @NotNull
+    void setLanguage(@NotNull String language);
 
     /**
      * Fetches the locale based on {@link #getLanguage()}.
