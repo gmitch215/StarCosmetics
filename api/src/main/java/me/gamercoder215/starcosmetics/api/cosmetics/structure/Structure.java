@@ -119,6 +119,7 @@ public abstract class Structure implements Cloneable {
         return "Structure{" +
                 "minVersion='" + minVersion + '\'' +
                 ", key='" + key + '\'' +
+                ", name='" + getLocalizedName() + '\'' +
                 '}';
     }
 }
