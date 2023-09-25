@@ -7,6 +7,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +27,8 @@ public enum StarSound {
     ITEM_TRIDENT_RIPTIDE_1,
     ;
 
-    private final List<String> sounds = new ArrayList<>();
+    @VisibleForTesting
+    final List<String> sounds = new ArrayList<>();
 
     StarSound(String... sounds) {
         // Ensure names are uppercase

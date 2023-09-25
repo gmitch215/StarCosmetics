@@ -51,10 +51,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -82,6 +85,15 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     private static final Gson GSON = new Gson();
 
+    public StarCosmetics() {
+        super();
+    }
+
+    @VisibleForTesting
+    StarCosmetics(@NotNull final JavaPluginLoader loader, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file) {
+        super(loader, description, dataFolder, file);
+    }
+
     private boolean checkCompatible() {
         if (!Wrapper.isCompatible()) {
             getLogger().severe("StarCosmetics is not compatible with: " + Bukkit.getBukkitVersion() + " (Expected Wrapper" + Wrapper.getServerVersion() + ")");
@@ -107,7 +119,8 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         w.registerEvents();
     }
 
-    private static FileConfiguration config;
+    @VisibleForTesting
+    static FileConfiguration config;
     private static FileConfiguration cosmeticsFile;
 
     private static final List<Class<? extends ConfigurationSerializable>> SERIALIZABLE = ImmutableList.<Class<? extends ConfigurationSerializable>>builder()
@@ -213,6 +226,12 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     @Override
     public String getLanguage() {
         return config.getString("language", "en");
+    }
+
+    @Override
+    public void setLanguage(String lang) {
+        config.set("language", lang);
+        saveConfig();
     }
 
     @Override

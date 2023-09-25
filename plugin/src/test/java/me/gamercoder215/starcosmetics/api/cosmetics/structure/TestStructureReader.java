@@ -5,9 +5,42 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileReader;
 import java.util.Arrays;
 
 public class TestStructureReader {
+
+    @Test
+    @DisplayName("Test LegacyStructureReader")
+    public void testLegacyStructureReader() throws Exception{
+        Structure s = new LegacyStructureReader(new FileReader(
+                Thread.currentThread().getContextClassLoader().getResource("test.scs").getFile()
+        )).read();
+        Assertions.assertNotNull(s);
+        Assertions.assertNotNull(s.getRarity());
+        Assertions.assertFalse(s.getMaterials().isEmpty());
+        Assertions.assertTrue(s.getPointsPlaced().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Test ModernStructureReader")
+    public void testModernStructureReader() throws Exception {
+        Structure s = new ModernStructureReader(new FileReader(
+                Thread.currentThread().getContextClassLoader().getResource("test.scs").getFile()
+        )).read();
+        Assertions.assertNotNull(s);
+        Assertions.assertNotNull(s.getRarity());
+        Assertions.assertFalse(s.getMaterials().isEmpty());
+        Assertions.assertTrue(s.getPointsPlaced().isEmpty());
+
+        Structure s2 = new ModernStructureReader(new FileReader(
+                Thread.currentThread().getContextClassLoader().getResource("test-modern.scs").getFile()
+        )).read();
+        Assertions.assertNotNull(s2);
+        Assertions.assertNotNull(s2.getRarity());
+        Assertions.assertFalse(s2.getMaterials().isEmpty());
+        Assertions.assertTrue(s2.getPointsPlaced().isEmpty());
+    }
 
     @Test
     @DisplayName("Test Raw Points")

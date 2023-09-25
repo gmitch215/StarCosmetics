@@ -1,5 +1,6 @@
 package me.gamercoder215.starcosmetics.api.cosmetics.structure;
 
+import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import org.bukkit.Bukkit;
@@ -28,12 +29,16 @@ final class ModernStructure extends Structure {
 
         this.rarity = rarity == null ? Rarity.COMMON : rarity;
         this.points = points;
-        this.pointData = pointData.entrySet()
-            .stream()
-            .filter(Objects::nonNull)
-            .filter(e -> e.getValue() != null && !e.getValue().isEmpty())
-            .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), Bukkit.createBlockData(e.getValue())))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        if (Bukkit.getServer() != null)
+            this.pointData = pointData.entrySet()
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(e -> e.getValue() != null && !e.getValue().isEmpty())
+                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), Bukkit.createBlockData(e.getValue())))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        else
+            this.pointData = ImmutableMap.of();
     }
 
 

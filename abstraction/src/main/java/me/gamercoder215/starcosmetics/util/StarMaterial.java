@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.util;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,10 +118,12 @@ public enum StarMaterial {
     SNOWBALL("snow_ball"),
     ;
 
-    private final Material defaultV;
+    @VisibleForTesting
+    final Material defaultV;
     private final short data;
     private final boolean dataOnlyLegacy;
-    private final List<String> names = new ArrayList<>();
+    @VisibleForTesting
+    final List<String> names = new ArrayList<>();
 
     StarMaterial(Material defaultV, int data, boolean dataOnlyLegacy, String... allnames) {
         this.names.add(name());

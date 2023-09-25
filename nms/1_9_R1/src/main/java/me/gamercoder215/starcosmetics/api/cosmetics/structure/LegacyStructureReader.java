@@ -39,15 +39,19 @@ final class LegacyStructureReader implements StructureReader {
                 int i = index.get();
 
                 switch (i) {
-                    case 0: minVersion = line; index.incrementAndGet(); continue;
+                    case 0: {
+                        minVersion = line;
+                        if (!StructureReader.isCompatible(minVersion)) {
+                            close();
+                            return null;
+                        }
+
+                        index.incrementAndGet();
+                        continue;
+                    }
                     case 1: key = line.substring(line.indexOf(":") + 1, line.lastIndexOf(":")); index.incrementAndGet(); continue;
                     case 2: displayKey = line; index.incrementAndGet(); continue;
                     case 3: rarity = Rarity.valueOf(line.toUpperCase()); index.incrementAndGet(); continue;
-                }
-
-                if (!StructureReader.isCompatible(minVersion)) {
-                    close();
-                    return null;
                 }
 
                 if (i == 4 && !line.equalsIgnoreCase("---")) throw new MalformedStructureException("Malformed Strucutre File: Expected '---' but got '" + line + "'");
@@ -61,7 +65,7 @@ final class LegacyStructureReader implements StructureReader {
                         String[] entries = material.split(",");
 
                         for (String entry : entries) {
-                            String[] split = entry.split("=");
+                            String[] split = entry.split("=", 2);
 
                             int chance = Integer.parseInt(split[0].replaceAll("[%{}]", ""));
                             amount += chance;
@@ -120,10 +124,10 @@ final class LegacyStructureReader implements StructureReader {
             close();
             return new LegacyStructure(key, minVersion, displayKey, points, rarity);
         } catch (IOException e) {
-            StarConfig.print(e);
+            throw new RuntimeException(e);
         }
 
-        return null;
+//        return null;
     }
 
     @Override
