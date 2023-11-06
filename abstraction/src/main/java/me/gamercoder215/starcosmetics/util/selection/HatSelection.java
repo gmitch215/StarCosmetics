@@ -15,11 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.itemBuilder;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
@@ -49,30 +44,6 @@ public final class HatSelection extends CosmeticSelection<Object> {
 
         this.parent = BaseHat.ANIMATED;
         this.name = name;
-    }
-
-    public static AnimatedHatData of(long interval, Iterable<ItemStack> frames) {
-        AnimatedHatData.Builder builder = AnimatedHatData.builder();
-        for (ItemStack item : frames)
-            builder.addFrame(interval, item);
-        
-        return builder.build();
-    }
-
-    public static AnimatedHatData of(long interval, ItemStack... frames) {
-        return of(interval, Arrays.asList(frames));
-    }
-
-    public static AnimatedHatData of(long interval, Collection<Material> frames) {
-        return of(interval, frames.stream()
-                .filter(Objects::nonNull)
-                .map(ItemStack::new)
-                .collect(Collectors.toList())
-        );
-    }
-
-    public static AnimatedHatData of(long interval, Material... frames) {
-        return of(interval, Arrays.asList(frames));
     }
 
     @Override

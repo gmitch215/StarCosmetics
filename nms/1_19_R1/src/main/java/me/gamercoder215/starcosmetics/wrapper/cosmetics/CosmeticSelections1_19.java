@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
@@ -116,9 +117,13 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
 
             .add(new HatSelection("packed_mud", Material.PACKED_MUD,
                     fromMined(145, Material.MUD), Rarity.OCCASIONAL))
+            .add(new HatSelection("mangrove_leaves", Material.MANGROVE_LEAVES,
+                    fromMined(75, Material.MANGROVE_LEAVES), Rarity.OCCASIONAL))
 
             .add(new HatSelection("sculk", Material.SCULK,
                     fromMined(300, Material.SCULK), Rarity.UNCOMMON))
+            .add(new HatSelection("mangrove_roots", Material.MANGROVE_ROOTS,
+                    fromMined(110, Material.MANGROVE_ROOTS), Rarity.UNCOMMON))
 
             .add(new HatSelection("mangrove_fence", Material.MANGROVE_FENCE,
                     fromCrafted(250, Material.MANGROVE_FENCE), Rarity.RARE))
@@ -126,6 +131,16 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
             .add(new HatSelection("mangrove_fence_gate", Material.MANGROVE_FENCE_GATE,
                     fromCrafted(680, Material.MANGROVE_FENCE), Rarity.EPIC))
 
+            .build();
+
+    // Animated Hats
+
+    private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new HatSelection("froglight", AnimatedHatData.of(10,
+                    Material.OCHRE_FROGLIGHT,
+                    Material.VERDANT_FROGLIGHT,
+                    Material.PEARLESCENT_FROGLIGHT
+            ), fromKilled(825, EntityType.MAGMA_CUBE), Rarity.EPIC))
             .build();
 
     // Selections

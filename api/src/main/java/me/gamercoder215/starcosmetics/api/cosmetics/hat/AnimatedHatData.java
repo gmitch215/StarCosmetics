@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.api.cosmetics.hat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -27,6 +29,30 @@ public final class AnimatedHatData implements Cloneable {
     private AnimatedHatData(List<Map.Entry<Long, ItemStack>> frames) {
         this.frames.addAll(frames);
         this.started = false;
+    }
+
+    public static AnimatedHatData of(long interval, Iterable<ItemStack> frames) {
+        Builder builder = builder();
+        for (ItemStack item : frames)
+            builder.addFrame(interval, item);
+
+        return builder.build();
+    }
+
+    public static AnimatedHatData of(long interval, ItemStack... frames) {
+        return of(interval, Arrays.asList(frames));
+    }
+
+    public static AnimatedHatData of(long interval, Collection<Material> frames) {
+        return of(interval, frames.stream()
+                .filter(Objects::nonNull)
+                .map(ItemStack::new)
+                .collect(Collectors.toList())
+        );
+    }
+
+    public static AnimatedHatData of(long interval, Material... frames) {
+        return of(interval, Arrays.asList(frames));
     }
 
     /**

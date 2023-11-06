@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
@@ -161,12 +162,12 @@ final class CosmeticSelections1_17 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("deepslate_ores", HatSelection.of(20,
+            .add(new HatSelection("deepslate_ores", AnimatedHatData.of(20,
                 Material.DEEPSLATE_COAL_ORE, Material.DEEPSLATE_COPPER_ORE, Material.DEEPSLATE_IRON_ORE,
                 Material.DEEPSLATE_LAPIS_ORE, Material.DEEPSLATE_REDSTONE_ORE, Material.DEEPSLATE_GOLD_ORE,
                 Material.DEEPSLATE_DIAMOND_ORE, Material.DEEPSLATE_EMERALD_ORE  
             ), fromMined(400, Material.DEEPSLATE_COAL_ORE), Rarity.EPIC))
-            .add(new HatSelection("animated_azalea", HatSelection.of(60,
+            .add(new HatSelection("animated_azalea", AnimatedHatData.of(60,
                 Material.AZALEA, Material.FLOWERING_AZALEA
             ), fromMined(500, Material.AZALEA_LEAVES), Rarity.LEGENDARY))
             .build();
