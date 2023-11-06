@@ -102,7 +102,7 @@ subprojects {
         compileOnly("org.jetbrains:annotations:24.0.1")
 
         testImplementation("org.mockito:mockito-core:5.6.0")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
 
         testImplementation("org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT")
         testImplementation("net.md-5:bungeecord-chat:1.20-R0.1")
