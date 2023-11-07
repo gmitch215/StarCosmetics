@@ -6,7 +6,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
@@ -334,8 +334,8 @@ public final class StarPlayer {
         if (Cosmetic.class.equals(clazz)) return;
 
         if (loc != null) {
-            if (loc.getInput() instanceof AnimatedHatData) {
-                AnimatedHatData old = (AnimatedHatData) getSelectedCosmetic(Hat.class).getInput();
+            if (loc.getInput() instanceof AnimatedItem) {
+                AnimatedItem old = (AnimatedItem) getSelectedCosmetic(Hat.class).getInput();
                 old.stop();
             }
         }

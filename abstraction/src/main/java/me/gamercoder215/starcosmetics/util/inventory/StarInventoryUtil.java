@@ -6,7 +6,7 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
@@ -434,8 +434,8 @@ public final class StarInventoryUtil {
         ItemStack item;
         if (input instanceof ItemStack)
             item = ((ItemStack) input).clone();
-        else if (input instanceof AnimatedHatData)
-            item = ((AnimatedHatData) input).getFrames().get(0).getValue();
+        else if (input instanceof AnimatedItem)
+            item = ((AnimatedItem) input).getFrames().get(0).getValue();
         else
             item = new ItemStack(toInputMaterial(input, loc));
 

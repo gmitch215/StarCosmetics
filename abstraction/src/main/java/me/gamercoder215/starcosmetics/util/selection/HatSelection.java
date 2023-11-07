@@ -4,7 +4,7 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
@@ -39,7 +39,7 @@ public final class HatSelection extends CosmeticSelection<Object> {
         this(name, StarInventoryUtil.cleanSkull(itemBuilder(StarMaterial.PLAYER_HEAD.find(), meta -> ((SkullMeta) meta).setOwner(skullOwner))), criteria, rarity);
     }
 
-    public HatSelection(String name, AnimatedHatData data, CompletionCriteria criteria, Rarity rarity) {
+    public HatSelection(String name, AnimatedItem data, CompletionCriteria criteria, Rarity rarity) {
         super(data.map(i -> NBTWrapper.builder(i, meta -> meta.setDisplayName(" "), nbt -> nbt.set("hat", true))), criteria, rarity);
 
         this.parent = BaseHat.ANIMATED;
@@ -74,7 +74,7 @@ public final class HatSelection extends CosmeticSelection<Object> {
                     get("cosmetics.hat." + name, str)
             );
         } else {
-            AnimatedHatData data = (AnimatedHatData) o;
+            AnimatedItem data = (AnimatedItem) o;
             ItemStack input = data.getFrames().get(0).getValue();
             String str;
             if (input.getItemMeta() instanceof SkullMeta) {

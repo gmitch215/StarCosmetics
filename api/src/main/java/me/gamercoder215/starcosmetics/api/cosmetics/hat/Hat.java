@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.api.cosmetics.hat;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.State;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,6 @@ public interface Hat extends Cosmetic {
      * @return The Hat's Type.
      */
     @NotNull
-    HatType getType();
+    State getType();
 
 }

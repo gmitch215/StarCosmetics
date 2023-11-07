@@ -22,7 +22,7 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
-import static me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData.of;
+import static me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem.of;
 
 final class CosmeticSelections1_9 implements CosmeticSelections {
 

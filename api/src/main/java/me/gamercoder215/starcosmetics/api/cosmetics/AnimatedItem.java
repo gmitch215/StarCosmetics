@@ -1,4 +1,4 @@
-package me.gamercoder215.starcosmetics.api.cosmetics.hat;
+package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -16,43 +16,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * <p>Utility class for describing instructions creating an Animated Hat</p>
+ * <p>Utility class for describing instructions creating an Animated Item</p>
  * <strong>NOTE: Starting this hat will NOT automatically and safely remove/replace existing helmets or hats.</strong>
  */
-public final class AnimatedHatData implements Cloneable {
+public final class AnimatedItem implements Cloneable {
 
     private final List<Map.Entry<Long, ItemStack>> frames = new ArrayList<>();
 
     private Player player = null;
     private boolean started;
 
-    private AnimatedHatData(List<Map.Entry<Long, ItemStack>> frames) {
+    private AnimatedItem(List<Map.Entry<Long, ItemStack>> frames) {
         this.frames.addAll(frames);
         this.started = false;
-    }
-
-    public static AnimatedHatData of(long interval, Iterable<ItemStack> frames) {
-        Builder builder = builder();
-        for (ItemStack item : frames)
-            builder.addFrame(interval, item);
-
-        return builder.build();
-    }
-
-    public static AnimatedHatData of(long interval, ItemStack... frames) {
-        return of(interval, Arrays.asList(frames));
-    }
-
-    public static AnimatedHatData of(long interval, Collection<Material> frames) {
-        return of(interval, frames.stream()
-                .filter(Objects::nonNull)
-                .map(ItemStack::new)
-                .collect(Collectors.toList())
-        );
-    }
-
-    public static AnimatedHatData of(long interval, Material... frames) {
-        return of(interval, Arrays.asList(frames));
     }
 
     /**
@@ -96,14 +72,14 @@ public final class AnimatedHatData implements Cloneable {
      * @return new Animated Hat Data with mapped itemstack hats 
      */
     @NotNull
-    public AnimatedHatData map(@NotNull Function<ItemStack, ItemStack> mapper) {
+    public AnimatedItem map(@NotNull Function<ItemStack, ItemStack> mapper) {
         List<Map.Entry<Long, ItemStack>> map = new ArrayList<>();
         for (Map.Entry<Long, ItemStack> frame : this.frames)
             map.add(
                 new AbstractMap.SimpleEntry<>(frame.getKey(), mapper.apply(frame.getValue()))
             );
 
-        return new AnimatedHatData(map);
+        return new AnimatedItem(map);
     }
 
     /**
@@ -170,9 +146,9 @@ public final class AnimatedHatData implements Cloneable {
      * @return Cloned Animated Hat Data
      */
     @NotNull
-    public AnimatedHatData clone() {
+    public AnimatedItem clone() {
         try {
-            return (AnimatedHatData) super.clone();
+            return (AnimatedItem) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
@@ -184,11 +160,59 @@ public final class AnimatedHatData implements Cloneable {
      * @return Constructed AnimatedHatData
      * @throws IllegalArgumentException if frames is null or less than 2 frames
      */
-    public static AnimatedHatData of(@NotNull List<Map.Entry<Long, ItemStack>> frames) throws IllegalArgumentException {
+    public static AnimatedItem of(@NotNull List<Map.Entry<Long, ItemStack>> frames) throws IllegalArgumentException {
         if (frames == null) throw new IllegalArgumentException("Cannot build Animated Hat Data with null frames.");
         if (frames.size() < 2) throw new IllegalArgumentException("Cannot build Animated Hat Data with 1 or less frames.");
         
-        return new AnimatedHatData(frames);
+        return new AnimatedItem(frames);
+    }
+
+    /**
+     * Constructs a new Animated Hat Data with the given frames.
+     * @param interval interval between frames, in ticks
+     * @param frames frames to use
+     * @return Constructed AnimatedHatData
+     */
+    public static AnimatedItem of(long interval, Iterable<ItemStack> frames) {
+        Builder builder = builder();
+        for (ItemStack item : frames)
+            builder.addFrame(interval, item);
+
+        return builder.build();
+    }
+
+    /**
+     * Constructs a new Animated Hat Data with the given frames.
+     * @param interval interval between frames, in ticks
+     * @param frames frames to use
+     * @return Constructed AnimatedHatData
+     */
+    public static AnimatedItem of(long interval, ItemStack... frames) {
+        return of(interval, Arrays.asList(frames));
+    }
+
+    /**
+     * Constructs a new Animated Hat Data with the given frames.
+     * @param interval interval between frames, in ticks
+     * @param frames frames to use
+     * @return Constructed AnimatedHatData
+     */
+    public static AnimatedItem of(long interval, Collection<Material> frames) {
+        return of(interval, frames.stream()
+                .filter(Objects::nonNull)
+                .map(ItemStack::new)
+                .collect(Collectors.toList())
+        );
+    }
+
+    /**
+     * Constructs a new Animated Hat Data with the given frames.
+     * @param interval interval between frames, in ticks
+     * @param frames frames to use
+     * @return Constructed AnimatedHatData
+     */
+    public static AnimatedItem of(long interval, Material... frames) {
+        return of(interval, Arrays.asList(frames));
     }
 
     /**
@@ -280,10 +304,10 @@ public final class AnimatedHatData implements Cloneable {
          * @throws IllegalStateException if there are less than 2 frames
          */
         @NotNull
-        public AnimatedHatData build() throws IllegalStateException{
+        public AnimatedItem build() throws IllegalStateException{
             if (frames.size() < 2) throw new IllegalStateException("Cannot build Animated Hat Data with 1 or less frames.");
 
-            return new AnimatedHatData(frames);
+            return new AnimatedItem(frames);
         }
 
     }

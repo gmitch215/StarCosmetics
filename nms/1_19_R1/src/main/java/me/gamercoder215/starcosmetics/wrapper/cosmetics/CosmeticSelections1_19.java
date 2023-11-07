@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
@@ -136,7 +136,7 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("froglight", AnimatedHatData.of(10,
+            .add(new HatSelection("froglight", AnimatedItem.of(10,
                     Material.OCHRE_FROGLIGHT,
                     Material.VERDANT_FROGLIGHT,
                     Material.PEARLESCENT_FROGLIGHT

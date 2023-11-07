@@ -3,7 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
@@ -99,7 +99,7 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("miner_pot_animated", AnimatedHatData.of(20,
+            .add(new HatSelection("miner_pot_animated", AnimatedItem.of(20,
                     decoratedPot(Material.MINER_POTTERY_SHERD), decoratedPot(Material.PRIZE_POTTERY_SHERD)
             ), fromMined(15, Material.EMERALD_ORE), LEGENDARY))
             .build();
