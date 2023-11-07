@@ -1,9 +1,12 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,11 +17,14 @@ public enum CosmeticParent {
             BaseTrail.PROJECTILE_TRAIL, BaseTrail.GROUND_TRAIL, BaseTrail.SOUND_TRAIL),
 
     HATS(Material.LEATHER_HELMET, 22, Hat.class,
-            BaseHat.NORMAL, BaseHat.ANIMATED)
+            BaseHat.NORMAL, BaseHat.ANIMATED),
+
+    CAPES(StarMaterial.BLUE_BANNER.findStack(), 32, Cape.class,
+            BaseCape.NORMAL, BaseCape.ANIMATED)
 
     ;
 
-    private final Material icon;
+    private final ItemStack icon;
 
     private final Cosmetic[] children;
 
@@ -29,6 +35,11 @@ public enum CosmeticParent {
 
     @SafeVarargs
     <T extends Cosmetic> CosmeticParent(String prefix, Material icon, int place, Class<T> childClass, T... children) {
+        this(prefix, new ItemStack(icon), place, childClass, children);
+    }
+
+    @SafeVarargs
+    <T extends Cosmetic> CosmeticParent(String prefix, ItemStack icon, int place, Class<T> childClass, T... children) {
         this.prefix = prefix;
         this.icon = icon;
         this.children = children;
@@ -42,7 +53,17 @@ public enum CosmeticParent {
     }
 
     @SafeVarargs
+    <T extends Cosmetic> CosmeticParent(ItemStack icon, int place, Class<T> childClass, T... children) {
+        this(ChatColor.YELLOW, icon, place, childClass, children);
+    }
+
+    @SafeVarargs
     <T extends Cosmetic> CosmeticParent(ChatColor color, Material icon, int place, Class<T> childClass, T... children) {
+        this(color.toString(), icon, place, childClass, children);
+    }
+
+    @SafeVarargs
+    <T extends Cosmetic> CosmeticParent(ChatColor color, ItemStack icon, int place, Class<T> childClass, T... children) {
         this(color.toString(), icon, place, childClass, children);
     }
 
@@ -77,7 +98,7 @@ public enum CosmeticParent {
         return "menu.cosmetics." + name().toLowerCase();
     }
 
-    public Material getIcon() {
+    public ItemStack getIcon() {
         return this.icon;
     }
 

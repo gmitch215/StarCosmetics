@@ -270,7 +270,7 @@ public interface CommandWrapper {
 
         // Gadgets
 
-        inv.setItem(32, builder(StarMaterial.FIREWORK_ROCKET.findStack(),
+        inv.setItem(31, builder(StarMaterial.FIREWORK_ROCKET.findStack(),
                 meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.gadget")),
                 nbt -> {
                     nbt.setID("cosmetic:selection");
