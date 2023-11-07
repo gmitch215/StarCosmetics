@@ -116,6 +116,14 @@ public enum StarMaterial {
     END_PORTAL_FRAME("ender_portal_frame"),
 
     SNOWBALL("snow_ball"),
+
+    LIME_BANNER(5, "banner"),
+
+    RED_BANNER(14, "banner"),
+
+    WHITE_BANNER(0, "banner"),
+
+    BLUE_BANNER(11, "banner")
     ;
 
     @VisibleForTesting
