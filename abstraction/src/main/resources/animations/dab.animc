@@ -1,0 +1,500 @@
+interpolate
+length 250
+frame 1
+Armorstand_Left_Arm -0.11839999524084877 -0.05919999762042438 -0.023680000715696408
+frame 2
+Armorstand_Left_Arm -0.46719998698938736 -0.23359999349469368 -0.09344000273396276
+frame 3
+Armorstand_Left_Arm -1.036799984284604 -0.518399992142302 -0.20735999418887818
+frame 4
+Armorstand_Left_Arm -1.8175999961654876 -0.9087999980827438 -0.3635200099052681
+frame 5
+Armorstand_Left_Arm -2.800000191753585 -1.4000000958767924 -0.5600000596950581
+frame 6
+Armorstand_Left_Arm -3.974399993118502 -1.987199996559251 -0.7948799666071887
+frame 7
+Armorstand_Left_Arm -5.3311999962686105 -2.6655999981343053 -1.066240127319769
+frame 8
+Armorstand_Left_Arm -6.860799516551809 -3.4303997582759047 -1.3721600313764089
+frame 9
+Armorstand_Left_Arm -8.553598723089648 -4.276799361544824 -1.7107199153726587
+frame 10
+Armorstand_Left_Arm -10.399999492550963 -5.1999997462754814 -2.07999985582151
+frame 11
+Armorstand_Left_Arm -12.390397725189072 -6.195198862594536 -2.4780797157925436
+frame 12
+Armorstand_Left_Arm -14.515200420314693 -7.257600210157347 -2.903039998685574
+frame 13
+Armorstand_Left_Arm -16.764798355539263 -8.382399177769631 -3.3529599272399464
+frame 14
+Armorstand_Left_Arm -19.129597676399854 -9.564798838199927 -3.8259193645252414
+frame 15
+Armorstand_Left_Arm -21.599996844470716 -10.799998422235358 -4.319999881158331
+frame 16
+Armorstand_Left_Arm -24.166399443967986 -12.083199721983993 -4.8332800595483265
+frame 17
+Armorstand_Left_Arm -26.81919710627675 -13.409598553138375 -5.3638393358779854
+frame 18
+Armorstand_Left_Arm -29.548798538255014 -14.774399269127507 -5.909759707651003
+frame 19
+Armorstand_Left_Arm -32.34559366374057 -16.172796831870286 -6.469118903502843
+frame 20
+Armorstand_Left_Arm -35.1999980197806 -17.5999990098903 -7.0399993478240255
+frame 21
+Armorstand_Left_Arm -38.10239470002372 -19.05119735001186 -7.620478769250015
+frame 22
+Armorstand_Left_Arm -41.04319411887524 -20.52159705943762 -8.208639165284508
+frame 23
+Armorstand_Left_Arm -44.01279303036212 -22.00639651518106 -8.802559972110258
+frame 24
+Armorstand_Left_Arm -47.001598433795074 -23.500799216897537 -9.400319345249557
+frame 25
+Armorstand_Left_Arm -49.999996837917315 -24.999998418958658 -9.99999970909292
+frame 26
+Armorstand_Left_Arm -52.99839524203955 -26.499197621019775 -10.599680072936286
+frame 27
+Armorstand_Left_Arm -55.987193815283334 -27.993596907641667 -11.197437738528292
+frame 28
+Armorstand_Left_Arm -58.95679272677022 -29.47839636338511 -11.791358545354043
+frame 29
+Armorstand_Left_Arm -61.897592145621736 -30.948796072810868 -12.379518941388534
+frame 30
+Armorstand_Left_Arm -64.79999224095944 -32.39999612047972 -12.959999643474994
+frame 31
+Armorstand_Left_Arm -67.6543897668103 -33.82719488340515 -13.530878807135707
+frame 32
+Armorstand_Left_Arm -70.45118830739044 -35.22559415369522 -14.0902371492139
+frame 33
+Armorstand_Left_Arm -73.18080510729433 -36.590402553647166 -14.636159655421034
+frame 34
+Armorstand_Left_Arm -75.83359593941393 -37.91679796970696 -15.16671850486387
+frame 35
+Armorstand_Left_Arm -78.39999170872203 -39.19999585436101 -15.679996975706572
+frame 36
+Armorstand_Left_Arm -80.8703891692456 -40.4351945846228 -16.174079199886954
+frame 37
+Armorstand_Left_Arm -83.23519190520078 -41.61759595260039 -16.647039064059072
+frame 38
+Armorstand_Left_Arm -85.48478984042535 -42.742394920212675 -17.096957285066154
+frame 39
+Armorstand_Left_Arm -87.60960021951378 -43.80480010975689 -17.521917994846007
+frame 40
+Armorstand_Left_Arm -89.60000613611471 -44.80000306805736 -17.919998495147276
+frame 41
+Armorstand_Left_Arm -91.44639751406592 -45.72319875703296 -18.289277795265892
+frame 42
+Armorstand_Left_Arm -93.13919159796188 -46.56959579898094 -18.627838319592374
+frame 43
+Armorstand_Left_Arm -94.66879880220789 -47.334399401103944 -18.93375907742266
+frame 44
+Armorstand_Left_Arm -96.02558856007424 -48.01279428003712 -19.205119078052682
+frame 45
+Armorstand_Left_Arm -97.19998494634459 -48.59999247317229 -19.439999038325666
+frame 46
+Armorstand_Left_Arm -98.1823983754242 -49.0911991877121 -19.63647967508484
+frame 47
+Armorstand_Left_Arm -98.96321194096171 -49.48160597048086 -19.79263829007884
+frame 48
+Armorstand_Left_Arm -99.53280873660576 -49.76640436830288 -19.90655901524548
+frame 49
+Armorstand_Left_Arm -99.88161283713997 -49.940806418569984 -19.976319152333406
+frame 50
+Armorstand_Left_Arm -100.0000005060238 -50.0000002530119 -19.99999941818584
+frame 51
+Armorstand_Left_Arm -99.88159917676163 -49.94079958838081 -19.976319152333406
+frame 52
+Armorstand_Left_Arm -99.53280190641658 -49.76640095320829 -19.90655901524548
+frame 53
+Armorstand_Left_Arm -98.96319828058337 -49.481599140291685 -19.792639997626132
+frame 54
+Armorstand_Left_Arm -98.1823983754242 -49.0911991877121 -19.63647967508484
+frame 55
+Armorstand_Left_Arm -97.19999860672291 -48.59999930336146 -19.439999038325666
+frame 56
+Armorstand_Left_Arm -96.02560222045258 -48.01280111022629 -19.205119078052682
+frame 57
+Armorstand_Left_Arm -94.66879880220789 -47.334399401103944 -18.93375907742266
+frame 58
+Armorstand_Left_Arm -93.13919842815105 -46.569599214075524 -18.62784002713967
+frame 59
+Armorstand_Left_Arm -91.44639751406592 -45.72319875703296 -18.289279502813184
+frame 60
+Armorstand_Left_Arm -89.59999930592554 -44.79999965296277 -17.919998495147276
+frame 61
+Armorstand_Left_Arm -87.60959338932462 -43.80479669466231 -17.521919702393298
+frame 62
+Armorstand_Left_Arm -85.48479667061451 -42.74239833530726 -17.096958992613445
+frame 63
+Armorstand_Left_Arm -83.23519873538994 -41.61759936769497 -16.647039064059072
+frame 64
+Armorstand_Left_Arm -80.87039599943478 -40.43519799971739 -16.174079199886954
+frame 65
+Armorstand_Left_Arm -78.3999985389112 -39.1999992694556 -15.679998683253865
+frame 66
+Armorstand_Left_Arm -75.8336027696031 -37.91680138480155 -15.16671850486387
+frame 67
+Armorstand_Left_Arm -73.180791446916 -36.590395723458 -14.636159655421034
+frame 68
+Armorstand_Left_Arm -70.45120196776878 -35.22560098388439 -14.090238856761193
+frame 69
+Armorstand_Left_Arm -67.65439659699948 -33.82719829849974 -13.530879660909353
+frame 70
+Armorstand_Left_Arm -64.79999907114862 -32.39999953557431 -12.959998789701347
+frame 71
+Armorstand_Left_Arm -61.8975989758109 -30.94879948790545 -12.379518941388534
+frame 72
+Armorstand_Left_Arm -58.95679955695938 -29.47839977847969 -11.791359399127689
+frame 73
+Armorstand_Left_Arm -55.98719723037792 -27.99359861518896 -11.197439446075585
+frame 74
+Armorstand_Left_Arm -52.99840207222872 -26.49920103611436 -10.599680072936286
+frame 75
+Armorstand_Left_Arm -50.0000002530119 -25.00000012650595 -9.99999970909292
+frame 76
+Armorstand_Left_Arm -47.001605263984246 -23.500802631992123 -9.400319345249557
+frame 77
+Armorstand_Left_Arm -44.01279644545671 -22.006398222728354 -8.802559972110258
+frame 78
+Armorstand_Left_Arm -41.04319411887524 -20.52159705943762 -8.20863831151086
+frame 79
+Armorstand_Left_Arm -38.102401530212894 -19.051200765106447 -7.6204796230236616
+frame 80
+Armorstand_Left_Arm -35.200008265064355 -17.600004132532177 -7.039999774710849
+frame 81
+Armorstand_Left_Arm -32.34560049392974 -16.17280024696487 -6.469118903502843
+frame 82
+Armorstand_Left_Arm -29.5488019533496 -14.7744009766748 -5.909758853877356
+frame 83
+Armorstand_Left_Arm -26.81919539872946 -13.40959769936473 -5.363840616538455
+frame 84
+Armorstand_Left_Arm -24.166390906231527 -12.083195453115763 -4.8332800595483265
+frame 85
+Armorstand_Left_Arm -21.600008797301765 -10.800004398650882 -4.320000734931977
+frame 86
+Armorstand_Left_Arm -19.129604506589022 -9.564802253294511 -3.8259202182988874
+frame 87
+Armorstand_Left_Arm -16.76478811025551 -8.382394055127754 -3.352958646579477
+frame 88
+Armorstand_Left_Arm -14.515190175030938 -7.257595087515469 -2.9030387180251047
+frame 89
+Armorstand_Left_Arm -12.390400286510012 -6.195200143255006 -2.4780797157925436
+frame 90
+Armorstand_Left_Arm -10.399994369909086 -5.199997184954543 -2.0799992154912754
+frame 91
+Armorstand_Left_Arm -8.553602991957879 -4.2768014959789395 -1.7107199153726587
+frame 92
+Armorstand_Left_Arm -6.860795247683578 -3.430397623841789 -1.3721593910461742
+frame 93
+Armorstand_Left_Arm -5.331194873626733 -2.6655974368133664 -1.066238633215888
+frame 94
+Armorstand_Left_Arm -3.9743914553820394 -1.9871957276910197 -0.7948803401331589
+frame 95
+Armorstand_Left_Arm -2.799995069111707 -1.3999975345558535 -0.5599969647655905
+frame 96
+Armorstand_Left_Arm -1.8175816400320932 -0.9087908200160466 -0.36351974310100366
+frame 97
+Armorstand_Left_Arm -1.0367953952512556 -0.5183976976256278 -0.2073611281070021
+frame 98
+Armorstand_Left_Arm -0.4671985996072122 -0.2335992998036061 -0.09344040294035943
+frame 99
+Armorstand_Left_Arm -0.11840815945134105 -0.05920407972567052 -0.02368026585243421
+frame 100
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 101
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 102
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 103
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 104
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 105
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 106
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 107
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 108
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 109
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 110
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 111
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 112
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 113
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 114
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 115
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 116
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 117
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 118
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 119
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 120
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 121
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 122
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 123
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 124
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 125
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 126
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 127
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 128
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 129
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 130
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 131
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 132
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 133
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 134
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 135
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 136
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 137
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 138
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 139
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 140
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 141
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 142
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 143
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 144
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 145
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 146
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 147
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 148
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 149
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 150
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 151
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 152
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 153
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 154
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 155
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 156
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 157
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 158
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 159
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 160
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 161
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 162
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 163
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 164
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 165
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 166
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 167
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 168
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 169
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 170
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 171
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 172
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 173
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 174
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 175
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 176
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 177
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 178
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 179
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 180
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 181
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 182
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 183
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 184
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 185
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 186
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 187
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 188
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 189
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 190
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 191
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 192
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 193
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 194
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 195
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 196
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 197
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 198
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 199
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 200
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 201
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 202
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 203
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 204
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 205
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 206
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 207
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 208
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 209
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 210
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 211
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 212
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 213
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 214
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 215
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 216
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 217
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 218
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 219
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 220
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 221
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 222
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 223
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 224
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 225
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 226
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 227
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 228
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 229
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 230
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 231
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 232
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 233
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 234
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 235
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 236
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 237
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 238
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 239
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 240
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 241
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 242
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 243
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 244
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 245
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 246
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 247
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 248
+Armorstand_Left_Arm 0.0 -0.0 -0.0
+frame 249
+Armorstand_Left_Arm 0.0 -0.0 -0.0

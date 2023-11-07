@@ -9,7 +9,10 @@ import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.selection.*;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.LargeFireball;
+import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -19,7 +22,7 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
-import static me.gamercoder215.starcosmetics.util.selection.HatSelection.of;
+import static me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData.of;
 
 final class CosmeticSelections1_9 implements CosmeticSelections {
 

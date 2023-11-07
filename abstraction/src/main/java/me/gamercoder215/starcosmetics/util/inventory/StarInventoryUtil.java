@@ -89,6 +89,10 @@ public final class StarInventoryUtil {
         switch (n) {
             case "playerjoinevent": 
             case "playergamemodechangeevent": return GRASS_BLOCK.find();
+
+            case "playertakedamagebyentityevent":
+            case "playertakedamagebyplayerevent": return SHIELD;
+            case "playerdamageplayerevent": return DIAMOND_SWORD;
             
             case "playerfishevent": return FISHING_ROD;
             case "playerrespawnevent": return BEACON;
@@ -102,7 +106,7 @@ public final class StarInventoryUtil {
             case "blockbreakevent": return IRON_PICKAXE;
             case "sheepdyewoolevent": return WHITE_WOOL.find();
             case "playeritembreakevent": return DIAMOND_PICKAXE;
-            case "playeritemconsumeevent": return BREAD;    
+            case "playeritemconsumeevent": return BREAD;
         }
 
         if (chosen == null) chosen = REDSTONE;

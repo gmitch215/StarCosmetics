@@ -7,6 +7,10 @@ import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.StarPet;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.Trail;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
+import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerDamageEntityEvent;
+import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerDamagePlayerEvent;
+import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerTakeDamageByEntityEvent;
+import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerTakeDamageByPlayerEvent;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
@@ -51,7 +55,7 @@ public final class CosmeticEvents implements Listener {
         if (SoundEventSelection.isValid(e.getClass())) {
             Player p = null;
             try {
-                Method get = e.getClass().getDeclaredMethod("getPlayer");
+                Method get = e.getClass().getMethod("getPlayer");
                 get.setAccessible(true);
                 p = (Player) get.invoke(e);
             } catch (NoSuchMethodException ignored) {
@@ -177,9 +181,25 @@ public final class CosmeticEvents implements Listener {
     public void onDamage(EntityDamageByEntityEvent event) {
         if (event.isCancelled()) return;
 
+        Entity entity = event.getEntity();
         Entity damager = event.getDamager();
+
         if (damager.hasMetadata("cosmetic"))
             event.setCancelled(true);
+
+        if (entity instanceof Player || damager instanceof Player) {
+            boolean isDamagee = entity instanceof Player;
+            boolean isDamager = damager instanceof Player;
+
+            if (isDamagee && isDamager) {
+                Bukkit.getPluginManager().callEvent(new PlayerDamagePlayerEvent(event));
+                Bukkit.getPluginManager().callEvent(new PlayerTakeDamageByPlayerEvent(event));
+            } else if (isDamagee && !isDamager)
+                Bukkit.getPluginManager().callEvent(new PlayerTakeDamageByEntityEvent(event));
+            else if (!isDamagee && isDamager)
+                Bukkit.getPluginManager().callEvent(new PlayerDamageEntityEvent(event));
+        }
+
     }
 
     @EventHandler
