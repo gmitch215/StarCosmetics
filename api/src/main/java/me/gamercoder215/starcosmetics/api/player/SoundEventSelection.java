@@ -3,6 +3,10 @@ package me.gamercoder215.starcosmetics.api.player;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerDamageEntityEvent;
+import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerDamagePlayerEvent;
+import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerTakeDamageByEntityEvent;
+import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerTakeDamageByPlayerEvent;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -113,6 +117,10 @@ public final class SoundEventSelection implements ConfigurationSerializable {
                 .add(SheepDyeWoolEvent.class)
                 .add(SignChangeEvent.class)
                 .add(PlayerInteractEntityEvent.class)
+                .add(PlayerDamageEntityEvent.class)
+                .add(PlayerDamagePlayerEvent.class)
+                .add(PlayerTakeDamageByEntityEvent.class)
+                .add(PlayerTakeDamageByPlayerEvent.class)
                 .build()
                 .stream().filter(Objects::nonNull).collect(Collectors.toList()));
     }

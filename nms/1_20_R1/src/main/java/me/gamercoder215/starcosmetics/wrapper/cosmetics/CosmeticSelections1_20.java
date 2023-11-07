@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
 import me.gamercoder215.starcosmetics.util.selection.HatSelection;
 import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
@@ -11,6 +12,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +33,10 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
 
             .add(new TrailSelection("relic", BaseTrail.PROJECTILE_TRAIL, Material.MUSIC_DISC_RELIC,
                     fromStatistic(Statistic.ANIMALS_BRED, 5500), EPIC))
+
+            .add(new TrailSelection("armor_trims", BaseTrail.PROJECTILE_TRAIL,
+                    Arrays.stream(Material.values()).filter(m -> m.name().endsWith("_TRIM_SMITHING_TEMPLATE")).toList(),
+                    fromCrafted(4780, Material.IRON_CHESTPLATE), LEGENDARY))
             .build();
 
     // Ground Trails
@@ -64,6 +70,9 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
             .add(new HatSelection("empty_pot", decoratedPot(Material.BRICK),
                     fromStatistic(Statistic.TRADED_WITH_VILLAGER, 25), COMMON))
 
+            .add(new HatSelection("cherry_leaves", Material.CHERRY_LEAVES,
+                    fromMined(65, Material.CHERRY_LEAVES), OCCASIONAL))
+
             .add(new HatSelection("angler_pot", decoratedPot(Material.ANGLER_POTTERY_SHERD),
                     fromCrafted(50, Material.DECORATED_POT), UNCOMMON))
             .add(new HatSelection("heart_pot", decoratedPot(Material.HEART_POTTERY_SHERD),
@@ -90,7 +99,7 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("miner_pot_animated", HatSelection.of(20,
+            .add(new HatSelection("miner_pot_animated", AnimatedHatData.of(20,
                     decoratedPot(Material.MINER_POTTERY_SHERD), decoratedPot(Material.PRIZE_POTTERY_SHERD)
             ), fromMined(15, Material.EMERALD_ORE), LEGENDARY))
             .build();

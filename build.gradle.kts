@@ -13,7 +13,7 @@ plugins {
 }
 
 val pGroup = "me.gamercoder215.starcosmetics"
-val pVersion = "1.2.2"
+val pVersion = "1.3.0"
 val pAuthor = "GamerCoder215"
 
 sonarqube {
@@ -101,7 +101,7 @@ subprojects {
     dependencies {
         compileOnly("org.jetbrains:annotations:24.0.1")
 
-        testImplementation("org.mockito:mockito-core:5.6.0")
+        testImplementation("org.mockito:mockito-core:5.7.0")
         testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 
         testImplementation("org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT")
