@@ -22,7 +22,7 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
-import static me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem.of;
+import static me.gamercoder215.starcosmetics.util.selection.HatSelection.ofHat;
 
 final class CosmeticSelections1_9 implements CosmeticSelections {
 
@@ -461,12 +461,12 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("ores", of(30,
+            .add(new HatSelection("ores", ofHat(30,
                             Material.COAL_ORE, Material.matchMaterial("COPPER_ORE"), Material.IRON_ORE,
                             Material.LAPIS_ORE, Material.REDSTONE_ORE, Material.GOLD_ORE,
                             Material.DIAMOND_ORE, Material.EMERALD_ORE
                     ), fromMined(255, Material.COAL_ORE), RARE))
-            .add(new HatSelection("ore_blocks", of(40,
+            .add(new HatSelection("ore_blocks", ofHat(40,
                             Material.COAL_BLOCK, Material.matchMaterial("COPPER_BLOCK"), Material.IRON_BLOCK,
                             Material.LAPIS_BLOCK, Material.REDSTONE_BLOCK, Material.GOLD_BLOCK,
                             Material.DIAMOND_BLOCK, Material.EMERALD_BLOCK

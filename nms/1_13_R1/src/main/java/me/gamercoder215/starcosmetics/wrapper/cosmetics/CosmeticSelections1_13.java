@@ -6,7 +6,6 @@ import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseGadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
@@ -216,14 +215,14 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("minerals", AnimatedItem.of(10,
+            .add(new HatSelection("minerals", HatSelection.ofHat(10,
                     Material.STONE, Material.ANDESITE, Material.GRANITE, Material.DIORITE),
                     fromMined(1000, Material.STONE), UNCOMMON))
     
-            .add(new HatSelection("wood_stairs", AnimatedItem.of(20,
+            .add(new HatSelection("wood_stairs", HatSelection.ofHat(20,
                     Tag.WOODEN_STAIRS.getValues()), fromCrafted(10000, Material.OAK_PLANKS), EPIC))
             
-            .add(new HatSelection("colored_glass", AnimatedItem.of(20,
+            .add(new HatSelection("colored_glass", HatSelection.ofHat(20,
                         Material.GRAY_STAINED_GLASS,
                         Material.WHITE_STAINED_GLASS,
                         Material.RED_STAINED_GLASS,
