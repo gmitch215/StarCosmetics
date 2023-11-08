@@ -5,6 +5,7 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
@@ -269,6 +270,7 @@ public final class StarPlayer {
         if (ParticleShape.class.isAssignableFrom(clazz)) return "particle_shape";
         if (Hat.class.isAssignableFrom(clazz)) return "hat";
         if (Gadget.class.isAssignableFrom(clazz)) return "gadget";
+        if (Cape.class.isAssignableFrom(clazz)) return "cape";
 
         return clazz.getSimpleName().toLowerCase();
     }
@@ -285,6 +287,9 @@ public final class StarPlayer {
 
         CosmeticLocation<ItemStack> hat = (CosmeticLocation<ItemStack>) getSelectedCosmetic(Hat.class);
         if (hat != null) ((Hat) hat.getParent()).run(p, hat);
+
+        CosmeticLocation<ItemStack> cape = (CosmeticLocation<ItemStack>) getSelectedCosmetic(Cape.class);
+        if (cape != null) ((Cape) cape.getParent()).run(p, cape);
     }
 
     /**
