@@ -449,6 +449,7 @@ public interface CommandWrapper {
 
             .put("hat", Hat.class)
             .put("particle_shape", ParticleShape.class)
+            .put("gadget", Gadget.class)
             .build();
 
     default void cosmeticInfo(Player p, TrailType type) {
