@@ -49,19 +49,7 @@ public enum BaseCape implements Cape {
     public void run(@NotNull Player p, @Nullable CosmeticLocation<?> loc) throws IllegalArgumentException {
         if (!ItemStack.class.isAssignableFrom(loc.getInputType()) && !AnimatedItem.class.isAssignableFrom(loc.getInputType())) return;
 
-        ArmorStand stand = CAPES.get(p.getUniqueId());
-        if (stand == null) {
-            stand = p.getWorld().spawn(p.getLocation(), ArmorStand.class);
-            stand.setInvulnerable(true);
-            stand.setCollidable(false);
-            stand.setVisible(false);
-            stand.setArms(true);
-            stand.setGravity(false);
-            stand.setMarker(true);
-            stand.setBasePlate(false);
-
-            CAPES.put(p.getUniqueId(), stand);
-        }
+        ArmorStand stand = checkCape(p);
 
         Location location = local(p.getLocation(), new Vector(0.0, -2.0, -0.5));
         location.setYaw(p.getLocation().getYaw() + 180.0F);
@@ -76,12 +64,34 @@ public enum BaseCape implements Cape {
         }
     }
 
+    public static ArmorStand checkCape(@NotNull Player p) {
+        ArmorStand stand = CAPES.get(p.getUniqueId());
+        if (stand == null) {
+            stand = p.getWorld().spawn(p.getLocation(), ArmorStand.class);
+            stand.setInvulnerable(true);
+            stand.setCollidable(false);
+            stand.setVisible(false);
+            stand.setArms(true);
+            stand.setGravity(false);
+            stand.setMarker(true);
+            stand.setBasePlate(false);
+
+            CAPES.put(p.getUniqueId(), stand);
+        }
+
+        return stand;
+    }
+
     public static void removeCape(@NotNull Player p) {
         ArmorStand stand = CAPES.get(p.getUniqueId());
         if (stand != null) {
             stand.remove();
             CAPES.remove(p.getUniqueId());
         }
+    }
+
+    public static void setCape(@NotNull Player p, @NotNull ItemStack item) {
+        checkCape(p).setChestplate(item);
     }
 
     @Override

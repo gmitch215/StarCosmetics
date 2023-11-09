@@ -4,9 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.StarCosmetics;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseCape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
@@ -209,7 +211,7 @@ public final class ClickEvents implements Listener {
                     p.getInventory().removeItem(Arrays.stream(p.getInventory().getContents())
                             .filter(Objects::nonNull)
                             .filter(i -> {
-                                NBTWrapper n = NBTWrapper.of(i);
+                                NBTWrapper n = of(i);
                                 return n.hasString("gadget");
                             }).toArray(ItemStack[]::new));
 
@@ -313,7 +315,7 @@ public final class ClickEvents implements Listener {
                     p.getInventory().removeItem(Arrays.stream(p.getInventory().getContents())
                             .filter(Objects::nonNull)
                             .filter(i -> {
-                                NBTWrapper n = NBTWrapper.of(i);
+                                NBTWrapper n = of(i);
                                 return n.hasString("gadget");
                             }).toArray(ItemStack[]::new));
                 }
@@ -635,6 +637,16 @@ public final class ClickEvents implements Listener {
                     StarPlayerUtil.getHologram(p);
                     cw.hologramInfo(p);
                 });
+            })
+            .put("cancel:cosmetic:cape", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                sp.setSelectedCosmetic(Cape.class, null);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+                updateCache(p);
+
+                BaseCape.removeCape(p);
             })
 
             .build();

@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
@@ -724,6 +725,13 @@ public final class StarInventoryUtil {
 
             NBTWrapper nbt = of(reset);
             nbt.setID("cancel:cosmetic:hat");
+            reset = nbt.getItem();
+        } else if (Cape.class.isAssignableFrom(parent.getClass())) {
+            meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset.cape"));
+            reset.setItemMeta(meta);
+
+            NBTWrapper nbt = of(reset);
+            nbt.setID("cancel:cosmetic:cape");
             reset = nbt.getItem();
         } else {
             meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset"));
