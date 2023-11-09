@@ -51,7 +51,7 @@ public final class HatSelection extends CosmeticSelection<Object> {
         this.name = name;
     }
 
-    public static AnimatedItem ofHat(long interval, Iterable<ItemStack> frames) {
+    public static AnimatedItem of(long interval, Iterable<ItemStack> frames) {
         AnimatedItem.Builder builder = AnimatedItem.builder((p, item) -> p.getEquipment().setHelmet(item));
         for (ItemStack item : frames)
             builder.addFrame(interval, item);
@@ -59,20 +59,20 @@ public final class HatSelection extends CosmeticSelection<Object> {
         return builder.build();
     }
 
-    public static AnimatedItem ofHat(long interval, ItemStack... frames) {
-        return ofHat(interval, Arrays.asList(frames));
+    public static AnimatedItem of(long interval, ItemStack... frames) {
+        return of(interval, Arrays.asList(frames));
     }
 
-    public static AnimatedItem ofHat(long interval, Collection<Material> frames) {
-        return ofHat(interval, frames.stream()
+    public static AnimatedItem of(long interval, Collection<Material> frames) {
+        return of(interval, frames.stream()
                 .filter(Objects::nonNull)
                 .map(ItemStack::new)
                 .collect(Collectors.toList())
         );
     }
 
-    public static AnimatedItem ofHat(long interval, Material... frames) {
-        return ofHat(interval, Arrays.asList(frames));
+    public static AnimatedItem of(long interval, Material... frames) {
+        return of(interval, Arrays.asList(frames));
     }
 
     @Override
@@ -131,8 +131,8 @@ public final class HatSelection extends CosmeticSelection<Object> {
     }
 
     @Override
-    public @NotNull Class<? extends ItemStack> getInputType() {
-        return ItemStack.class;
+    public @NotNull Class<?> getInputType() {
+        return Object.class;
     }
 
 }
