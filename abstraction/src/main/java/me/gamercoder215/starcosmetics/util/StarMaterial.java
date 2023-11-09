@@ -117,13 +117,23 @@ public enum StarMaterial {
 
     SNOWBALL("snow_ball"),
 
-    LIME_BANNER(5, "banner"),
-
-    RED_BANNER(14, "banner"),
-
     WHITE_BANNER(0, "banner"),
+    ORANGE_BANNER(1, "banner"),
+    MAGENTA_BANNER(2, "banner"),
+    LIGHT_BLUE_BANNER(3, "banner"),
+    YELLOW_BANNER(4, "banner"),
+    LIME_BANNER(5, "banner"),
+    PINK_BANNER(6, "banner"),
+    GRAY_BANNER(7, "banner"),
+    LIGHT_GRAY_BANNER(8, "banner"),
+    CYAN_BANNER(9, "banner"),
+    PURPLE_BANNER(10, "banner"),
+    BLUE_BANNER(11, "banner"),
+    BROWN_BANNER(12, "banner"),
+    GREEN_BANNER(13, "banner"),
+    RED_BANNER(14, "banner"),
+    BLACK_BANNER(15, "banner"),
 
-    BLUE_BANNER(11, "banner")
     ;
 
     @VisibleForTesting
