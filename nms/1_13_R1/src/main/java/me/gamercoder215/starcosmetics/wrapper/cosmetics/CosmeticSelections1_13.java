@@ -215,14 +215,14 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("minerals", HatSelection.ofHat(10,
+            .add(new HatSelection("minerals", HatSelection.of(10,
                     Material.STONE, Material.ANDESITE, Material.GRANITE, Material.DIORITE),
                     fromMined(1000, Material.STONE), UNCOMMON))
     
-            .add(new HatSelection("wood_stairs", HatSelection.ofHat(20,
+            .add(new HatSelection("wood_stairs", HatSelection.of(20,
                     Tag.WOODEN_STAIRS.getValues()), fromCrafted(10000, Material.OAK_PLANKS), EPIC))
             
-            .add(new HatSelection("colored_glass", HatSelection.ofHat(20,
+            .add(new HatSelection("colored_glass", HatSelection.of(20,
                         Material.GRAY_STAINED_GLASS,
                         Material.WHITE_STAINED_GLASS,
                         Material.RED_STAINED_GLASS,

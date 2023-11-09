@@ -98,7 +98,7 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("miner_pot_animated", HatSelection.ofHat(20,
+            .add(new HatSelection("miner_pot_animated", HatSelection.of(20,
                     decoratedPot(Material.MINER_POTTERY_SHERD), decoratedPot(Material.PRIZE_POTTERY_SHERD)
             ), fromMined(15, Material.EMERALD_ORE), LEGENDARY))
             .build();

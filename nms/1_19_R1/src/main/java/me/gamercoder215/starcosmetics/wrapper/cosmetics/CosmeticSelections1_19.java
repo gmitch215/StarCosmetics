@@ -135,7 +135,7 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("froglight", HatSelection.ofHat(10,
+            .add(new HatSelection("froglight", HatSelection.of(10,
                     Material.OCHRE_FROGLIGHT,
                     Material.VERDANT_FROGLIGHT,
                     Material.PEARLESCENT_FROGLIGHT
