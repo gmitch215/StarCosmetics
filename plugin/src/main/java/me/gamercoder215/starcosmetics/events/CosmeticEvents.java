@@ -117,7 +117,7 @@ public final class CosmeticEvents implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
-        StarPlayer sp = StarCosmetics.getCached(p);
+        StarPlayer sp = StarPlayerUtil.getCached(p);
 
         if (sp.getSpawnedPet() != null) {
             Pet spawned = sp.getSpawnedPet();
