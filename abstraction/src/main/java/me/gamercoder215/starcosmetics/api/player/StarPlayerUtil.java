@@ -97,4 +97,12 @@ public final class StarPlayerUtil {
         StarPlayer.SPAWNED_PETS.remove(p.getUniqueId());
     }
 
+    public static StarPlayer getCached(@NotNull Player p) {
+        StarPlayer sp = STAR_PLAYER_CACHE.get(p.getUniqueId());
+        if (sp == null) {
+            sp = new StarPlayer(p);
+            STAR_PLAYER_CACHE.put(p.getUniqueId(), sp);
+        }
+        return sp;
+    }
 }

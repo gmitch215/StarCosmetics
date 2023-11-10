@@ -2,10 +2,10 @@ package me.gamercoder215.starcosmetics.api.cosmetics.trail;
 
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,7 +40,7 @@ public interface Trail<T> extends Cosmetic {
      */
     @Override
     @Deprecated
-    default void run(Location l, CosmeticLocation<?> cloc) {
+    default void run(Player p, CosmeticLocation<?> cloc) {
         throw new UnsupportedOperationException();
     }
 

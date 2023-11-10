@@ -3,11 +3,11 @@ package me.gamercoder215.starcosmetics.api.player;
 import me.gamercoder215.starcosmetics.api.Completion;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
-import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
@@ -283,13 +283,13 @@ public final class StarPlayer {
         Player p = player.getPlayer();
 
         CosmeticLocation<Particle> shape = (CosmeticLocation<Particle>) getSelectedCosmetic(ParticleShape.class);
-        if (shape != null) shape.getParent().run(p.getLocation().add(0, .25, 0), shape);
+        if (shape != null) shape.getParent().run(p, shape);
 
         CosmeticLocation<ItemStack> hat = (CosmeticLocation<ItemStack>) getSelectedCosmetic(Hat.class);
-        if (hat != null) ((Hat) hat.getParent()).run(p, hat);
+        if (hat != null) hat.getParent().run(p, hat);
 
         CosmeticLocation<ItemStack> cape = (CosmeticLocation<ItemStack>) getSelectedCosmetic(Cape.class);
-        if (cape != null) ((Cape) cape.getParent()).run(p, cape);
+        if (cape != null) cape.getParent().run(p, cape);
     }
 
     /**
