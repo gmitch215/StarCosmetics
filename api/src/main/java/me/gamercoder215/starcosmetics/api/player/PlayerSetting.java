@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.api.player;
 
 import com.google.common.collect.ImmutableList;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleReducer;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetCosmetics;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetPosition;
 import org.bukkit.ChatColor;
@@ -64,6 +65,13 @@ public final class PlayerSetting<T> {
      */
     public static final PlayerSetting<HologramFormat> HOLOGRAM_FORMAT =
             ofEnum("hologram_format", "settings.hologram_format", HologramFormat.YELLOW);
+
+    /**
+     * How much to reduce particles by.
+     */
+    @SettingDescription("settings.particle_reduction.desc")
+    public static final PlayerSetting<ParticleReducer> PARTICLE_REDUCTION =
+            ofEnum("particle_reduction", "settings.particle_reduction", ParticleReducer.NORMAL);
 
     // Setting Enums
 
