@@ -920,6 +920,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             sp.getSelectionLimit(); // Updates Config Limit
 
             StarPlayerUtil.removePet(p);
+            StarPlayerUtil.removeCape(p);
         }
 
         @EventHandler

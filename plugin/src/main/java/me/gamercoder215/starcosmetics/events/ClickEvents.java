@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.StarCosmetics;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.BaseCape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
@@ -646,7 +645,7 @@ public final class ClickEvents implements Listener {
                 StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
                 updateCache(p);
 
-                BaseCape.removeCape(p);
+                StarPlayerUtil.removeCape(p);
             })
 
             .build();

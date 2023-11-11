@@ -8,6 +8,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.BaseCape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
+import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.DyeColor;
@@ -82,7 +83,7 @@ public final class CapeSelection extends CosmeticSelection<Object> {
     }
 
     public static AnimatedItem of(long interval, Iterable<ItemStack> frames) {
-        AnimatedItem.Builder builder = AnimatedItem.builder(BaseCape::setCape);
+        AnimatedItem.Builder builder = AnimatedItem.builder(StarPlayerUtil::setCape);
         for (ItemStack item : frames)
             builder.addFrame(interval, item);
 
