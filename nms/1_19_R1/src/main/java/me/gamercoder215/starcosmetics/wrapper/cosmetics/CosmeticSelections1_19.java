@@ -5,13 +5,14 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
-import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
-import me.gamercoder215.starcosmetics.util.selection.HatSelection;
-import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
-import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.selection.*;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.EntityType;
 
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.cape;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
@@ -142,6 +144,18 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
             ), fromKilled(825, EntityType.MAGMA_CUBE), Rarity.EPIC))
             .build();
 
+    // Capes
+
+    // Normal Capes
+    private static final List<CosmeticSelection<?>> NORMAL_CAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new CapeSelection("warden", cape(StarMaterial.BLACK_BANNER,
+                    new Pattern(DyeColor.CYAN, PatternType.STRIPE_SMALL), new Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER),
+                    new Pattern(DyeColor.GRAY, PatternType.FLOWER), new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_TOP),
+                    new Pattern(DyeColor.CYAN, PatternType.SKULL), new Pattern(DyeColor.BLACK, PatternType.CREEPER),
+                    new Pattern(DyeColor.CYAN, PatternType.SKULL), new Pattern(DyeColor.BLACK, PatternType.SKULL)),
+                    fromKilled(20, EntityType.WARDEN), Rarity.LEGENDARY))
+            .build();
+
     // Selections
 
     private static final Map<Cosmetic, List<CosmeticSelection<?>>> SELECTIONS = ImmutableMap.<Cosmetic, List<CosmeticSelection<?>>>builder()
@@ -155,6 +169,9 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
             .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_18"))
 
             .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_18"))
+
+            .put(BaseCape.NORMAL, join(NORMAL_CAPES, BaseCape.NORMAL, "1_18"))
+            .put(BaseCape.ANIMATED, getForVersion(BaseCape.ANIMATED, "1_18"))
             .build();
 
     @Override
