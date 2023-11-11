@@ -6,6 +6,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleReducer;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetCosmetics;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetPosition;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,6 +73,13 @@ public final class PlayerSetting<T> {
     @SettingDescription("settings.particle_reduction.desc")
     public static final PlayerSetting<ParticleReducer> PARTICLE_REDUCTION =
             ofEnum("particle_reduction", "settings.particle_reduction", ParticleReducer.NORMAL);
+
+    /**
+     * The color of the armor when using emotes.
+     */
+    @SettingDescription("settings.emote_color.desc")
+    public static final PlayerSetting<DyeColor> EMOTE_COLOR =
+    		ofEnum("emote_color", "settings.emote_color", DyeColor.LIME);
 
     // Setting Enums
 
