@@ -2,7 +2,7 @@ name: StarCosmetics
 main: me.gamercoder215.starcosmetics.StarCosmetics
 version: ${project.version}
 description: ${project.description}
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI, PVPManager]
 author: GamerCoder
 website: "https://github.com/GamerCoder215/StarCosmetics"
 load: POSTWORLD

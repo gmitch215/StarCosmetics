@@ -14,6 +14,7 @@ import me.gamercoder215.starcosmetics.api.events.cosmetics.PlayerTakeDamageByPla
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
+import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Bukkit;
@@ -194,10 +195,26 @@ public final class CosmeticEvents implements Listener {
             if (isDamagee && isDamager) {
                 Bukkit.getPluginManager().callEvent(new PlayerDamagePlayerEvent(event));
                 Bukkit.getPluginManager().callEvent(new PlayerTakeDamageByPlayerEvent(event));
-            } else if (isDamagee && !isDamager)
+
+                damager.setMetadata("pvp", new FixedMetadataValue(plugin, true));
+                entity.setMetadata("pvp", new FixedMetadataValue(plugin, true));
+
+                StarRunnable.syncLater(() -> {
+                    damager.removeMetadata("pvp", plugin);
+                    entity.removeMetadata("pvp", plugin);
+                }, 20 * 5);
+            } else if (isDamagee && !isDamager) {
                 Bukkit.getPluginManager().callEvent(new PlayerTakeDamageByEntityEvent(event));
-            else if (!isDamagee && isDamager)
+                entity.setMetadata("pve", new FixedMetadataValue(plugin, true));
+
+                StarRunnable.syncLater(() -> entity.removeMetadata("pve", plugin), 20 * 3);
+            }
+            else if (!isDamagee && isDamager) {
                 Bukkit.getPluginManager().callEvent(new PlayerDamageEntityEvent(event));
+                damager.setMetadata("pve", new FixedMetadataValue(plugin, true));
+
+                StarRunnable.syncLater(() -> damager.removeMetadata("pve", plugin), 20 * 3);
+            }
         }
 
     }

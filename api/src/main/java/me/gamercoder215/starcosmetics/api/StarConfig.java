@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -112,7 +113,7 @@ public interface StarConfig {
     }
 
     /**
-     * Fetches the StarCosmetics Configuration File.
+     * Fetches the StarCosmetics Configuration File, whether it exists or not.
      * @return StarCosmetics Configuration File
      */
     @NotNull
@@ -151,6 +152,9 @@ public interface StarConfig {
             config.set("cosmetics.max-hologram-size", getConfig().getInternalMaxHologramLimit());
 
         if (!config.isList("cosmetics.structures")) config.set("cosmetics.structures", new ArrayList<>());
+
+        if (!config.isBoolean("cosmetics.emote-in-pvp")) config.set("cosmetics.emote-in-pvp", true);
+        if (!config.isBoolean("cosmetics.emote-in-pve")) config.set("cosmetics.emote-in-pve", true);
 
         try {
             config.save(getConfigurationFile());
@@ -510,5 +514,36 @@ public interface StarConfig {
      */
     @NotNull
     Set<Structure> getCustomStructures();
+
+    /**
+     * Checks if the given player is currently in PvP.
+     * @param p Player to check
+     * @return true if in PvP, else false
+     */
+    boolean isInPvP(@NotNull Player p);
+
+    /**
+     * Sets whether the given player is currently in PvP.
+     * @return true if in PvP, else false
+     */
+    boolean getCanEmoteInPvP();
+
+    /**
+     * Sets whether the given player is currently in PvP.
+     * @param canEmoteInPvP true if in PvP, else false
+     */
+    void setCanEmoteInPvP(boolean canEmoteInPvP);
+
+    /**
+     * Checks if the given player is currently in PvE.
+     * @return true if in PvE, else false
+     */
+    boolean getCanEmoteInPvE();
+
+    /**
+     * Sets whether the given player is currently in PvE.
+     * @param canEmoteInPvE true if in PvE, else false
+     */
+    void setCanEmoteInPvE(boolean canEmoteInPvE);
 
 }
