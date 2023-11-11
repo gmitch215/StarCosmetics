@@ -9,19 +9,18 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
-import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
+import org.apache.commons.lang3.text.WordUtils;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
 
 public final class CapeSelection extends CosmeticSelection<Object> {
@@ -47,12 +46,30 @@ public final class CapeSelection extends CosmeticSelection<Object> {
         this.name = name;
     }
 
-    public static ItemStack cape(StarMaterial base, Pattern... patterns) {
+    public static Pattern[] patterns(DyeColor color, PatternType... types) {
+        return Arrays.stream(types)
+                .map(type -> new Pattern(color, type))
+                .toArray(Pattern[]::new);
+    }
+
+    public static ItemStack cape(StarMaterial base, Object... objects) {
+        List<Pattern> patterns = new ArrayList<>();
+        for (Object obj : objects) {
+            if (obj instanceof Pattern)
+                patterns.add((Pattern) obj);
+            else if (obj instanceof Pattern[])
+                patterns.addAll(Arrays.asList((Pattern[]) obj));
+        }
+
         return cape(base.findStack(), patterns);
     }
 
-    public static ItemStack cape(ItemStack base, Pattern... patterns) {
-        return cape(base, Arrays.asList(patterns));
+    public static ItemStack cape(StarMaterial base, Pattern[]... patterns) {
+        return cape(base.findStack(), Arrays.stream(patterns).flatMap(Arrays::stream).collect(Collectors.toList()));
+    }
+
+    public static ItemStack cape(StarMaterial base, Pattern... patterns) {
+        return cape(base.findStack(), Arrays.asList(patterns));
     }
 
     public static ItemStack cape(ItemStack base, Iterable<Pattern> patterns) {
@@ -70,6 +87,10 @@ public final class CapeSelection extends CosmeticSelection<Object> {
             builder.addFrame(interval, item);
 
         return builder.build();
+    }
+
+    public static AnimatedItem of(long interval, StarMaterial... frames) {
+        return of(interval, Arrays.stream(frames).map(StarMaterial::findStack).collect(Collectors.toList()));
     }
 
     public static AnimatedItem of(long interval, ItemStack... frames) {
@@ -95,24 +116,7 @@ public final class CapeSelection extends CosmeticSelection<Object> {
 
     @Override
     public @NotNull String getDisplayName() {
-        Object o = getInput();
-
-        if (o instanceof ItemStack) {
-            ItemStack input = (ItemStack) o;
-            String str = StarInventoryUtil.toInputString(input);
-
-            return getWithArgs("constants.cape",
-                    get("cosmetics.cape." + name, str)
-            );
-        } else {
-            AnimatedItem data = (AnimatedItem) o;
-            ItemStack input = data.getFrames().get(0).getValue();
-            String str = StarInventoryUtil.toInputString(input);
-
-            return getWithArgs("constants.cape",
-                    get("cosmetics.cape." + name, str)
-            );
-        }
+        return getWithArgs("constants.cape", WordUtils.capitalizeFully(name.replace('_', ' ')));
     }
 
     @Override
