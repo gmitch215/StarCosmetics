@@ -47,6 +47,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -64,6 +65,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -458,6 +460,40 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         }
 
         return ImmutableSet.copyOf(structures);
+    }
+
+    @Override
+    public boolean isInPvP(@NotNull Player p) {
+        AtomicBoolean pvp = new AtomicBoolean(false);
+        if (p.hasMetadata("pvp"))
+            pvp.compareAndSet(false, p.getMetadata("pvp").stream().anyMatch(MetadataValue::asBoolean));
+
+        if (Bukkit.getPluginManager().getPlugin("PvPManager") != null)
+            pvp.compareAndSet(false, StarPvP.isInPvP(p));
+
+        return pvp.get();
+    }
+
+    @Override
+    public boolean getCanEmoteInPvP() {
+        return config.getBoolean("cosmetics.emote-in-pvp");
+    }
+
+    @Override
+    public void setCanEmoteInPvP(boolean canEmoteInPvP) {
+        config.set("cosmetics.emote-in-pvp", canEmoteInPvP);
+        saveConfig();
+    }
+
+    @Override
+    public boolean getCanEmoteInPvE() {
+        return config.getBoolean("cosmetics.emote-in-pve");
+    }
+
+    @Override
+    public void setCanEmoteInPvE(boolean canEmoteInPvE) {
+        config.set("cosmetics.emote-in-pve", canEmoteInPvE);
+        saveConfig();
     }
 
     // Other Utilities
