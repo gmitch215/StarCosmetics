@@ -7,7 +7,6 @@ import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.StarSound;
-import me.gamercoder215.starcosmetics.util.entity.StarSelector;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
@@ -167,7 +166,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (StarSelector.isStopped(en)) {
+                                if (isStopped(en)) {
                                     cancel();
                                     return;
                                 }
@@ -208,7 +207,7 @@ public final class BaseTrail<T> implements Trail<T> {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (StarSelector.isStopped(en)) {
+                                if (isStopped(en)) {
                                     cancel();
                                     return;
                                 }
