@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
@@ -134,6 +135,7 @@ public interface CommandWrapper {
                                     ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length)),
                                     ChatColor.GREEN + getWithArgs("menu.about.hat_count", comma(getCosmeticCount(Hat.class))),
                                     ChatColor.BLUE + getWithArgs("menu.about.gadget_count", comma(getCosmeticCount(Gadget.class))),
+                                    ChatColor.DARK_GREEN + getWithArgs("menu.about.cape_count", comma(getCosmeticCount(Cape.class))),
                                     " ",
                                     ChatColor.RED + getWithArgs("menu.about.total_cosmetic_count", comma(getCosmeticCount()))
                             )
