@@ -179,6 +179,10 @@ public final class ClickEvents implements Listener {
                             for (TrailType t : TrailType.values()) sp.setSelectedTrail(t, null);
                             break;
                         }
+                        default: {
+                            sp.setSelectedCosmetic(parent.getChildClass(), null);
+                            break;
+                        }
                     }
 
                     StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
