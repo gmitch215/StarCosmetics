@@ -39,8 +39,6 @@ public enum BaseHat implements Hat {
 
     @Override
     public void run(@NotNull Player p, CosmeticLocation<?> loc) {
-        if (!ItemStack.class.isAssignableFrom(loc.getInputType()) && !AnimatedItem.class.isAssignableFrom(loc.getInputType())) return;
-
         boolean normal = this == NORMAL;
         if (p.getEquipment().getHelmet() != null) {
             ItemStack helmet = p.getEquipment().getHelmet();
