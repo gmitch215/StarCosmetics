@@ -33,6 +33,9 @@ public final class StarPlayerUtil {
 
         // Remove Holograms
         for (ArmorStand as : HOLOGRAMS.values()) as.remove();
+
+        // Remove Capes
+        for (ArmorStand as : CAPES.values()) as.remove();
     }
 
     public static Map<UUID, Pet> getPets() {
@@ -117,6 +120,7 @@ public final class StarPlayerUtil {
             stand = p.getWorld().spawn(p.getLocation(), ArmorStand.class);
             stand.setInvulnerable(true);
             stand.setCollidable(false);
+            stand.setSmall(true);
             stand.setVisible(false);
             stand.setArms(true);
             stand.setGravity(false);
@@ -138,6 +142,6 @@ public final class StarPlayerUtil {
     }
 
     public static void setCape(@NotNull Player p, @NotNull ItemStack item) {
-        checkCape(p).setChestplate(item);
+        checkCape(p).setHelmet(item);
     }
 }
