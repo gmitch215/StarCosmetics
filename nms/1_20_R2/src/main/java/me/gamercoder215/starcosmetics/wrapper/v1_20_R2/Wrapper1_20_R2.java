@@ -38,7 +38,6 @@ import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.advancement.CraftAdvancement;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftDecoratedPot;
@@ -228,8 +227,7 @@ final class Wrapper1_20_R2 implements Wrapper {
 
     @Override
     public String getAdvancementDescription(String s) {
-        CraftAdvancement ca = (CraftAdvancement) Bukkit.getAdvancement(NamespacedKey.minecraft(s));
-        return ca.getDisplay().getDescription();
+        return Bukkit.getAdvancement(NamespacedKey.minecraft(s)).getDisplay().getDescription();
     }
 
     @Override
