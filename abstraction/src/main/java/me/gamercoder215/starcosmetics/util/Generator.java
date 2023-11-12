@@ -381,19 +381,14 @@ public final class Generator {
             parentInv.setItem(place, cItem);
         }
 
-        if (parent == CosmeticParent.TRAILS) {
-            ItemStack resetAll = new ItemStack(Material.BARRIER);
-            ItemMeta resetMeta = resetAll.getItemMeta();
-            resetMeta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all_trails"));
-            resetAll.setItemMeta(resetMeta);
-
-            NBTWrapper resetNBT = of(resetAll);
-            resetNBT.setID("cancel:cosmetic:all");
-            resetNBT.set("parent", parent.name());
-            resetAll = resetNBT.getItem();
-
-            parentInv.setItem(size - 1, resetAll);
-        }
+        ItemStack resetAll = builder(Material.BARRIER,
+            meta -> meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all")),
+            nbt -> {
+                nbt.setID("cancel:cosmetic:all");
+                nbt.set("parent", parent.name());
+            }
+        );
+        parentInv.setItem(size - 1, resetAll);
 
         StarInventoryUtil.setBack(parentInv, cw::cosmetics);
         parentInv.setAttribute("selection_back", (Consumer<Player>) pl -> pl.openInventory(parentInv));
