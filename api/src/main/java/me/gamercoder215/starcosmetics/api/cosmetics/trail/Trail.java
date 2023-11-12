@@ -35,13 +35,7 @@ public interface Trail<T> extends Cosmetic {
      */
     void run(@NotNull Entity en, CosmeticLocation<?> loc);
 
-    /**
-     * @deprecated use {@link #run(Entity, CosmeticLocation)}
-     */
     @Override
-    @Deprecated
-    default void run(Player p, CosmeticLocation<?> cloc) {
-        throw new UnsupportedOperationException();
-    }
+    default void run(Player p, CosmeticLocation<?> cloc) { run((Entity) p, cloc); }
 
 }
