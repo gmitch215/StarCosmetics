@@ -549,7 +549,7 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromPlaytime(20 * 60 * 60 * 24 * 7), UNCOMMON))
             .add(new CapeSelection("lime_crown", cape(StarMaterial.YELLOW_BANNER,
                     new Pattern(DyeColor.YELLOW, PatternType.HALF_HORIZONTAL), new Pattern(DyeColor.LIME, PatternType.TRIANGLE_TOP),
-                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.LIME, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM)),
+                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.LIME, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM, PatternType.BORDER)),
                     fromStatistic(Statistic.ANIMALS_BRED, 355), UNCOMMON))
 
             .add(new CapeSelection("brown", StarMaterial.BROWN_BANNER.findStack(),
@@ -570,7 +570,7 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromStatistic(Statistic.DEATHS, 60000), LEGENDARY))
             .add(new CapeSelection("black_crown", cape(StarMaterial.YELLOW_BANNER,
                     new Pattern(DyeColor.YELLOW, PatternType.HALF_HORIZONTAL), new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_TOP),
-                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.BLACK, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM)),
+                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.BLACK, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM, PatternType.BORDER)),
                     fromStatistic(Statistic.MOB_KILLS, 900000), LEGENDARY))
 
             .add(new CapeSelection("mojang", cape(StarMaterial.RED_BANNER, new Pattern(DyeColor.WHITE, PatternType.MOJANG)),
@@ -578,7 +578,7 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new CapeSelection("purple_crown", cape(StarMaterial.YELLOW_BANNER,
                     new Pattern(DyeColor.YELLOW, PatternType.HALF_HORIZONTAL), new Pattern(DyeColor.PURPLE, PatternType.TRIANGLE_TOP),
-                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.PURPLE, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM)),
+                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.PURPLE, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM, PatternType.BORDER)),
                     fromPlaytime(20 * 60 * 60 * 24 * 31 * 12), ULTRA))
             .add(new CapeSelection("bigfoot", cape(StarMaterial.BLACK_BANNER,
                     new Pattern(DyeColor.BROWN, PatternType.STRIPE_SMALL), new Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
