@@ -7,7 +7,6 @@ import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseCape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import org.apache.commons.lang3.text.WordUtils;
@@ -127,7 +126,7 @@ public final class CapeSelection extends CosmeticSelection<Object> {
 
     @Override
     public Class<? extends Cosmetic> getParentClass() {
-        return Hat.class;
+        return Cape.class;
     }
 
     @Override
