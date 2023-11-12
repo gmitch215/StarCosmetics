@@ -20,7 +20,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -285,10 +284,10 @@ public final class StarPlayer {
         CosmeticLocation<Particle> shape = (CosmeticLocation<Particle>) getSelectedCosmetic(ParticleShape.class);
         if (shape != null) shape.getParent().run(p, shape);
 
-        CosmeticLocation<ItemStack> hat = (CosmeticLocation<ItemStack>) getSelectedCosmetic(Hat.class);
+        CosmeticLocation<?> hat = getSelectedCosmetic(Hat.class);
         if (hat != null) hat.getParent().run(p, hat);
 
-        CosmeticLocation<ItemStack> cape = (CosmeticLocation<ItemStack>) getSelectedCosmetic(Cape.class);
+        CosmeticLocation<?> cape = getSelectedCosmetic(Cape.class);
         if (cape != null) cape.getParent().run(p, cape);
     }
 
@@ -339,10 +338,8 @@ public final class StarPlayer {
         if (Cosmetic.class.equals(clazz)) return;
 
         if (loc != null) {
-            if (loc.getInput() instanceof AnimatedItem) {
-                AnimatedItem old = (AnimatedItem) getSelectedCosmetic(Hat.class).getInput();
-                old.stop();
-            }
+            if (loc.getInput() instanceof AnimatedItem)
+                ((AnimatedItem) loc.getInput()).stop();
         }
 
         String path = "cosmetics." + toString(clazz);
