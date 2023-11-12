@@ -4,9 +4,9 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
-import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
@@ -302,7 +302,7 @@ public final class StarInventoryUtil {
             ItemStack head = w.isLegacy() ? new ItemStack(matchMaterial("SKULL_ITEM"), 1, (short) 3) : new ItemStack(matchMaterial("PLAYER_HEAD"));
             SkullMeta hMeta = (SkullMeta) head.getItemMeta();
 
-            GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+            GameProfile profile = new GameProfile(UUID.randomUUID(), key);
             profile.getProperties().put("textures", new Property("textures", value));
             Method mtd = hMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
             mtd.setAccessible(true);
