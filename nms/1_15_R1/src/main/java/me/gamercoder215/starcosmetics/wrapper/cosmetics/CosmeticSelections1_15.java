@@ -6,20 +6,21 @@ import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
-import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
-import me.gamercoder215.starcosmetics.util.selection.HatSelection;
-import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
-import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.Statistic;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.selection.*;
+import org.bukkit.*;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 
 import java.util.List;
 import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.api.Rarity.RARE;
+import static me.gamercoder215.starcosmetics.api.Rarity.UNCOMMON;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
+import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.cape;
+import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.patterns;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
 final class CosmeticSelections1_15 implements CosmeticSelections {
@@ -33,7 +34,7 @@ final class CosmeticSelections1_15 implements CosmeticSelections {
                     fromMined(240, Material.OAK_LOG, Material.BIRCH_LOG), Rarity.COMMON))
 
             .add(new TrailSelection("super_honeycomb", BaseTrail.PROJECTILE_TRAIL, Material.HONEYCOMB_BLOCK,
-                    fromMined(1345, Material.OAK_LOG, Material.BIRCH_LOG), Rarity.RARE))
+                    fromMined(1345, Material.OAK_LOG, Material.BIRCH_LOG), RARE))
 
             // Particles
             .add(new TrailSelection("honey", BaseTrail.PROJECTILE_TRAIL, Particle.DRIPPING_HONEY,
@@ -57,11 +58,11 @@ final class CosmeticSelections1_15 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> PARTICLE_SHAPES = ImmutableList.<CosmeticSelection<?>>builder()
             // Small Rings
             .add(new ParticleSelection("honey", BaseShape.SMALL_RING, Particle.DRIPPING_HONEY,
-                    fromCrafted(180, Material.BEEHIVE), Rarity.RARE))
+                    fromCrafted(180, Material.BEEHIVE), RARE))
         
             // Small Triangles
             .add(new ParticleSelection("honeycomb", BaseShape.SMALL_TRIANGLE, Material.HONEYCOMB_BLOCK,
-                    fromCrafted(205, Material.BEEHIVE), Rarity.RARE))
+                    fromCrafted(205, Material.BEEHIVE), RARE))
 
             .build();
 
@@ -75,6 +76,17 @@ final class CosmeticSelections1_15 implements CosmeticSelections {
 
             .add(new HatSelection("honeycomb_block", Material.HONEYCOMB_BLOCK,
                     fromCrafted(15, Material.BEEHIVE), Rarity.UNCOMMON))
+            .build();
+
+    // Capes
+
+    // Normal Capes
+
+    private static final List<CosmeticSelection<?>> NORMAL_CAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new CapeSelection("orange_crown", cape(StarMaterial.YELLOW_BANNER,
+                    new Pattern(DyeColor.YELLOW, PatternType.HALF_HORIZONTAL), new Pattern(DyeColor.ORANGE, PatternType.TRIANGLE_TOP),
+                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.ORANGE, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM, PatternType.BORDER)),
+                    fromCrafted(50, Material.BEEHIVE), RARE))
             .build();
 
     // Selections
@@ -91,7 +103,7 @@ final class CosmeticSelections1_15 implements CosmeticSelections {
 
             .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_14"))
 
-            .put(BaseCape.NORMAL, getForVersion(BaseCape.NORMAL, "1_14"))
+            .put(BaseCape.NORMAL, join(NORMAL_CAPES, BaseCape.NORMAL, "1_14"))
             .put(BaseCape.ANIMATED, getForVersion(BaseCape.ANIMATED, "1_14"))
             .build();
 

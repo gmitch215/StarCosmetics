@@ -591,9 +591,17 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
     // Animated Capes
 
     private static final List<CosmeticSelection<?>> ANIMATED_CAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new CapeSelection("rainbow_flower",
+                    of(5, animatedCape(StarMaterial.LIME_BANNER, PatternType.FLOWER, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
+                    fromKilled(2300, EntityType.IRON_GOLEM), EPIC))
+
             .add(new CapeSelection("rainbow",
                     of(10, StarMaterial.RED_BANNER, StarMaterial.ORANGE_BANNER, StarMaterial.YELLOW_BANNER, StarMaterial.LIME_BANNER, StarMaterial.LIGHT_BLUE_BANNER, StarMaterial.BLUE_BANNER, StarMaterial.PURPLE_BANNER),
                     fromKilled(25000, EntityType.SHEEP), LEGENDARY))
+
+            .add(new CapeSelection("rainbow_mojang",
+                    of(5, animatedCape(StarMaterial.WHITE_BANNER, PatternType.MOJANG, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
+                    fromPlaytime(20 * 60 * 60 * 24 * 31 * 12 * 2), ULTRA))
             .build();
         
     // Selection Map

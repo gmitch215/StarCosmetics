@@ -46,6 +46,12 @@ public final class CapeSelection extends CosmeticSelection<Object> {
         this.name = name;
     }
 
+    public static List<ItemStack> animatedCape(StarMaterial material, PatternType pattern, DyeColor... colors) {
+        return Arrays.stream(colors)
+                .map(color -> cape(material, new Pattern(color, pattern)))
+                .collect(Collectors.toList());
+    }
+
     public static Pattern[] patterns(DyeColor color, PatternType... types) {
         return Arrays.stream(types)
                 .map(type -> new Pattern(color, type))
