@@ -1,9 +1,12 @@
 package me.gamercoder215.starcosmetics.util;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -17,6 +20,7 @@ import java.util.Set;
  * MIT License
 
  Copyright (c) 2016 Bram Stout
+ Copyright (c) 2023 Gregory Mitchell
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -49,10 +53,9 @@ public final class StarAnimator {
     private ArmorStand armorStand;
     private int length;
     private Frame[] frames;
-    private boolean paused = false;
+    private boolean stopped = false;
     private int currentFrame;
     private Location startLocation;
-    private boolean interpolate = false;
 
     private void readFrames(InputStream stream) {
         BufferedReader br = null;
@@ -75,8 +78,6 @@ public final class StarAnimator {
                     currentFrame = new Frame();
                     currentFrame.frameID = frameID;
                 }
-                else if (line.contains("interpolate"))
-                    interpolate = true;
                 else if (line.contains("Armorstand_Position")) {
                     currentFrame.x = Float.parseFloat(split[1]);
                     currentFrame.y = Float.parseFloat(split[2]);
@@ -136,10 +137,10 @@ public final class StarAnimator {
         }
     }
 
-    /**
-     * Constructor of the animator. Takes in the path to the file with the animation and the armor stand to animate.
-     * @param armorStand
-     */
+    public StarAnimator(Emote emote, ArmorStand armorStand) {
+        this(emote.getName(), armorStand);
+    }
+
     public StarAnimator(String name, ArmorStand armorStand) {
         this.armorStand = armorStand;
         startLocation = armorStand.getLocation();
@@ -148,50 +149,55 @@ public final class StarAnimator {
         animators.add(this);
     }
 
-    /**
-     * This method removes this instance from the animator instances list. When you don't want to use this instance any more, you can call this method.
-     */
     public void remove() {
         animators.remove(this);
     }
 
-    public void pause() {
-        paused = true;
-    }
-
-    public void stop() {
-        currentFrame = 0;
-        update();
-        currentFrame = 0;
-        paused = true;
+    public boolean isStopped() {
+        return stopped;
     }
 
     public void play() {
-        paused = false;
+        play(null);
+    }
+
+    public void play(@Nullable Runnable after) {
+        new BukkitRunnable() {
+            public void run() {
+                if (currentFrame >= length) {
+                    currentFrame = 0;
+                    stopped = true;
+                    if (after != null) after.run();
+                    cancel();
+                    return;
+                }
+
+                update();
+            }
+        }.runTaskTimer(StarConfig.getPlugin(), 0, 1);
     }
 
     public void update() {
-        if (!paused) {
-            if (currentFrame >= (length - 1) || currentFrame < 0)
-                currentFrame = 0;
+        if (stopped) return;
 
-            Frame f = frames[currentFrame];
-            if (interpolate && f == null)
-                f = interpolate(currentFrame);
+        if (currentFrame >= (length - 1) || currentFrame < 0)
+            currentFrame = 0;
 
-            if (f != null) {
-                Location newLoc = startLocation.clone().add(f.x, f.y, f.z);
-                newLoc.setYaw(f.r + newLoc.getYaw());
-                armorStand.teleport(newLoc);
-                armorStand.setBodyPose(f.middle);
-                armorStand.setLeftLegPose(f.leftLeg);
-                armorStand.setRightLegPose(f.rightLeg);
-                armorStand.setLeftArmPose(f.leftArm);
-                armorStand.setRightArmPose(f.rightArm);
-                armorStand.setHeadPose(f.head);
-            }
-            currentFrame++;
+        Frame f = frames[currentFrame];
+        if (f == null) f = interpolate(currentFrame);
+
+        if (f != null) {
+            Location newLoc = startLocation.clone().add(f.x, f.y, f.z);
+            newLoc.setYaw(f.r + newLoc.getYaw());
+            armorStand.teleport(newLoc);
+            armorStand.setBodyPose(f.middle);
+            armorStand.setLeftLegPose(f.leftLeg);
+            armorStand.setRightLegPose(f.rightLeg);
+            armorStand.setLeftArmPose(f.leftArm);
+            armorStand.setRightArmPose(f.rightArm);
+            armorStand.setHeadPose(f.head);
         }
+        currentFrame++;
     }
 
     public int getCurrentFrame() {
@@ -214,29 +220,8 @@ public final class StarAnimator {
         return frames;
     }
 
-    public boolean isPaused() {
-        return paused;
-    }
-
     public Location getStartLocation() {
         return startLocation;
-    }
-
-    /**
-     * Sets the start location. If you want to teleport the armor stand this is the recommended function
-     *
-     * @param location
-     */
-    public void setStartLocation(Location location) {
-        startLocation = location;
-    }
-
-    public boolean isInterpolated() {
-        return interpolate;
-    }
-
-    public void setInterpolated(boolean interpolate) {
-        this.interpolate = interpolate;
     }
 
     private Frame interpolate(int frameID) {
@@ -276,10 +261,7 @@ public final class StarAnimator {
         return res;
     }
 
-    /**
-     * The frame class. This class holds all the information of one frame.
-     */
-    public static class Frame {
+    public static final class Frame {
         int frameID;
         float x, y, z, r;
         EulerAngle middle;
