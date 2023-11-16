@@ -3,12 +3,14 @@ package me.gamercoder215.starcosmetics.api.player;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -143,5 +145,14 @@ public final class StarPlayerUtil {
 
     public static void setCape(@NotNull Player p, @NotNull ItemStack item) {
         checkCape(p).setHelmet(item);
+    }
+
+    public static ItemStack head(Player p) {
+        ItemStack head = StarMaterial.PLAYER_HEAD.findStack();
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        meta.setOwner(p.getName());
+        head.setItemMeta(meta);
+
+        return head;
     }
 }

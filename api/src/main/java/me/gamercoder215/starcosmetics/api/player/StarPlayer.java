@@ -7,6 +7,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -532,6 +534,19 @@ public final class StarPlayer {
 
         config.set("hologram_message", message == null ? "" : message);
         save();
+    }
+
+    /**
+     * Performs the specified emote.
+     * @param emote Emote to perform
+     */
+    public void emote(@NotNull Emote emote) {
+        try {
+            Method m = Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.BaseEmote").getMethod("emote", StarPlayer.class, Emote.class);
+            m.invoke(null, this, emote);
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
     }
 
     /**
