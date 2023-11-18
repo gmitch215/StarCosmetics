@@ -100,7 +100,7 @@ subprojects {
     apply(plugin = "com.github.johnrengelman.shadow")
 
     dependencies {
-        compileOnly("org.jetbrains:annotations:24.0.1")
+        compileOnly("org.jetbrains:annotations:24.1.0")
 
         testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
         testImplementation("org.mockito:mockito-core:5.7.0")
