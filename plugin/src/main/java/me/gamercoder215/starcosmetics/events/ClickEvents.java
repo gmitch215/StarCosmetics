@@ -8,6 +8,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
 import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
@@ -56,6 +57,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote.EMOTE_TAG;
 import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
@@ -650,6 +652,26 @@ public final class ClickEvents implements Listener {
                 updateCache(p);
 
                 StarPlayerUtil.removeCape(p);
+            })
+            .put("choose:emote", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+                Emote emote = Emote.valueOf(nbt.getString(EMOTE_TAG));
+
+                if (StarCooldowns.checkCooldown(EMOTE_TAG, p)) return;
+                if (!emote.getCriteria().isUnlocked(p)) {
+                    p.sendMessage(get("plugin.prefix") + ChatColor.RED + emote.getCriteria().getDisplayMessage());
+                    return;
+                }
+
+                sp.emote(emote);
+                p.closeInventory();
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+
+                StarCooldowns.set(EMOTE_TAG, p, 100);
             })
 
             .build();

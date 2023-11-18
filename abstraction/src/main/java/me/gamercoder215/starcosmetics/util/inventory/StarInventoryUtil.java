@@ -8,6 +8,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
@@ -744,6 +745,29 @@ public final class StarInventoryUtil {
         }
 
         inv.setItem(18, reset);
+    }
+
+    public static ItemStack toItemStack(@NotNull Player p, @NotNull Emote e) {
+        CompletionCriteria criteria = e.getCriteria();
+        return builder(ARMOR_STAND,
+                meta -> {
+                    meta.setDisplayName(ChatColor.GOLD + WordUtils.capitalizeFully(e.name().replace("_", " ")));
+                    List<String> lore = new ArrayList<>();
+                    ChatColor c = criteria.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
+
+                    lore.add(e.getRarity().toString());
+                    lore.add(" ");
+                    lore.addAll(Arrays.stream(
+                            ChatPaginator.wordWrap(criteria.getDisplayMessage(), 30)
+                    ).map(s -> c + s).collect(Collectors.toList()));
+                    lore.add(ChatColor.DARK_GREEN + getWithArgs("constants.completed", String.format("%,.2f", criteria.getProgressPercentage(p)) + "%"));
+                    meta.setLore(lore);
+                },
+                nbt -> {
+                    nbt.setID("choose:emote");
+                    nbt.set("emote", e.name());
+                }
+        );
     }
 
 
