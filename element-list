@@ -1,9 +1,12 @@
 me.gamercoder215.starcosmetics.api
 me.gamercoder215.starcosmetics.api.cosmetics
+me.gamercoder215.starcosmetics.api.cosmetics.capes
+me.gamercoder215.starcosmetics.api.cosmetics.emote
 me.gamercoder215.starcosmetics.api.cosmetics.gadget
 me.gamercoder215.starcosmetics.api.cosmetics.hat
 me.gamercoder215.starcosmetics.api.cosmetics.particle
 me.gamercoder215.starcosmetics.api.cosmetics.pet
 me.gamercoder215.starcosmetics.api.cosmetics.structure
 me.gamercoder215.starcosmetics.api.cosmetics.trail
+me.gamercoder215.starcosmetics.api.events.cosmetics
 me.gamercoder215.starcosmetics.api.player
