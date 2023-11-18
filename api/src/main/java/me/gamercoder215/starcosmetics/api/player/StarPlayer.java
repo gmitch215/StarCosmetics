@@ -549,6 +549,16 @@ public final class StarPlayer {
         }
     }
 
+    public boolean isEmoting() {
+        try {
+            Method m = Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.BaseEmote").getMethod("isEmoting", StarPlayer.class);
+            return (boolean) m.invoke(null, this);
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+            return false;
+        }
+    }
+
     /**
      * <p>Saves all of this StarPlayer's configuration.</p>
      * <p>Methods that edit the configuration automatically save the configuration, so an additional call is not necessary.</p>
