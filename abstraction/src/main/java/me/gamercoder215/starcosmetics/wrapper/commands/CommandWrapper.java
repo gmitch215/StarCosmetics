@@ -582,6 +582,11 @@ public interface CommandWrapper {
             return;
         }
 
+        if (StarConfig.getConfig().isInPvP(p) && !StarConfig.getConfig().getCanEmoteInPvE()) {
+            p.sendMessage(get("plugin.prefix") + ChatColor.RED + get("error.emote.pvp"));
+            return;
+        }
+
         if (StarCooldowns.checkCooldown(EMOTE_TAG, p)) return;
 
         StarPlayer sp = new StarPlayer(p);

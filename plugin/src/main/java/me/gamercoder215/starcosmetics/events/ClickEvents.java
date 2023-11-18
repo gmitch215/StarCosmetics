@@ -661,6 +661,11 @@ public final class ClickEvents implements Listener {
                 NBTWrapper nbt = of(item);
                 Emote emote = Emote.valueOf(nbt.getString(EMOTE_TAG));
 
+                if (StarConfig.getConfig().isInPvP(p) && !StarConfig.getConfig().getCanEmoteInPvE()) {
+                    p.sendMessage(get("plugin.prefix") + ChatColor.RED + get("error.emote.pvp"));
+                    return;
+                }
+
                 if (StarCooldowns.checkCooldown(EMOTE_TAG, p)) return;
                 if (!emote.getCriteria().isUnlocked(p)) {
                     p.sendMessage(get("plugin.prefix") + ChatColor.RED + emote.getCriteria().getDisplayMessage());
