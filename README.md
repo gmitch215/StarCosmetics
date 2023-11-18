@@ -26,6 +26,21 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+🕺 v1.3.0 - November 17, 2023 | "Astounding Animations"
+- PlaceholderAPI & Other Dependency Updates
+- Additional 1.20.2/Paper-related Fixes
+- New Sound Events for Attacking and Defending
+- More General Cosmetics
+- **Capes**
+  - 25+ Capes to Choose From
+  - Normal & Animated Capes Available
+- **Emotes**
+  - Armor Stand Emotes currently available
+  - Customizable Armor Stand Color
+  - Toggleagle Emote in PvP Configuration Option
+- Customizable Particle Reduction
+- PvPManager Hook for Emotes
+
 🔧 v1.2.2 - September 24, 2023
 - Gradle & CI Updates
 - Heavy Optimization & GUI Creation Changes
@@ -184,6 +199,10 @@ Download the plugin on our Spigot Page, and drop it in to your Spigot/Paper "plu
 ---
 
 ## 📷 Screenshots
+
+<img src="https://media.discordapp.net/attachments/894254760075603980/1175255342263836692/2023-11-17_19.46.50.png" title="StarCosmetics v1.3.0 Emotes" alt="StarCosmetics Emotes">
+
+<img src="https://media.discordapp.net/attachments/894254760075603980/1173088902819610644/2023-11-11_20.34.39.png" title="StarCosmetics v1.3.0 Capes" alt="StarCosmetics Capes">
 
 <img src="https://media.discordapp.net/attachments/894254760075603980/1145101159367987281/2023-08-26_15.51.54.png" title="StarCosmetics v1.2.1 Holograms" alt="StarCosmetics Holograms">
 
