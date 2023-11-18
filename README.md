@@ -21,6 +21,8 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 - **Sound Effects** - Create sound effects for your players to use, on any triggered event.
 - **Gadgets** - Fun, harmless toys for you and your players to use!
 - **Holograms** - Messages shown above your head!
+- **Capes** - Customizable Banners behind your back!
+- **Emotes** - Show off your mood with a range of emotes!
 
 ---
 
