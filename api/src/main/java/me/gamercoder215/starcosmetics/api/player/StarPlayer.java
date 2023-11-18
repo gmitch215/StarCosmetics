@@ -3,10 +3,12 @@ package me.gamercoder215.starcosmetics.api.player;
 import me.gamercoder215.starcosmetics.api.Completion;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
@@ -19,12 +21,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -269,6 +271,7 @@ public final class StarPlayer {
         if (ParticleShape.class.isAssignableFrom(clazz)) return "particle_shape";
         if (Hat.class.isAssignableFrom(clazz)) return "hat";
         if (Gadget.class.isAssignableFrom(clazz)) return "gadget";
+        if (Cape.class.isAssignableFrom(clazz)) return "cape";
 
         return clazz.getSimpleName().toLowerCase();
     }
@@ -281,10 +284,13 @@ public final class StarPlayer {
         Player p = player.getPlayer();
 
         CosmeticLocation<Particle> shape = (CosmeticLocation<Particle>) getSelectedCosmetic(ParticleShape.class);
-        if (shape != null) shape.getParent().run(p.getLocation().add(0, .25, 0), shape);
+        if (shape != null) shape.getParent().run(p, shape);
 
-        CosmeticLocation<ItemStack> hat = (CosmeticLocation<ItemStack>) getSelectedCosmetic(Hat.class);
-        if (hat != null) ((Hat) hat.getParent()).run(p, hat);
+        CosmeticLocation<?> hat = getSelectedCosmetic(Hat.class);
+        if (hat != null) hat.getParent().run(p, hat);
+
+        CosmeticLocation<?> cape = getSelectedCosmetic(Cape.class);
+        if (cape != null) cape.getParent().run(p, cape);
     }
 
     /**
@@ -334,10 +340,8 @@ public final class StarPlayer {
         if (Cosmetic.class.equals(clazz)) return;
 
         if (loc != null) {
-            if (loc.getInput() instanceof AnimatedHatData) {
-                AnimatedHatData old = (AnimatedHatData) getSelectedCosmetic(Hat.class).getInput();
-                old.stop();
-            }
+            if (loc.getInput() instanceof AnimatedItem)
+                ((AnimatedItem) loc.getInput()).stop();
         }
 
         String path = "cosmetics." + toString(clazz);
@@ -530,6 +534,29 @@ public final class StarPlayer {
 
         config.set("hologram_message", message == null ? "" : message);
         save();
+    }
+
+    /**
+     * Performs the specified emote.
+     * @param emote Emote to perform
+     */
+    public void emote(@NotNull Emote emote) {
+        try {
+            Method m = Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.BaseEmote").getMethod("emote", StarPlayer.class, Emote.class);
+            m.invoke(null, this, emote);
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+        }
+    }
+
+    public boolean isEmoting() {
+        try {
+            Method m = Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.BaseEmote").getMethod("isEmoting", StarPlayer.class);
+            return (boolean) m.invoke(null, this);
+        } catch (ReflectiveOperationException e) {
+            StarConfig.print(e);
+            return false;
+        }
     }
 
     /**

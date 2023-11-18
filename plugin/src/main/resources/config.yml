@@ -89,3 +89,11 @@ cosmetics:
   # Examples:
   # - 'castle.scs'
   structures: []
+
+  # Whether to use emotes when a player is currently in combat.
+  # The plugin determines if a player is in pvp if they have been hit by another player within the last 5 seconds. We also hook into PVPManager by ChanceSD.
+  emote-in-pvp: false
+
+  # Whether to use emotes when a player is currently in PvE (Player vs Entity).
+  # The plugin determines if a player is in PvE if they have been hit by an entity within the last 3 seconds.
+  emote-in-pve: false

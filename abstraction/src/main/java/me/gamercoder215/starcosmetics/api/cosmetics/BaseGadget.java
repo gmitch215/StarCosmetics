@@ -3,10 +3,9 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.util.Constants;
-import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public enum BaseGadget implements Gadget {
 
@@ -28,7 +27,5 @@ public enum BaseGadget implements Gadget {
     public @NotNull Material getIcon() { return Material.FIREWORK; }
 
     @Override
-    public void run(@Nullable Location l, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException {
-
-    }
+    public void run(@NotNull Player p, @NotNull CosmeticLocation<?> location) throws IllegalArgumentException {}
 }

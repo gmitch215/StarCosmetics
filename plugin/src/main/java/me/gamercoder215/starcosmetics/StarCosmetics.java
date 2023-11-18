@@ -11,15 +11,12 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
-import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
-import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetCosmetics;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureReader;
-import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
 import me.gamercoder215.starcosmetics.api.player.SoundEventSelection;
 import me.gamercoder215.starcosmetics.api.player.StarPlayer;
 import me.gamercoder215.starcosmetics.api.player.StarPlayerUtil;
@@ -50,6 +47,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -67,6 +65,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -150,7 +149,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         SERIALIZABLE.forEach(ConfigurationSerialization::registerClass);
         loadConstructors();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            getCached(p); // Load Player Cache
+            StarPlayerUtil.getCached(p); // Load Player Cache
             w.addPacketInjector(p);
         }
 
@@ -463,6 +462,40 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         return ImmutableSet.copyOf(structures);
     }
 
+    @Override
+    public boolean isInPvP(@NotNull Player p) {
+        AtomicBoolean pvp = new AtomicBoolean(false);
+        if (p.hasMetadata("pvp"))
+            pvp.compareAndSet(false, p.getMetadata("pvp").stream().anyMatch(MetadataValue::asBoolean));
+
+        if (Bukkit.getPluginManager().getPlugin("PvPManager") != null)
+            pvp.compareAndSet(false, StarPvP.isInPvP(p));
+
+        return pvp.get();
+    }
+
+    @Override
+    public boolean getCanEmoteInPvP() {
+        return config.getBoolean("cosmetics.emote-in-pvp");
+    }
+
+    @Override
+    public void setCanEmoteInPvP(boolean canEmoteInPvP) {
+        config.set("cosmetics.emote-in-pvp", canEmoteInPvP);
+        saveConfig();
+    }
+
+    @Override
+    public boolean getCanEmoteInPvE() {
+        return config.getBoolean("cosmetics.emote-in-pve");
+    }
+
+    @Override
+    public void setCanEmoteInPvE(boolean canEmoteInPvE) {
+        config.set("cosmetics.emote-in-pve", canEmoteInPvE);
+        saveConfig();
+    }
+
     // Other Utilities
 
     private static OfflinePlayer getPlayer(String name) {
@@ -541,16 +574,6 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         StarConfig.print(t);
     }
 
-
-    public static StarPlayer getCached(@NotNull Player p) {
-        StarPlayer sp = STAR_PLAYER_CACHE.get(p.getUniqueId());
-        if (sp == null) {
-            sp = new StarPlayer(p);
-            STAR_PLAYER_CACHE.put(p.getUniqueId(), sp);
-        }
-        return sp;
-    }
-
     public static final Runnable ASYNC_TICK_TASK = () -> {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (!STAR_PLAYER_CACHE.containsKey(p.getUniqueId()))
@@ -600,29 +623,6 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
     };
 
     public static final Runnable SYNC_TICK_TASK = () -> {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            StarPlayer sp = getCached(p);
-
-            PetCosmetics setting = sp.getSetting(PlayerSetting.PET_COSMETICS);
-            CosmeticLocation<?> shape = sp.getSelectedCosmetic(ParticleShape.class);
-
-            if (shape != null) {
-                if (setting.isStarPet() && StarPlayerUtil.getPets().containsKey(p.getUniqueId())) {
-                    LivingEntity petEntity = StarPlayerUtil.getPets().get(p.getUniqueId()).getEntity();
-                    shape.getParent().run(petEntity.getLocation().add(0, 0.8, 0), shape);
-                }
-
-                if (setting.isTameables())
-                    Bukkit.getWorlds().forEach(w ->
-                            w.getEntitiesByClass(LivingEntity.class)
-                                    .stream()
-                                    .filter(l -> l instanceof Tameable && ((Tameable) l).getOwner() != null && ((Tameable) l).getOwner().getUniqueId().equals(p.getUniqueId()))
-                                    .map(l -> (Tameable & LivingEntity) l)
-                                    .forEach(t -> shape.getParent().run(t.getLocation(), shape))
-                    );
-            }
-        }
-
         for (World w : Bukkit.getWorlds())
             for (Item i : w.getEntitiesByClass(Item.class)) {
                 NBTWrapper nbt = NBTWrapper.of(i.getItemStack());
@@ -920,6 +920,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
             sp.getSelectionLimit(); // Updates Config Limit
 
             StarPlayerUtil.removePet(p);
+            StarPlayerUtil.removeCape(p);
         }
 
         @EventHandler

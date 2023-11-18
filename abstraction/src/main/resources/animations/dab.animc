@@ -1,0 +1,794 @@
+interpolate
+length 100
+frame 1
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.03551999857225463 0.023680000715696408 -0.09472000286278563
+Armorstand_Left_Arm -0.03551999857225463 0.023680000715696408 -0.09472000286278563
+Armorstand_Head 0.03551999857225463 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 2
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.14016000410094415 0.09344000273396276 -0.37376001093585104
+Armorstand_Left_Arm -0.14016000410094415 0.09344000273396276 -0.37376001093585104
+Armorstand_Head 0.14016000410094415 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 3
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.3110400112936371 0.20735999418887818 -0.8294399767555127
+Armorstand_Left_Arm -0.3110400112936371 0.20735999418887818 -0.8294399767555127
+Armorstand_Head 0.3110400112936371 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 4
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.5452799881774757 0.3635200099052681 -1.4540800396210725
+Armorstand_Left_Arm -0.5452799881774757 0.3635200099052681 -1.4540800396210725
+Armorstand_Head 0.5452799881774757 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 5
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.8400000361817342 0.5600000596950581 -2.2400002387802322
+Armorstand_Left_Arm -0.8400000361817342 0.5600000596950581 -2.2400002387802322
+Armorstand_Head 0.8400000361817342 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 6
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -1.1923199765912096 0.7948799666071887 -3.179519866428755
+Armorstand_Left_Arm -1.1923199765912096 0.7948799666071887 -3.179519866428755
+Armorstand_Head 1.1923199765912096 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 7
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -1.5993600842579476 1.066240127319769 -4.264960509279076
+Armorstand_Left_Arm -1.5993600842579476 1.066240127319769 -4.264960509279076
+Armorstand_Head 1.5993600842579476 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 8
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -2.0582399403429075 1.3721600313764089 -5.488640125505635
+Armorstand_Left_Arm -2.0582399403429075 1.3721600313764089 -5.488640125505635
+Armorstand_Head 2.0582399403429075 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 9
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -2.566079873058988 1.7107199153726587 -6.842879661490635
+Armorstand_Left_Arm -2.566079873058988 1.7107199153726587 -6.842879661490635
+Armorstand_Head 2.566079873058988 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 10
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -3.119999890453971 2.07999985582151 -8.31999942328604
+Armorstand_Left_Arm -3.119999890453971 2.07999985582151 -8.31999942328604
+Armorstand_Head 3.119999890453971 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 11
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -3.7171195736888154 2.4780797157925436 -9.912318863170174
+Armorstand_Left_Arm -3.7171195736888154 2.4780797157925436 -9.912318863170174
+Armorstand_Head 3.7171195736888154 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 12
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -4.354560211471773 2.903039998685574 -11.612159994742296
+Armorstand_Left_Arm -4.354560211471773 2.903039998685574 -11.612159994742296
+Armorstand_Head 4.354560211471773 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 13
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -5.029440104303331 3.3529599272399464 -13.411839708959786
+Armorstand_Left_Arm -5.029440104303331 3.3529599272399464 -13.411839708959786
+Armorstand_Head 5.029440104303331 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 14
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -5.738879473674685 3.8259193645252414 -15.303677458100966
+Armorstand_Left_Arm -5.738879473674685 3.8259193645252414 -15.303677458100966
+Armorstand_Head 5.738879473674685 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 15
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -6.479999394850673 4.319999881158331 -17.279999524633325
+Armorstand_Left_Arm -6.479999394850673 4.319999881158331 -17.279999524633325
+Armorstand_Head 6.479999394850673 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 16
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -7.249919662435667 4.8332800595483265 -19.333120238193306
+Armorstand_Left_Arm -7.249919662435667 4.8332800595483265 -19.333120238193306
+Armorstand_Head 7.249919662435667 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 17
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -8.045758790373567 5.3638393358779854 -21.455357343511942
+Armorstand_Left_Arm -8.045758790373567 5.3638393358779854 -21.455357343511942
+Armorstand_Head 8.045758790373567 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 18
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -8.864639561476505 5.909759707651003 -23.63903883060401
+Armorstand_Left_Arm -8.864639561476505 5.909759707651003 -23.63903883060401
+Armorstand_Head 8.864639561476505 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 19
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -9.703678782141088 6.469118903502843 -25.876475614011373
+Armorstand_Left_Arm -9.703678782141088 6.469118903502843 -25.876475614011373
+Armorstand_Head 9.703678782141088 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 20
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -10.560000088953096 7.0399993478240255 -28.159997391296102
+Armorstand_Left_Arm -10.560000088953096 7.0399993478240255 -28.159997391296102
+Armorstand_Head 10.560000088953096 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 21
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -11.430719434535492 7.620478769250015 -30.48191507700006
+Armorstand_Left_Arm -11.430719434535492 7.620478769250015 -30.48191507700006
+Armorstand_Head 11.430719434535492 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 22
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -12.312957894153113 8.208639165284508 -32.83455666113803
+Armorstand_Left_Arm -12.312957894153113 8.208639165284508 -32.83455666113803
+Armorstand_Head 12.312957894153113 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 23
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -13.203839104391742 8.802559972110258 -35.21023988844103
+Armorstand_Left_Arm -13.203839104391742 8.802559972110258 -35.21023988844103
+Armorstand_Head 13.203839104391742 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 24
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -14.10047816410069 9.400319345249557 -37.601277380998226
+Armorstand_Left_Arm -14.10047816410069 9.400319345249557 -37.601277380998226
+Armorstand_Head 14.10047816410069 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 25
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -14.999998709865736 9.99999970909292 -39.99999883637168
+Armorstand_Left_Arm -14.999998709865736 9.99999970909292 -39.99999883637168
+Armorstand_Head 14.999998709865736 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 26
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -15.899520963178075 10.599680072936286 -42.39872029174514
+Armorstand_Left_Arm -15.899520963178075 10.599680072936286 -42.39872029174514
+Armorstand_Head 15.899520963178075 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 27
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -16.796159169113377 11.197437738528292 -44.78975095411317
+Armorstand_Left_Arm -16.796159169113377 11.197437738528292 -44.78975095411317
+Armorstand_Head 16.796159169113377 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 28
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -17.687037818031065 11.791358545354043 -47.165434181416174
+Armorstand_Left_Arm -17.687037818031065 11.791358545354043 -47.165434181416174
+Armorstand_Head 17.687037818031065 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 29
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -18.569276277648687 12.379518941388534 -49.51807576555414
+Armorstand_Left_Arm -18.569276277648687 12.379518941388534 -49.51807576555414
+Armorstand_Head 18.569276277648687 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 30
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -19.439999038325666 12.959999643474994 -51.839998573899976
+Armorstand_Left_Arm -19.439999038325666 12.959999643474994 -51.839998573899976
+Armorstand_Head 19.439999038325666 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 31
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -20.29631693004309 13.530878807135707 -54.12351522854283
+Armorstand_Left_Arm -20.29631693004309 13.530878807135707 -54.12351522854283
+Armorstand_Head 20.29631693004309 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 32
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -21.135357858254967 14.0902371492139 -56.3609485968556
+Armorstand_Left_Arm -21.135357858254967 14.0902371492139 -56.3609485968556
+Armorstand_Head 21.135357858254967 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 33
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -21.954241190678843 14.636159655421034 -58.544638621684136
+Armorstand_Left_Arm -21.954241190678843 14.636159655421034 -58.544638621684136
+Armorstand_Head 21.954241190678843 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 34
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -22.750077757295802 15.16671850486387 -60.66687401945548
+Armorstand_Left_Arm -22.750077757295802 15.16671850486387 -60.66687401945548
+Armorstand_Head 22.750077757295802 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 35
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -23.51999717110715 15.679996975706572 -62.71998790282629
+Armorstand_Left_Arm -23.51999717110715 15.679996975706572 -62.71998790282629
+Armorstand_Head 23.51999717110715 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 36
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -24.26111709228314 16.174079199886954 -64.69631679954782
+Armorstand_Left_Arm -24.26111709228314 16.174079199886954 -64.69631679954782
+Armorstand_Head 24.26111709228314 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 37
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -24.970560303635903 16.647039064059072 -66.58815625623629
+Armorstand_Left_Arm -24.970560303635903 16.647039064059072 -66.58815625623629
+Armorstand_Head 24.970560303635903 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 38
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -25.645439342693813 17.096957285066154 -68.38782914026461
+Armorstand_Left_Arm -25.645439342693813 17.096957285066154 -68.38782914026461
+Armorstand_Head 25.645439342693813 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 39
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -26.2828786998163 17.521917994846007 -70.08767197938403
+Armorstand_Left_Arm -26.2828786998163 17.521917994846007 -70.08767197938403
+Armorstand_Head 26.2828786998163 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 40
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -26.880001157815496 17.919998495147276 -71.6799939805891
+Armorstand_Left_Arm -26.880001157815496 17.919998495147276 -71.6799939805891
+Armorstand_Head 26.880001157815496 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 41
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -27.43391583912519 18.289277795265892 -73.15711118106357
+Armorstand_Left_Arm -27.43391583912519 18.289277795265892 -73.15711118106357
+Armorstand_Head 27.43391583912519 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 42
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -27.94176089448315 18.627838319592374 -74.5113532783695
+Armorstand_Left_Arm -27.94176089448315 18.627838319592374 -74.5113532783695
+Armorstand_Head 27.94176089448315 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 43
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -28.400640323681284 18.93375907742266 -75.73503630969064
+Armorstand_Left_Arm -28.400640323681284 18.93375907742266 -75.73503630969064
+Armorstand_Head 28.400640323681284 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 44
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -28.807678617079024 19.205119078052682 -76.82047631221073
+Armorstand_Left_Arm -28.807678617079024 19.205119078052682 -76.82047631221073
+Armorstand_Head 28.807678617079024 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 45
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.160000265035794 19.439999038325666 -77.75999615330267
+Armorstand_Left_Arm -29.160000265035794 19.439999038325666 -77.75999615330267
+Armorstand_Head 29.160000265035794 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 46
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.45471609753267 19.63647967508484 -78.54591870033936
+Armorstand_Left_Arm -29.45471609753267 19.63647967508484 -78.54591870033936
+Armorstand_Head 29.45471609753267 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 47
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.68895743511826 19.79263829007884 -79.17055316031536
+Armorstand_Left_Arm -29.68895743511826 19.79263829007884 -79.17055316031536
+Armorstand_Head 29.68895743511826 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 48
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.859835107773637 19.90655901524548 -79.62623606098192
+Armorstand_Left_Arm -29.859835107773637 19.90655901524548 -79.62623606098192
+Armorstand_Head 29.859835107773637 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 49
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.96447702095282 19.976319152333406 -79.90527660933363
+Armorstand_Left_Arm -29.96447702095282 19.976319152333406 -79.90527660933363
+Armorstand_Head 29.96447702095282 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 50
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -30.000000834826057 19.99999941818584 -79.99999767274336
+Armorstand_Left_Arm -30.000000834826057 19.99999941818584 -79.99999767274336
+Armorstand_Head 30.000000834826057 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 51
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.96448385114199 19.976319152333406 -79.90527660933363
+Armorstand_Left_Arm -29.96448385114199 19.976319152333406 -79.90527660933363
+Armorstand_Head 29.96448385114199 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 52
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.859838522868223 19.90655901524548 -79.62623606098192
+Armorstand_Left_Arm -29.859838522868223 19.90655901524548 -79.62623606098192
+Armorstand_Head 29.859838522868223 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 53
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.688960850212844 19.792639997626132 -79.17055999050453
+Armorstand_Left_Arm -29.688960850212844 19.792639997626132 -79.17055999050453
+Armorstand_Head 29.688960850212844 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 54
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.454719512627257 19.63647967508484 -78.54591870033936
+Armorstand_Left_Arm -29.454719512627257 19.63647967508484 -78.54591870033936
+Armorstand_Head 29.454719512627257 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 55
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -29.160000265035794 19.439999038325666 -77.75999615330267
+Armorstand_Left_Arm -29.160000265035794 19.439999038325666 -77.75999615330267
+Armorstand_Head 29.160000265035794 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 56
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -28.807678617079024 19.205119078052682 -76.82047631221073
+Armorstand_Left_Arm -28.807678617079024 19.205119078052682 -76.82047631221073
+Armorstand_Head 28.807678617079024 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 57
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -28.400640323681284 18.93375907742266 -75.73503630969064
+Armorstand_Left_Arm -28.400640323681284 18.93375907742266 -75.73503630969064
+Armorstand_Head 28.400640323681284 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 58
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -27.94176089448315 18.62784002713967 -74.51136010855868
+Armorstand_Left_Arm -27.94176089448315 18.62784002713967 -74.51136010855868
+Armorstand_Head 27.94176089448315 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 59
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -27.43392096176707 18.289279502813184 -73.15711801125273
+Armorstand_Left_Arm -27.43392096176707 18.289279502813184 -73.15711801125273
+Armorstand_Head 27.43392096176707 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 60
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -26.879999450268205 17.919998495147276 -71.6799939805891
+Armorstand_Left_Arm -26.879999450268205 17.919998495147276 -71.6799939805891
+Armorstand_Head 26.879999450268205 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 61
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -26.282880407363592 17.521919702393298 -70.08767880957319
+Armorstand_Left_Arm -26.282880407363592 17.521919702393298 -70.08767880957319
+Armorstand_Head 26.282880407363592 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 62
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -25.645439342693813 17.096958992613445 -68.38783597045378
+Armorstand_Left_Arm -25.645439342693813 17.096958992613445 -68.38783597045378
+Armorstand_Head 25.645439342693813 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 63
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -24.970560303635903 16.647039064059072 -66.58815625623629
+Armorstand_Left_Arm -24.970560303635903 16.647039064059072 -66.58815625623629
+Armorstand_Head 24.970560303635903 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 64
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -24.261120507377726 16.174079199886954 -64.69631679954782
+Armorstand_Left_Arm -24.261120507377726 16.174079199886954 -64.69631679954782
+Armorstand_Head 24.261120507377726 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 65
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -23.520000586201736 15.679998683253865 -62.71999473301546
+Armorstand_Left_Arm -23.520000586201736 15.679998683253865 -62.71999473301546
+Armorstand_Head 23.520000586201736 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 66
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -22.750079464843097 15.16671850486387 -60.66687401945548
+Armorstand_Left_Arm -22.750079464843097 15.16671850486387 -60.66687401945548
+Armorstand_Head 22.750079464843097 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 67
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -21.954241190678843 14.636159655421034 -58.544638621684136
+Armorstand_Left_Arm -21.954241190678843 14.636159655421034 -58.544638621684136
+Armorstand_Head 21.954241190678843 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 68
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -21.135361273349552 14.090238856761193 -56.36095542704477
+Armorstand_Left_Arm -21.135361273349552 14.090238856761193 -56.36095542704477
+Armorstand_Head 21.135361273349552 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 69
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -20.296320345137676 13.530879660909353 -54.12351864363741
+Armorstand_Left_Arm -20.296320345137676 13.530879660909353 -54.12351864363741
+Armorstand_Head 20.296320345137676 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 70
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -19.440000745872958 12.959998789701347 -51.83999515880539
+Armorstand_Left_Arm -19.440000745872958 12.959998789701347 -51.83999515880539
+Armorstand_Head 19.440000745872958 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 71
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -18.569279692743272 12.379518941388534 -49.51807576555414
+Armorstand_Left_Arm -18.569279692743272 12.379518941388534 -49.51807576555414
+Armorstand_Head 18.569279692743272 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 72
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -17.687041233125647 11.791359399127689 -47.165437596510756
+Armorstand_Left_Arm -17.687041233125647 11.791359399127689 -47.165437596510756
+Armorstand_Head 17.687041233125647 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 73
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -16.796159169113377 11.197439446075585 -44.78975778430234
+Armorstand_Left_Arm -16.796159169113377 11.197439446075585 -44.78975778430234
+Armorstand_Head 16.796159169113377 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 74
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -15.899520963178075 10.599680072936286 -42.39872029174514
+Armorstand_Left_Arm -15.899520963178075 10.599680072936286 -42.39872029174514
+Armorstand_Head 15.899520963178075 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 75
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -15.000000417413029 9.99999970909292 -39.99999883637168
+Armorstand_Left_Arm -15.000000417413029 9.99999970909292 -39.99999883637168
+Armorstand_Head 15.000000417413029 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 76
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -14.10047987164798 9.400319345249557 -37.601277380998226
+Armorstand_Left_Arm -14.10047987164798 9.400319345249557 -37.601277380998226
+Armorstand_Head 14.10047987164798 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 77
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -13.203839104391742 8.802559972110258 -35.21023988844103
+Armorstand_Left_Arm -13.203839104391742 8.802559972110258 -35.21023988844103
+Armorstand_Head 13.203839104391742 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 78
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -12.312959601700406 8.20863831151086 -32.83455324604344
+Armorstand_Left_Arm -12.312959601700406 8.20863831151086 -32.83455324604344
+Armorstand_Head 12.312959601700406 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 79
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -11.430721142082785 7.6204796230236616 -30.481918492094646
+Armorstand_Left_Arm -11.430721142082785 7.6204796230236616 -30.481918492094646
+Armorstand_Head 11.430721142082785 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 80
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -10.560002650274035 7.039999774710849 -28.159999098843397
+Armorstand_Left_Arm -10.560002650274035 7.039999774710849 -28.159999098843397
+Armorstand_Head 10.560002650274035 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 81
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -9.70368048968838 6.469118903502843 -25.876475614011373
+Armorstand_Left_Arm -9.70368048968838 6.469118903502843 -25.876475614011373
+Armorstand_Head 9.70368048968838 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 82
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -8.864641269023796 5.909758853877356 -23.639035415509426
+Armorstand_Left_Arm -8.864641269023796 5.909758853877356 -23.639035415509426
+Armorstand_Head 8.864641269023796 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 83
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -8.045759644147212 5.363840616538455 -21.45536246615382
+Armorstand_Left_Arm -8.045759644147212 5.363840616538455 -21.45536246615382
+Armorstand_Head 8.045759644147212 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 84
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -7.2499179548883745 4.8332800595483265 -19.333120238193306
+Armorstand_Left_Arm -7.2499179548883745 4.8332800595483265 -19.333120238193306
+Armorstand_Head 7.2499179548883745 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 85
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -6.48000024862432 4.320000734931977 -17.280002939727908
+Armorstand_Left_Arm -6.48000024862432 4.320000734931977 -17.280002939727908
+Armorstand_Head 6.48000024862432 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 86
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -5.7388803274483315 3.8259202182988874 -15.30368087319555
+Armorstand_Left_Arm -5.7388803274483315 3.8259202182988874 -15.30368087319555
+Armorstand_Head 5.7388803274483315 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 87
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -5.029437116095569 3.352958646579477 -13.411834586317909
+Armorstand_Left_Arm -5.029437116095569 3.352958646579477 -13.411834586317909
+Armorstand_Head 5.029437116095569 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 88
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -4.354558077037657 2.9030387180251047 -11.612154872100419
+Armorstand_Left_Arm -4.354558077037657 2.9030387180251047 -11.612154872100419
+Armorstand_Head 4.354558077037657 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 89
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -3.7171221350097543 2.4780797157925436 -9.912318863170174
+Armorstand_Left_Arm -3.7171221350097543 2.4780797157925436 -9.912318863170174
+Armorstand_Head 3.7171221350097543 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 90
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -3.1199996770105596 2.0799992154912754 -8.319996861965102
+Armorstand_Left_Arm -3.1199996770105596 2.0799992154912754 -8.319996861965102
+Armorstand_Head 3.1199996770105596 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 91
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -2.5660781655116955 1.7107199153726587 -6.842879661490635
+Armorstand_Left_Arm -2.5660781655116955 1.7107199153726587 -6.842879661490635
+Armorstand_Head 2.5660781655116955 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 92
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -2.0582399403429075 1.3721593910461742 -5.488637564184697
+Armorstand_Left_Arm -2.0582399403429075 1.3721593910461742 -5.488637564184697
+Armorstand_Head 2.0582399403429075 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 93
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -1.5993570960501857 1.066238633215888 -4.264954532863552
+Armorstand_Left_Arm -1.5993570960501857 1.066238633215888 -4.264954532863552
+Armorstand_Head 1.5993570960501857 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 94
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -1.192322217747031 0.7948803401331589 -3.1795213605326356
+Armorstand_Left_Arm -1.192322217747031 0.7948803401331589 -3.1795213605326356
+Armorstand_Head 1.192322217747031 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 95
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.8400005697902632 0.5599969647655905 -2.239987859062362
+Armorstand_Left_Arm -0.8400005697902632 0.5599969647655905 -2.239987859062362
+Armorstand_Head 0.8400005697902632 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 96
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.545274492009628 0.36351974310100366 -1.4540789724040146
+Armorstand_Left_Arm -0.545274492009628 0.36351974310100366 -1.4540789724040146
+Armorstand_Head 0.545274492009628 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 97
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.31103998461321064 0.2073611281070021 -0.8294445124280084
+Armorstand_Left_Arm -0.31103998461321064 0.2073611281070021 -0.8294445124280084
+Armorstand_Head 0.31103998461321064 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 98
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.14015889686324665 0.09344040294035943 -0.37376161176143774
+Armorstand_Left_Arm -0.14015889686324665 0.09344040294035943 -0.37376161176143774
+Armorstand_Head 0.14015889686324665 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0
+frame 99
+Armorstand_Left_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Leg 0.0 -0.0 -0.0
+Armorstand_Right_Arm -0.035516983684066306 0.02368026585243421 -0.09472106340973684
+Armorstand_Left_Arm -0.035516983684066306 0.02368026585243421 -0.09472106340973684
+Armorstand_Head 0.035516983684066306 -0.0 -0.0
+Armorstand_Position 0.0 0.0 0.0 -0.0
+Armorstand_Middle 0.0 -0.0 -0.0

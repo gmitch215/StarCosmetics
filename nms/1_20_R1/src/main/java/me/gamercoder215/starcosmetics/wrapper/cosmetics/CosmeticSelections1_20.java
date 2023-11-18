@@ -11,6 +11,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,10 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
 
             .add(new TrailSelection("relic", BaseTrail.PROJECTILE_TRAIL, Material.MUSIC_DISC_RELIC,
                     fromStatistic(Statistic.ANIMALS_BRED, 5500), EPIC))
+
+            .add(new TrailSelection("armor_trims", BaseTrail.PROJECTILE_TRAIL,
+                    Arrays.stream(Material.values()).filter(m -> m.name().endsWith("_TRIM_SMITHING_TEMPLATE")).toList(),
+                    fromCrafted(4780, Material.IRON_CHESTPLATE), LEGENDARY))
             .build();
 
     // Ground Trails
@@ -63,6 +68,9 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
     private static final List<CosmeticSelection<?>> NORMAL_HATS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new HatSelection("empty_pot", decoratedPot(Material.BRICK),
                     fromStatistic(Statistic.TRADED_WITH_VILLAGER, 25), COMMON))
+
+            .add(new HatSelection("cherry_leaves", Material.CHERRY_LEAVES,
+                    fromMined(65, Material.CHERRY_LEAVES), OCCASIONAL))
 
             .add(new HatSelection("angler_pot", decoratedPot(Material.ANGLER_POTTERY_SHERD),
                     fromCrafted(50, Material.DECORATED_POT), UNCOMMON))
@@ -108,6 +116,9 @@ final class CosmeticSelections1_20 implements CosmeticSelections {
             .put(BaseHat.ANIMATED, join(ANIMATED_HATS, BaseHat.ANIMATED, "1_19_R3"))
 
             .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_19_R3"))
+
+            .put(BaseCape.NORMAL, getForVersion(BaseCape.NORMAL, "1_19_R3"))
+            .put(BaseCape.ANIMATED, getForVersion(BaseCape.ANIMATED, "1_19_R3"))
             .build();
 
 

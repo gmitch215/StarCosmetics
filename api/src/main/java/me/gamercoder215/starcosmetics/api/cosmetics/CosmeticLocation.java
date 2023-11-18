@@ -3,7 +3,6 @@ package me.gamercoder215.starcosmetics.api.cosmetics;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -92,7 +91,7 @@ public interface CosmeticLocation<T> {
     Class<? extends T> getInputType();
 
     /**
-     * Fetches the input used in {@link Cosmetic#run(Location, CosmeticLocation)}.
+     * Fetches the input used in {@link Cosmetic#run(Player, CosmeticLocation)}.
      * @return CosmeticLocation Input for Parent Cosmetic
      */
     @NotNull

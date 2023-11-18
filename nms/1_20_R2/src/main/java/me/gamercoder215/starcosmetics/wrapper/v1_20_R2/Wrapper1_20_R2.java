@@ -14,15 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
-import net.minecraft.network.protocol.game.ClientboundOpenSignEditorPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
-import net.minecraft.network.protocol.game.ServerboundSignUpdatePacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.dedicated.DedicatedServer;
@@ -30,6 +22,7 @@ import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
+import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -41,15 +34,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.advancement.CraftAdvancement;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftDecoratedPot;
@@ -239,8 +227,7 @@ final class Wrapper1_20_R2 implements Wrapper {
 
     @Override
     public String getAdvancementDescription(String s) {
-        CraftAdvancement ca = (CraftAdvancement) Bukkit.getAdvancement(NamespacedKey.minecraft(s));
-        return ca.getDisplay().getDescription();
+        return Bukkit.getAdvancement(NamespacedKey.minecraft(s)).getDisplay().getDescription();
     }
 
     @Override
@@ -301,7 +288,7 @@ final class Wrapper1_20_R2 implements Wrapper {
         ServerPlayer sp = ((CraftPlayer) p).getHandle();
 
         try {
-            Field connection = ServerGamePacketListenerImpl.class.getDeclaredField("h");
+            Field connection = ServerCommonPacketListenerImpl.class.getDeclaredField("c");
             connection.setAccessible(true);
             Channel ch = ((Connection) connection.get(sp.connection)).channel;
 
@@ -317,7 +304,7 @@ final class Wrapper1_20_R2 implements Wrapper {
         ServerPlayer sp = ((CraftPlayer) p).getHandle();
 
         try {
-            Field connection = ServerGamePacketListenerImpl.class.getDeclaredField("h");
+            Field connection = ServerCommonPacketListenerImpl.class.getDeclaredField("c");
             connection.setAccessible(true);
             Channel ch = ((Connection) connection.get(sp.connection)).channel;
 

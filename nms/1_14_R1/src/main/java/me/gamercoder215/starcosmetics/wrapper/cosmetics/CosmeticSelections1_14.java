@@ -90,6 +90,9 @@ final class CosmeticSelections1_14 implements CosmeticSelections {
             .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_13"))
 
             .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_13"))
+
+            .put(BaseCape.NORMAL, getForVersion(BaseCape.NORMAL, "1_13"))
+            .put(BaseCape.ANIMATED, getForVersion(BaseCape.ANIMATED, "1_13"))
             .build();
 
     @Override

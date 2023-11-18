@@ -1,4 +1,4 @@
-package me.gamercoder215.starcosmetics.api.cosmetics.hat;
+package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -10,22 +10,25 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * <p>Utility class for describing instructions creating an Animated Hat</p>
+ * <p>Utility class for describing instructions creating an Animated Item</p>
  * <strong>NOTE: Starting this hat will NOT automatically and safely remove/replace existing helmets or hats.</strong>
  */
-public final class AnimatedHatData implements Cloneable {
+public final class AnimatedItem implements Cloneable {
 
     private final List<Map.Entry<Long, ItemStack>> frames = new ArrayList<>();
+    private final BiConsumer<Player, ItemStack> function;
 
     private Player player = null;
     private boolean started;
 
-    private AnimatedHatData(List<Map.Entry<Long, ItemStack>> frames) {
+    private AnimatedItem(List<Map.Entry<Long, ItemStack>> frames, BiConsumer<Player, ItemStack> function) {
         this.frames.addAll(frames);
+        this.function = function;
         this.started = false;
     }
 
@@ -70,14 +73,23 @@ public final class AnimatedHatData implements Cloneable {
      * @return new Animated Hat Data with mapped itemstack hats 
      */
     @NotNull
-    public AnimatedHatData map(@NotNull Function<ItemStack, ItemStack> mapper) {
+    public AnimatedItem map(@NotNull Function<ItemStack, ItemStack> mapper) {
         List<Map.Entry<Long, ItemStack>> map = new ArrayList<>();
         for (Map.Entry<Long, ItemStack> frame : this.frames)
             map.add(
                 new AbstractMap.SimpleEntry<>(frame.getKey(), mapper.apply(frame.getValue()))
             );
 
-        return new AnimatedHatData(map);
+        return new AnimatedItem(map, function);
+    }
+
+    /**
+     * Fetches the function to run when starting this Animated Hat.
+     * @return Function to run when starting this Animated Hat
+     */
+    @NotNull
+    public BiConsumer<Player, ItemStack> getFunction() {
+        return function;
     }
 
     /**
@@ -116,7 +128,7 @@ public final class AnimatedHatData implements Cloneable {
                 @Override
                 public void run() {
                     if (player != null)
-                        player.getInventory().setHelmet(item);
+                        function.accept(player, item);
                 }
             }, current));
         }
@@ -144,9 +156,9 @@ public final class AnimatedHatData implements Cloneable {
      * @return Cloned Animated Hat Data
      */
     @NotNull
-    public AnimatedHatData clone() {
+    public AnimatedItem clone() {
         try {
-            return (AnimatedHatData) super.clone();
+            return (AnimatedItem) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
@@ -154,24 +166,26 @@ public final class AnimatedHatData implements Cloneable {
 
     /**
      * Constructs a new Animated Hat Data with the given frames.
+     * @param function Function to run when starting this Animated Hat
      * @param frames Frames to use, a list of map entries describing duration (key) and hat item to use (value)
      * @return Constructed AnimatedHatData
      * @throws IllegalArgumentException if frames is null or less than 2 frames
      */
-    public static AnimatedHatData of(@NotNull List<Map.Entry<Long, ItemStack>> frames) throws IllegalArgumentException {
+    public static AnimatedItem of(@NotNull BiConsumer<Player, ItemStack> function, @NotNull List<Map.Entry<Long, ItemStack>> frames) throws IllegalArgumentException {
         if (frames == null) throw new IllegalArgumentException("Cannot build Animated Hat Data with null frames.");
         if (frames.size() < 2) throw new IllegalArgumentException("Cannot build Animated Hat Data with 1 or less frames.");
         
-        return new AnimatedHatData(frames);
+        return new AnimatedItem(frames, function);
     }
 
     /**
      * Constructs a new Builder for Animated Hat Data.
+     * @param function Function to run when starting this Animated Hat
      * @return AnimatedHatData Builder
      */
     @NotNull
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(@NotNull BiConsumer<Player, ItemStack> function) {
+        return new Builder(function);
     }
 
     /**
@@ -180,8 +194,21 @@ public final class AnimatedHatData implements Cloneable {
     public static final class Builder {
 
         private final List<Map.Entry<Long, ItemStack>> frames = new ArrayList<>();
+        private BiConsumer<Player, ItemStack> function;
 
-        Builder() {}
+        Builder(@NotNull BiConsumer<Player, ItemStack> function) {
+            this.function = function;
+        }
+
+        /**
+         * Sets the function to run when starting this Animated Hat.
+         * @param function function to run
+         * @return this class, for chaining
+         */
+        public Builder function(@NotNull BiConsumer<Player, ItemStack> function) {
+            this.function = function;
+            return this;
+        }
 
         /**
          * Clears and sets the frames for this Animated Hat Data.
@@ -254,10 +281,10 @@ public final class AnimatedHatData implements Cloneable {
          * @throws IllegalStateException if there are less than 2 frames
          */
         @NotNull
-        public AnimatedHatData build() throws IllegalStateException{
+        public AnimatedItem build() throws IllegalStateException{
             if (frames.size() < 2) throw new IllegalStateException("Cannot build Animated Hat Data with 1 or less frames.");
 
-            return new AnimatedHatData(frames);
+            return new AnimatedItem(frames, function);
         }
 
     }

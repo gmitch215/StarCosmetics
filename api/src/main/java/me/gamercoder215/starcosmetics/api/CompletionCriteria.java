@@ -25,7 +25,7 @@ public final class CompletionCriteria {
     /**
      * Represents a CompletionCriteria that requires nothing.
      */
-    public static final CompletionCriteria NONE = new CompletionCriteria(p -> true, p -> 100, "");
+    public static final CompletionCriteria NONE = new CompletionCriteria(p -> true, p -> 100, "constants.free");
 
     private final Predicate<Player> criteria;
     private final Function<Player, Number> progressFunc;
