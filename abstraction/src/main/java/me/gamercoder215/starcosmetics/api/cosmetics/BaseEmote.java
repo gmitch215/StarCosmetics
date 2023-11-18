@@ -29,6 +29,16 @@ public final class BaseEmote {
         return armor;
     }
 
+    public static boolean isEmoting(@NotNull StarPlayer sp) {
+        StarAnimator animator = StarAnimator.animators.stream()
+                .filter(a -> a.isOwner(sp.getPlayer())
+                ).findFirst()
+                .orElse(null);
+
+        if (animator == null) return false;
+        return !animator.isStopped();
+    }
+
     public static void emote(@NotNull StarPlayer sp, @NotNull Emote emote) {
         Player p = sp.getPlayer().getPlayer();
         if (p == null) return;
@@ -37,7 +47,7 @@ public final class BaseEmote {
         final int modifier = sp.getSetting(PlayerSetting.PARTICLE_REDUCTION).getModifier();
 
         ArmorStand stand = p.getWorld().spawn(
-                p.getLocation().add(p.getLocation().getDirection().multiply(2.0)),
+                p.getLocation().add(p.getLocation().getDirection().setY(0.0).multiply(2.0)),
                 ArmorStand.class
         );
         stand.setInvulnerable(true);
@@ -52,7 +62,7 @@ public final class BaseEmote {
         stand.setLeggings(dyedArmor(Material.LEATHER_LEGGINGS, color));
         stand.setBoots(dyedArmor(Material.LEATHER_BOOTS, color));
 
-        StarAnimator animator = new StarAnimator(emote, stand);
+        StarAnimator animator = new StarAnimator(emote, stand, p.getUniqueId());
         animator.play(() -> {
             stand.remove();
             stand.getWorld().spawnParticle(Particle.CLOUD, stand.getLocation(), 100 / modifier, 0.5, 0.5, 0.5, 0.1);

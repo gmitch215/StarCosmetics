@@ -3,16 +3,21 @@ package me.gamercoder215.starcosmetics.util;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The original thread that the original code belongs to can be found here:
@@ -50,6 +55,7 @@ public final class StarAnimator {
         animators.forEach(StarAnimator::update);
     }
 
+    private UUID owner;
     private ArmorStand armorStand;
     private int length;
     private Frame[] frames;
@@ -58,6 +64,8 @@ public final class StarAnimator {
     private Location startLocation;
 
     private void readFrames(InputStream stream) {
+        if (stream == null) throw new IllegalArgumentException("Null input stream for animation file");
+
         BufferedReader br = null;
         try {
             br = new BufferedReader(new InputStreamReader(stream));
@@ -137,14 +145,16 @@ public final class StarAnimator {
         }
     }
 
-    public StarAnimator(Emote emote, ArmorStand armorStand) {
-        this(emote.getName(), armorStand);
+    public StarAnimator(Emote emote, ArmorStand armorStand, UUID owner) {
+        this(emote.getFile(), armorStand, owner);
     }
 
-    public StarAnimator(String name, ArmorStand armorStand) {
+    public StarAnimator(InputStream stream, ArmorStand armorStand, UUID owner) {
         this.armorStand = armorStand;
+        this.owner = owner;
+
         startLocation = armorStand.getLocation();
-        readFrames(StarConfig.class.getResourceAsStream("/animations/" + name + ".animc"));
+        readFrames(stream);
 
         animators.add(this);
     }
@@ -157,31 +167,60 @@ public final class StarAnimator {
         return stopped;
     }
 
+    public boolean isOwner(@NotNull OfflinePlayer p) {
+        return p.getUniqueId().equals(owner);
+    }
+
+    public void stop() {
+        stopped = true;
+    }
+
     public void play() {
         play(null);
     }
 
     public void play(@Nullable Runnable after) {
+        AtomicBoolean ranOnce = new AtomicBoolean(false);
+
         new BukkitRunnable() {
             public void run() {
-                if (currentFrame >= length) {
+                Runnable cancel = () -> {
                     currentFrame = 0;
                     stopped = true;
                     if (after != null) after.run();
                     cancel();
+                    remove();
+                };
+
+                if (currentFrame >= length) {
+                    if (ranOnce.get()) {
+                        cancel.run();
+                        return;
+                    }
+                    else {
+                        ranOnce.set(true);
+                        currentFrame = 0;
+                    }
                     return;
                 }
 
-                update();
+                if (stopped) {
+                    cancel();
+                    return;
+                }
+
+                try {
+                    update();
+                } catch (Exception ex) {
+                    StarConfig.print(ex);
+                    cancel.run();
+                }
             }
         }.runTaskTimer(StarConfig.getPlugin(), 0, 1);
     }
 
     public void update() {
         if (stopped) return;
-
-        if (currentFrame >= (length - 1) || currentFrame < 0)
-            currentFrame = 0;
 
         Frame f = frames[currentFrame];
         if (f == null) f = interpolate(currentFrame);
@@ -190,12 +229,23 @@ public final class StarAnimator {
             Location newLoc = startLocation.clone().add(f.x, f.y, f.z);
             newLoc.setYaw(f.r + newLoc.getYaw());
             armorStand.teleport(newLoc);
-            armorStand.setBodyPose(f.middle);
-            armorStand.setLeftLegPose(f.leftLeg);
-            armorStand.setRightLegPose(f.rightLeg);
-            armorStand.setLeftArmPose(f.leftArm);
-            armorStand.setRightArmPose(f.rightArm);
-            armorStand.setHeadPose(f.head);
+            if (f.head != null)
+                armorStand.setHeadPose(f.head);
+
+            if (f.middle != null)
+                armorStand.setBodyPose(f.middle);
+
+            if (f.leftLeg != null)
+                armorStand.setLeftLegPose(f.leftLeg);
+
+            if (f.leftArm != null)
+                armorStand.setLeftArmPose(f.leftArm);
+
+            if (f.rightLeg != null)
+                armorStand.setRightLegPose(f.rightLeg);
+
+            if (f.rightArm != null)
+                armorStand.setRightArmPose(f.rightArm);
         }
         currentFrame++;
     }
@@ -301,6 +351,36 @@ public final class StarAnimator {
             f.leftArm = new EulerAngle(leftArm.getX() + a.leftArm.getX(), leftArm.getY() + a.leftArm.getY(), leftArm.getZ() + a.leftArm.getZ());
             f.head = new EulerAngle(head.getX() + a.head.getX(), head.getY() + a.head.getY(), head.getZ() + a.head.getZ());
             return f;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Frame frame = (Frame) o;
+            return frameID == frame.frameID && Float.compare(x, frame.x) == 0 && Float.compare(y, frame.y) == 0 && Float.compare(z, frame.z) == 0 && Float.compare(r, frame.r) == 0 && Objects.equals(middle, frame.middle) && Objects.equals(rightLeg, frame.rightLeg) && Objects.equals(leftLeg, frame.leftLeg) && Objects.equals(rightArm, frame.rightArm) && Objects.equals(leftArm, frame.leftArm) && Objects.equals(head, frame.head);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(frameID, x, y, z, r, middle, rightLeg, leftLeg, rightArm, leftArm, head);
+        }
+
+        @Override
+        public String toString() {
+            return "Frame{" +
+                    "frameID=" + frameID +
+                    ", x=" + x +
+                    ", y=" + y +
+                    ", z=" + z +
+                    ", r=" + r +
+                    ", middle=" + middle +
+                    ", rightLeg=" + rightLeg +
+                    ", leftLeg=" + leftLeg +
+                    ", rightArm=" + rightArm +
+                    ", leftArm=" + leftArm +
+                    ", head=" + head +
+                    '}';
         }
     }
 
