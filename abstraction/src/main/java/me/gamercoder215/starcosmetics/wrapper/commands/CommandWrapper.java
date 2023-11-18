@@ -3,6 +3,8 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
@@ -30,10 +32,13 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote.EMOTE_TAG;
+import static me.gamercoder215.starcosmetics.api.player.StarPlayerUtil.getCached;
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.util.Generator.genGUI;
 import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.itemBuilder;
@@ -52,6 +57,8 @@ public interface CommandWrapper {
             .put("starhelp", Collections.singletonList("shelp"))
             .put("starcosmeticinfo", Arrays.asList("cosmeticinfo", "scinfo", "scosmeticinfo", "cinfo"))
             .put("starhologram", Arrays.asList("starh", "hologram"))
+            .put("starcapes", Arrays.asList("scapes", "starcape", "capes", "cape"))
+            .put("staremote", Arrays.asList("semote", "emote", "e", "se"))
             .build();
 
     Map<String, String> COMMAND_PERMISSION = ImmutableMap.<String, String>builder()
@@ -62,6 +69,8 @@ public interface CommandWrapper {
             .put("starpets", "starcosmetics.user.cosmetics")
             .put("starcosmeticinfo", "starcosmetics.user.cosmetics")
             .put("starhologram", "starcosmetics.user.cosmetics")
+            .put("starcapes", "starcosmetics.user.cosmetics")
+            .put("staremote", "starcosmetics.user.cosmetics")
             .build();
 
     Map<String, String> COMMAND_DESCRIPTION = ImmutableMap.<String, String>builder()
@@ -74,6 +83,8 @@ public interface CommandWrapper {
             .put("starhelp", "Displays help for StarCosmetics.")
             .put("starcosmeticinfo", "Displays information about the cosmetic the player has currently equipped.")
             .put("starhologram", "Opens the StarCosmetics hologram menu.")
+            .put("starcapes", "Opens the StarCosmetics capes menu.")
+            .put("staremote", "Performs an emote or opens up the StarCosmetics emote menu.")
             .build();
 
     Map<String, String> COMMAND_USAGE = ImmutableMap.<String, String>builder()
@@ -86,6 +97,7 @@ public interface CommandWrapper {
             .put("starhelp", "/starhelp")
             .put("starcosmeticinfo", "/starcosmeticinfo <cosmetic>")
             .put("starhologram", "/starhologram")
+            .put("staremote", "/staremote [emote]")
             .build();
 
     // Command Methods
@@ -134,6 +146,8 @@ public interface CommandWrapper {
                                     ChatColor.LIGHT_PURPLE + getWithArgs("menu.about.pet_count", comma(PetType.values().length)),
                                     ChatColor.GREEN + getWithArgs("menu.about.hat_count", comma(getCosmeticCount(Hat.class))),
                                     ChatColor.BLUE + getWithArgs("menu.about.gadget_count", comma(getCosmeticCount(Gadget.class))),
+                                    ChatColor.DARK_GREEN + getWithArgs("menu.about.cape_count", comma(getCosmeticCount(Cape.class))),
+                                    ChatColor.GOLD + getWithArgs("menu.about.emote_count", comma(Emote.values().length)),
                                     " ",
                                     ChatColor.RED + getWithArgs("menu.about.total_cosmetic_count", comma(getCosmeticCount()))
                             )
@@ -180,7 +194,7 @@ public interface CommandWrapper {
                         .name(StarChat.hexMessage("1DA1F2", "Twitter"))
                         .id("about_link")
                         .nbt(nbt -> {
-                            nbt.set("link", "https://twitter.com/TeamInceptus");
+                            nbt.set("link", "https://twitter.com/gamercoder215");
                             nbt.set("message_id", "menu.about.message.twitter");
                             nbt.set("color", "1DA1F2");
                         })
@@ -270,7 +284,7 @@ public interface CommandWrapper {
 
         // Gadgets
 
-        inv.setItem(32, builder(StarMaterial.FIREWORK_ROCKET.findStack(),
+        inv.setItem(31, builder(StarMaterial.FIREWORK_ROCKET.findStack(),
                 meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.gadget")),
                 nbt -> {
                     nbt.setID("cosmetic:selection");
@@ -289,6 +303,18 @@ public interface CommandWrapper {
                 }
         ));
         inv.setAttribute("pets", Generator.createPetInventory(p));
+
+        // Emotes
+
+        inv.setItem(40, builder(Material.ARMOR_STAND,
+                meta -> meta.setDisplayName(ChatColor.YELLOW + get("menu.cosmetics.choose.emote")),
+                nbt -> {
+                    nbt.setID("cosmetic:selection:custom_inventory");
+                    nbt.set("inventory_key", "emotes");
+                }));
+        inv.setAttribute("emotes", Generator.createEmotesInventory(p));
+
+        // Settings
 
         ItemStack settings = ItemBuilder.of(Material.NETHER_STAR)
                 .id("player_settings")
@@ -449,6 +475,7 @@ public interface CommandWrapper {
 
             .put("hat", Hat.class)
             .put("particle_shape", ParticleShape.class)
+            .put("gadget", Gadget.class)
             .build();
 
     default void cosmeticInfo(Player p, TrailType type) {
@@ -517,6 +544,67 @@ public interface CommandWrapper {
         StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
     }
 
+    default void capes(@NotNull Player p, String arg) {
+        if (arg == null) {
+            p.openInventory(Generator.createParentInventory(CosmeticParent.CAPES));
+            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            return;
+        }
+
+        StarPlayer sp = new StarPlayer(p);
+        switch (arg.toLowerCase()) {
+            case "remove": {
+                if (sp.getSpawnedPet() == null) {
+                    sendError(p, "error.cosmetics.no_cape");
+                    return;
+                }
+
+                StarPlayerUtil.removeCape(p);
+                sp.sendNotification(ChatColor.GREEN + get("success.cosmetics.cape_removed"));
+                break;
+            }
+            default: {
+                sendError(p, "error.argument");
+                break;
+            }
+        }
+    }
+
+    default void emote(@NotNull Player p, @Nullable String emote) {
+        if (emote == null) {
+            p.openInventory(Generator.createEmotesInventory(p));
+            StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+            return;
+        }
+
+        if (getCached(p).isEmoting()) {
+            sendError(p, "error.cosmetics.emoting");
+            return;
+        }
+
+        if (StarConfig.getConfig().isInPvP(p) && !StarConfig.getConfig().getCanEmoteInPvE()) {
+            p.sendMessage(get("plugin.prefix") + ChatColor.RED + get("error.emote.pvp"));
+            return;
+        }
+
+        if (StarCooldowns.checkCooldown(EMOTE_TAG, p)) return;
+
+        StarPlayer sp = new StarPlayer(p);
+        try {
+            Emote e = Emote.valueOf(emote.toUpperCase());
+            if (!e.getCriteria().isUnlocked(p)) {
+                p.sendMessage(get("plugin.prefix") + ChatColor.RED + e.getCriteria().getDisplayMessage());
+                return;
+            }
+
+            sp.emote(e);
+
+            StarCooldowns.set(EMOTE_TAG, p, 100);
+        } catch (IllegalArgumentException e) {
+            sendError(p, "error.argument.emote");
+        }
+    }
+
     // Utilities
 
     static long getCosmeticCount(TrailType t) {
@@ -549,6 +637,7 @@ public interface CommandWrapper {
         count += SoundEventSelection.AVAILABLE_EVENTS.size();
         count += PetType.values().length;
         count += StarConfig.getRegistry().getAvailableStructures().size();
+        count += Emote.values().length;
 
         return count;
     }

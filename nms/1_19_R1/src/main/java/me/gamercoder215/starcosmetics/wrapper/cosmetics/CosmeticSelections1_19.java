@@ -5,13 +5,14 @@ import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
-import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
-import me.gamercoder215.starcosmetics.util.selection.HatSelection;
-import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
-import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.selection.*;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.EntityType;
 
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
+import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.cape;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.join;
 
@@ -116,9 +118,13 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
 
             .add(new HatSelection("packed_mud", Material.PACKED_MUD,
                     fromMined(145, Material.MUD), Rarity.OCCASIONAL))
+            .add(new HatSelection("mangrove_leaves", Material.MANGROVE_LEAVES,
+                    fromMined(75, Material.MANGROVE_LEAVES), Rarity.OCCASIONAL))
 
             .add(new HatSelection("sculk", Material.SCULK,
                     fromMined(300, Material.SCULK), Rarity.UNCOMMON))
+            .add(new HatSelection("mangrove_roots", Material.MANGROVE_ROOTS,
+                    fromMined(110, Material.MANGROVE_ROOTS), Rarity.UNCOMMON))
 
             .add(new HatSelection("mangrove_fence", Material.MANGROVE_FENCE,
                     fromCrafted(250, Material.MANGROVE_FENCE), Rarity.RARE))
@@ -126,6 +132,28 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
             .add(new HatSelection("mangrove_fence_gate", Material.MANGROVE_FENCE_GATE,
                     fromCrafted(680, Material.MANGROVE_FENCE), Rarity.EPIC))
 
+            .build();
+
+    // Animated Hats
+
+    private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new HatSelection("froglight", HatSelection.of(10,
+                    Material.OCHRE_FROGLIGHT,
+                    Material.VERDANT_FROGLIGHT,
+                    Material.PEARLESCENT_FROGLIGHT
+            ), fromKilled(825, EntityType.MAGMA_CUBE), Rarity.EPIC))
+            .build();
+
+    // Capes
+
+    // Normal Capes
+    private static final List<CosmeticSelection<?>> NORMAL_CAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new CapeSelection("warden", cape(StarMaterial.BLACK_BANNER,
+                    new Pattern(DyeColor.CYAN, PatternType.STRIPE_SMALL), new Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER),
+                    new Pattern(DyeColor.GRAY, PatternType.FLOWER), new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_TOP),
+                    new Pattern(DyeColor.CYAN, PatternType.SKULL), new Pattern(DyeColor.BLACK, PatternType.CREEPER),
+                    new Pattern(DyeColor.CYAN, PatternType.SKULL), new Pattern(DyeColor.BLACK, PatternType.SKULL)),
+                    fromKilled(20, EntityType.WARDEN), Rarity.LEGENDARY))
             .build();
 
     // Selections
@@ -141,6 +169,9 @@ final class CosmeticSelections1_19 implements CosmeticSelections {
             .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_18"))
 
             .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_18"))
+
+            .put(BaseCape.NORMAL, join(NORMAL_CAPES, BaseCape.NORMAL, "1_18"))
+            .put(BaseCape.ANIMATED, getForVersion(BaseCape.ANIMATED, "1_18"))
             .build();
 
     @Override

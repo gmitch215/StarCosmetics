@@ -373,6 +373,21 @@ public class MockServer implements Server {
     }
 
     @Override
+    public ItemStack craftItem(ItemStack[] itemStacks, World world) {
+        return null;
+    }
+
+    @Override
+    public ItemCraftResult craftItemResult(ItemStack[] itemStacks, World world, Player player) {
+        return null;
+    }
+
+    @Override
+    public ItemCraftResult craftItemResult(ItemStack[] itemStacks, World world) {
+        return null;
+    }
+
+    @Override
     public Iterator<Recipe> recipeIterator() {
         return null;
     }

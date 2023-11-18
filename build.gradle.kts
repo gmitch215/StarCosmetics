@@ -13,7 +13,7 @@ plugins {
 }
 
 val pGroup = "me.gamercoder215.starcosmetics"
-val pVersion = "1.2.2"
+val pVersion = "1.3.0"
 val pAuthor = "GamerCoder215"
 
 sonarqube {
@@ -43,6 +43,7 @@ allprojects {
         maven("https://oss.sonatype.org/content/repositories/central")
 
         maven("https://repo.codemc.org/repository/nms/")
+        maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://hub.jeff-media.com/nexus/repository/jeff-media-public/")
@@ -101,8 +102,8 @@ subprojects {
     dependencies {
         compileOnly("org.jetbrains:annotations:24.1.0")
 
-        testImplementation("org.mockito:mockito-core:5.6.0")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+        testImplementation("org.mockito:mockito-core:5.7.0")
 
         testImplementation("org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT")
         testImplementation("net.md-5:bungeecord-chat:1.20-R0.1")

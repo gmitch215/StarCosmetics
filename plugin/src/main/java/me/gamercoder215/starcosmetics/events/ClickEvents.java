@@ -7,6 +7,8 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.gadget.Gadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.particle.ParticleShape;
@@ -55,6 +57,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote.EMOTE_TAG;
 import static me.gamercoder215.starcosmetics.util.Constants.w;
 import static me.gamercoder215.starcosmetics.util.Generator.cw;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.*;
@@ -178,6 +181,10 @@ public final class ClickEvents implements Listener {
                             for (TrailType t : TrailType.values()) sp.setSelectedTrail(t, null);
                             break;
                         }
+                        default: {
+                            sp.setSelectedCosmetic(parent.getChildClass(), null);
+                            break;
+                        }
                     }
 
                     StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
@@ -209,7 +216,7 @@ public final class ClickEvents implements Listener {
                     p.getInventory().removeItem(Arrays.stream(p.getInventory().getContents())
                             .filter(Objects::nonNull)
                             .filter(i -> {
-                                NBTWrapper n = NBTWrapper.of(i);
+                                NBTWrapper n = of(i);
                                 return n.hasString("gadget");
                             }).toArray(ItemStack[]::new));
 
@@ -313,7 +320,7 @@ public final class ClickEvents implements Listener {
                     p.getInventory().removeItem(Arrays.stream(p.getInventory().getContents())
                             .filter(Objects::nonNull)
                             .filter(i -> {
-                                NBTWrapper n = NBTWrapper.of(i);
+                                NBTWrapper n = of(i);
                                 return n.hasString("gadget");
                             }).toArray(ItemStack[]::new));
                 }
@@ -635,6 +642,41 @@ public final class ClickEvents implements Listener {
                     StarPlayerUtil.getHologram(p);
                     cw.hologramInfo(p);
                 });
+            })
+            .put("cancel:cosmetic:cape", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                sp.setSelectedCosmetic(Cape.class, null);
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playFailure(p);
+                updateCache(p);
+
+                StarPlayerUtil.removeCape(p);
+            })
+            .put("choose:emote", (inv, e) -> {
+                Player p = (Player) e.getWhoClicked();
+                StarPlayer sp = new StarPlayer(p);
+
+                ItemStack item = e.getCurrentItem();
+                NBTWrapper nbt = of(item);
+                Emote emote = Emote.valueOf(nbt.getString(EMOTE_TAG));
+
+                if (StarConfig.getConfig().isInPvP(p) && !StarConfig.getConfig().getCanEmoteInPvE()) {
+                    p.sendMessage(get("plugin.prefix") + ChatColor.RED + get("error.emote.pvp"));
+                    return;
+                }
+
+                if (StarCooldowns.checkCooldown(EMOTE_TAG, p)) return;
+                if (!emote.getCriteria().isUnlocked(p)) {
+                    p.sendMessage(get("plugin.prefix") + ChatColor.RED + emote.getCriteria().getDisplayMessage());
+                    return;
+                }
+
+                sp.emote(emote);
+                p.closeInventory();
+                StarSound.ENTITY_ARROW_HIT_PLAYER.playSuccess(p);
+
+                StarCooldowns.set(EMOTE_TAG, p, 100);
             })
 
             .build();

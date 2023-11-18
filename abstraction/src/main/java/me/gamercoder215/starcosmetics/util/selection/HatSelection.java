@@ -4,7 +4,7 @@ import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.Rarity;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseHat;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil;
@@ -44,26 +44,26 @@ public final class HatSelection extends CosmeticSelection<Object> {
         this(name, StarInventoryUtil.cleanSkull(itemBuilder(StarMaterial.PLAYER_HEAD.find(), meta -> ((SkullMeta) meta).setOwner(skullOwner))), criteria, rarity);
     }
 
-    public HatSelection(String name, AnimatedHatData data, CompletionCriteria criteria, Rarity rarity) {
+    public HatSelection(String name, AnimatedItem data, CompletionCriteria criteria, Rarity rarity) {
         super(data.map(i -> NBTWrapper.builder(i, meta -> meta.setDisplayName(" "), nbt -> nbt.set("hat", true))), criteria, rarity);
 
         this.parent = BaseHat.ANIMATED;
         this.name = name;
     }
 
-    public static AnimatedHatData of(long interval, Iterable<ItemStack> frames) {
-        AnimatedHatData.Builder builder = AnimatedHatData.builder();
+    public static AnimatedItem of(long interval, Iterable<ItemStack> frames) {
+        AnimatedItem.Builder builder = AnimatedItem.builder((p, item) -> p.getEquipment().setHelmet(item));
         for (ItemStack item : frames)
             builder.addFrame(interval, item);
-        
+
         return builder.build();
     }
 
-    public static AnimatedHatData of(long interval, ItemStack... frames) {
+    public static AnimatedItem of(long interval, ItemStack... frames) {
         return of(interval, Arrays.asList(frames));
     }
 
-    public static AnimatedHatData of(long interval, Collection<Material> frames) {
+    public static AnimatedItem of(long interval, Collection<Material> frames) {
         return of(interval, frames.stream()
                 .filter(Objects::nonNull)
                 .map(ItemStack::new)
@@ -71,7 +71,7 @@ public final class HatSelection extends CosmeticSelection<Object> {
         );
     }
 
-    public static AnimatedHatData of(long interval, Material... frames) {
+    public static AnimatedItem of(long interval, Material... frames) {
         return of(interval, Arrays.asList(frames));
     }
 
@@ -103,7 +103,7 @@ public final class HatSelection extends CosmeticSelection<Object> {
                     get("cosmetics.hat." + name, str)
             );
         } else {
-            AnimatedHatData data = (AnimatedHatData) o;
+            AnimatedItem data = (AnimatedItem) o;
             ItemStack input = data.getFrames().get(0).getValue();
             String str;
             if (input.getItemMeta() instanceof SkullMeta) {
@@ -131,8 +131,8 @@ public final class HatSelection extends CosmeticSelection<Object> {
     }
 
     @Override
-    public @NotNull Class<? extends ItemStack> getInputType() {
-        return ItemStack.class;
+    public @NotNull Class<?> getInputType() {
+        return Object.class;
     }
 
 }

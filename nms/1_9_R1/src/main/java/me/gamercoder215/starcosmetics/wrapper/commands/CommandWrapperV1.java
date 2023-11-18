@@ -150,6 +150,16 @@ final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
                 hologramInfo((Player) sender);
                 break;
             }
+            case "starcapes": {
+                if (!(sender instanceof Player)) return false;
+                capes((Player) sender, args.length == 0 ? null : args[0]);
+                break;
+            }
+            case "staremote": {
+                if (!(sender instanceof Player)) return false;
+                emote((Player) sender, args.length == 0 ? null : args[0]);
+                break;
+            }
         }
 
         return true;

@@ -1,9 +1,7 @@
 package me.gamercoder215.starcosmetics.api.cosmetics;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.HatType;
 import me.gamercoder215.starcosmetics.util.Constants;
 import me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper;
 import org.bukkit.Material;
@@ -41,8 +39,6 @@ public enum BaseHat implements Hat {
 
     @Override
     public void run(@NotNull Player p, CosmeticLocation<?> loc) {
-        if (!ItemStack.class.isAssignableFrom(loc.getInputType()) && !AnimatedHatData.class.isAssignableFrom(loc.getInputType())) return;
-
         boolean normal = this == NORMAL;
         if (p.getEquipment().getHelmet() != null) {
             ItemStack helmet = p.getEquipment().getHelmet();
@@ -64,13 +60,13 @@ public enum BaseHat implements Hat {
             ItemStack item = (ItemStack) loc.getInput();
             p.getEquipment().setHelmet(itemBuilder(item, meta -> meta.setDisplayName(" ")));
         } else {
-            AnimatedHatData data = (AnimatedHatData) loc.getInput();
+            AnimatedItem data = (AnimatedItem) loc.getInput();
             data.tryStart(p);
         }
     }
 
     @Override
-    public @NotNull HatType getType() {
-        return HatType.valueOf(name());
+    public @NotNull State getType() {
+        return State.valueOf(name());
     }
 }

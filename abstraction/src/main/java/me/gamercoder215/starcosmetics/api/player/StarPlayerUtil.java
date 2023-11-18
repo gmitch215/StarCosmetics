@@ -3,11 +3,14 @@ package me.gamercoder215.starcosmetics.api.player;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.Pet;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
+import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,13 +24,20 @@ import static me.gamercoder215.starcosmetics.wrapper.Wrapper.STAR_PLAYER_CACHE;
 public final class StarPlayerUtil {
 
     private static final Map<UUID, ArmorStand> HOLOGRAMS = new HashMap<>();
+    private static final Map<UUID, ArmorStand> CAPES = new HashMap<>();
 
     public static void onDisable() {
         // Remove Pets
-        for (Player p : Bukkit.getOnlinePlayers()) removePet(p);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            removePet(p);
+            removeCape(p);
+        }
 
         // Remove Holograms
         for (ArmorStand as : HOLOGRAMS.values()) as.remove();
+
+        // Remove Capes
+        for (ArmorStand as : CAPES.values()) as.remove();
     }
 
     public static Map<UUID, Pet> getPets() {
@@ -97,4 +107,52 @@ public final class StarPlayerUtil {
         StarPlayer.SPAWNED_PETS.remove(p.getUniqueId());
     }
 
+    public static StarPlayer getCached(@NotNull Player p) {
+        StarPlayer sp = STAR_PLAYER_CACHE.get(p.getUniqueId());
+        if (sp == null) {
+            sp = new StarPlayer(p);
+            STAR_PLAYER_CACHE.put(p.getUniqueId(), sp);
+        }
+        return sp;
+    }
+
+    public static ArmorStand checkCape(@NotNull Player p) {
+        ArmorStand stand = CAPES.get(p.getUniqueId());
+        if (stand == null) {
+            stand = p.getWorld().spawn(p.getLocation(), ArmorStand.class);
+            stand.setInvulnerable(true);
+            stand.setCollidable(false);
+            stand.setSmall(true);
+            stand.setVisible(false);
+            stand.setArms(true);
+            stand.setGravity(false);
+            stand.setMarker(true);
+            stand.setBasePlate(false);
+
+            CAPES.put(p.getUniqueId(), stand);
+        }
+
+        return stand;
+    }
+
+    public static void removeCape(@NotNull Player p) {
+        ArmorStand stand = CAPES.get(p.getUniqueId());
+        if (stand != null) {
+            stand.remove();
+            CAPES.remove(p.getUniqueId());
+        }
+    }
+
+    public static void setCape(@NotNull Player p, @NotNull ItemStack item) {
+        checkCape(p).setHelmet(item);
+    }
+
+    public static ItemStack head(Player p) {
+        ItemStack head = StarMaterial.PLAYER_HEAD.findStack();
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        meta.setOwner(p.getName());
+        head.setItemMeta(meta);
+
+        return head;
+    }
 }

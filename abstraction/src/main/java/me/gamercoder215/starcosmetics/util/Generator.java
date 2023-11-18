@@ -6,6 +6,7 @@ import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticParent;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureCompletion;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.player.PlayerSetting;
@@ -33,7 +34,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static me.gamercoder215.starcosmetics.util.Constants.w;
-import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.itemBuilder;
+import static me.gamercoder215.starcosmetics.util.inventory.StarInventoryUtil.*;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.get;
 import static me.gamercoder215.starcosmetics.wrapper.Wrapper.getWithArgs;
 import static me.gamercoder215.starcosmetics.wrapper.nbt.NBTWrapper.builder;
@@ -77,20 +78,20 @@ public final class Generator {
         for (StarInventory inv : pages) {
             Rarity current = inv.getAttribute("rarity", Rarity.class);
 
-            StarInventoryUtil.setReset(inv);
+            setReset(inv);
 
             Map<Integer, List<ItemStack>> rows = generateRows(it
                     .stream()
                     .filter(c -> c.getRarity() == current)
-                    .map(loc -> StarInventoryUtil.toItemStack(p, loc))
+                    .map(loc -> toItemStack(p, loc))
                     .collect(Collectors.toList()));
 
             inv.setAttribute("rows", rows);
-            StarInventoryUtil.setRows(inv, rows);
-            StarInventoryUtil.setScrolls(inv);
+            setRows(inv, rows);
+            setScrolls(inv);
         }
 
-        StarInventoryUtil.setPages(pages);
+        setPages(pages);
 
         return pages;
     }
@@ -142,7 +143,7 @@ public final class Generator {
                 page.setAttribute("parent", loc.getParent());
             }
 
-            page.addItem(StarInventoryUtil.toItemStack(p, loc));
+            page.addItem(toItemStack(p, loc));
         });
 
         rarityPages.forEach((r, inv) -> pages.add(inv));
@@ -180,9 +181,9 @@ public final class Generator {
         int selLimit = sp.getSelectionLimit();
         int size = sp.getSoundSelections().size();
 
-        for (SoundEventSelection s : sp.getSoundSelections()) inv.addItem(StarInventoryUtil.toItemStack(s));
+        for (SoundEventSelection s : sp.getSoundSelections()) inv.addItem(toItemStack(s));
 
-        if (size < selLimit) inv.addItem(builder(StarInventoryUtil.getHead("plus"),
+        if (size < selLimit) inv.addItem(builder(getHead("plus"),
                 meta -> meta.setDisplayName(ChatColor.GREEN + get("constants.cosmetics.add_selection")),
                 nbt -> nbt.setID("add:soundevent")
         ));
@@ -207,7 +208,7 @@ public final class Generator {
             inv.setItem(18, limit);
         }
 
-        StarInventoryUtil.setBack(inv, 45, cw::cosmetics);
+        setBack(inv, 45, cw::cosmetics);
 
         return inv;
     }
@@ -245,7 +246,7 @@ public final class Generator {
                 rarityPages.put(info.getRarity(), page);
                 page.setAttribute("rarity", info.getRarity());
 
-                StarInventoryUtil.setBack(page, cw::cosmetics);
+                setBack(page, cw::cosmetics);
             }
 
             page.addItem(item);
@@ -254,7 +255,7 @@ public final class Generator {
         rarityPages.forEach((r, inv) -> pages.add(inv));
         pages.sort(Comparator.comparing(inv -> inv.getAttribute("rarity", Rarity.class)));
 
-        StarInventoryUtil.setPages(pages);
+        setPages(pages);
         return pages.get(0);
     }
 
@@ -269,8 +270,8 @@ public final class Generator {
 
         Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
         inv.setAttribute("rows", rows);
-        StarInventoryUtil.setRows(inv, rows);
-        StarInventoryUtil.setScrolls(inv);
+        setRows(inv, rows);
+        setScrolls(inv);
 
         return inv;
     }
@@ -339,7 +340,7 @@ public final class Generator {
         StarConfig.getRegistry().getAllPets().keySet().forEach(type -> {
             Rarity r = type.getRarity();
             List<ItemStack> items = itemsMap.containsKey(r) ? itemsMap.get(r) : new ArrayList<>();
-            items.add(StarInventoryUtil.toItemStack(p, type.getInfo()));
+            items.add(toItemStack(p, type.getInfo()));
             itemsMap.put(r, items);
         });
 
@@ -354,10 +355,10 @@ public final class Generator {
 
         Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
         inv.setAttribute("rows", rows);
-        StarInventoryUtil.setRows(inv, rows);
+        setRows(inv, rows);
 
-        StarInventoryUtil.setScrolls(inv);
-        StarInventoryUtil.setBack(inv, cw::cosmetics);
+        setScrolls(inv);
+        setBack(inv, cw::cosmetics);
 
         inv.setItem(18, ItemBuilder.of(Material.BARRIER)
                 .id("cancel:pet")
@@ -372,33 +373,59 @@ public final class Generator {
         int size = parent.getChildren().size() > 7 ? 45 : 27;
 
         StarInventory parentInv = genGUI("cosmetics_menu:" + parent.name(), size, get("menu.cosmetics." + parent.name().toLowerCase()));
-        List<Integer> places = StarInventoryUtil.getGUIPlacements(size, parent.getChildren().size());
+        List<Integer> places = getGUIPlacements(size, parent.getChildren().size());
 
         for (int i = 0; i < parent.getChildren().size(); i++) {
             Cosmetic c = parent.getChildren().get(i);
             int place = places.get(i);
-            ItemStack cItem = StarInventoryUtil.toItemStack(c);
+            ItemStack cItem = toItemStack(c);
             parentInv.setItem(place, cItem);
         }
 
-        if (parent == CosmeticParent.TRAILS) {
-            ItemStack resetAll = new ItemStack(Material.BARRIER);
-            ItemMeta resetMeta = resetAll.getItemMeta();
-            resetMeta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all_trails"));
-            resetAll.setItemMeta(resetMeta);
+        ItemStack resetAll = builder(Material.BARRIER,
+            meta -> meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset_all")),
+            nbt -> {
+                nbt.setID("cancel:cosmetic:all");
+                nbt.set("parent", parent.name());
+            }
+        );
+        parentInv.setItem(size - 1, resetAll);
 
-            NBTWrapper resetNBT = of(resetAll);
-            resetNBT.setID("cancel:cosmetic:all");
-            resetNBT.set("parent", parent.name());
-            resetAll = resetNBT.getItem();
-
-            parentInv.setItem(size - 1, resetAll);
-        }
-
-        StarInventoryUtil.setBack(parentInv, cw::cosmetics);
+        setBack(parentInv, cw::cosmetics);
         parentInv.setAttribute("selection_back", (Consumer<Player>) pl -> pl.openInventory(parentInv));
 
         return parentInv;
+    }
+
+    @NotNull
+    public static StarInventory createEmotesInventory(@NotNull Player p) {
+        StarInventory inv = genGUI(54, get("menu.cosmetics.choose.emote"));
+
+        Map<Rarity, List<ItemStack>> itemsMap = new HashMap<>();
+        for (Emote e : Emote.values()) {
+            Rarity r = e.getRarity();
+            List<ItemStack> items = itemsMap.containsKey(r) ? itemsMap.get(r) : new ArrayList<>();
+            items.add(toItemStack(p, e));
+            itemsMap.put(r, items);
+        }
+
+        itemsMap.values().forEach(l -> l.sort(Comparator.comparing(i ->
+                i.hasItemMeta() ? (i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : "") : "")
+        ));
+
+        List<ItemStack> items = new ArrayList<>();
+
+        // Rarities are ordered from lowest to highest
+        for (Rarity r : Rarity.values()) if (itemsMap.containsKey(r)) items.addAll(itemsMap.get(r));
+
+        Map<Integer, List<ItemStack>> rows = Generator.generateRows(items);
+        inv.setAttribute("rows", rows);
+        setRows(inv, rows);
+
+        setScrolls(inv);
+        setBack(inv, cw::cosmetics);
+
+        return inv;
     }
 
 }

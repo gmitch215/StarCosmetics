@@ -4,9 +4,11 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.gamercoder215.starcosmetics.api.CompletionCriteria;
 import me.gamercoder215.starcosmetics.api.StarConfig;
+import me.gamercoder215.starcosmetics.api.cosmetics.AnimatedItem;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
-import me.gamercoder215.starcosmetics.api.cosmetics.hat.AnimatedHatData;
+import me.gamercoder215.starcosmetics.api.cosmetics.capes.Cape;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.hat.Hat;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
@@ -89,6 +91,10 @@ public final class StarInventoryUtil {
         switch (n) {
             case "playerjoinevent": 
             case "playergamemodechangeevent": return GRASS_BLOCK.find();
+
+            case "playertakedamagebyentityevent":
+            case "playertakedamagebyplayerevent": return SHIELD;
+            case "playerdamageplayerevent": return DIAMOND_SWORD;
             
             case "playerfishevent": return FISHING_ROD;
             case "playerrespawnevent": return BEACON;
@@ -102,7 +108,7 @@ public final class StarInventoryUtil {
             case "blockbreakevent": return IRON_PICKAXE;
             case "sheepdyewoolevent": return WHITE_WOOL.find();
             case "playeritembreakevent": return DIAMOND_PICKAXE;
-            case "playeritemconsumeevent": return BREAD;    
+            case "playeritemconsumeevent": return BREAD;
         }
 
         if (chosen == null) chosen = REDSTONE;
@@ -297,7 +303,7 @@ public final class StarInventoryUtil {
             ItemStack head = w.isLegacy() ? new ItemStack(matchMaterial("SKULL_ITEM"), 1, (short) 3) : new ItemStack(matchMaterial("PLAYER_HEAD"));
             SkullMeta hMeta = (SkullMeta) head.getItemMeta();
 
-            GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+            GameProfile profile = new GameProfile(UUID.randomUUID(), key);
             profile.getProperties().put("textures", new Property("textures", value));
             Method mtd = hMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
             mtd.setAccessible(true);
@@ -430,8 +436,8 @@ public final class StarInventoryUtil {
         ItemStack item;
         if (input instanceof ItemStack)
             item = ((ItemStack) input).clone();
-        else if (input instanceof AnimatedHatData)
-            item = ((AnimatedHatData) input).getFrames().get(0).getValue();
+        else if (input instanceof AnimatedItem)
+            item = ((AnimatedItem) input).getFrames().get(0).getValue();
         else
             item = new ItemStack(toInputMaterial(input, loc));
 
@@ -721,6 +727,13 @@ public final class StarInventoryUtil {
             NBTWrapper nbt = of(reset);
             nbt.setID("cancel:cosmetic:hat");
             reset = nbt.getItem();
+        } else if (Cape.class.isAssignableFrom(parent.getClass())) {
+            meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset.cape"));
+            reset.setItemMeta(meta);
+
+            NBTWrapper nbt = of(reset);
+            nbt.setID("cancel:cosmetic:cape");
+            reset = nbt.getItem();
         } else {
             meta.setDisplayName(ChatColor.RED + get("constants.cosmetics.reset"));
             reset.setItemMeta(meta);
@@ -732,6 +745,29 @@ public final class StarInventoryUtil {
         }
 
         inv.setItem(18, reset);
+    }
+
+    public static ItemStack toItemStack(@NotNull Player p, @NotNull Emote e) {
+        CompletionCriteria criteria = e.getCriteria();
+        return builder(ARMOR_STAND,
+                meta -> {
+                    meta.setDisplayName(ChatColor.GOLD + WordUtils.capitalizeFully(e.name().replace("_", " ")));
+                    List<String> lore = new ArrayList<>();
+                    ChatColor c = criteria.isUnlocked(p) ? ChatColor.GREEN : ChatColor.RED;
+
+                    lore.add(e.getRarity().toString());
+                    lore.add(" ");
+                    lore.addAll(Arrays.stream(
+                            ChatPaginator.wordWrap(criteria.getDisplayMessage(), 30)
+                    ).map(s -> c + s).collect(Collectors.toList()));
+                    lore.add(ChatColor.DARK_GREEN + getWithArgs("constants.completed", String.format("%,.2f", criteria.getProgressPercentage(p)) + "%"));
+                    meta.setLore(lore);
+                },
+                nbt -> {
+                    nbt.setID("choose:emote");
+                    nbt.set("emote", e.name());
+                }
+        );
     }
 
 

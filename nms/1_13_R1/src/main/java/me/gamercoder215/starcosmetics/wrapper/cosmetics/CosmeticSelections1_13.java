@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.gamercoder215.starcosmetics.api.Rarity;
+import me.gamercoder215.starcosmetics.api.cosmetics.BaseCape;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseGadget;
 import me.gamercoder215.starcosmetics.api.cosmetics.BaseShape;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
@@ -10,11 +11,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
-import me.gamercoder215.starcosmetics.util.selection.CosmeticSelection;
-import me.gamercoder215.starcosmetics.util.selection.GadgetSelection;
-import me.gamercoder215.starcosmetics.util.selection.HatSelection;
-import me.gamercoder215.starcosmetics.util.selection.ParticleSelection;
-import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
+import me.gamercoder215.starcosmetics.util.selection.*;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Statistic;
@@ -193,6 +190,19 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
             .add(new HatSelection("granite", Material.GRANITE,
                     fromMined(45, Material.GRANITE), COMMON))
 
+            .add(new HatSelection("oak_leaves", Material.OAK_LEAVES,
+                    fromMined(65, Material.OAK_LEAVES), OCCASIONAL))
+            .add(new HatSelection("birch_leaves", Material.BIRCH_LEAVES,
+                    fromMined(65, Material.BIRCH_LEAVES), OCCASIONAL))
+            .add(new HatSelection("spruce_leaves", Material.SPRUCE_LEAVES,
+                    fromMined(65, Material.SPRUCE_LEAVES), OCCASIONAL))
+            .add(new HatSelection("jungle_leaves", Material.JUNGLE_LEAVES,
+                    fromMined(65, Material.JUNGLE_LEAVES), OCCASIONAL))
+            .add(new HatSelection("acacia_leaves", Material.ACACIA_LEAVES,
+                    fromMined(65, Material.ACACIA_LEAVES), OCCASIONAL))
+            .add(new HatSelection("dark_oak_leaves", Material.DARK_OAK_LEAVES,
+                    fromMined(65, Material.DARK_OAK_LEAVES), OCCASIONAL))
+
             .add(new HatSelection("dried_kelp_block", Material.DRIED_KELP_BLOCK,
                     fromMined(250, Material.DRIED_KELP_BLOCK), UNCOMMON))
             .add(new HatSelection("polished_andesite", Material.POLISHED_ANDESITE,
@@ -210,7 +220,7 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
                     Material.STONE, Material.ANDESITE, Material.GRANITE, Material.DIORITE),
                     fromMined(1000, Material.STONE), UNCOMMON))
     
-            .add(new HatSelection("wood_stairs", HatSelection.of(20, 
+            .add(new HatSelection("wood_stairs", HatSelection.of(20,
                     Tag.WOODEN_STAIRS.getValues()), fromCrafted(10000, Material.OAK_PLANKS), EPIC))
             
             .add(new HatSelection("colored_glass", HatSelection.of(20,
@@ -251,6 +261,9 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
             .put(ANIMATED, join(ANIMATED_HATS, ANIMATED, "1_12"))
 
             .put(BaseGadget.INSTANCE, join(GADGETS, BaseGadget.INSTANCE, "1_12"))
+
+            .put(BaseCape.NORMAL, getForVersion(BaseCape.NORMAL, "1_12"))
+            .put(BaseCape.ANIMATED, getForVersion(BaseCape.ANIMATED, "1_12"))
             .build();
 
     @Override

@@ -9,7 +9,12 @@ import me.gamercoder215.starcosmetics.util.StarMaterial;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.selection.*;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.LargeFireball;
+import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -19,7 +24,7 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
-import static me.gamercoder215.starcosmetics.util.selection.HatSelection.of;
+import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.*;
 
 final class CosmeticSelections1_9 implements CosmeticSelections {
 
@@ -458,12 +463,12 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
     // Animated Hats
 
     private static final List<CosmeticSelection<?>> ANIMATED_HATS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new HatSelection("ores", of(30,
+            .add(new HatSelection("ores", HatSelection.of(30,
                             Material.COAL_ORE, Material.matchMaterial("COPPER_ORE"), Material.IRON_ORE,
                             Material.LAPIS_ORE, Material.REDSTONE_ORE, Material.GOLD_ORE,
                             Material.DIAMOND_ORE, Material.EMERALD_ORE
                     ), fromMined(255, Material.COAL_ORE), RARE))
-            .add(new HatSelection("ore_blocks", of(40,
+            .add(new HatSelection("ore_blocks", HatSelection.of(40,
                             Material.COAL_BLOCK, Material.matchMaterial("COPPER_BLOCK"), Material.IRON_BLOCK,
                             Material.LAPIS_BLOCK, Material.REDSTONE_BLOCK, Material.GOLD_BLOCK,
                             Material.DIAMOND_BLOCK, Material.EMERALD_BLOCK
@@ -510,6 +515,94 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
                 f.setYield(0);
             }, fromKilled(250, EntityType.BLAZE), EPIC))
             .build();
+
+    // Capes
+
+    // Normal Capes
+
+    private static final List<CosmeticSelection<?>> NORMAL_CAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new CapeSelection("white", StarMaterial.WHITE_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60), COMMON))
+            .add(new CapeSelection("orange", StarMaterial.ORANGE_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 2), COMMON))
+            .add(new CapeSelection("magenta", StarMaterial.MAGENTA_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 3), COMMON))
+
+            .add(new CapeSelection("light_blue", StarMaterial.LIGHT_BLUE_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 5), OCCASIONAL))
+            .add(new CapeSelection("yellow", StarMaterial.YELLOW_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 8), OCCASIONAL))
+            .add(new CapeSelection("lime", StarMaterial.LIME_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 12), OCCASIONAL))
+            .add(new CapeSelection("pink", StarMaterial.PINK_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 20), OCCASIONAL))
+
+            .add(new CapeSelection("gray", StarMaterial.GRAY_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24), UNCOMMON))
+            .add(new CapeSelection("light_gray", StarMaterial.LIGHT_GRAY_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24 * 2), UNCOMMON))
+            .add(new CapeSelection("cyan", StarMaterial.CYAN_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24 * 3), UNCOMMON))
+            .add(new CapeSelection("purple", StarMaterial.PURPLE_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24 * 5), UNCOMMON))
+            .add(new CapeSelection("blue", StarMaterial.BLUE_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24 * 7), UNCOMMON))
+            .add(new CapeSelection("lime_crown", cape(StarMaterial.YELLOW_BANNER,
+                    new Pattern(DyeColor.YELLOW, PatternType.HALF_HORIZONTAL), new Pattern(DyeColor.LIME, PatternType.TRIANGLE_TOP),
+                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.LIME, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM, PatternType.BORDER)),
+                    fromStatistic(Statistic.ANIMALS_BRED, 355), UNCOMMON))
+
+            .add(new CapeSelection("brown", StarMaterial.BROWN_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24 * 14), RARE))
+            .add(new CapeSelection("green", StarMaterial.GREEN_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24 * 14), RARE))
+            .add(new CapeSelection("ice", cape(StarMaterial.LIGHT_BLUE_BANNER,
+                    new Pattern(DyeColor.WHITE, PatternType.BORDER), new Pattern(DyeColor.LIGHT_BLUE, PatternType.STRIPE_SMALL),
+                    patterns(DyeColor.WHITE, PatternType.GRADIENT, PatternType.GRADIENT_UP, PatternType.RHOMBUS_MIDDLE)
+            ), fromMined(3800, Material.SNOW), RARE))
+
+            .add(new CapeSelection("red", StarMaterial.RED_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24 * 31), EPIC))
+
+            .add(new CapeSelection("black", StarMaterial.BLACK_BANNER.findStack(),
+                    fromPlaytime(20 * 60 * 60 * 24 * 31 * 3), LEGENDARY))
+            .add(new CapeSelection("death", cape(StarMaterial.BLACK_BANNER, new Pattern(DyeColor.WHITE, PatternType.SKULL)),
+                    fromStatistic(Statistic.DEATHS, 60000), LEGENDARY))
+            .add(new CapeSelection("black_crown", cape(StarMaterial.YELLOW_BANNER,
+                    new Pattern(DyeColor.YELLOW, PatternType.HALF_HORIZONTAL), new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_TOP),
+                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.BLACK, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM, PatternType.BORDER)),
+                    fromStatistic(Statistic.MOB_KILLS, 900000), LEGENDARY))
+
+            .add(new CapeSelection("mojang", cape(StarMaterial.RED_BANNER, new Pattern(DyeColor.WHITE, PatternType.MOJANG)),
+                    fromPlaytime(20 * 60 * 60 * 24 * 31 * 6), MYTHICAL))
+
+            .add(new CapeSelection("purple_crown", cape(StarMaterial.YELLOW_BANNER,
+                    new Pattern(DyeColor.YELLOW, PatternType.HALF_HORIZONTAL), new Pattern(DyeColor.PURPLE, PatternType.TRIANGLE_TOP),
+                    new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE), patterns(DyeColor.PURPLE, PatternType.HALF_HORIZONTAL_MIRROR, PatternType.STRIPE_BOTTOM, PatternType.BORDER)),
+                    fromPlaytime(20 * 60 * 60 * 24 * 31 * 12), ULTRA))
+            .add(new CapeSelection("bigfoot", cape(StarMaterial.BLACK_BANNER,
+                    new Pattern(DyeColor.BROWN, PatternType.STRIPE_SMALL), new Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL),
+                    new Pattern(DyeColor.GREEN, PatternType.TRIANGLES_TOP), new Pattern(DyeColor.BLACK, PatternType.TRIANGLES_BOTTOM),
+                    new Pattern(DyeColor.GREEN, PatternType.FLOWER), new Pattern(DyeColor.BROWN, PatternType.RHOMBUS_MIDDLE),
+                    new Pattern(DyeColor.GREEN, PatternType.CIRCLE_MIDDLE), new Pattern(DyeColor.BROWN, PatternType.SKULL)
+            ), fromStatistic(Statistic.MOB_KILLS, 5500000), ULTRA))
+            .build();
+
+    // Animated Capes
+
+    private static final List<CosmeticSelection<?>> ANIMATED_CAPES = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new CapeSelection("rainbow_flower",
+                    of(5, animatedCape(StarMaterial.LIME_BANNER, PatternType.FLOWER, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
+                    fromKilled(2300, EntityType.IRON_GOLEM), EPIC))
+
+            .add(new CapeSelection("rainbow",
+                    of(10, StarMaterial.RED_BANNER, StarMaterial.ORANGE_BANNER, StarMaterial.YELLOW_BANNER, StarMaterial.LIME_BANNER, StarMaterial.LIGHT_BLUE_BANNER, StarMaterial.BLUE_BANNER, StarMaterial.PURPLE_BANNER),
+                    fromKilled(25000, EntityType.SHEEP), LEGENDARY))
+
+            .add(new CapeSelection("rainbow_mojang",
+                    of(5, animatedCape(StarMaterial.WHITE_BANNER, PatternType.MOJANG, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
+                    fromPlaytime(20 * 60 * 60 * 24 * 31 * 12 * 2), ULTRA))
+            .build();
         
     // Selection Map
 
@@ -524,6 +617,9 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .put(BaseHat.ANIMATED, ANIMATED_HATS)
 
             .put(BaseGadget.INSTANCE, GADGETS)
+
+            .put(BaseCape.NORMAL, NORMAL_CAPES)
+            .put(BaseCape.ANIMATED, ANIMATED_CAPES)
             .build();
 
     @Override

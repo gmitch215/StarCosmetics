@@ -3,6 +3,7 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
+import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.trail.TrailType;
 import me.gamercoder215.starcosmetics.util.StarSound;
@@ -155,6 +156,23 @@ final class CommandWrapperV2 implements CommandWrapper {
     @Usage("/starhologram")
     public void hologram(Player p) {
         CommandWrapper.super.hologramInfo(p);
+    }
+
+    @Command({"starcapes", "scapes", "starcape", "capes", "cape"})
+    @Description("Opens the StarCosmetics Capes menu.")
+    @CommandPermission("starcosmetics.user.cosmetics")
+    @Usage("/starcapes")
+    @AutoComplete("remove")
+    public void capes(Player p, @Single String arg) {
+        CommandWrapper.super.capes(p, arg);
+    }
+
+    @Command({"staremote", "semote", "emote", "e", "se"})
+    @Description("Performs an emote or opens the StarCosmetics Emotes menu.")
+    @Usage("/staremote [emote]")
+    @CommandPermission("starcosmetics.user.cosmetics")
+    public void emote(Player p, @Optional Emote emote) {
+        CommandWrapper.super.emote(p, emote == null ? null : emote.name());
     }
 
 }
