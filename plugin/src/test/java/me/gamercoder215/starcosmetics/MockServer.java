@@ -741,7 +741,7 @@ public class MockServer implements Server {
     }
 
     @Override
-    public BlockData createBlockData(Material material, Consumer<BlockData> consumer) {
+    public BlockData createBlockData(Material material, Consumer<? super BlockData> consumer) {
         return null;
     }
 
