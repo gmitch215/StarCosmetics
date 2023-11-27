@@ -549,6 +549,10 @@ public final class StarPlayer {
         }
     }
 
+    /**
+     * Gets if the current player is emoting.
+     * @return true if emoting, false otherwise
+     */
     public boolean isEmoting() {
         try {
             Method m = Class.forName("me.gamercoder215.starcosmetics.api.cosmetics.BaseEmote").getMethod("isEmoting", StarPlayer.class);
