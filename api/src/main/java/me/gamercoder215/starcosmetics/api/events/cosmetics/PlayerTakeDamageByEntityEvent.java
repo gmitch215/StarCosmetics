@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
@@ -18,7 +19,9 @@ public class PlayerTakeDamageByEntityEvent extends EntityDamageByEntityEvent {
 
     static <T> Object getDeclaredField(Class<T> clazz, T instance, String name) {
         try {
-            return clazz.getDeclaredField(name).get(instance);
+            Field f = clazz.getDeclaredField(name);
+            f.setAccessible(true);
+            return f.get(instance);
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
             return null;
