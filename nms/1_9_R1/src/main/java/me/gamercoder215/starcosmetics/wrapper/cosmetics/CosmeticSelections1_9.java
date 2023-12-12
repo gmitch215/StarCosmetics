@@ -340,6 +340,9 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("netherrack", BaseShape.SMALL_SQUARE, Material.NETHERRACK,
                     fromMined(65, Material.NETHERRACK), COMMON))
 
+            .add(new ParticleSelection("sponge", BaseShape.SMALL_SQUARE, Material.SPONGE,
+                    fromKilled(100, EntityType.GUARDIAN), UNCOMMON))
+
             // Large Squares
             .add(new ParticleSelection("pumpkin_seeds", BaseShape.LARGE_SQUARE, Material.PUMPKIN_SEEDS,
                     fromMined(140, Material.PUMPKIN), UNCOMMON))
@@ -347,13 +350,33 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("redstone", BaseShape.LARGE_SQUARE, Material.REDSTONE,
                     fromCrafted(400, Material.REDSTONE_BLOCK), EPIC))
 
+            .add(new ParticleSelection("barrier", BaseShape.LARGE_SQUARE, Particle.BARRIER,
+                    fromBlocksMined(10000000), SPECIAL))
+
             // Pentagons
             .add(new ParticleSelection("crit", BaseShape.PENTAGON, Particle.CRIT,
                     fromStatistic(Statistic.MOB_KILLS, 7800), RARE))
+            .add(new ParticleSelection("chorus", BaseShape.PENTAGON, Material.CHORUS_FRUIT,
+                    fromMined(1400, StarMaterial.END_STONE.find()), RARE))
 
             // Detailed Pentagons
             .add(new ParticleSelection("crit_magic", BaseShape.DETAILED_PENTAGON, Particle.CRIT_MAGIC,
                     fromStatistic(Statistic.MOB_KILLS, 17500), LEGENDARY))
+
+            // Octagons
+            .add(new ParticleSelection("dragon_breath", BaseShape.OCTAGON, Particle.DRAGON_BREATH,
+                    fromKilled(25, EntityType.ENDER_DRAGON), MYTHICAL))
+
+            // Detailed Octagons
+            .add(new ParticleSelection("end_portal_frame", BaseShape.DETAILED_OCTAGON, StarMaterial.END_PORTAL_FRAME.find(),
+                    fromKilled(75000, EntityType.ENDERMITE), MYTHICAL))
+
+            .add(new ParticleSelection("end_rod", BaseShape.DETAILED_OCTAGON, Material.END_ROD,
+                    fromKilled(250000, EntityType.SHULKER), ULTRA))
+            .add(new ParticleSelection("structure_block", BaseShape.DETAILED_OCTAGON, Material.STRUCTURE_BLOCK,
+                    fromBlocksMined(3500000), ULTRA))
+
+            // Detailed Octagons
 
             // Combinations
             .add(new ParticleSelection("snowball", BaseShape.SQUARE_RING, Particle.SNOWBALL,

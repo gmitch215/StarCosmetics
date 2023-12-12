@@ -75,6 +75,16 @@ public final class BaseShape implements ParticleShape {
         polygon(l, o, 5, 1.5, m);
     });
 
+    // Octagons
+
+    public static final BaseShape OCTAGON = new BaseShape("octagon", (l, o, m) -> polygon(l, o, 8, 2, m));
+
+    public static final BaseShape DETAILED_OCTAGON = new BaseShape("detailed_octagon", (l, o, m) -> {
+        polygon(l, o, 8, 2, m);
+        polygon(l, o, 8, 1.75, m);
+        polygon(l, o, 8, 1.5, m);
+    });
+
     // Combinations
 
     public static final BaseShape SQUARE_RING = new BaseShape("square_ring", (l, o, m) -> {
