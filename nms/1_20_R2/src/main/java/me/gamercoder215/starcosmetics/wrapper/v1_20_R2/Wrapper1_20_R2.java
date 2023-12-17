@@ -80,7 +80,7 @@ final class Wrapper1_20_R2 implements Wrapper {
     public void spawnFakeEntity(Player p, EntityType type, Location loc, long deathTicks) {
         CraftWorld cw = (CraftWorld) loc.getWorld();
         ServerPlayer sp = ((CraftPlayer) p).getHandle();
-        Entity nmsEntity = cw.createEntity(loc, type.getEntityClass());
+        Entity nmsEntity = cw.createEntity(loc, type.getEntityClass(), false);
 
         ClientboundAddEntityPacket add = new ClientboundAddEntityPacket(nmsEntity);
         sp.connection.send(add);
