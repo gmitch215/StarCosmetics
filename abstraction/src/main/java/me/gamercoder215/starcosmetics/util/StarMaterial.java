@@ -20,17 +20,13 @@ public enum StarMaterial {
     PLAYER_HEAD(3, "skull_item"),
 
     OAK_LOG("log"),
-
     ACACIA_LOG("log_2"),
-
     JUNGLE_LOG(3, "log"),
 
     END_STONE("ender_stone"),
 
     COMMAND_BLOCK("command"),
-
     CHAIN_COMMAND_BLOCK("command_chain"),
-
     REPEATING_COMMAND_BLOCK("command_repeating"),
 
     GRASS_BLOCK("grass"),
@@ -38,15 +34,11 @@ public enum StarMaterial {
     CRAFTING_TABLE("workbench"),
 
     BLACK_STAINED_GLASS_PANE(15, "stained_glass_pane"),
-
     RED_STAINED_GLASS_PANE(14, "stained_glass_pane"),
-
     LIME_STAINED_GLASS_PANE(5, "stained_glass_pane"),
 
     LIME_WOOL(5, "wool"),
-
     RED_WOOL(14, "wool"),
-
     WHITE_WOOL(0, "wool"),
 
     LIGHT_BLUE_WOOL(3, "wool"),
@@ -93,18 +85,13 @@ public enum StarMaterial {
 
     LIGHT_BLUE_TERRACOTTA(3, "stained_clay"),
 
-    PORKCHOP("pork"),
-
     RED_SAND(1, "sand"),
 
     NETHER_QUARTZ_ORE("quartz_ore"),
 
     OAK_LEAVES("leaves"),
-
     OAK_BUTTON("wooden_button"),
-
     OAK_FENCE("fence"),
-
     OAK_FENCE_GATE("fence_gate"),
 
     SPAWNER("mob_spawner"),
@@ -133,6 +120,12 @@ public enum StarMaterial {
     GREEN_BANNER(13, "banner"),
     RED_BANNER(14, "banner"),
     BLACK_BANNER(15, "banner"),
+
+    CHICKEN("raw_chicken"),
+    BEEF("raw_beef"),
+    PORKCHOP("pork"),
+
+    NETHER_WART("nether_warts"),
 
     ;
 

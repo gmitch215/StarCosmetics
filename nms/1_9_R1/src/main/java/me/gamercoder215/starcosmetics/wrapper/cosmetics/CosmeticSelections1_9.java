@@ -293,6 +293,8 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             // Large Rings
             .add(new ParticleSelection("sand", BaseShape.LARGE_RING, Material.SAND,
                     fromMined(80, Material.SAND), COMMON))
+            .add(new ParticleSelection("bucket", BaseShape.LARGE_RING, Material.BUCKET,
+                    fromCrafted(12, Material.BUCKET), COMMON))
 
             .add(new ParticleSelection("note", BaseShape.LARGE_RING, Particle.NOTE,
                     fromCrafted(200, Material.NOTE_BLOCK), RARE))
@@ -312,6 +314,17 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new ParticleSelection("quartz_block", BaseShape.SMALL_TRIANGLE, Material.QUARTZ_BLOCK,
                     fromCrafted(75, Material.QUARTZ_BLOCK), OCCASIONAL))
+            .add(new ParticleSelection("chicken", BaseShape.SMALL_TRIANGLE, StarMaterial.CHICKEN.find(),
+                    fromKilled(100, EntityType.CHICKEN), OCCASIONAL))
+            .add(new ParticleSelection("mutton", BaseShape.SMALL_TRIANGLE, Material.MUTTON,
+                    fromKilled(100, EntityType.SHEEP), OCCASIONAL))
+            .add(new ParticleSelection("rabbit", BaseShape.SMALL_TRIANGLE, Material.RABBIT,
+                    fromKilled(100, EntityType.RABBIT), OCCASIONAL))
+            .add(new ParticleSelection("beef", BaseShape.SMALL_TRIANGLE, StarMaterial.BEEF.find(),
+                    fromKilled(100, EntityType.COW), OCCASIONAL))
+
+            .add(new ParticleSelection("iron_block", BaseShape.SMALL_TRIANGLE, Material.IRON_BLOCK,
+                    fromCrafted(170, Material.IRON_BLOCK), RARE))
 
             // Medium Triangles
             .add(new ParticleSelection("water", BaseShape.MEDIUM_TRIANGLE, Particle.WATER_SPLASH,
@@ -319,6 +332,17 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new ParticleSelection("endstone", BaseShape.MEDIUM_TRIANGLE, StarMaterial.END_STONE.find(),
                     fromMined(310, StarMaterial.END_STONE.find()), UNCOMMON))
+            .add(new ParticleSelection("cooked_chicken", BaseShape.MEDIUM_TRIANGLE, Material.COOKED_CHICKEN,
+                    fromKilled(250, EntityType.CHICKEN), UNCOMMON))
+            .add(new ParticleSelection("cooked_mutton", BaseShape.MEDIUM_TRIANGLE, Material.COOKED_MUTTON,
+                    fromKilled(250, EntityType.SHEEP), UNCOMMON))
+            .add(new ParticleSelection("cooked_rabbit", BaseShape.MEDIUM_TRIANGLE, Material.COOKED_RABBIT,
+                    fromKilled(250, EntityType.RABBIT), UNCOMMON))
+            .add(new ParticleSelection("cooked_beef", BaseShape.MEDIUM_TRIANGLE, Material.COOKED_BEEF,
+                    fromKilled(250, EntityType.COW), UNCOMMON))
+
+            .add(new ParticleSelection("gold_block", BaseShape.MEDIUM_TRIANGLE, Material.GOLD_BLOCK,
+                    fromCrafted(170, Material.GOLD_BLOCK), EPIC))
 
             // Large Triangles
             .add(new ParticleSelection("gravel", BaseShape.LARGE_TRIANGLE, Material.GRAVEL,
@@ -327,12 +351,20 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("anvil", BaseShape.LARGE_TRIANGLE, Material.ANVIL,
                     fromCrafted(160, Material.ANVIL), RARE))
 
+            .add(new ParticleSelection("diamond_block", BaseShape.LARGE_TRIANGLE, Material.DIAMOND_BLOCK,
+                    fromCrafted(170, Material.DIAMOND_BLOCK), LEGENDARY))
+
             // Large Detailed Triangles
             .add(new ParticleSelection("seeds", BaseShape.LARGE_DETAILED_TRIANGLE, StarMaterial.WHEAT_SEEDS.find(),
                     fromMined(100, Material.HAY_BLOCK), UNCOMMON))
+            .add(new ParticleSelection("book", BaseShape.LARGE_DETAILED_TRIANGLE, Material.BOOK,
+                    fromCrafted(25, Material.BOOK), UNCOMMON))
 
             .add(new ParticleSelection("string", BaseShape.LARGE_DETAILED_TRIANGLE, Material.STRING,
                     fromMined(350, StarMaterial.COBWEB.find()), RARE))
+
+            .add(new ParticleSelection("emerald_block", BaseShape.LARGE_DETAILED_TRIANGLE, Material.EMERALD_BLOCK,
+                    fromCrafted(170, Material.EMERALD_BLOCK), LEGENDARY))
 
             // Small Squares
             .add(new ParticleSelection("cobblestone", BaseShape.SMALL_SQUARE, Material.COBBLESTONE,
@@ -350,6 +382,9 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("redstone", BaseShape.LARGE_SQUARE, Material.REDSTONE,
                     fromCrafted(400, Material.REDSTONE_BLOCK), EPIC))
 
+            .add(new ParticleSelection("redstone_block", BaseShape.LARGE_SQUARE, Material.REDSTONE_BLOCK,
+                    fromCrafted(170, Material.REDSTONE_BLOCK), LEGENDARY))
+
             .add(new ParticleSelection("barrier", BaseShape.LARGE_SQUARE, Particle.BARRIER,
                     fromBlocksMined(10000000), SPECIAL))
 
@@ -359,7 +394,13 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("chorus", BaseShape.PENTAGON, Material.CHORUS_FRUIT,
                     fromMined(1400, StarMaterial.END_STONE.find()), RARE))
 
+            .add(new ParticleSelection("glass", BaseShape.PENTAGON, "fancy_block:glass",
+                    fromMined(1855, Material.SAND), EPIC))
+
             // Detailed Pentagons
+            .add(new ParticleSelection("nether_wart", BaseShape.DETAILED_PENTAGON, StarMaterial.NETHER_WART.find(),
+                    fromMined(410, Material.SOUL_SAND), RARE))
+
             .add(new ParticleSelection("crit_magic", BaseShape.DETAILED_PENTAGON, Particle.CRIT_MAGIC,
                     fromStatistic(Statistic.MOB_KILLS, 17500), LEGENDARY))
 
@@ -367,7 +408,13 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("dragon_breath", BaseShape.OCTAGON, Particle.DRAGON_BREATH,
                     fromKilled(25, EntityType.ENDER_DRAGON), MYTHICAL))
 
+            .add(new ParticleSelection("bedrock", BaseShape.OCTAGON, Material.BEDROCK,
+                    fromMined(2000000, Material.OBSIDIAN), ULTRA))
+
             // Detailed Octagons
+            .add(new ParticleSelection("blaze", BaseShape.DETAILED_OCTAGON, Material.BLAZE_ROD,
+                    fromKilled(360, EntityType.BLAZE), RARE))
+
             .add(new ParticleSelection("end_portal_frame", BaseShape.DETAILED_OCTAGON, StarMaterial.END_PORTAL_FRAME.find(),
                     fromKilled(75000, EntityType.ENDERMITE), MYTHICAL))
 
@@ -375,8 +422,6 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
                     fromKilled(250000, EntityType.SHULKER), ULTRA))
             .add(new ParticleSelection("structure_block", BaseShape.DETAILED_OCTAGON, Material.STRUCTURE_BLOCK,
                     fromBlocksMined(3500000), ULTRA))
-
-            // Detailed Octagons
 
             // Combinations
             .add(new ParticleSelection("snowball", BaseShape.SQUARE_RING, Particle.SNOWBALL,
