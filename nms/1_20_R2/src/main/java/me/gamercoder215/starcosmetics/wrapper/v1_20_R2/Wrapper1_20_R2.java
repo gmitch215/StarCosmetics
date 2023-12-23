@@ -113,7 +113,7 @@ final class Wrapper1_20_R2 implements Wrapper {
             ClientInformation info = new ClientInformation("en", 0, ChatVisiblity.HIDDEN, false, 0, HumanoidArm.RIGHT, false, false);
 
             ServerPlayer sp = new ServerPlayer(srv, sw, profile, info);
-            sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.CLIENTBOUND), sp, new CommonListenerCookie(profile, 0, info));
+            sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.SERVERBOUND), sp, new CommonListenerCookie(profile, 0, info));
             sp.setPos(loc.getX(), loc.getY(), loc.getZ());
 
             for (Player p : loc.getWorld().getPlayers()) {
@@ -141,6 +141,7 @@ final class Wrapper1_20_R2 implements Wrapper {
 
         SynchedEntityData dw = sp.getEntityData();
         dw.set(EntityDataSerializers.BYTE.createAccessor(8), (byte) 0x04);
+        en.addPassenger(sp.getBukkitEntity());
 
         for (Player p : en.getWorld().getPlayers()) {
             ServerPlayer sph = ((CraftPlayer) p).getHandle();

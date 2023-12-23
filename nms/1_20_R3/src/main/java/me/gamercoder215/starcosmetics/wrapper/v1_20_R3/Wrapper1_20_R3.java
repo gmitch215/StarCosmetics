@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper.v1_20_R3;
 
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.Channel;
+import io.netty.channel.embedded.EmbeddedChannel;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
@@ -13,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -25,9 +27,7 @@ import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.ChatVisiblity;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
@@ -54,6 +54,7 @@ import org.bukkit.util.Vector;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
@@ -110,10 +111,18 @@ final class Wrapper1_20_R3 implements Wrapper {
             ServerLevel sw = ((CraftWorld) loc.getWorld()).getHandle();
             UUID uid = UUID.randomUUID();
             GameProfile profile = new GameProfile(uid, uid.toString().substring(0, 16));
-            ClientInformation info = new ClientInformation("en", 0, ChatVisiblity.HIDDEN, false, 0, HumanoidArm.RIGHT, false, false);
+            ClientInformation info = ClientInformation.createDefault();
 
             ServerPlayer sp = new ServerPlayer(srv, sw, profile, info);
-            sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.CLIENTBOUND), sp, new CommonListenerCookie(profile, 0, info));
+
+            Connection c = new Connection(PacketFlow.SERVERBOUND);
+            c.channel = new EmbeddedChannel();
+            c.channel.attr(Connection.ATTRIBUTE_CLIENTBOUND_PROTOCOL).set(ConnectionProtocol.PLAY.codec(PacketFlow.CLIENTBOUND));
+            c.channel.attr(Connection.ATTRIBUTE_SERVERBOUND_PROTOCOL).set(ConnectionProtocol.PLAY.codec(PacketFlow.SERVERBOUND));
+
+            c.address = new InetSocketAddress("localhost", 0);
+            new ServerGamePacketListenerImpl(srv, c, sp, new CommonListenerCookie(profile, 0, info));
+
             sp.setPos(loc.getX(), loc.getY(), loc.getZ());
 
             for (Player p : loc.getWorld().getPlayers()) {
@@ -141,6 +150,7 @@ final class Wrapper1_20_R3 implements Wrapper {
 
         SynchedEntityData dw = sp.getEntityData();
         dw.set(EntityDataSerializers.BYTE.createAccessor(8), (byte) 0x04);
+        en.addPassenger(sp.getBukkitEntity());
 
         for (Player p : en.getWorld().getPlayers()) {
             ServerPlayer sph = ((CraftPlayer) p).getHandle();

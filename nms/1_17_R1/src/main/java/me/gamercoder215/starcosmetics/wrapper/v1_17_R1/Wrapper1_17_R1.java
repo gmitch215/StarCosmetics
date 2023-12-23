@@ -139,6 +139,7 @@ final class Wrapper1_17_R1 implements Wrapper {
 
         DataWatcher dw = sp.getDataWatcher();
         dw.set(DataWatcherRegistry.a.a(8), (byte) 0x04);
+        en.addPassenger(sp.getBukkitEntity());
 
         for (Player p : en.getWorld().getPlayers()) {
             EntityPlayer sph = ((CraftPlayer) p).getHandle();
