@@ -31,11 +31,6 @@ public enum Emote {
     DISAPPROVAL(Rarity.UNCOMMON, fromStatistic(Statistic.DEATHS, 50)),
 
     /**
-     * The Clap Emote.
-     */
-    CLAP(Rarity.OCCASIONAL, fromBlocksMined(10000)),
-
-    /**
      * The Jumping Jacks Emote.
      */
     JUMPING_JACKS(Rarity.RARE, fromDistance(Statistic.WALK_ONE_CM, 500000)),
