@@ -100,18 +100,22 @@ public final class BaseShape implements ParticleShape {
     // Spawn Utilities
 
     public static void spawn(Location l, Object o) {
+        spawn(l, o, 0);
+    }
+
+    public static void spawn(Location l, Object o, double speed) {
         if (o instanceof Material) {
             Material m = (Material) o;
             Object input = m.isBlock() ? m : new ItemStack(m);
 
             if (input instanceof ItemStack) {
                 ItemStack item = (ItemStack) input;
-                l.getWorld().spawnParticle(Particle.ITEM_CRACK, l, 1, 0, 0, 0, 0, item);
+                l.getWorld().spawnParticle(Particle.ITEM_CRACK, l, 1, 0, 0, 0, speed, item);
             } else
-                dw.blockDataParticle(Particle.BLOCK_CRACK, l, 1, m);
+                dw.blockDataParticle(Particle.BLOCK_CRACK, l, 1, m, speed);
         } else if (o instanceof Particle) {
             Particle p = (Particle) o;
-            l.getWorld().spawnParticle(p, l, 1, 0, 0, 0, 0);
+            l.getWorld().spawnParticle(p, l, 1, 0, 0, 0, speed);
         }
     }
 
@@ -150,20 +154,27 @@ public final class BaseShape implements ParticleShape {
         }
     }
 
+    public static void line(Location l, Object o, int length) {
+        line(l, o, length, 0);
+    }
+
     public static void line(Location l, Object o, int length, long stepDelay) {
+        line(l, o, length, stepDelay, 0);
+    }
+
+    public static void line(Location l, Object o, int length, long stepDelay, double speed) {
         Vector dir = l.getDirection();
         double width = 0.1;
 
         int count = 0;
-        for (double i = 0; i < length * (1 / width); i += width) {
+        for (double i = 0; i < length; i += width) {
             final double fi = i;
-
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    dir.multiply(fi);
+                    dir.multiply(1 + fi);
                     l.add(dir);
-                    spawn(l, o);
+                    spawn(l, o, speed);
                     l.subtract(dir);
                     dir.normalize();
                 }
