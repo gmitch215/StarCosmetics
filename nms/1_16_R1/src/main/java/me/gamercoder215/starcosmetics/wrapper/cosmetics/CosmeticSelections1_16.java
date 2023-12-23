@@ -23,6 +23,7 @@ import java.util.Map;
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.circle;
+import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.line;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.cape;
 import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.of;
@@ -174,6 +175,13 @@ final class CosmeticSelections1_16 implements CosmeticSelections {
                     fromMined(260, Material.ANCIENT_DEBRIS), MYTHICAL))
             .build();
 
+    // Gadgets
+
+    private static final List<CosmeticSelection<?>> GADGETS = ImmutableList.<CosmeticSelection<?>>builder()
+            .add(new GadgetSelection("soul_flamethrower", Material.SOUL_TORCH, loc -> line(loc, Particle.SOUL_FIRE_FLAME, 9, 0, 0.005),
+                    fromKilled(175, EntityType.WITHER_SKELETON), EPIC))
+            .build();
+
     // Capes
 
     // Normal Capes
@@ -206,7 +214,7 @@ final class CosmeticSelections1_16 implements CosmeticSelections {
             .put(BaseHat.NORMAL, join(NORMAL_HATS, BaseHat.NORMAL, "1_15"))
             .put(BaseHat.ANIMATED, getForVersion(BaseHat.ANIMATED, "1_15"))
 
-            .put(BaseGadget.INSTANCE, getForVersion(BaseGadget.INSTANCE, "1_15"))
+            .put(BaseGadget.INSTANCE, join(GADGETS, BaseGadget.INSTANCE, "1_15"))
 
             .put(BaseCape.NORMAL, join(NORMAL_CAPES, BaseCape.NORMAL, "1_15"))
             .put(BaseCape.ANIMATED, join(ANIMATED_CAPES, BaseCape.ANIMATED, "1_15"))
