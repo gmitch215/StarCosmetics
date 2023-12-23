@@ -6,5 +6,5 @@ import org.bukkit.Particle;
 
 public final class TestDataWrapper implements DataWrapper {
     @Override
-    public void blockDataParticle(Particle p, Location loc, int count, Material m) {}
+    public void blockDataParticle(Particle p, Location loc, int count, Material m, double speed) {}
 }
