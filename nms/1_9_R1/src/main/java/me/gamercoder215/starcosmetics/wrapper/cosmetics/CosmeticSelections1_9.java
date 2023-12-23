@@ -549,12 +549,6 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
                 loc.getWorld().playSound(loc, Sound.ENTITY_SNOWBALL_THROW, 2F, r.nextFloat(0.3F, 0.6F));
             }, fromMined(30, Material.SNOW_BLOCK), COMMON))
-            .add(new GadgetSelection("egg", Material.EGG, loc -> {
-                Egg e = cosmetic(loc.getWorld().spawn(loc, Egg.class));
-                e.setVelocity(loc.getDirection().multiply(1.5));
-
-                loc.getWorld().playSound(loc, Sound.ENTITY_EGG_THROW, 2F, r.nextFloat(0.3F, 0.6F));
-            }, fromKilled(50, EntityType.CHICKEN), COMMON))
 
             .add(new GadgetSelection("tnt_launcher", Material.TNT, loc -> {
                 TNTPrimed tnt = cosmetic(loc.getWorld().spawn(loc, TNTPrimed.class));
