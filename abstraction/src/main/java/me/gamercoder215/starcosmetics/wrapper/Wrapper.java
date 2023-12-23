@@ -57,7 +57,7 @@ public interface Wrapper {
     default void registerEvents() {}
 
     static String getServerVersion() {
-        if (Bukkit.getServer() == null) return "1_20_R2"; // Using Test Server
+        if (Bukkit.getServer() == null) return "1_20_R3"; // Using Test Server
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1);
     }
 

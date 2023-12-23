@@ -99,13 +99,15 @@ public final class CompletionCriteria {
     static String toPlural(String base) {
         String lower = base.toLowerCase();
         String trimmed = base.substring(0, base.length() - 1);
+        String trimmed2 = base.substring(0, base.length() - 2);
 
         if (lower.endsWith("ore") || lower.endsWith("prismarine") || lower.endsWith("ice")) return base;
 
-        if (base.endsWith("l") || base.endsWith("s") || base.endsWith("p")) return base;
+        if (base.endsWith("us")) return trimmed2 + "i";
+        if (base.endsWith("l") || base.endsWith("s") || base.endsWith("p") || base.endsWith("r")) return base;
         if (base.endsWith("oo")) return base + "s";
 
-        if (base.endsWith("on")) return base.substring(0, base.length() - 2) + "en";
+        if (base.endsWith("on")) return trimmed2 + "en";
         if (base.endsWith("man")) return base.substring(0, base.length() - 3) + "men";
 
         if (base.endsWith("h") || base.endsWith("o")) return base + "es";

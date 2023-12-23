@@ -1,8 +1,25 @@
 package me.gamercoder215.starcosmetics.util;
 
+import me.gamercoder215.starcosmetics.api.StarConfig;
+import org.bukkit.entity.Explosive;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.Metadatable;
+
 import java.util.Arrays;
 
 public final class StarUtil {
+
+    public static <T extends Metadatable> T cosmetic(T m) {
+        m.setMetadata("cosmetic", new FixedMetadataValue(StarConfig.getPlugin(), true));
+
+        if (m instanceof Explosive) {
+            Explosive e = (Explosive) m;
+            e.setIsIncendiary(false);
+            e.setYield(0);
+        }
+
+        return m;
+    }
     
     public static int levenshteinDistance(String s1, String s2) {
         if (s1 == null || s2 == null) return -1;

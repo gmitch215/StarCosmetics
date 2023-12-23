@@ -28,6 +28,14 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+🪩 v1.3.1 - December 22, 2023
+- Add 1.20.3+ Support & Cosmetics
+- Fix Additional 1.20.2 Bugs
+- Octagon Particle Shape
+  - More Gadgets & Particle Shape Options
+- Improve Riptide-related Cosmetic Accuracy
+- Other Optimizations
+
 🕺 v1.3.0 - November 17, 2023 | "Astounding Animations"
 - PlaceholderAPI & Other Dependency Updates
 - Additional 1.20.2/Paper-related Fixes

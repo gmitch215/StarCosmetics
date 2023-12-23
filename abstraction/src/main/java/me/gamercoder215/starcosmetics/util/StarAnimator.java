@@ -87,9 +87,10 @@ public final class StarAnimator {
                     currentFrame.frameID = frameID;
                 }
                 else if (line.contains("Armorstand_Position")) {
+                    // Blender uses Z as up and Y as forward
                     currentFrame.x = Float.parseFloat(split[1]);
-                    currentFrame.y = Float.parseFloat(split[2]);
-                    currentFrame.z = Float.parseFloat(split[3]);
+                    currentFrame.y = Float.parseFloat(split[3]);
+                    currentFrame.z = -Float.parseFloat(split[2]);
                     currentFrame.r = Float.parseFloat(split[4]);
                 }
                 else if (line.contains("Armorstand_Middle")) {

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 
-import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromStatistic;
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 
 /**
  * Represents an Emote that a player can use.
@@ -19,10 +19,26 @@ public enum Emote {
      * The Wave Emote.
      */
     WAVE(Rarity.COMMON),
+
     /**
      * The Dab Emote.
      */
     DAB(Rarity.OCCASIONAL, fromStatistic(Statistic.PLAYER_KILLS, 100)),
+
+    /**
+     * The Shaking Head Emote.
+     */
+    DISAPPROVAL(Rarity.UNCOMMON, fromStatistic(Statistic.DEATHS, 50)),
+
+    /**
+     * The Jumping Jacks Emote.
+     */
+    JUMPING_JACKS(Rarity.RARE, fromDistance(Statistic.WALK_ONE_CM, 500000)),
+
+    /**
+     * The Spinny Emote.
+     */
+    SPINNY(Rarity.RARE, fromPlaytime(20 * 60 * 60 * 4))
     ;
 
     /**

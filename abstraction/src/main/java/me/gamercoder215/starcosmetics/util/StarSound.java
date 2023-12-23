@@ -25,6 +25,8 @@ public enum StarSound {
     ITEM_BOOK_PAGE_TURN,
     BLOCK_SLIME_PLACE("block_slime_block_place"),
     ITEM_TRIDENT_RIPTIDE_1,
+
+    ENTITY_ENDER_DRAGON_GROWL("ENTITY_ENDERDRAGON_GROWL"),
     ;
 
     @VisibleForTesting

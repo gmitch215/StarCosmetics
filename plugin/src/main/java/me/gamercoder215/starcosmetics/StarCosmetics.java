@@ -200,10 +200,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
 
     @Override
     public void onDisable() {
-        // Remove Cosmetic Fireworks
+        // Remove Cosmetic Entities
         for (World w : Bukkit.getWorlds())
-            for (Firework f : w.getEntitiesByClass(Firework.class))
-                if (f.hasMetadata("cosmetic")) f.remove();
+            for (Entity en : w.getEntities())
+                if (en.hasMetadata("cosmetic")) en.remove();
 
         try {
             ASYNC_TICK_RUNNABLE.cancel();

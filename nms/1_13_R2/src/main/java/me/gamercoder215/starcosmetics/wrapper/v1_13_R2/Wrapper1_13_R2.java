@@ -101,7 +101,7 @@ final class Wrapper1_13_R2 implements Wrapper {
 
             UUID uid = UUID.randomUUID();
             EntityPlayer sp = new EntityPlayer(srv, sw, new GameProfile(uid, uid.toString().substring(0, 16)), new PlayerInteractManager(sw));
-            sp.playerConnection = new PlayerConnection(srv, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), sp);
+            sp.playerConnection = new PlayerConnection(srv, new NetworkManager(EnumProtocolDirection.SERVERBOUND), sp);
             sp.setPosition(loc.getX(), loc.getY(), loc.getZ());
 
             for (Player p : loc.getWorld().getPlayers()) {
@@ -130,6 +130,7 @@ final class Wrapper1_13_R2 implements Wrapper {
 
         DataWatcher dw = sp.getDataWatcher();
         dw.set(DataWatcherRegistry.a.a(8), (byte) 0x04);
+        en.addPassenger(sp.getBukkitEntity());
 
         for (Player p : en.getWorld().getPlayers()) {
             EntityPlayer sph = ((CraftPlayer) p).getHandle();

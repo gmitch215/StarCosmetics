@@ -61,6 +61,7 @@ public final class BaseEmote {
         stand.setChestplate(dyedArmor(Material.LEATHER_CHESTPLATE, color));
         stand.setLeggings(dyedArmor(Material.LEATHER_LEGGINGS, color));
         stand.setBoots(dyedArmor(Material.LEATHER_BOOTS, color));
+        stand.setItemInHand(p.getInventory().getItemInMainHand());
 
         StarAnimator animator = new StarAnimator(emote, stand, p.getUniqueId());
         animator.play(() -> {

@@ -1,7 +1,8 @@
-package me.gamercoder215.starcosmetics.wrapper.v1_20_R2;
+package me.gamercoder215.starcosmetics.wrapper.v1_20_R3;
 
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.Channel;
+import io.netty.channel.embedded.EmbeddedChannel;
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.entity.StarSelector;
@@ -13,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -25,9 +27,7 @@ import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.ChatVisiblity;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
@@ -36,14 +36,14 @@ import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockEntityState;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockState;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftDecoratedPot;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_20_R2.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlockEntityState;
+import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlockState;
+import org.bukkit.craftbukkit.v1_20_R3.block.CraftDecoratedPot;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -54,12 +54,13 @@ import org.bukkit.util.Vector;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-final class Wrapper1_20_R2 implements Wrapper {
+final class Wrapper1_20_R3 implements Wrapper {
 
     @Override
     public int getCommandVersion() {
@@ -68,7 +69,7 @@ final class Wrapper1_20_R2 implements Wrapper {
 
     @Override
     public NBTWrapper getNBTWrapper(ItemStack item) {
-        return new NBTWrapper1_20_R2(item);
+        return new NBTWrapper1_20_R3(item);
     }
 
     @Override
@@ -110,10 +111,18 @@ final class Wrapper1_20_R2 implements Wrapper {
             ServerLevel sw = ((CraftWorld) loc.getWorld()).getHandle();
             UUID uid = UUID.randomUUID();
             GameProfile profile = new GameProfile(uid, uid.toString().substring(0, 16));
-            ClientInformation info = new ClientInformation("en", 0, ChatVisiblity.HIDDEN, false, 0, HumanoidArm.RIGHT, false, false);
+            ClientInformation info = ClientInformation.createDefault();
 
             ServerPlayer sp = new ServerPlayer(srv, sw, profile, info);
-            sp.connection = new ServerGamePacketListenerImpl(srv, new Connection(PacketFlow.SERVERBOUND), sp, new CommonListenerCookie(profile, 0, info));
+
+            Connection c = new Connection(PacketFlow.SERVERBOUND);
+            c.channel = new EmbeddedChannel();
+            c.channel.attr(Connection.ATTRIBUTE_CLIENTBOUND_PROTOCOL).set(ConnectionProtocol.PLAY.codec(PacketFlow.CLIENTBOUND));
+            c.channel.attr(Connection.ATTRIBUTE_SERVERBOUND_PROTOCOL).set(ConnectionProtocol.PLAY.codec(PacketFlow.SERVERBOUND));
+
+            c.address = new InetSocketAddress("localhost", 0);
+            new ServerGamePacketListenerImpl(srv, c, sp, new CommonListenerCookie(profile, 0, info));
+
             sp.setPos(loc.getX(), loc.getY(), loc.getZ());
 
             for (Player p : loc.getWorld().getPlayers()) {
@@ -223,7 +232,7 @@ final class Wrapper1_20_R2 implements Wrapper {
 
     @Override
     public StarInventory createInventory(String key, int size, String title) {
-        return new StarInventory1_20_R2(key, size, title);
+        return new StarInventory1_20_R3(key, size, title);
     }
 
     @Override
@@ -294,7 +303,7 @@ final class Wrapper1_20_R2 implements Wrapper {
             Channel ch = ((Connection) connection.get(sp.connection)).channel;
 
             if (ch.pipeline().get(PACKET_INJECTOR_ID) != null) return;
-            ch.pipeline().addAfter("decoder", PACKET_INJECTOR_ID, new PacketHandler1_20_R2(p));
+            ch.pipeline().addAfter("decoder", PACKET_INJECTOR_ID, new PacketHandler1_20_R3(p));
         } catch (ReflectiveOperationException e) {
             StarConfig.print(e);
         }
@@ -330,7 +339,7 @@ final class Wrapper1_20_R2 implements Wrapper {
         ClientboundOpenSignEditorPacket sent2 = new ClientboundOpenSignEditorPacket(pos, true);
         ((CraftPlayer) p).getHandle().connection.send(sent2);
 
-        PacketHandler1_20_R2.PACKET_HANDLERS.put(p.getUniqueId(), packetO -> {
+        PacketHandler1_20_R3.PACKET_HANDLERS.put(p.getUniqueId(), packetO -> {
             if (!(packetO instanceof ServerboundSignUpdatePacket packet)) return false;
 
             ClientboundBlockUpdatePacket sent3 = new ClientboundBlockUpdatePacket(pos, old);

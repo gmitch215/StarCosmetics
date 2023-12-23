@@ -25,6 +25,8 @@ public class TestCompletionCriteria {
         Assertions.assertEquals(CompletionCriteria.toPlural("zombie"), "zombies");
         Assertions.assertEquals(CompletionCriteria.toPlural("droh"), "drohes");
         Assertions.assertEquals(CompletionCriteria.toPlural("cry"), "cries");
+        Assertions.assertEquals(CompletionCriteria.toPlural("cactus"), "cacti");
+        Assertions.assertEquals(CompletionCriteria.toPlural("copper"), "copper");
     }
 
 }

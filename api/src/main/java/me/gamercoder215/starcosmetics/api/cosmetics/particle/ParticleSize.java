@@ -70,7 +70,17 @@ public enum ParticleSize {
     /**
      * Represents a Particle Pentagon Ring, a pentagon inside a ring.
      */
-    PENTAGON_RING
+    PENTAGON_RING,
+
+    /**
+     * Represents a Particle Octagon.
+     */
+    OCTAGON,
+
+    /**
+     * Represents a detailed Particle Octagon.
+     */
+    DETAILED_OCTAGON,
     ;
 
     ParticleSize() {}

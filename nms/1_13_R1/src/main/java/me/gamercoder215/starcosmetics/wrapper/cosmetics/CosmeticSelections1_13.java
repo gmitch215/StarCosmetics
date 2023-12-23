@@ -10,6 +10,7 @@ import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetInfo;
 import me.gamercoder215.starcosmetics.api.cosmetics.pet.PetType;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
+import me.gamercoder215.starcosmetics.util.StarRunnable;
 import me.gamercoder215.starcosmetics.util.StarSound;
 import me.gamercoder215.starcosmetics.util.selection.*;
 import org.bukkit.Material;
@@ -17,6 +18,7 @@ import org.bukkit.Particle;
 import org.bukkit.Statistic;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Trident;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -30,6 +32,7 @@ import static me.gamercoder215.starcosmetics.api.cosmetics.BaseHat.NORMAL;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.BaseTrail.*;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
+import static me.gamercoder215.starcosmetics.util.StarUtil.cosmetic;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.*;
 
 final class CosmeticSelections1_13 implements CosmeticSelections {
@@ -245,7 +248,19 @@ final class CosmeticSelections1_13 implements CosmeticSelections {
     // Gadgets
 
     private static final List<CosmeticSelection<?>> GADGETS = ImmutableList.<CosmeticSelection<?>>builder()
-            .add(new GadgetSelection("raygun", Material.LAPIS_LAZULI, loc -> line(loc, Particle.WATER_BUBBLE, 3, 5), fromStatistic(Statistic.PLAYER_KILLS, 200), UNCOMMON))
+            .add(new GadgetSelection("raygun", Material.LAPIS_LAZULI, loc -> line(loc, Particle.WATER_BUBBLE, 6),
+                    fromStatistic(Statistic.PLAYER_KILLS, 200), UNCOMMON))
+
+            .add(new GadgetSelection("riptide", Material.TRIDENT, loc -> {
+                Trident trident = cosmetic(loc.getWorld().spawn(loc, Trident.class));
+                trident.setBounce(false);
+                trident.setVelocity(loc.getDirection().multiply(2));
+                w.attachRiptide(trident);
+
+                StarSound.ITEM_TRIDENT_RIPTIDE_1.play(loc);
+
+                StarRunnable.syncLater(trident::remove, 100);
+            }, fromDistance(Statistic.SWIM_ONE_CM, 100 * 1000), LEGENDARY))
             .build();
 
     // Selections

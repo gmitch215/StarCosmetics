@@ -250,7 +250,7 @@ public final class BaseTrail<T> implements Trail<T> {
                                     return;
                                 }
             
-                                dw.blockDataParticle(Particle.BLOCK_CRACK, p.getLocation(), 2, m);
+                                dw.blockDataParticle(Particle.BLOCK_CRACK, p.getLocation(), 2, m, 0);
                             }
                         }.runTaskTimer(StarConfig.getPlugin(), 2, 1);
                         break;
@@ -265,7 +265,7 @@ public final class BaseTrail<T> implements Trail<T> {
                                     return;
                                 }
             
-                                dw.blockDataParticle(Particle.BLOCK_DUST, p.getLocation(), 2, m);
+                                dw.blockDataParticle(Particle.BLOCK_DUST, p.getLocation(), 2, m, 0);
                             }
                         }.runTaskTimer(StarConfig.getPlugin(), 2, 1);
                         break;
@@ -373,12 +373,12 @@ public final class BaseTrail<T> implements Trail<T> {
                 }
                 case "crack": {
                     Material m = matchMaterial(input);
-                    dw.blockDataParticle(Particle.BLOCK_CRACK, loc, 2, m);
+                    dw.blockDataParticle(Particle.BLOCK_CRACK, loc, 2, m, 0);
                     break;
                 }
                 case "dust": {
                     Material m = matchMaterial(input);
-                    dw.blockDataParticle(Particle.BLOCK_DUST, loc, 2, m);
+                    dw.blockDataParticle(Particle.BLOCK_DUST, loc, 2, m, 0);
                     break;
                 }
             }

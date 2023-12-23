@@ -2,7 +2,6 @@ package me.gamercoder215.starcosmetics.wrapper.cosmetics;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.*;
 import me.gamercoder215.starcosmetics.api.player.PlayerCompletion;
 import me.gamercoder215.starcosmetics.util.StarMaterial;
@@ -11,12 +10,8 @@ import me.gamercoder215.starcosmetics.util.selection.*;
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.LargeFireball;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +19,8 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
+import static me.gamercoder215.starcosmetics.api.cosmetics.BaseShape.line;
+import static me.gamercoder215.starcosmetics.util.StarUtil.cosmetic;
 import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.*;
 
 final class CosmeticSelections1_9 implements CosmeticSelections {
@@ -293,6 +290,8 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             // Large Rings
             .add(new ParticleSelection("sand", BaseShape.LARGE_RING, Material.SAND,
                     fromMined(80, Material.SAND), COMMON))
+            .add(new ParticleSelection("bucket", BaseShape.LARGE_RING, Material.BUCKET,
+                    fromCrafted(12, Material.BUCKET), COMMON))
 
             .add(new ParticleSelection("note", BaseShape.LARGE_RING, Particle.NOTE,
                     fromCrafted(200, Material.NOTE_BLOCK), RARE))
@@ -312,6 +311,17 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new ParticleSelection("quartz_block", BaseShape.SMALL_TRIANGLE, Material.QUARTZ_BLOCK,
                     fromCrafted(75, Material.QUARTZ_BLOCK), OCCASIONAL))
+            .add(new ParticleSelection("chicken", BaseShape.SMALL_TRIANGLE, StarMaterial.CHICKEN.find(),
+                    fromKilled(100, EntityType.CHICKEN), OCCASIONAL))
+            .add(new ParticleSelection("mutton", BaseShape.SMALL_TRIANGLE, Material.MUTTON,
+                    fromKilled(100, EntityType.SHEEP), OCCASIONAL))
+            .add(new ParticleSelection("rabbit", BaseShape.SMALL_TRIANGLE, Material.RABBIT,
+                    fromKilled(100, EntityType.RABBIT), OCCASIONAL))
+            .add(new ParticleSelection("beef", BaseShape.SMALL_TRIANGLE, StarMaterial.BEEF.find(),
+                    fromKilled(100, EntityType.COW), OCCASIONAL))
+
+            .add(new ParticleSelection("iron_block", BaseShape.SMALL_TRIANGLE, Material.IRON_BLOCK,
+                    fromCrafted(170, Material.IRON_BLOCK), RARE))
 
             // Medium Triangles
             .add(new ParticleSelection("water", BaseShape.MEDIUM_TRIANGLE, Particle.WATER_SPLASH,
@@ -319,6 +329,17 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new ParticleSelection("endstone", BaseShape.MEDIUM_TRIANGLE, StarMaterial.END_STONE.find(),
                     fromMined(310, StarMaterial.END_STONE.find()), UNCOMMON))
+            .add(new ParticleSelection("cooked_chicken", BaseShape.MEDIUM_TRIANGLE, Material.COOKED_CHICKEN,
+                    fromKilled(250, EntityType.CHICKEN), UNCOMMON))
+            .add(new ParticleSelection("cooked_mutton", BaseShape.MEDIUM_TRIANGLE, Material.COOKED_MUTTON,
+                    fromKilled(250, EntityType.SHEEP), UNCOMMON))
+            .add(new ParticleSelection("cooked_rabbit", BaseShape.MEDIUM_TRIANGLE, Material.COOKED_RABBIT,
+                    fromKilled(250, EntityType.RABBIT), UNCOMMON))
+            .add(new ParticleSelection("cooked_beef", BaseShape.MEDIUM_TRIANGLE, Material.COOKED_BEEF,
+                    fromKilled(250, EntityType.COW), UNCOMMON))
+
+            .add(new ParticleSelection("gold_block", BaseShape.MEDIUM_TRIANGLE, Material.GOLD_BLOCK,
+                    fromCrafted(170, Material.GOLD_BLOCK), EPIC))
 
             // Large Triangles
             .add(new ParticleSelection("gravel", BaseShape.LARGE_TRIANGLE, Material.GRAVEL,
@@ -327,18 +348,29 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("anvil", BaseShape.LARGE_TRIANGLE, Material.ANVIL,
                     fromCrafted(160, Material.ANVIL), RARE))
 
+            .add(new ParticleSelection("diamond_block", BaseShape.LARGE_TRIANGLE, Material.DIAMOND_BLOCK,
+                    fromCrafted(170, Material.DIAMOND_BLOCK), LEGENDARY))
+
             // Large Detailed Triangles
             .add(new ParticleSelection("seeds", BaseShape.LARGE_DETAILED_TRIANGLE, StarMaterial.WHEAT_SEEDS.find(),
                     fromMined(100, Material.HAY_BLOCK), UNCOMMON))
+            .add(new ParticleSelection("book", BaseShape.LARGE_DETAILED_TRIANGLE, Material.BOOK,
+                    fromCrafted(25, Material.BOOK), UNCOMMON))
 
             .add(new ParticleSelection("string", BaseShape.LARGE_DETAILED_TRIANGLE, Material.STRING,
                     fromMined(350, StarMaterial.COBWEB.find()), RARE))
+
+            .add(new ParticleSelection("emerald_block", BaseShape.LARGE_DETAILED_TRIANGLE, Material.EMERALD_BLOCK,
+                    fromCrafted(170, Material.EMERALD_BLOCK), LEGENDARY))
 
             // Small Squares
             .add(new ParticleSelection("cobblestone", BaseShape.SMALL_SQUARE, Material.COBBLESTONE,
                     fromMined(25, Material.COBBLESTONE), COMMON))
             .add(new ParticleSelection("netherrack", BaseShape.SMALL_SQUARE, Material.NETHERRACK,
                     fromMined(65, Material.NETHERRACK), COMMON))
+
+            .add(new ParticleSelection("sponge", BaseShape.SMALL_SQUARE, Material.SPONGE,
+                    fromKilled(100, EntityType.GUARDIAN), UNCOMMON))
 
             // Large Squares
             .add(new ParticleSelection("pumpkin_seeds", BaseShape.LARGE_SQUARE, Material.PUMPKIN_SEEDS,
@@ -347,13 +379,46 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new ParticleSelection("redstone", BaseShape.LARGE_SQUARE, Material.REDSTONE,
                     fromCrafted(400, Material.REDSTONE_BLOCK), EPIC))
 
+            .add(new ParticleSelection("redstone_block", BaseShape.LARGE_SQUARE, Material.REDSTONE_BLOCK,
+                    fromCrafted(170, Material.REDSTONE_BLOCK), LEGENDARY))
+
+            .add(new ParticleSelection("barrier", BaseShape.LARGE_SQUARE, Material.BARRIER,
+                    fromBlocksMined(10000000), SPECIAL))
+
             // Pentagons
             .add(new ParticleSelection("crit", BaseShape.PENTAGON, Particle.CRIT,
                     fromStatistic(Statistic.MOB_KILLS, 7800), RARE))
+            .add(new ParticleSelection("chorus", BaseShape.PENTAGON, Material.CHORUS_FRUIT,
+                    fromMined(1400, StarMaterial.END_STONE.find()), RARE))
+
+            .add(new ParticleSelection("glass", BaseShape.PENTAGON, "fancy_block:glass",
+                    fromMined(1855, Material.SAND), EPIC))
 
             // Detailed Pentagons
+            .add(new ParticleSelection("nether_wart", BaseShape.DETAILED_PENTAGON, StarMaterial.NETHER_WART.find(),
+                    fromMined(410, Material.SOUL_SAND), RARE))
+
             .add(new ParticleSelection("crit_magic", BaseShape.DETAILED_PENTAGON, Particle.CRIT_MAGIC,
                     fromStatistic(Statistic.MOB_KILLS, 17500), LEGENDARY))
+
+            // Octagons
+            .add(new ParticleSelection("dragon_breath", BaseShape.OCTAGON, Particle.DRAGON_BREATH,
+                    fromKilled(25, EntityType.ENDER_DRAGON), MYTHICAL))
+
+            .add(new ParticleSelection("bedrock", BaseShape.OCTAGON, Material.BEDROCK,
+                    fromMined(2000000, Material.OBSIDIAN), ULTRA))
+
+            // Detailed Octagons
+            .add(new ParticleSelection("blaze", BaseShape.DETAILED_OCTAGON, Material.BLAZE_ROD,
+                    fromKilled(360, EntityType.BLAZE), RARE))
+
+            .add(new ParticleSelection("end_portal_frame", BaseShape.DETAILED_OCTAGON, StarMaterial.END_PORTAL_FRAME.find(),
+                    fromKilled(75000, EntityType.ENDERMITE), MYTHICAL))
+
+            .add(new ParticleSelection("end_rod", BaseShape.DETAILED_OCTAGON, Material.END_ROD,
+                    fromKilled(250000, EntityType.SHULKER), ULTRA))
+            .add(new ParticleSelection("structure_block", BaseShape.DETAILED_OCTAGON, Material.STRUCTURE_BLOCK,
+                    fromBlocksMined(3500000), ULTRA))
 
             // Combinations
             .add(new ParticleSelection("snowball", BaseShape.SQUARE_RING, Particle.SNOWBALL,
@@ -479,16 +544,21 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
     private static final List<CosmeticSelection<?>> GADGETS = ImmutableList.<CosmeticSelection<?>>builder()
             .add(new GadgetSelection("snowball", StarMaterial.SNOWBALL.find(), loc -> {
-                Snowball s = loc.getWorld().spawn(loc, Snowball.class);
-                s.setMetadata("cosmetic", new FixedMetadataValue(StarConfig.getPlugin(), true));
+                Snowball s = cosmetic(loc.getWorld().spawn(loc, Snowball.class));
                 s.setVelocity(loc.getDirection().multiply(1.5));
 
                 loc.getWorld().playSound(loc, Sound.ENTITY_SNOWBALL_THROW, 2F, r.nextFloat(0.3F, 0.6F));
             }, fromMined(30, Material.SNOW_BLOCK), COMMON))
 
+            .add(new GadgetSelection("tnt_launcher", Material.TNT, loc -> {
+                TNTPrimed tnt = cosmetic(loc.getWorld().spawn(loc, TNTPrimed.class));
+
+                tnt.setVelocity(loc.getDirection().multiply(1.6));
+                tnt.setFuseTicks(80);
+            }, fromKilled(80, EntityType.CREEPER), OCCASIONAL))
+
             .add(new GadgetSelection("firework", StarMaterial.FIREWORK_ROCKET.find(), loc -> {
-                Firework f = loc.getWorld().spawn(loc, Firework.class);
-                f.setMetadata("cosmetic", new FixedMetadataValue(StarConfig.getPlugin(), true));
+                Firework f = cosmetic(loc.getWorld().spawn(loc, Firework.class));
 
                 FireworkMeta meta = f.getFireworkMeta();
                 meta.setPower(r.nextInt(1, 4));
@@ -505,15 +575,16 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
 
             .add(new GadgetSelection("lightning", Material.BONE, loc -> loc.getWorld().strikeLightningEffect(loc),
                     fromKilled(150, EntityType.CREEPER), RARE))
+            .add(new GadgetSelection("dragon_roar", StarMaterial.END_STONE.find(), StarSound.ENTITY_ENDER_DRAGON_GROWL::play,
+                    fromKilled(1, EntityType.ENDER_DRAGON), RARE))
 
             .add(new GadgetSelection("fireball", Material.BLAZE_ROD, loc -> {
-                LargeFireball f = loc.getWorld().spawn(loc, LargeFireball.class);
-                f.setMetadata("cosmetic", new FixedMetadataValue(StarConfig.getPlugin(), true));
+                LargeFireball f = cosmetic(loc.getWorld().spawn(loc, LargeFireball.class));
 
                 f.setDirection(loc.getDirection());
-                f.setIsIncendiary(false);
-                f.setYield(0);
             }, fromKilled(250, EntityType.BLAZE), EPIC))
+            .add(new GadgetSelection("flamethrower", Material.TORCH, loc -> line(loc, Particle.FLAME, 10, 0, 0.01),
+                    fromKilled(100, EntityType.GHAST), EPIC))
             .build();
 
     // Capes
@@ -594,10 +665,20 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
             .add(new CapeSelection("rainbow_flower",
                     of(5, animatedCape(StarMaterial.LIME_BANNER, PatternType.FLOWER, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
                     fromKilled(2300, EntityType.IRON_GOLEM), EPIC))
+            .add(new CapeSelection("rainbow_creeper",
+                    of(5, animatedCape(StarMaterial.BLACK_BANNER, PatternType.CREEPER, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
+                    fromKilled(2000, EntityType.CREEPER), EPIC))
 
             .add(new CapeSelection("rainbow",
                     of(10, StarMaterial.RED_BANNER, StarMaterial.ORANGE_BANNER, StarMaterial.YELLOW_BANNER, StarMaterial.LIME_BANNER, StarMaterial.LIGHT_BLUE_BANNER, StarMaterial.BLUE_BANNER, StarMaterial.PURPLE_BANNER),
                     fromKilled(25000, EntityType.SHEEP), LEGENDARY))
+            .add(new CapeSelection("rainbow_bricks",
+                    of(10, animatedCape(StarMaterial.LIME_BANNER, PatternType.BRICKS, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
+                    fromMined(7500, Material.CLAY), LEGENDARY))
+
+            .add(new CapeSelection("rainbow_skull",
+                    of(5, animatedCape(StarMaterial.BLACK_BANNER, PatternType.SKULL, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.GREEN, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
+                    fromKilled(8000, EntityType.SKELETON), MYTHICAL))
 
             .add(new CapeSelection("rainbow_mojang",
                     of(5, animatedCape(StarMaterial.WHITE_BANNER, PatternType.MOJANG, DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE)),
