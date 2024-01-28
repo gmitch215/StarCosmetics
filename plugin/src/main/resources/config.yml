@@ -50,6 +50,10 @@ cosmetics:
   # "trail/projectile[red_flowers]"
   #
   # You can figure out a cosmetic's key by equipping it, then navigating to your player information file.
+  #
+  # As of v1.3.2, you can disable categories by inputting the parent namespace:
+  # "hat"
+  # "trail/sound"
   disabled: []
 
   # The multipler against the numerical amount required for a cosmetic
