@@ -605,6 +605,61 @@ public interface CommandWrapper {
         }
     }
 
+    default void disableCosmetic(CommandSender sender, String loc) {
+        if (!sender.hasPermission("starcosmetics.admin.disable_cosmetics")) {
+            sendError(sender, "error.permission");
+            return;
+        }
+
+        boolean somethingHappened = false;
+
+        if (StarConfig.getRegistry().getByFullKey(loc) != null) {
+            CosmeticLocation<?> c = StarConfig.getRegistry().getByFullKey(loc);
+            StarConfig.getConfig().disableCosmetic(c);
+            somethingHappened = true;
+        }
+
+        if (StarConfig.getRegistry().getByNamespace(loc) != null) {
+            Cosmetic c = StarConfig.getRegistry().getByNamespace(loc);
+            StarConfig.getConfig().disableCosmetic(c);
+            somethingHappened = true;
+        }
+
+        if (!somethingHappened) {
+            sendError(sender, "error.argument.cosmetic");
+            return;
+        }
+
+        sender.sendMessage(prefix() + ChatColor.GREEN + get("success.cosmetics.disabled"));
+    }
+
+    default void enableCosmetic(CommandSender sender, String loc) {
+        if (!sender.hasPermission("starcosmetics.admin.enable_cosmetics")) {
+            sendError(sender, "error.permission");
+            return;
+        }
+
+        boolean somethingHappened = false;
+        if (StarConfig.getRegistry().getByFullKey(loc) != null) {
+            CosmeticLocation<?> c = StarConfig.getRegistry().getByFullKey(loc);
+            StarConfig.getConfig().enableCosmetic(c);
+            somethingHappened = true;
+        }
+
+        if (StarConfig.getRegistry().getByNamespace(loc) != null) {
+            Cosmetic c = StarConfig.getRegistry().getByNamespace(loc);
+            StarConfig.getConfig().enableCosmetic(c);
+            somethingHappened = true;
+        }
+
+        if (!somethingHappened) {
+            sendError(sender, "error.argument.cosmetic");
+            return;
+        }
+
+        sender.sendMessage(prefix() + ChatColor.GREEN + get("success.cosmetics.enabled"));
+    }
+
     // Utilities
 
     static long getCosmeticCount(TrailType t) {

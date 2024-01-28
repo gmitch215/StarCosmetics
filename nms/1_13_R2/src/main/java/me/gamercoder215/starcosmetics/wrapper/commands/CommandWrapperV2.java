@@ -2,6 +2,7 @@ package me.gamercoder215.starcosmetics.wrapper.commands;
 
 import me.gamercoder215.starcosmetics.api.StarConfig;
 import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
+import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.api.cosmetics.emote.Emote;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.StructureInfo;
@@ -27,6 +28,11 @@ final class CommandWrapperV2 implements CommandWrapper {
         handler = BukkitCommandHandler.create(plugin);
 
         handler.getAutoCompleter()
+                .registerSuggestion("cosmetics", SuggestionProvider
+                        .map(plugin::getAllCosmetics, CosmeticLocation::getFullKey)
+                        .compose(SuggestionProvider.map(plugin::getAllParents, Cosmetic::getNamespace))
+                )
+
                 .registerSuggestion("structures", SuggestionProvider.map(plugin::getAvailableStructures, StructureInfo::getLocalizedName))
                 .registerSuggestion("parents", SuggestionProvider.of(PARENTS_INFO.keySet()));
 
@@ -115,6 +121,16 @@ final class CommandWrapperV2 implements CommandWrapper {
 
         @Subcommand("hologram")
         public void hologram(Player p) { wrapper.hologram(p); }
+
+        @Subcommand("enable")
+        @AutoComplete("@cosmetics *")
+        @CommandPermission("starcosmetics.admin.enable_cosmetics")
+        public void enable(Player p, @Single String cosmetic) { wrapper.enableCosmetic(p, cosmetic); }
+
+        @Subcommand("disable")
+        @AutoComplete("@cosmetics *")
+        @CommandPermission("starcosmetics.admin.disable_cosmetics")
+        public void disable(Player p, @Single String cosmetic) { wrapper.disableCosmetic(p, cosmetic); }
     }
 
     @Override

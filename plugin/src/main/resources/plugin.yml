@@ -32,6 +32,18 @@ permissions:
     children:
       starcosmetics.admin: true
 
+  starcosmetics.admin.disable_cosmetics:
+    description: Access to disable cosmetics
+    default: op
+    children:
+      starcosmetics.admin: true
+
+  starcosmetics.admin.enable_cosmetics:
+    description: Access to enable cosmetics
+    default: op
+    children:
+      starcosmetics.admin: true
+
   # User
   starcosmetics.user:
     description: Access to all StarCosmetics User Actions
