@@ -259,8 +259,4 @@ public interface Wrapper {
         sender.sendMessage(getMessage(key, ChatColor.RED));
     }
 
-    static void sendWithArgs(CommandSender sender, String key, Object... args) {
-        sender.sendMessage(String.format(get(key), args));
-    }
-
 }
