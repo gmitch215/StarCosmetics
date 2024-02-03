@@ -547,7 +547,7 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
                 Snowball s = cosmetic(loc.getWorld().spawn(loc, Snowball.class));
                 s.setVelocity(loc.getDirection().multiply(1.5));
 
-                loc.getWorld().playSound(loc, Sound.ENTITY_SNOWBALL_THROW, 2F, r.nextFloat(0.3F, 0.6F));
+                loc.getWorld().playSound(loc, Sound.ENTITY_SNOWBALL_THROW, 2F, 0.5F);
             }, fromMined(30, Material.SNOW_BLOCK), COMMON))
 
             .add(new GadgetSelection("tnt_launcher", Material.TNT, loc -> {
@@ -561,7 +561,7 @@ final class CosmeticSelections1_9 implements CosmeticSelections {
                 Firework f = cosmetic(loc.getWorld().spawn(loc, Firework.class));
 
                 FireworkMeta meta = f.getFireworkMeta();
-                meta.setPower(r.nextInt(1, 4));
+                meta.setPower(r.nextInt(3) + 1);
                 meta.addEffect(FireworkEffect.builder()
                         .withColor(Color.fromRGB(r.nextInt(16777215)))
                         .withFade(Color.fromRGB(r.nextInt(16777215)))
