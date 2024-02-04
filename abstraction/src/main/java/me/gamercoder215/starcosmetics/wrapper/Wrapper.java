@@ -164,7 +164,9 @@ public interface Wrapper {
         }
     }
 
-    int getCommandVersion();
+    default int getCommandVersion() {
+        return 2;
+    }
 
     boolean isItem(Material m);
 
@@ -257,10 +259,6 @@ public interface Wrapper {
 
     static void sendError(CommandSender sender, String key) {
         sender.sendMessage(getMessage(key, ChatColor.RED));
-    }
-
-    static void sendWithArgs(CommandSender sender, String key, Object... args) {
-        sender.sendMessage(String.format(get(key), args));
     }
 
 }

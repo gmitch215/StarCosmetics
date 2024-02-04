@@ -28,7 +28,7 @@ final class Wrapper1_9_R1 implements Wrapper {
 
     @Override
     public int getCommandVersion() {
-        return 2;
+        return 1;
     }
 
     @Override

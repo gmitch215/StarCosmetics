@@ -193,6 +193,8 @@ public final class ClickEvents implements Listener {
                     StarSound.BLOCK_NOTE_BLOCK_PLING.playFailure(p);
                     inv.getAttribute("selection_back", Consumer.class).accept(p);
                 });
+
+                updateCache(p);
             })
             .put("choose:cosmetic", (inv, e) -> {
                 Player p = (Player) e.getWhoClicked();

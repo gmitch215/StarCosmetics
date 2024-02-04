@@ -95,6 +95,34 @@ final class CommandWrapperV1 implements CommandWrapper, CommandExecutor {
                         hologramInfo(p);
                         break;
                     }
+                    case "disable": {
+                        if (!sender.hasPermission("starcosmetics.admin.disable_cosmetics")) {
+                            sendError(p, "error.permission");
+                            return true;
+                        }
+
+                        if (args.length < 2) {
+                            sendError(p, "error.argument.cosmetic");
+                            return true;
+                        }
+
+                        disableCosmetic(p, args[1]);
+                        break;
+                    }
+                    case "enable": {
+                        if (!sender.hasPermission("starcosmetics.admin.enable_cosmetics")) {
+                            sendError(p, "error.permission");
+                            return true;
+                        }
+
+                        if (args.length < 2) {
+                            sendError(p, "error.argument.cosmetic");
+                            return true;
+                        }
+
+                        enableCosmetic(p, args[1]);
+                        break;
+                    }
                     default: {
                         sendError(p, "error.argument");
                         break;

@@ -1,25 +1,25 @@
-val versions = listOf(
-    "1_9_R1",
-    "1_9_R2",
-    "1_10_R1",
-    "1_11_R1",
-    "1_12_R1",
-    "1_13_R1",
-    "1_13_R2",
-    "1_14_R1",
-    "1_15_R1",
-    "1_16_R1",
-    "1_16_R2",
-    "1_16_R3",
-    "1_17_R1",
-    "1_18_R1",
-    "1_18_R2",
-    "1_19_R1",
-    "1_19_R2",
-    "1_19_R3",
-    "1_20_R1",
-    "1_20_R2",
-    "1_20_R3"
+val versions = mapOf(
+    "1_9_R1" to 8,
+    "1_9_R2" to 8,
+    "1_10_R1" to 8,
+    "1_11_R1" to 8,
+    "1_12_R1" to 8,
+    "1_13_R1" to 8,
+    "1_13_R2" to 8,
+    "1_14_R1" to 8,
+    "1_15_R1" to 8,
+    "1_16_R1" to 8,
+    "1_16_R2" to 8,
+    "1_16_R3" to 8,
+    "1_17_R1" to 16,
+    "1_18_R1" to 17,
+    "1_18_R2" to 17,
+    "1_19_R1" to 17,
+    "1_19_R2" to 17,
+    "1_19_R3" to 17,
+    "1_20_R1" to 17,
+    "1_20_R2" to 17,
+    "1_20_R3" to 17
 )
 
 dependencies {
@@ -46,13 +46,17 @@ dependencies {
     // API
     api(project(":starcosmetics-api"))
 
-    versions.forEach { api(project(":starcosmetics-$it")) }
+    versions.forEach {
+        if (JavaVersion.current().isCompatibleWith(JavaVersion.toVersion(it.value)))
+            api(project(":starcosmetics-${it.key}"))
+    }
 }
 
 
 tasks {
     compileJava {
-        versions.subList(versions.indexOf("1_18_R1"), versions.size).forEach { dependsOn(project(":starcosmetics-$it").tasks["remap"]) }
+        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17))
+            versions.filterValues { it >= 17 }.keys.forEach { dependsOn(project(":starcosmetics-$it").tasks["remap"]) }
     }
 
     register("sourcesJar", Jar::class.java) {

@@ -321,9 +321,54 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         List<String> disabled = config.getStringList("cosmetics.disabled");
 
         return ImmutableSet.copyOf(disabled.stream()
-                .map(StarConfig.getRegistry()::getByFullKey)
+                .map(s -> {
+                    Set<CosmeticLocation<?>> list = new HashSet<>();
+                    list.add(StarConfig.getRegistry().getByFullKey(s));
+                    Optional.ofNullable(StarConfig.getRegistry().getByNamespace(s))
+                            .map(StarConfig.getRegistry()::getAllFor)
+                            .ifPresent(list::addAll);
+
+                    return list;
+                })
+                .flatMap(Collection::stream)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet()));
+    }
+
+    @Override
+    public void disableCosmetic(@NotNull CosmeticLocation<?> loc) {
+        List<String> disabled = config.getStringList("cosmetics.disabled");
+        disabled.add(loc.getFullKey());
+
+        config.set("cosmetics.disabled", disabled);
+        saveConfig();
+    }
+
+    @Override
+    public void disableCosmetic(@NotNull Cosmetic c) {
+        List<String> disabled = config.getStringList("cosmetics.disabled");
+        disabled.add(c.getNamespace());
+
+        config.set("cosmetics.disabled", disabled);
+        saveConfig();
+    }
+
+    @Override
+    public void enableCosmetic(@NotNull CosmeticLocation<?> loc) {
+        List<String> disabled = config.getStringList("cosmetics.disabled");
+        disabled.remove(loc.getFullKey());
+
+        config.set("cosmetics.disabled", disabled);
+        saveConfig();
+    }
+
+    @Override
+    public void enableCosmetic(@NotNull Cosmetic c) {
+        List<String> disabled = config.getStringList("cosmetics.disabled");
+        disabled.removeIf(s -> s.startsWith(c.getNamespace()));
+
+        config.set("cosmetics.disabled", disabled);
+        saveConfig();
     }
 
     @Override
@@ -663,13 +708,7 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         for (CosmeticLocation<?> loc : getCustomCosmetics())
             if (parentClass.isInstance(loc.getParent())) locs.add(loc);
 
-        Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
-        locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
-
-        return ImmutableList.copyOf(locs.stream()
-                .filter(l -> !getDisabledCosmetics().contains(l))
-                .collect(Collectors.toList())
-        );
+        return sortLocations(locs);
     }
 
     @Override
@@ -682,6 +721,10 @@ public final class StarCosmetics extends JavaPlugin implements StarConfig, Cosme
         for (Map.Entry<Cosmetic, List<CosmeticSelection<?>>> entry : selections.entrySet())
             if (entry.getKey().equals(parent)) locs.addAll(entry.getValue());
 
+        return sortLocations(locs);
+    }
+
+    private List<CosmeticLocation<?>> sortLocations(List<CosmeticLocation<?>> locs) {
         Function<CosmeticLocation<?>, Rarity> c = CosmeticLocation::getRarity;
         locs.sort(Comparator.comparing(c).thenComparing(CosmeticLocation::getDisplayName));
 

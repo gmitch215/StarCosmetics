@@ -13,7 +13,7 @@ plugins {
 }
 
 val pGroup = "me.gamercoder215.starcosmetics"
-val pVersion = "1.3.1"
+val pVersion = "1.3.2"
 val pAuthor = "GamerCoder215"
 
 sonarqube {
@@ -129,7 +129,7 @@ subprojects {
                 csv.required.set(false)
 
                 xml.required.set(true) // SonarCloud
-                xml.outputLocation.set(layout.buildDirectory.file("jacoco/jacoco.xml"));
+                xml.outputLocation.set(layout.buildDirectory.file("jacoco/jacoco.xml"))
 
                 html.required.set(true)
                 html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))

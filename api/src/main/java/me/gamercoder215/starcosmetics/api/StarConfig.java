@@ -1,6 +1,7 @@
 package me.gamercoder215.starcosmetics.api;
 
 import com.google.common.collect.Iterables;
+import me.gamercoder215.starcosmetics.api.cosmetics.Cosmetic;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticLocation;
 import me.gamercoder215.starcosmetics.api.cosmetics.CosmeticRegistry;
 import me.gamercoder215.starcosmetics.api.cosmetics.structure.Structure;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.io.File;
 import java.io.IOException;
@@ -352,11 +354,37 @@ public interface StarConfig {
     StructureReader getStructureReader(@NotNull Reader reader);
 
     /**
-     * Fetches a list of all disabled cosmetics.
+     * Fetches an immutable set of all disabled cosmetics.
      * @return Disabled Cosmetics
      */
     @NotNull
+    @Unmodifiable
     Set<CosmeticLocation<?>> getDisabledCosmetics();
+
+    /**
+     * Disables a cosmetic.
+     * @param loc Cosmetic Location
+     */
+    void disableCosmetic(@NotNull CosmeticLocation<?> loc);
+
+    /**
+     * Disables all cosmetics with the given Cosmetic Parent.
+     * @param c Cosmetic Parent
+     */
+    void disableCosmetic(@NotNull Cosmetic c);
+
+    /**
+     * <p>Enables all cosmetics with the parent. This method will silently fail if the cosmetic is not disabled.</p>
+     * <p>If any cosmetic locations are explicity disabled with this parent, they will be removed.</p>
+     * @param c Cosmetic Parent
+     */
+    void enableCosmetic(@NotNull Cosmetic c);
+
+    /**
+     * Enables a cosmetic. This method will silently fail if the cosmetic is not disabled.
+     * @param loc Cosmetic Location
+     */
+    void enableCosmetic(@NotNull CosmeticLocation<?> loc);
 
     /**
      * Whether pets can play their ambient sound.

@@ -49,19 +49,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class StarAnimator {
 
-    public static Set<StarAnimator> animators = new HashSet<>();
+    public static final Set<StarAnimator> animators = new HashSet<>();
 
     public static void updateAll() {
         animators.forEach(StarAnimator::update);
     }
 
-    private UUID owner;
-    private ArmorStand armorStand;
+    private final UUID owner;
+    private final ArmorStand armorStand;
     private int length;
     private Frame[] frames;
     private boolean stopped = false;
     private int currentFrame;
-    private Location startLocation;
+    private final Location startLocation;
 
     private void readFrames(InputStream stream) {
         if (stream == null) throw new IllegalArgumentException("Null input stream for animation file");

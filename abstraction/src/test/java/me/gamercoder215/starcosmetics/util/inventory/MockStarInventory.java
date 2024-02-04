@@ -12,7 +12,7 @@ import java.util.*;
 public class MockStarInventory implements StarInventory {
 
     private final Map<String, Object> attributes = new HashMap<>();
-    private String key;
+    private final String key;
 
     public MockStarInventory(String key) {
         this.key = key;
