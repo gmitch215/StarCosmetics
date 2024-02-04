@@ -35,11 +35,6 @@ import java.util.function.Consumer;
 final class Wrapper1_16_R2 implements Wrapper {
 
     @Override
-    public int getCommandVersion() {
-        return 2;
-    }
-
-    @Override
     public boolean isItem(org.bukkit.Material m) {
         if (m == org.bukkit.Material.AIR) return false;
         return m.isItem();

@@ -34,10 +34,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 final class Wrapper1_13_R2 implements Wrapper {
-    @Override
-    public int getCommandVersion() {
-        return 2;
-    }
 
     @Override
     public boolean isItem(org.bukkit.Material m) {

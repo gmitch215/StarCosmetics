@@ -46,11 +46,6 @@ import java.util.function.Consumer;
 final class Wrapper1_18_R2 implements Wrapper {
 
     @Override
-    public int getCommandVersion() {
-        return 2;
-    }
-
-    @Override
     public NBTWrapper getNBTWrapper(ItemStack item) {
         return new NBTWrapper1_18_R2(item);
     }
