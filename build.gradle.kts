@@ -129,7 +129,7 @@ subprojects {
                 csv.required.set(false)
 
                 xml.required.set(true) // SonarCloud
-                xml.outputLocation.set(layout.buildDirectory.file("jacoco/jacoco.xml"));
+                xml.outputLocation.set(layout.buildDirectory.file("jacoco/jacoco.xml"))
 
                 html.required.set(true)
                 html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
