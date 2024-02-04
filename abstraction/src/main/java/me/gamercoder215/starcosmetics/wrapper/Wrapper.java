@@ -164,7 +164,9 @@ public interface Wrapper {
         }
     }
 
-    int getCommandVersion();
+    default int getCommandVersion() {
+        return 2;
+    }
 
     boolean isItem(Material m);
 

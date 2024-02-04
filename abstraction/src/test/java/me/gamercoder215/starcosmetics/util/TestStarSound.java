@@ -10,7 +10,7 @@ public class TestStarSound {
     @DisplayName("Test StarSound")
     public void testStarSound() {
         for (StarSound sound : StarSound.values())
-            Assertions.assertTrue(sound.sounds.size() > 0);
+            Assertions.assertTrue(!sound.sounds.isEmpty());
     }
 
 }
