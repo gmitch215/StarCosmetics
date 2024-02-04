@@ -154,7 +154,7 @@ jobs:
       - name: Build Plugin
         run: ./gradlew clean assemble
       - name: Test Plugin - ${{ matrix.version }}
-        uses: GamerCoder215/TestMC@v1.0.0
+        uses: GamerCoder215/TestMC@v1.0.1
         with:
           path: 'plugin/build/libs/starcosmetics-*.jar'
           runtime: 'paper'
