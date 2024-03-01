@@ -17,7 +17,6 @@ import java.util.Map;
 
 import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.RARE;
-import static me.gamercoder215.starcosmetics.api.Rarity.UNCOMMON;
 import static me.gamercoder215.starcosmetics.api.cosmetics.pet.HeadInfo.of;
 import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.cape;
 import static me.gamercoder215.starcosmetics.util.selection.CapeSelection.patterns;
