@@ -121,6 +121,7 @@ public final class SoundEventSelection implements ConfigurationSerializable {
                 .add(PlayerDamagePlayerEvent.class)
                 .add(PlayerTakeDamageByEntityEvent.class)
                 .add(PlayerTakeDamageByPlayerEvent.class)
+                .add(optional("raid.RaidTriggerEvent"))
                 .build()
                 .stream().filter(Objects::nonNull).collect(Collectors.toList()));
     }
