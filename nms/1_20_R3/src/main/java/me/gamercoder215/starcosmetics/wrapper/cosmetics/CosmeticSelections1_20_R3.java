@@ -9,13 +9,13 @@ import me.gamercoder215.starcosmetics.util.selection.TrailSelection;
 import me.gamercoder215.starcosmetics.wrapper.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 
 import java.util.List;
 import java.util.Map;
 
-import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromCrafted;
-import static me.gamercoder215.starcosmetics.api.CompletionCriteria.fromKilled;
+import static me.gamercoder215.starcosmetics.api.CompletionCriteria.*;
 import static me.gamercoder215.starcosmetics.api.Rarity.*;
 import static me.gamercoder215.starcosmetics.util.selection.HatSelection.of;
 import static me.gamercoder215.starcosmetics.wrapper.cosmetics.CosmeticSelections.getForVersion;
@@ -45,6 +45,9 @@ final class CosmeticSelections1_20_R3 implements CosmeticSelections {
                     fromCrafted(32, Material.POLISHED_TUFF), UNCOMMON))
             .add(new TrailSelection("tuff_bricks", BaseTrail.GROUND_TRAIL, Material.TUFF_BRICKS,
                     fromCrafted(32, Material.TUFF_BRICKS), UNCOMMON))
+
+            .add(new TrailSelection("copper_trapdoor", BaseTrail.GROUND_TRAIL, Material.COPPER_TRAPDOOR,
+                    fromCrafted(40, Material.COPPER_TRAPDOOR), RARE))
             .build();
 
     // Hats
@@ -62,6 +65,12 @@ final class CosmeticSelections1_20_R3 implements CosmeticSelections {
 
             .add(new HatSelection("crafter", Material.CRAFTER,
                     fromCrafted(5, Material.CRAFTER), RARE))
+
+            .add(new HatSelection("trial_key", Material.TRIAL_KEY,
+                    fromStatistic(Statistic.MOB_KILLS, 450000), LEGENDARY))
+            
+            .add(new HatSelection("trial_spawner", Material.TRIAL_SPAWNER,
+                    fromStatistic(Statistic.MOB_KILLS, 1100000), MYTHICAL))
             .build();
 
     // Animated Hats
