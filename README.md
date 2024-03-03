@@ -28,6 +28,15 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ## 📓 Changelog
 
+✨ v1.4.0 - March 3, 2024 | "Serene Stop"
+- **This is the last update for StarCosmetics. The plugin will no longer be maintained.**
+- Add More 1.21 Features
+- Add More 1.19 Animated Hats
+- Mark as Folia Supported
+- Fix Legacy Issues
+- Add More Sound Event Selections
+- Code Cleanup
+
 🛠️ v1.3.2 - February 4, 2024
 - Fix Legacy Issues (1.9-1.12.2)
 - Add Additional Testing Measures
