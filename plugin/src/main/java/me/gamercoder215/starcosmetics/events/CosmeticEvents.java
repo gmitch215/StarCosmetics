@@ -224,7 +224,6 @@ public final class CosmeticEvents implements Listener {
         if (!(e.getWhoClicked() instanceof Player)) return;
         if (e.getClickedInventory() instanceof PlayerInventory) return;
 
-        Player p = (Player) e.getWhoClicked();
         if (e.getCursor() != null) {
             NBTWrapper w = NBTWrapper.of(e.getCursor());
             if (w.hasString("gadget")) e.setCancelled(true);

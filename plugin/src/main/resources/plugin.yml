@@ -2,6 +2,7 @@ name: StarCosmetics
 main: me.gamercoder215.starcosmetics.StarCosmetics
 version: ${project.version}
 description: ${project.description}
+folia-supported: true
 softdepend: [PlaceholderAPI, PVPManager]
 author: GamerCoder
 website: "https://github.com/GamerCoder215/StarCosmetics"

@@ -1,7 +1,6 @@
 package me.gamercoder215.starcosmetics.api.events.cosmetics;
 
 import com.google.common.base.Function;
-import me.gamercoder215.starcosmetics.api.StarConfig;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;

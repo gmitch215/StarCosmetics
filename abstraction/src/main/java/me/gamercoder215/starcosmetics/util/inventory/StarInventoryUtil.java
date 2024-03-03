@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.time.ZoneId;
@@ -305,9 +306,16 @@ public final class StarInventoryUtil {
 
             GameProfile profile = new GameProfile(UUID.randomUUID(), key);
             profile.getProperties().put("textures", new Property("textures", value));
-            Method mtd = hMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
-            mtd.setAccessible(true);
-            mtd.invoke(hMeta, profile);
+
+            try {
+                Method setProfile = hMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+                setProfile.setAccessible(true);
+                setProfile.invoke(hMeta, profile);
+            } catch (NoSuchMethodException ignored) {
+                Field gameProfile = hMeta.getClass().getDeclaredField("profile");
+                gameProfile.setAccessible(true);
+                gameProfile.set(hMeta, gameProfile);
+            }
 
             head.setItemMeta(hMeta);
             return head;

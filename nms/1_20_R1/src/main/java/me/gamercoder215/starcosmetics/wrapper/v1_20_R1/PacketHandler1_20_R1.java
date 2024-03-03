@@ -3,7 +3,6 @@ package me.gamercoder215.starcosmetics.wrapper.v1_20_R1;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import me.gamercoder215.starcosmetics.util.StarRunnable;
-import me.gamercoder215.starcosmetics.util.StarUtil;
 import net.minecraft.network.protocol.Packet;
 import org.bukkit.entity.Player;
 
