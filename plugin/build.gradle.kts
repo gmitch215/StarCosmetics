@@ -41,7 +41,7 @@ dependencies {
 
     // Soft Dependencies
     compileOnly("me.clip:placeholderapi:2.11.5")
-    compileOnly("me.NoChance.PvPManager:pvpmanager:3.16")
+    compileOnly("me.NoChance.PvPManager:pvpmanager:3.17")
 
     // API
     api(project(":starcosmetics-api"))
