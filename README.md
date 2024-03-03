@@ -13,6 +13,8 @@ Featuring things from Projectile Trails, Particle Rings, Custom Structures, Pets
 
 ---
 
+# This plugin is no longer maintained. Thank you for everyone who downloaded the plugin.
+
 ## 📚 Features
 - **Projectile Trails** - Create items, particles, entities, and more that follow your projectiles around.
 - **Particle Rings** - Create particle rings for your players to use.
